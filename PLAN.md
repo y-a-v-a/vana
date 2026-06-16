@@ -246,12 +246,15 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] `notify.ts`: `buildEmail()` (tested) + `sendCandidateEmail()` over SMTP; `loadSmtp()` reads `SMTP_*` from env
 - [x] Email body: title, summary, verdict + scores, rationale, reservations, dashboard deep-link, local path
 - [x] Wired into loop `onAccepted`; `VANA_NO_EMAIL` opt-out; 8 SMTP/notify tests (suite 51)
-- [ ] Live send — needs `SMTP_HOST/PORT/USER/PASS` in `.zshenv`
+- [x] Live SMTP send verified (1.4s, 250 OK from mail.oni.nl) via `ONI_MAIL_*` env
+- [ ] Confirm Gmail inbox vs spam (new sender; may need an SPF record for oni.nl)
 
-### Phase 7 — Approval gateway
-- [ ] `dashboard/`: local web server; list `pending/`, render work + motivation + jury
-- [ ] Approve/Reject endpoints; `promote.ts` moves pending→published (+ commit/push)
-- [ ] Bind to Tailscale host; confirm reachable from iOS
+### Phase 7 — Approval gateway  ✅ (code; iOS reach + tailnet host pending)
+- [x] `dashboard.ts`: dependency-free `node:http` server; index lists `pending/`, detail renders work (iframe) + motivation + jury verdict
+- [x] `promote.ts`: `decide(id, approve|reject)` moves pending→published/rejected, updates catalogue, commit+push; approve is the ONLY writer to `published/`
+- [x] Approve/Reject POST endpoints (303 redirect); `/work` serves the candidate; HTML-escaped; 6 tests (suite 56)
+- [x] Live-verified all GET routes + 404; binds `0.0.0.0` (tailnet-reachable)
+- [ ] Set `dashboard.tailnetHost` so the email link is clickable from iOS; confirm reachability from your phone
 
 ### Phase 8 — Deploy
 - [ ] Vercel project pointed at `published/`; `ai.y-a-v-a.org` CNAME
