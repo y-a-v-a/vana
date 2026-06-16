@@ -14,7 +14,7 @@
     "published": "workspace/published",
     "rejected": "workspace/rejected"
   },
-  "dashboard": { "port": 4737, "tailnetHost": "" },
+  "dashboard": { "port": 4737, "tailnetHost": "the-machine.taile14d0c.ts.net" },
   "email": { "to": "vebruijn@gmail.com" },
   "git": { "remote": "origin", "branch": "main", "push": true }
 }
