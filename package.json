@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Autonomous art-generating agent harness in the y-a-v-a artistic DNA. Generate → jury → human gate → publish.",
   "engines": {
-    "node": ">=24"
+    "node": ">=22"
   },
   "scripts": {
     "start": "tsx src/daemon.ts",

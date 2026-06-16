@@ -7,26 +7,38 @@ The public site is **assembled, not raw**: `npm run build:site` reads
 regular visitor lands on each work's `index.html`; `motivation.md` is reachable
 at `/<id>/motivation.md`.
 
-## One-time setup (your action when ready)
+## Setup — Vercel native Git integration (recommended)
 
-1. **Create a Vercel project** (framework preset: *Other* / static). You can
-   link it to the `y-a-v-a/vana` repo or keep it deploy-by-CLI only.
-2. **Add three repo secrets** (GitHub → Settings → Secrets → Actions):
-   - `VERCEL_TOKEN` — a Vercel access token
-   - `VERCEL_ORG_ID` — from the project's `.vercel/project.json` (run `vercel link` once locally) or Vercel settings
-   - `VERCEL_PROJECT_ID` — same source
-3. **Point the domain:** add `ai.y-a-v-a.org` to the Vercel project's Domains,
-   and create the DNS record Vercel shows (CNAME → `cname.vercel-dns.com`).
+1. **Create the project**
+   - vercel.com → **Add New… → Project**
+   - **Import Git Repository** → `y-a-v-a/vana`
+     (if it's not listed, click *Adjust GitHub App Permissions* / *Configure GitHub App*
+     and grant Vercel access to the `y-a-v-a` org and the `vana` repo)
 
-After that, `.github/workflows/deploy.yml` deploys automatically whenever an
-approval pushes a change under `workspace/published/`.
+2. **Configure build settings** (on the import screen)
+   - **Framework Preset:** Other
+   - **Build Command:** `npm run build:site`
+   - **Output Directory:** `dist-site`
+   - **Install Command:** `npm ci`
+   - Root Directory: `./` (default). No environment variables needed.
 
-## Simpler alternative (no GitHub Actions)
+3. **Deploy.** The first build runs `npm run build:site` and serves the current
+   catalogue (it'll show "The Original"). You'll get a `*.vercel.app` URL.
 
-Use Vercel's native Git integration instead:
-- Build Command: `npm run build:site`
-- Output Directory: `dist-site`
-- Install Command: `npm ci`
+4. **Point the domain**
+   - Project → **Settings → Domains** → add `ai.y-a-v-a.org`
+   - Vercel shows a DNS record (a CNAME to `cname.vercel-dns.com`). Add it at
+     wherever `y-a-v-a.org`'s DNS is managed.
 
-Vercel then auto-deploys on every push; `dist-site` is served, so `jury.json`
-still never ships. If you choose this, you can delete `deploy.yml`.
+That's it. Every push to `main` triggers a rebuild+deploy. When you Approve a
+candidate, the dashboard pushes `workspace/published/` → Vercel redeploys with
+the new work. `dist-site` is the only thing served, so `jury.json` never ships.
+
+> Optional: to deploy only when published works change (not on every push), set
+> an **Ignored Build Step** in Vercel:
+> `git diff --quiet HEAD^ HEAD -- workspace/published src/site.ts || exit 1`
+
+## Verifying
+- Visit the `*.vercel.app` URL → catalogue index.
+- `/<id>/` → the work; `/<id>/motivation.md` → its motivation.
+- `/<id>/jury.json` → **404** (must not exist).
