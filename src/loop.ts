@@ -2,8 +2,8 @@ import { existsSync, mkdirSync, mkdtempSync, renameSync, rmSync, writeFileSync }
 import { join } from "node:path";
 import { loadConfig } from "./config.ts";
 import { isoDate, makeId } from "./ids.ts";
-import { generateCandidate } from "./generator.ts";
-import { juryCandidate, type Verdict } from "./jury.ts";
+import { generateCandidate, type GeneratedMeta } from "./generator.ts";
+import { juryCandidate, type Verdict, type JuryVerdict } from "./jury.ts";
 import { CostMeter, getOpenRouterPricing, usageCostUsd } from "./cost.ts";
 import { upsertEntry, type CatalogueEntry } from "./catalogue.ts";
 import { commitAndPush } from "./git.ts";
@@ -34,13 +34,20 @@ export interface WakeResult {
   spentUsd: number;
 }
 
+export interface AcceptedContext {
+  id: string;
+  dir: string;
+  meta: GeneratedMeta;
+  verdict: JuryVerdict;
+}
+
 export interface RunWakeOptions {
   /** Cap attempts (for testing/bounded runs); default: bounded only by time/fuse. */
   maxAttempts?: number;
   /** Override the push decision (default: config.git.push). */
   push?: boolean;
-  /** Called when a candidate is accepted into pending/ (Phase 6 wires email here). */
-  onAccepted?: (id: string, dir: string) => Promise<void> | void;
+  /** Called when a candidate is accepted into pending/ (the email gateway). */
+  onAccepted?: (ctx: AcceptedContext) => Promise<void> | void;
 }
 
 function lifecycleExists(cfg: ReturnType<typeof loadConfig>, id: string): boolean {
@@ -117,7 +124,7 @@ export async function runWake(opts: RunWakeOptions = {}): Promise<WakeResult> {
       );
 
       if (publish) {
-        await opts.onAccepted?.(id, dest);
+        await opts.onAccepted?.({ id, dir: dest, meta: gen.files.meta, verdict });
         return { passed: true, attempts, stopReason: "passed", publishedId: id, spentUsd: meter.wakeSpent() };
       }
       // rejected → loop-until-pass continues
@@ -135,7 +142,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   if (cmd === "once") {
     const maxAttempts = process.env.VANA_MAX_ATTEMPTS ? Number(process.env.VANA_MAX_ATTEMPTS) : undefined;
     const push = process.env.VANA_NO_PUSH ? false : undefined;
-    runWake({ maxAttempts, push })
+    const onAccepted = process.env.VANA_NO_EMAIL
+      ? undefined
+      : async (ctx: AcceptedContext) => {
+          const { sendCandidateEmail } = await import("./notify.ts");
+          await sendCandidateEmail(ctx.id, ctx.meta, ctx.verdict);
+        };
+    runWake({ maxAttempts, push, onAccepted })
       .then((r) => {
         console.log(JSON.stringify(r, null, 2));
         process.exit(0);

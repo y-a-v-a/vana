@@ -240,9 +240,12 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] `git.ts`: scoped stage (`workspace/` + `catalogue.json`) + commit + optional push; tolerant of empty commit
 - [ ] Verify push works headlessly (SSH key/agent available to launchd) — deferred to your call (QQ2)
 
-### Phase 6 — Notify
-- [ ] `notify.ts`: osascript → Mail.app, send to vebruijn@gmail.com
-- [ ] Email body: title, verdict summary, Tailscale dashboard deep-link
+### Phase 6 — Notify  ✅ (code; live delivery being confirmed)
+- [x] `notify.ts`: `buildEmail()` (tested) + `sendCandidateEmail()` via `ops/send-mail.applescript` (argv-passed, no injection)
+- [x] Email body: title, summary, verdict + scores, rationale, reservations, dashboard deep-link, local path
+- [x] Wired into loop `onAccepted`; `VANA_NO_EMAIL` opt-out; `-1712` timeout treated as soft-warn (message queued)
+- [x] Automation permission granted on first run
+- [ ] Confirm actual Gmail delivery (first send hit a `-1712` timeout; widened to 300s + Mail launch)
 
 ### Phase 7 — Approval gateway
 - [ ] `dashboard/`: local web server; list `pending/`, render work + motivation + jury
