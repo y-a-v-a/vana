@@ -109,25 +109,24 @@ export function loadSecrets(): Secrets {
  * the environment so credentials live in .zshenv/.env, not in the repo.
  */
 export function loadSmtp(): Smtp {
-  const host = process.env.SMTP_HOST?.trim();
-  const user = process.env.SMTP_USER?.trim();
-  const pass = process.env.SMTP_PASS;
+  const host = process.env.ONI_MAIL_SERVER?.trim();
+  const user = process.env.ONI_MAIL_ADDRESS?.trim();
+  const pass = process.env.ONI_MAIL_PASSWORD;
   const missing: string[] = [];
-  if (!host) missing.push("SMTP_HOST");
-  if (!user) missing.push("SMTP_USER");
-  if (!pass) missing.push("SMTP_PASS");
+  if (!host) missing.push("ONI_MAIL_SERVER");
+  if (!user) missing.push("ONI_MAIL_ADDRESS");
+  if (!pass) missing.push("ONI_MAIL_PASSWORD");
   if (missing.length > 0) {
-    throw new Error(`Missing SMTP env: ${missing.join(", ")} (set in .zshenv or .env).`);
+    throw new Error(`Missing mail env: ${missing.join(", ")} (set in .zshenv or .env).`);
   }
-  const port = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 465;
-  const secure = process.env.SMTP_SECURE ? process.env.SMTP_SECURE !== "false" : port === 465;
+  const port = process.env.ONI_MAIL_PORT ? Number(process.env.ONI_MAIL_PORT) : 465;
   return {
     host: host!,
     port,
-    secure,
+    secure: port === 465,
     user: user!,
     pass: pass!,
-    from: process.env.SMTP_FROM?.trim() || user!,
+    from: process.env.ONI_MAIL_FROM?.trim() || user!,
   };
 }
 
