@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-16-today",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 45,
+  "verdict": "strong",
+  "references_named": [
+    "On Kawara, Today series (Date Paintings), 1966-2013"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism enacts the concept: the visitor's clock is the studio day, Intl.DateTimeFormat is the country, setInterval is the destruction rule, and 'Painted in 3 ms. He gave himself until midnight' is the labor/value argument embodied rather than illustrated. On Kawara is a genuinely new found-object in this catalogue, and the Esperanto fallback for non-Roman scripts is a precise, deep-cut double-code reward (P7). The build is exemplary in its restraint (P3) — a single muted ground, one line of text, one countdown, no dependencies, strict CSP, no persistence — and the cheerful-cynic tone is held cleanly throughout.",
+  "reservations": "Conceptual and structural proximity to The Unkept (2026): both works self-destruct with no persistence, and a viewer cataloguing the oeuvre may read them as sibling pieces. The work passes G6 because source (Kawara vs. Sehgal), mechanism (midnight countdown vs. Page Visibility API / blur), and argument (time/labor/value vs. documentation refusal) are materially distinct, but the DNA should be aware of the cluster. Narrative could be strengthened by explicitly naming which prior y-a-v-a work this answers (e.g., positioning itself against The Unkept's documentation-refusal argument or The webpage going on and off's cyclical-enactment mode).",
+  "revision_suggestion": "Add a single sentence to the wall label that locates the work inside the y-a-v-a argument — e.g., a quiet nod to The Unkept's no-record ethic or to The webpage going on and off's cyclical rule-enactment — so the narrative lens on chance/order and the twenty-year argument is legible on the page itself, not only in the motivation document.",
+  "jury_model": "minimax/minimax-m3"
+}
