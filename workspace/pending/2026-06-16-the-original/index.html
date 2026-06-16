@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Original — y-a-v-a</title>
+<style>
+  :root{ --ink:#1a1a1a; --paper:#f4f1ea; --line:#cabfa6; --faint:#8c8472; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif;
+    display:flex; align-items:center; justify-content:center;
+    padding:6vmin; line-height:1.5;
+  }
+  .cert{
+    max-width:640px; width:100%;
+    border:1px solid var(--line);
+    outline:1px solid var(--line); outline-offset:6px;
+    background:#fbf9f3;
+    padding:7vmin 6vmin;
+    text-align:center;
+  }
+  .kicker{ text-transform:uppercase; letter-spacing:.42em; font-size:.62rem; color:var(--faint); margin:0 0 1.6em; }
+  h1{ font-size:clamp(2rem,8vw,3.2rem); font-weight:400; font-style:italic; margin:0; }
+  .edition{ font-size:1.05rem; margin:.6em 0 0; }
+  .rule{ border:0; border-top:1px solid var(--line); width:42%; margin:2.2em auto; }
+  .body{ font-size:.95rem; max-width:46ch; margin:0 auto 2em; color:#2a2722; }
+  button{
+    font-family:inherit; font-size:1rem; font-style:italic;
+    background:var(--ink); color:var(--paper);
+    border:0; padding:.85em 2.2em; cursor:pointer; letter-spacing:.02em;
+  }
+  button:hover{ background:#000; }
+  .tally{ font-size:.82rem; color:var(--faint); margin:1.8em 0 0; min-height:1.2em; }
+  .sign{ display:flex; justify-content:space-between; gap:2em; margin-top:3em; font-size:.7rem; color:var(--faint); text-transform:uppercase; letter-spacing:.16em; }
+  .sign span{ border-top:1px solid var(--line); padding-top:.5em; flex:1; }
+  .meta{ margin-top:3.2em; font-size:.64rem; color:var(--faint); letter-spacing:.04em; line-height:1.8; }
+  .meta a{ color:var(--faint); }
+</style>
+</head>
+<body>
+  <main class="cert" id="cert">
+    <p class="kicker">Certificate of Authenticity</p>
+    <h1>The Original</h1>
+    <p class="edition">Edition <b>1</b> of <b>1</b></p>
+    <hr class="rule">
+    <p class="body">
+      This is the only authentic instance of this work. Acquire it below.
+      What you receive will be indistinguishable from the original — because it is.
+    </p>
+    <button id="buy">Acquire the original</button>
+    <p class="tally" id="tally" aria-live="polite"></p>
+    <div class="sign">
+      <span>Provenance: this browser</span>
+      <span>Aura: none on record</span>
+    </div>
+    <p class="meta">
+      <b>The Original</b> — y-a-v-a (yet another visual artist), 2026.<br>
+      After Walter Benjamin, <i>The Work of Art in the Age of Mechanical Reproduction</i> (1935).<br>
+      Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. No cookies, no trackers, no data leaves your machine.<br>
+      To forge your own provenance, view source.
+    </p>
+  </main>
+
+<script>
+(function(){
+  var KEY = "the-original.owners";
+  var tally = document.getElementById("tally");
+
+  function count(){ return parseInt(localStorage.getItem(KEY) || "0", 10) || 0; }
+  function render(){
+    var n = count();
+    if(n === 0){ tally.textContent = "No originals issued from this browser. Yet."; return; }
+    tally.textContent = "Originals issued from this browser: " + n +
+      ". Each is the only one.";
+  }
+
+  document.getElementById("buy").addEventListener("click", function(){
+    // mint a new "owner" record — privately, in this browser only
+    localStorage.setItem(KEY, count() + 1);
+    render();
+
+    // hand over the original: a faithful copy of this very page
+    var src = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+    var blob = new Blob([src], { type: "text/html;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "the-original.html";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-16-the-original",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "Marcel Duchamp / the readymade",
+    "net.art"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The work stages Benjamin's aura argument as a live mechanism: the certificate of authenticity hands the visitor a byte-faithful copy of itself, enacting the collapse of original/copy on the web. The localStorage counter exposes scarcity as a private, editable fiction, and the 'view source to forge your own provenance' invitation makes the critique participatory rather than declarative. Execution is restrained (one page, one button, one counter, no server) and the tone is perfectly calibrated — 'Aura: none on record' is exactly the deadpan register the catalogue keeps.",
+  "reservations": "The Benjamin thesis is extremely well-trodden; novelty lives in the specific mechanism rather than the conceptual frame. The work sits comfortably within the existing value/authenticity arc (Koons slot machine, 'But is it art?') without dramatically extending it — it is a strong consolidation rather than a new frontier.",
+  "revision_suggestion": null,
+  "jury_model": "minimax/minimax-m3"
+}

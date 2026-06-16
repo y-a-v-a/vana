@@ -182,5 +182,13 @@
     "source": "Warhol + Willison SVG-benchmark (P10)",
     "mechanism": "LLM-generated SVGs compared across models, on Warhol color-bands",
     "status": "historical"
+  },
+  {
+    "id": "2026-06-16-the-original",
+    "title": "The Original",
+    "year": 2026,
+    "source": "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Marcel Duchamp / the readymade; net.art",
+    "mechanism": "Client-side Blob download of the page's own source plus a private localStorage edition counter that exposes scarcity as fiction.",
+    "status": "pending"
   }
 ]
