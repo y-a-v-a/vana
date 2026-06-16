@@ -233,7 +233,7 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] `cost.ts`: generator cost from SDK `total_cost_usd`; jury cost from OpenRouter pricing × usage; `CostMeter` persists daily spend; `fuseCheck` per-wake + per-day
 - [x] `loop.ts`: `runWake()` loop-until-pass within wall-clock + fuse; stage→pending/rejected; `jury.json` persisted; catalogue upsert
 - [x] `isPublishable` (self-containment blocks even a strong verdict) + `uniqueId` — tested (8 new tests, suite 44)
-- [ ] Live `npm run once` end-to-end (bounded) — generate→jury→route→commit
+- [x] Live `npm run once` verified: generated "The Original" (Benjamin aura critique), jury **strong 40/50**, routed to `pending/`, catalogue updated, auto-committed. $0.37, one attempt.
 - [ ] Interval scheduler — Phase 9 daemon
 
 ### Phase 5 — Persistence
