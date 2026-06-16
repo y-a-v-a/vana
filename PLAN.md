@@ -263,7 +263,7 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] Deploy path chosen: **Vercel native Git integration** (build `npm run build:site`, output `dist-site`); removed the Actions workflow (no secrets needed)
 - [x] `ops/DEPLOY.md`: click-by-click Vercel project + build settings + domain + verification
 - [x] Node engine relaxed to `>=22` for the Vercel builder
-- [ ] **Your action:** create the Vercel project (import `y-a-v-a/vana`), then point `vana.y-a-v-a.org` DNS
+- [x] **LIVE:** Vercel project deployed; `vana.y-a-v-a.org` serving with valid Let's Encrypt TLS; `jury.json` → 404 verified in production
 
 ### Phase 9 — Ops  ✅ (code; `launchctl load` = your action)
 - [x] `src/daemon.ts`: serves dashboard continuously + self-schedules wakes (6h); `onAccepted`→email; SIGTERM/INT graceful; overlap-guarded
@@ -275,8 +275,9 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 ### Phase 10 — End-to-end dry run  ✅ (all but the deploy leg)
 - [x] Full cycle validated **live, piecemeal**: generate → jury → pending → email → dashboard → approve → published → pushed to GitHub (you ran it yourself from iOS)
 - [x] Thresholds sane: "The Original" scored 40/50 strong, you approved — calibration looks right at strong≥38
-- [ ] Final deploy leg (push→Vercel→vana.y-a-v-a.org) once the Vercel project + DNS exist
+- [x] Final deploy leg LIVE: `vana.y-a-v-a.org` serves the catalogue; the full chain (DNA→generate→jury→approve→push→Vercel→public, jury.json private) runs in production
 - [ ] Tune thresholds/budgets over time; record changes here
+- [ ] Only remaining switch: `launchctl load` to go autonomous (ops/DAEMON.md)
 
 ---
 
