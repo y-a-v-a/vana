@@ -264,13 +264,18 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] `ops/DEPLOY.md`: Vercel project + secrets + domain steps (+ native-integration alternative)
 - [ ] **Your action:** create Vercel project, add `VERCEL_*` secrets, point `ai.y-a-v-a.org` DNS
 
-### Phase 9 — Ops
-- [ ] `ops/com.yava.vana.plist` launchd unit (KeepAlive, logs)
-- [ ] Log rotation / stdout+stderr to file; load + smoke-test the daemon
+### Phase 9 — Ops  ✅ (code; `launchctl load` = your action)
+- [x] `src/daemon.ts`: serves dashboard continuously + self-schedules wakes (6h); `onAccepted`→email; SIGTERM/INT graceful; overlap-guarded
+- [x] `ops/com.yava.vana.plist`: launchd unit (`zsh -lc` for .zshenv secrets, abs node path, RunAtLoad, KeepAlive, logs)
+- [x] `ops/DAEMON.md`: install/load/stop, notes; boot-tested (dashboard 200, schedules, no spend, clean shutdown)
+- [ ] **Your action:** `launchctl load` to go autonomous (starts metered spend)
+- [ ] (follow-up) log rotation via `newsyslog` if logs grow
 
-### Phase 10 — End-to-end dry run
-- [ ] Set `OPENROUTER_API_KEY`; one full wake → candidate → jury → pending → email → dashboard → approve → publish → deploy
-- [ ] Tune thresholds/budgets with Vincent; record changes back into this file
+### Phase 10 — End-to-end dry run  ✅ (all but the deploy leg)
+- [x] Full cycle validated **live, piecemeal**: generate → jury → pending → email → dashboard → approve → published → pushed to GitHub (you ran it yourself from iOS)
+- [x] Thresholds sane: "The Original" scored 40/50 strong, you approved — calibration looks right at strong≥38
+- [ ] Final deploy leg (push→Vercel→ai.y-a-v-a.org) once the Vercel project + DNS exist
+- [ ] Tune thresholds/budgets over time; record changes here
 
 ---
 
