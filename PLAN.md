@@ -229,14 +229,16 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [ ] Persist `jury.json` beside candidate — handled in Phase 4 loop
 - [ ] (follow-up) one retry on malformed jury JSON — add in Phase 4 error handling
 
-### Phase 4 — Loop & budget
-- [ ] `cost.ts`: token→$ meter from API usage; per-wake + per-day fuse
-- [ ] `loop.ts`: loop-until-pass within wall-clock budget; route pass/reject
-- [ ] Scheduler: wake every `interval`; sleep between
+### Phase 4 — Loop & budget  ✅ (code; live run next)
+- [x] `cost.ts`: generator cost from SDK `total_cost_usd`; jury cost from OpenRouter pricing × usage; `CostMeter` persists daily spend; `fuseCheck` per-wake + per-day
+- [x] `loop.ts`: `runWake()` loop-until-pass within wall-clock + fuse; stage→pending/rejected; `jury.json` persisted; catalogue upsert
+- [x] `isPublishable` (self-containment blocks even a strong verdict) + `uniqueId` — tested (8 new tests, suite 44)
+- [ ] Live `npm run once` end-to-end (bounded) — generate→jury→route→commit
+- [ ] Interval scheduler — Phase 9 daemon
 
 ### Phase 5 — Persistence
-- [ ] `git.ts`: stage + commit (descriptive message) + push to origin/main each iteration
-- [ ] Verify push works headlessly (SSH key/agent available to launchd)
+- [x] `git.ts`: scoped stage (`workspace/` + `catalogue.json`) + commit + optional push; tolerant of empty commit
+- [ ] Verify push works headlessly (SSH key/agent available to launchd) — deferred to your call (QQ2)
 
 ### Phase 6 — Notify
 - [ ] `notify.ts`: osascript → Mail.app, send to vebruijn@gmail.com

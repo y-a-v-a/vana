@@ -13,3 +13,6 @@ logs/
 
 # daemon state (regenerable)
 .vana-state.json
+
+# generator staging area
+workspace/.work/

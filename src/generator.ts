@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { query, type Options } from "@anthropic-ai/claude-agent-sdk";
+import { query, type Options, type SDKResultMessage } from "@anthropic-ai/claude-agent-sdk";
 import { z } from "zod";
 import { loadConfig } from "./config.ts";
 import { loadDna } from "./dna.ts";
@@ -27,6 +27,8 @@ export interface GenerationResult {
   files: GeneratedFiles;
   /** Self-containment violations; empty = clean. A non-empty list is a soft fail. */
   violations: string[];
+  /** Provider-reported cost of this generation, USD (from the SDK result). */
+  costUsd: number;
 }
 
 // ── Prompt construction (pure, testable) ─────────────────────────────────────
@@ -137,18 +139,28 @@ export async function generateCandidate(workDir: string): Promise<GenerationResu
 
   const task = buildGeneratorTask(catalogueDigest());
 
-  let finalResult: unknown = null;
+  let finalResult: SDKResultMessage | null = null;
   for await (const message of query({ prompt: task, options })) {
-    if ((message as { type?: string }).type === "result") finalResult = message;
+    if (message.type === "result") finalResult = message;
+  }
+  if (!finalResult) throw new Error("Generator produced no result message");
+  if (finalResult.is_error) {
+    const errs = "errors" in finalResult ? finalResult.errors.join("; ") : "";
+    throw new Error(`Generator failed (${finalResult.subtype}): ${errs}`);
   }
 
   let files: GeneratedFiles;
   try {
     files = readGeneratedFiles(workDir);
   } catch (err) {
-    const tail = JSON.stringify(finalResult)?.slice(0, 400);
-    throw new Error(`${(err as Error).message}\nAgent result: ${tail}`);
+    throw new Error(
+      `${(err as Error).message}\nAgent subtype: ${finalResult.subtype}, cost: $${finalResult.total_cost_usd}`,
+    );
   }
 
-  return { files, violations: validateSelfContained(files.html) };
+  return {
+    files,
+    violations: validateSelfContained(files.html),
+    costUsd: finalResult.total_cost_usd,
+  };
 }

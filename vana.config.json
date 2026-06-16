@@ -4,7 +4,7 @@
   "costFuse": { "perWakeUsd": 5, "perDayUsd": 20 },
   "models": {
     "generator": "claude-opus-4-8",
-    "jury": "openai/gpt-4o"
+    "jury": "minimax/minimax-m3"
   },
   "thresholds": { "strong": 38, "borderline": 30 },
   "paths": {
@@ -16,5 +16,5 @@
   },
   "dashboard": { "port": 4737, "tailnetHost": "" },
   "email": { "to": "vebruijn@gmail.com" },
-  "git": { "remote": "origin", "branch": "main" }
+  "git": { "remote": "origin", "branch": "main", "push": true }
 }

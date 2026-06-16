@@ -36,7 +36,7 @@ const ConfigSchema = z.object({
     tailnetHost: z.string(),
   }),
   email: z.object({ to: z.string().email() }),
-  git: z.object({ remote: z.string(), branch: z.string() }),
+  git: z.object({ remote: z.string(), branch: z.string(), push: z.boolean().default(true) }),
 });
 
 export type Config = z.infer<typeof ConfigSchema> & {
