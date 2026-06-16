@@ -7,8 +7,12 @@
 > Source of artistic truth: [`identity/DNA.md`](identity/DNA.md). The harness does not
 > encode taste; it *applies* the DNA document.
 >
-> Status: **design locked, not yet implemented.** This file is the fallback record of
-> every architectural decision. Update it when decisions change.
+> Status: **LIVE in production** — the autonomous daemon runs on the Mac Mini and the
+> catalogue is served at `vana.y-a-v-a.org`. This file is the design + decision record
+> and the phased tasklist; for the **as-built** system see [`ARCHITECTURE.md`](ARCHITECTURE.md).
+> A couple of things evolved during the build (email became authenticated **SMTP**, not
+> Mail.app/osascript; deploy is **Vercel's native Git integration**, not a GitHub Action) —
+> ARCHITECTURE.md reflects the final shape; the diagram in §2 is the original design.
 
 ---
 
@@ -213,43 +217,43 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] `dna.ts`: DNA.md loader (used as generator/jury operating system)
 - [x] `ids.ts`: `slugify` + `makeId` (`<UTC-date>-<slug>`) — tested
 
-### Phase 2 — Generator  ✅ (code; live run pending)
+### Phase 2 — Generator  ✅
 - [x] `generator.ts`: Agent SDK (Opus), `claude_code` preset + DNA append, Read/Write tools, `cwd`-scoped
 - [x] Task prompt = constraints + §8 gates + catalogue digest → `index.html` + `motivation.md` + `meta.json`
 - [x] `validateSelfContained()` enforces no external requests; `parseMeta()` (zod) — tested
 - [x] Unit tests via `node:test` + `node:assert` (16 passing); `npm test`
 - [x] Live smoke run verified: produced a self-contained Yves Klein *Zone de Sensibilité* piece in ~200s, 0 violations (≈200s/generation ⇒ ~6 attempts fit a 20-min wake)
 
-### Phase 3 — Jury  ✅ (code; live run blocked on key)
+### Phase 3 — Jury  ✅
 - [x] `jury.ts`: OpenRouter call (fetch, JSON mode) applying DNA §8 → model judgments
 - [x] Deterministic in code (not trusted to LLM): weighting (§8.2), gate-first + thresholds (§8.1/§8.3), verdict
 - [x] `extractJson()` robust to fences/prose; zod-validated model reply; returns token usage for the fuse
 - [x] 14 jury unit tests (suite now 30 passing)
-- [ ] Live jury run — **BLOCKED: `OPENROUTER_API_KEY` not set**
-- [ ] Persist `jury.json` beside candidate — handled in Phase 4 loop
-- [ ] (follow-up) one retry on malformed jury JSON — add in Phase 4 error handling
+- [x] Live jury run verified (MiniMax M3, ~$0.0045/verdict): correctly rejected a thin test (21/50), passed strong work (40/50)
+- [x] Persist `jury.json` beside candidate — handled in Phase 4 loop
+- [ ] (follow-up) one retry on malformed jury JSON — not yet added
 
-### Phase 4 — Loop & budget  ✅ (code; live run next)
+### Phase 4 — Loop & budget  ✅
 - [x] `cost.ts`: generator cost from SDK `total_cost_usd`; jury cost from OpenRouter pricing × usage; `CostMeter` persists daily spend; `fuseCheck` per-wake + per-day
 - [x] `loop.ts`: `runWake()` loop-until-pass within wall-clock + fuse; stage→pending/rejected; `jury.json` persisted; catalogue upsert
 - [x] `isPublishable` (self-containment blocks even a strong verdict) + `uniqueId` — tested (8 new tests, suite 44)
 - [x] Live `npm run once` verified: generated "The Original" (Benjamin aura critique), jury **strong 40/50**, routed to `pending/`, catalogue updated, auto-committed. $0.37, one attempt.
-- [ ] Interval scheduler — Phase 9 daemon
+- [x] Interval scheduler — delivered in Phase 9 daemon
 
 ### Phase 5 — Persistence
 - [x] `git.ts`: scoped stage (`workspace/` + `catalogue.json`) + commit + optional push; tolerant of empty commit
-- [ ] Verify push works headlessly (SSH key/agent available to launchd) — deferred to your call (QQ2)
+- [x] Push verified headlessly (20+ pushes from non-interactive shells); launchd daemon uses the same keys via `zsh -lc` — first autonomous push confirms at the next wake
 
-### Phase 6 — Notify  ✅ (code; live SMTP send pending env)
+### Phase 6 — Notify  ✅
 - [x] **Transport: authenticated SMTP** from `agent@vincentbruijn.nl` (dropped Mail.app/osascript — flaky, GUI-dependent, hit `-1712`)
 - [x] `src/smtp.ts`: dependency-free SMTP-over-implicit-TLS (465) client; RFC2047 subject, base64 body; 20s timeout
 - [x] `notify.ts`: `buildEmail()` (tested) + `sendCandidateEmail()` over SMTP; `loadSmtp()` reads `SMTP_*` from env
 - [x] Email body: title, summary, verdict + scores, rationale, reservations, dashboard deep-link, local path
 - [x] Wired into loop `onAccepted`; `VANA_NO_EMAIL` opt-out; 8 SMTP/notify tests (suite 51)
 - [x] Live SMTP send verified (1.4s, 250 OK from mail.oni.nl) via `ONI_MAIL_*` env
-- [ ] Confirm Gmail inbox vs spam (new sender; may need an SPF record for oni.nl)
+- [x] Gmail delivery confirmed (received, not spam)
 
-### Phase 7 — Approval gateway  ✅ (code; iOS reach + tailnet host pending)
+### Phase 7 — Approval gateway  ✅
 - [x] `dashboard.ts`: dependency-free `node:http` server; index lists `pending/`, detail renders work (iframe) + motivation + jury verdict
 - [x] `promote.ts`: `decide(id, approve|reject)` moves pending→published/rejected, updates catalogue, commit+push; approve is the ONLY writer to `published/`
 - [x] Approve/Reject POST endpoints (303 redirect); `/work` serves the candidate; HTML-escaped; 6 tests (suite 56)
@@ -257,7 +261,7 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] `dashboard.tailnetHost` set to MagicDNS `the-machine.taile14d0c.ts.net`; confirmed end-to-end from iOS Safari (email → link → approve → pushed to GitHub)
 - [x] Decided-candidate UX: `candidateLocation()` lookup → published/rejected show a status page (work still viewable), unknown ids 303→landing, proper HTML 404 (live-verified)
 
-### Phase 8 — Deploy  ✅ (code; Vercel/DNS = your action)
+### Phase 8 — Deploy  ✅ (LIVE)
 - [x] `src/site.ts`: `buildSite()` assembles `dist-site/` — per-work `index.html` + `motivation.md` + `meta.json`, **never `jury.json`** (tested); catalogue `index.html` (living catalogue, DNA §9.5)
 - [x] `npm run build:site`; live-built from `published/` (The Original), verified jury.json absent
 - [x] Deploy path chosen: **Vercel native Git integration** (build `npm run build:site`, output `dist-site`); removed the Actions workflow (no secrets needed)
@@ -265,19 +269,19 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] Node engine relaxed to `>=22` for the Vercel builder
 - [x] **LIVE:** Vercel project deployed; `vana.y-a-v-a.org` serving with valid Let's Encrypt TLS; `jury.json` → 404 verified in production
 
-### Phase 9 — Ops  ✅ (code; `launchctl load` = your action)
+### Phase 9 — Ops  ✅ (LIVE)
 - [x] `src/daemon.ts`: serves dashboard continuously + self-schedules wakes (6h); `onAccepted`→email; SIGTERM/INT graceful; overlap-guarded
 - [x] `ops/com.yava.vana.plist`: launchd unit (`zsh -lc` for .zshenv secrets, abs node path, RunAtLoad, KeepAlive, logs)
 - [x] `ops/DAEMON.md`: install/load/stop, notes; boot-tested (dashboard 200, schedules, no spend, clean shutdown)
-- [ ] **Your action:** `launchctl load` to go autonomous (starts metered spend)
+- [x] **DONE:** loaded via `launchctl` — daemon running, dashboard 200, first wake scheduled; `npm run daemon:*` lifecycle + `npm run status` health check added
 - [ ] (follow-up) log rotation via `newsyslog` if logs grow
 
 ### Phase 10 — End-to-end dry run  ✅ (all but the deploy leg)
 - [x] Full cycle validated **live, piecemeal**: generate → jury → pending → email → dashboard → approve → published → pushed to GitHub (you ran it yourself from iOS)
 - [x] Thresholds sane: "The Original" scored 40/50 strong, you approved — calibration looks right at strong≥38
 - [x] Final deploy leg LIVE: `vana.y-a-v-a.org` serves the catalogue; the full chain (DNA→generate→jury→approve→push→Vercel→public, jury.json private) runs in production
+- [x] Autonomous: daemon loaded via launchd; wakes every 6h unattended
 - [ ] Tune thresholds/budgets over time; record changes here
-- [ ] Only remaining switch: `launchctl load` to go autonomous (ops/DAEMON.md)
 
 ---
 
