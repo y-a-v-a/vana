@@ -56,6 +56,15 @@ export type Secrets = {
   openRouterApiKey: string;
 };
 
+export type Smtp = {
+  host: string;
+  port: number;
+  secure: boolean;
+  user: string;
+  pass: string;
+  from: string;
+};
+
 let cached: Config | null = null;
 
 export function loadConfig(): Config {
@@ -93,6 +102,33 @@ export function loadSecrets(): Secrets {
     );
   }
   return { anthropicApiKey: anthropicApiKey!, openRouterApiKey: openRouterApiKey! };
+}
+
+/**
+ * SMTP settings for the agent mailbox (e.g. agent@vincentbruijn.nl), read from
+ * the environment so credentials live in .zshenv/.env, not in the repo.
+ */
+export function loadSmtp(): Smtp {
+  const host = process.env.SMTP_HOST?.trim();
+  const user = process.env.SMTP_USER?.trim();
+  const pass = process.env.SMTP_PASS;
+  const missing: string[] = [];
+  if (!host) missing.push("SMTP_HOST");
+  if (!user) missing.push("SMTP_USER");
+  if (!pass) missing.push("SMTP_PASS");
+  if (missing.length > 0) {
+    throw new Error(`Missing SMTP env: ${missing.join(", ")} (set in .zshenv or .env).`);
+  }
+  const port = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 465;
+  const secure = process.env.SMTP_SECURE ? process.env.SMTP_SECURE !== "false" : port === 465;
+  return {
+    host: host!,
+    port,
+    secure,
+    user: user!,
+    pass: pass!,
+    from: process.env.SMTP_FROM?.trim() || user!,
+  };
 }
 
 export const ROOT_DIR = ROOT;

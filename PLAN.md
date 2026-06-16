@@ -240,12 +240,13 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] `git.ts`: scoped stage (`workspace/` + `catalogue.json`) + commit + optional push; tolerant of empty commit
 - [ ] Verify push works headlessly (SSH key/agent available to launchd) — deferred to your call (QQ2)
 
-### Phase 6 — Notify  ✅ (code; live delivery being confirmed)
-- [x] `notify.ts`: `buildEmail()` (tested) + `sendCandidateEmail()` via `ops/send-mail.applescript` (argv-passed, no injection)
+### Phase 6 — Notify  ✅ (code; live SMTP send pending env)
+- [x] **Transport: authenticated SMTP** from `agent@vincentbruijn.nl` (dropped Mail.app/osascript — flaky, GUI-dependent, hit `-1712`)
+- [x] `src/smtp.ts`: dependency-free SMTP-over-implicit-TLS (465) client; RFC2047 subject, base64 body; 20s timeout
+- [x] `notify.ts`: `buildEmail()` (tested) + `sendCandidateEmail()` over SMTP; `loadSmtp()` reads `SMTP_*` from env
 - [x] Email body: title, summary, verdict + scores, rationale, reservations, dashboard deep-link, local path
-- [x] Wired into loop `onAccepted`; `VANA_NO_EMAIL` opt-out; `-1712` timeout treated as soft-warn (message queued)
-- [x] Automation permission granted on first run
-- [ ] Confirm actual Gmail delivery (first send hit a `-1712` timeout; widened to 300s + Mail launch)
+- [x] Wired into loop `onAccepted`; `VANA_NO_EMAIL` opt-out; 8 SMTP/notify tests (suite 51)
+- [ ] Live send — needs `SMTP_HOST/PORT/USER/PASS` in `.zshenv`
 
 ### Phase 7 — Approval gateway
 - [ ] `dashboard/`: local web server; list `pending/`, render work + motivation + jury

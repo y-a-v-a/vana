@@ -1,11 +1,7 @@
-import { execFile } from "node:child_process";
-import { join } from "node:path";
-import { promisify } from "node:util";
-import { loadConfig, type Config } from "./config.ts";
+import { loadConfig, loadSmtp, type Config } from "./config.ts";
+import { sendMail } from "./smtp.ts";
 import type { GeneratedMeta } from "./generator.ts";
 import type { JuryVerdict } from "./jury.ts";
-
-const exec = promisify(execFile);
 
 /** URL to the approval dashboard entry for a candidate (Phase 7 serves this). */
 export function dashboardUrl(cfg: Config, id: string): string {
@@ -53,34 +49,14 @@ export function buildEmail(
   return { subject, body };
 }
 
-export interface SendResult {
-  sent: boolean;
-  warning?: string;
-}
-
-/**
- * Send the candidate notification email via Mail.app (integration).
- * A `-1712` AppleEvent timeout is treated as a soft warning, not a failure:
- * Mail has accepted the message into its Outbox and typically still delivers it.
- */
+/** Send the candidate notification email over authenticated SMTP (integration). */
 export async function sendCandidateEmail(
   id: string,
   meta: GeneratedMeta,
   verdict: JuryVerdict,
-): Promise<SendResult> {
+): Promise<void> {
   const cfg = loadConfig();
+  const smtp = loadSmtp();
   const { subject, body } = buildEmail(id, meta, verdict, dashboardUrl(cfg, id));
-  const script = join(cfg.abs.root, "ops", "send-mail.applescript");
-  try {
-    await exec("osascript", [script, subject, body, cfg.email.to]);
-    return { sent: true };
-  } catch (err) {
-    const stderr = `${(err as { stderr?: string }).stderr ?? (err as Error).message}`;
-    if (/-1712|timed out/i.test(stderr)) {
-      const warning = "Mail send timed out (-1712); message queued in Outbox — verify delivery.";
-      console.warn(`[notify] ${warning}`);
-      return { sent: false, warning };
-    }
-    throw err;
-  }
+  await sendMail(smtp, { from: smtp.from, to: cfg.email.to, subject, body });
 }
