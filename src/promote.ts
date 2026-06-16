@@ -2,6 +2,7 @@ import { existsSync, renameSync } from "node:fs";
 import { join } from "node:path";
 import { loadConfig } from "./config.ts";
 import { loadCatalogue, writeCatalogue, type CatalogueStatus } from "./catalogue.ts";
+import { isValidId } from "./ids.ts";
 import { commitAndPush } from "./git.ts";
 
 export type Decision = "approve" | "reject";
@@ -41,6 +42,7 @@ export async function decide(
   decision: Decision,
   opts: { push?: boolean } = {},
 ): Promise<DecisionResult> {
+  if (!isValidId(id)) throw new Error(`Invalid candidate id: ${id}`);
   const cfg = loadConfig();
   const src = join(cfg.abs.pending, id);
   if (!existsSync(src)) throw new Error(`No pending candidate: ${id}`);

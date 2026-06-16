@@ -22,3 +22,14 @@ export function isoDate(date: Date): string {
 export function makeId(title: string, date: Date): string {
   return `${isoDate(date)}-${slugify(title) || "untitled"}`;
 }
+
+/**
+ * True only for ids of the exact shape `makeId()` produces: `YYYY-MM-DD-<slug>`
+ * with a lowercase, hyphen-separated alphanumeric slug (the `-2`, `-3`, …
+ * uniqueness suffix is covered). Use this to validate untrusted HTTP input
+ * before it is joined into a filesystem path — it admits no `.`, `/`, or `\`,
+ * so it cannot express path traversal.
+ */
+export function isValidId(id: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}-[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id);
+}

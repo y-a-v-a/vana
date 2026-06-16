@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { loadConfig, type Config } from "./config.ts";
 import type { GeneratedMeta } from "./generator.ts";
 import type { JuryVerdict } from "./jury.ts";
+import { isValidId } from "./ids.ts";
 import { decide, type Decision } from "./promote.ts";
 
 export interface PendingItem {
@@ -174,6 +175,9 @@ async function handle(req: IncomingMessage, res: ServerResponse, cfg: Config): P
 
   if (parts[0] === "candidate" && parts[1]) {
     const id = decodeURIComponent(parts[1]);
+    // Untrusted input: reject anything that isn't a well-formed candidate id
+    // before it can reach the filesystem (path-traversal guard).
+    if (!isValidId(id)) return send(res, 404, "text/html; charset=utf-8", renderNotFound());
     const loc = candidateLocation(cfg, id);
 
     if (req.method === "GET" && parts.length === 2) {
