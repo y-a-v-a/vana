@@ -15,6 +15,11 @@
     "dashboard": "tsx src/dashboard.ts",
     "build:site": "tsx src/site.ts",
     "status": "bash ops/status.sh",
+    "daemon:install": "cp ops/com.yava.vana.plist \"$HOME/Library/LaunchAgents/\" && echo installed",
+    "daemon:start": "launchctl load -w \"$HOME/Library/LaunchAgents/com.yava.vana.plist\" && echo started",
+    "daemon:stop": "launchctl unload -w \"$HOME/Library/LaunchAgents/com.yava.vana.plist\" && echo stopped",
+    "daemon:restart": "launchctl unload \"$HOME/Library/LaunchAgents/com.yava.vana.plist\" 2>/dev/null; launchctl load -w \"$HOME/Library/LaunchAgents/com.yava.vana.plist\" && echo restarted",
+    "daemon:logs": "tail -f logs/daemon.out.log",
     "test": "node --import tsx --test \"src/**/*.test.ts\"",
     "typecheck": "tsc"
   },

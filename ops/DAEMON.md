@@ -7,28 +7,39 @@
 
 Run it under launchd so it survives crashes and reboots.
 
+## Operating it (npm scripts)
+
+| Command | What it does |
+|---|---|
+| `npm run daemon:install` | copy the plist into `~/Library/LaunchAgents/` |
+| `npm run daemon:start` | load + enable the launch agent (goes autonomous) |
+| `npm run daemon:stop` | unload it |
+| `npm run daemon:restart` | reload (use after a **code** change — daemon runs `tsx` on source) |
+| `npm run daemon:logs` | `tail -f logs/daemon.out.log` |
+| `npm run status` | one-shot health check (launchd state, dashboard, wakes, spend, pending) |
+| `npm run once` | run one cycle now, on demand (separate from the schedule) |
+
 ## Going live (your explicit step — this starts autonomous, metered spend)
 
 ```sh
-# 1. stop any standalone dashboard you started (frees port 4737)
-lsof -ti tcp:4737 | xargs kill 2>/dev/null
-
-# 2. install + load the launch agent
-cp ops/com.yava.vana.plist ~/Library/LaunchAgents/
-launchctl load ~/Library/LaunchAgents/com.yava.vana.plist
-
-# 3. watch it boot
-tail -f logs/daemon.out.log
+lsof -ti tcp:4737 | xargs kill 2>/dev/null   # free the dashboard port if needed
+npm run daemon:install
+npm run daemon:start
+npm run daemon:logs
 ```
 
-By default the first wake is one interval (6h) away. To wake immediately on
-load, add `VANA_WAKE_ON_START=1` to your environment (or run a one-off
-`npm run once` to test a single cycle without the daemon).
+By default the first wake is one interval (6h) away. Use `npm run once` to test
+a single cycle immediately without waiting for the schedule.
+
+## After a change
+- **Code** change (`src/*.ts`): `npm run daemon:restart` (re-reads source).
+- **Plist** change (`ops/com.yava.vana.plist`): `npm run daemon:install` then
+  `npm run daemon:restart`.
 
 ## Stopping
 
 ```sh
-launchctl unload ~/Library/LaunchAgents/com.yava.vana.plist
+npm run daemon:stop
 ```
 
 ## Notes
