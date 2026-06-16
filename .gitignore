@@ -16,3 +16,6 @@ logs/
 
 # generator staging area
 workspace/.work/
+
+# built public site (assembled in CI)
+dist-site/

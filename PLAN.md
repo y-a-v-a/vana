@@ -257,9 +257,12 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] `dashboard.tailnetHost` set to MagicDNS `the-machine.taile14d0c.ts.net`; confirmed end-to-end from iOS Safari (email → link → approve → pushed to GitHub)
 - [x] Decided-candidate UX: `candidateLocation()` lookup → published/rejected show a status page (work still viewable), unknown ids 303→landing, proper HTML 404 (live-verified)
 
-### Phase 8 — Deploy
-- [ ] Vercel project pointed at `published/`; `ai.y-a-v-a.org` CNAME
-- [ ] `.github/workflows/deploy.yml`: on push to `published/**` → Vercel deploy
+### Phase 8 — Deploy  ✅ (code; Vercel/DNS = your action)
+- [x] `src/site.ts`: `buildSite()` assembles `dist-site/` — per-work `index.html` + `motivation.md` + `meta.json`, **never `jury.json`** (tested); catalogue `index.html` (living catalogue, DNA §9.5)
+- [x] `npm run build:site`; live-built from `published/` (The Original), verified jury.json absent
+- [x] `.github/workflows/deploy.yml`: on push to `workspace/published/**` → `build:site` → Vercel deploy
+- [x] `ops/DEPLOY.md`: Vercel project + secrets + domain steps (+ native-integration alternative)
+- [ ] **Your action:** create Vercel project, add `VERCEL_*` secrets, point `ai.y-a-v-a.org` DNS
 
 ### Phase 9 — Ops
 - [ ] `ops/com.yava.vana.plist` launchd unit (KeepAlive, logs)

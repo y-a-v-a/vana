@@ -1,0 +1,31 @@
+name: deploy-site
+
+# Builds the public catalogue (jury.json excluded) and deploys it to Vercel.
+# Fires when an approved work lands in workspace/published/ (i.e. after you
+# Approve in the dashboard, which commits + pushes), or on manual dispatch.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "workspace/published/**"
+      - "src/site.ts"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: npm ci
+      - run: npm run build:site
+      - name: Deploy dist-site to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: npx vercel deploy dist-site --prod --yes --token="$VERCEL_TOKEN"
