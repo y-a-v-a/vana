@@ -1,6 +1,13 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { escapeHtml, renderIndex, renderCandidate, type PendingItem } from "./dashboard.ts";
+import {
+  escapeHtml,
+  renderIndex,
+  renderCandidate,
+  renderResolved,
+  renderNotFound,
+  type PendingItem,
+} from "./dashboard.ts";
 import { statusFor } from "./promote.ts";
 import type { GeneratedMeta } from "./generator.ts";
 import type { JuryVerdict } from "./jury.ts";
@@ -53,6 +60,24 @@ test("renderCandidate embeds work iframe, scores, rationale, and action forms", 
   assert.match(html, /action="\/candidate\/2026-06-16-x\/approve"/);
   assert.match(html, /action="\/candidate\/2026-06-16-x\/reject"/);
   assert.match(html, /motivation body/);
+});
+
+test("renderResolved shows published status, work, and no action forms", () => {
+  const html = renderResolved("2026-06-16-x", meta, verdict, "published", "motivation body");
+  assert.match(html, /Published ✓/);
+  assert.match(html, /\/candidate\/2026-06-16-x\/work/); // work still viewable
+  assert.match(html, /back to pending/);
+  assert.doesNotMatch(html, /action="[^"]*\/approve"/); // no approve/reject buttons
+});
+
+test("renderResolved shows rejected status", () => {
+  assert.match(renderResolved("id", meta, verdict, "rejected", ""), /Rejected/);
+});
+
+test("renderNotFound links back to the landing page", () => {
+  const html = renderNotFound();
+  assert.match(html, /Nothing here/);
+  assert.match(html, /href="\/"/);
 });
 
 test("statusFor maps approve→published / reject→rejected", () => {

@@ -64,23 +64,29 @@ export function renderIndex(items: PendingItem[]): string {
   return shell("vana · pending", `<h1>Pending (${items.length})</h1>${rows}`);
 }
 
-export function renderCandidate(
-  id: string,
-  meta: GeneratedMeta,
-  verdict: JuryVerdict,
-  motivation: string,
-): string {
+/** The work iframe + jury card, shared by the pending and resolved views. */
+function workAndJury(id: string, meta: GeneratedMeta, verdict: JuryVerdict): string {
   const s = verdict.scores;
-  const body = `
-  <h1>${escapeHtml(meta.title)} <span class="badge ${verdict.verdict}">${verdict.verdict} ${verdict.weighted_total}/50</span></h1>
-  <p>${escapeHtml(meta.summary)}</p>
+  return `
   <iframe src="/candidate/${encodeURIComponent(id)}/work" title="work"></iframe>
   <div class="card">
     <div class="scores">novelty ${s.novelty} · nuance ${s.nuance} · narrative ${s.narrative} · craft ${s.craft} · wit ${s.wit}</div>
     <p><strong>Jury:</strong> ${escapeHtml(verdict.rationale)}</p>
     ${verdict.reservations ? `<p class="muted"><strong>Reservations:</strong> ${escapeHtml(verdict.reservations)}</p>` : ""}
     <p class="muted">Principles: ${escapeHtml(verdict.principles_invoked.join(", "))} · License: ${escapeHtml(meta.license)} · Jury: ${escapeHtml(verdict.jury_model)}</p>
-  </div>
+  </div>`;
+}
+
+export function renderCandidate(
+  id: string,
+  meta: GeneratedMeta,
+  verdict: JuryVerdict,
+  motivation: string,
+): string {
+  const body = `
+  <h1>${escapeHtml(meta.title)} <span class="badge ${verdict.verdict}">${verdict.verdict} ${verdict.weighted_total}/50</span></h1>
+  <p>${escapeHtml(meta.summary)}</p>
+  ${workAndJury(id, meta, verdict)}
   <div class="card">
     <form method="POST" action="/candidate/${encodeURIComponent(id)}/approve"><button class="approve" type="submit">Approve → publish</button></form>
     <form method="POST" action="/candidate/${encodeURIComponent(id)}/reject"><button class="rejectbtn" type="submit">Reject</button></form>
@@ -88,6 +94,34 @@ export function renderCandidate(
   <h2>Motivation</h2>
   <pre>${escapeHtml(motivation)}</pre>`;
   return shell(`vana · ${meta.title}`, body);
+}
+
+/** A candidate that has already been decided — no action buttons, just status. */
+export function renderResolved(
+  id: string,
+  meta: GeneratedMeta,
+  verdict: JuryVerdict,
+  status: "published" | "rejected",
+  motivation: string,
+): string {
+  const note =
+    status === "published"
+      ? `<strong>Published ✓</strong> — you already approved this; it lives in the catalogue.`
+      : `<strong>Rejected</strong> — this candidate was set aside.`;
+  const body = `
+  <h1>${escapeHtml(meta.title)} <span class="badge ${verdict.verdict}">${verdict.verdict} ${verdict.weighted_total}/50</span></h1>
+  <div class="card">${note} &nbsp; <a href="/">← back to pending</a></div>
+  ${workAndJury(id, meta, verdict)}
+  <h2>Motivation</h2>
+  <pre>${escapeHtml(motivation)}</pre>`;
+  return shell(`vana · ${meta.title}`, body);
+}
+
+export function renderNotFound(): string {
+  return shell(
+    "vana · not found",
+    `<h1>Nothing here</h1><p class="muted">That page doesn't exist. <a href="/">← back to pending</a></p>`,
+  );
 }
 
 // ── Data ─────────────────────────────────────────────────────────────────────
@@ -108,6 +142,22 @@ export function listPending(cfg: Config): PendingItem[] {
   return items.sort((a, b) => a.id.localeCompare(b.id));
 }
 
+export type Lifecycle = "pending" | "published" | "rejected";
+
+/** Find which lifecycle dir holds a candidate, searching pending→published→rejected. */
+export function candidateLocation(cfg: Config, id: string): { status: Lifecycle; dir: string } | null {
+  const roots: [Lifecycle, string][] = [
+    ["pending", cfg.abs.pending],
+    ["published", cfg.abs.published],
+    ["rejected", cfg.abs.rejected],
+  ];
+  for (const [status, root] of roots) {
+    const dir = join(root, id);
+    if (existsSync(dir)) return { status, dir };
+  }
+  return null;
+}
+
 // ── Server ───────────────────────────────────────────────────────────────────
 function send(res: ServerResponse, status: number, type: string, body: string): void {
   res.writeHead(status, { "Content-Type": type });
@@ -124,19 +174,28 @@ async function handle(req: IncomingMessage, res: ServerResponse, cfg: Config): P
 
   if (parts[0] === "candidate" && parts[1]) {
     const id = decodeURIComponent(parts[1]);
-    const dir = join(cfg.abs.pending, id);
+    const loc = candidateLocation(cfg, id);
 
     if (req.method === "GET" && parts.length === 2) {
-      if (!existsSync(dir)) return send(res, 404, "text/plain", "Unknown candidate");
-      const meta = JSON.parse(readFileSync(join(dir, "meta.json"), "utf8")) as GeneratedMeta;
-      const verdict = JSON.parse(readFileSync(join(dir, "jury.json"), "utf8")) as JuryVerdict;
-      const motivation = readFileSync(join(dir, "motivation.md"), "utf8");
-      return send(res, 200, "text/html; charset=utf-8", renderCandidate(id, meta, verdict, motivation));
+      // Truly unknown → bounce to the landing page; decided → status page.
+      if (!loc) {
+        res.writeHead(303, { Location: "/" });
+        res.end();
+        return;
+      }
+      const meta = JSON.parse(readFileSync(join(loc.dir, "meta.json"), "utf8")) as GeneratedMeta;
+      const verdict = JSON.parse(readFileSync(join(loc.dir, "jury.json"), "utf8")) as JuryVerdict;
+      const motivation = readFileSync(join(loc.dir, "motivation.md"), "utf8");
+      const html =
+        loc.status === "pending"
+          ? renderCandidate(id, meta, verdict, motivation)
+          : renderResolved(id, meta, verdict, loc.status, motivation);
+      return send(res, 200, "text/html; charset=utf-8", html);
     }
 
     if (req.method === "GET" && parts[2] === "work") {
-      const work = join(dir, "index.html");
-      if (!existsSync(work)) return send(res, 404, "text/plain", "No work");
+      const work = loc ? join(loc.dir, "index.html") : null;
+      if (!work || !existsSync(work)) return send(res, 404, "text/html; charset=utf-8", renderNotFound());
       return send(res, 200, "text/html; charset=utf-8", readFileSync(work, "utf8"));
     }
 
@@ -147,13 +206,13 @@ async function handle(req: IncomingMessage, res: ServerResponse, cfg: Config): P
         res.writeHead(303, { Location: "/" });
         res.end();
       } catch (err) {
-        send(res, 409, "text/plain", `Could not ${decision}: ${(err as Error).message}`);
+        send(res, 409, "text/html; charset=utf-8", renderNotFound());
       }
       return;
     }
   }
 
-  send(res, 404, "text/plain", "Not found");
+  send(res, 404, "text/html; charset=utf-8", renderNotFound());
 }
 
 export function startDashboard(): ReturnType<typeof createServer> {

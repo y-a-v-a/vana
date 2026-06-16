@@ -254,7 +254,8 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] `promote.ts`: `decide(id, approve|reject)` moves pending→published/rejected, updates catalogue, commit+push; approve is the ONLY writer to `published/`
 - [x] Approve/Reject POST endpoints (303 redirect); `/work` serves the candidate; HTML-escaped; 6 tests (suite 56)
 - [x] Live-verified all GET routes + 404; binds `0.0.0.0` (tailnet-reachable)
-- [ ] Set `dashboard.tailnetHost` so the email link is clickable from iOS; confirm reachability from your phone
+- [x] `dashboard.tailnetHost` set to MagicDNS `the-machine.taile14d0c.ts.net`; confirmed end-to-end from iOS Safari (email → link → approve → pushed to GitHub)
+- [x] Decided-candidate UX: `candidateLocation()` lookup → published/rejected show a status page (work still viewable), unknown ids 303→landing, proper HTML 404 (live-verified)
 
 ### Phase 8 — Deploy
 - [ ] Vercel project pointed at `published/`; `ai.y-a-v-a.org` CNAME
