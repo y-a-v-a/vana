@@ -69,7 +69,7 @@ export function renderIndex(items: PendingItem[]): string {
 function workAndJury(id: string, meta: GeneratedMeta, verdict: JuryVerdict): string {
   const s = verdict.scores;
   return `
-  <iframe src="/candidate/${encodeURIComponent(id)}/work" title="work"></iframe>
+  <iframe src="/candidate/${encodeURIComponent(id)}/work" title="work" sandbox="allow-scripts allow-downloads" referrerpolicy="no-referrer"></iframe>
   <div class="card">
     <div class="scores">novelty ${s.novelty} · nuance ${s.nuance} · narrative ${s.narrative} · craft ${s.craft} · wit ${s.wit}</div>
     <p><strong>Jury:</strong> ${escapeHtml(verdict.rationale)}</p>
@@ -159,6 +159,16 @@ export function candidateLocation(cfg: Config, id: string): { status: Lifecycle;
   return null;
 }
 
+// CSP for a rendered work: it must make ZERO external requests. This is the real
+// enforcement of self-containment (the generator regex is only a first pass).
+// default-src 'none' blocks external loads; connect-src 'none' blocks
+// fetch/XHR/WebSocket/sendBeacon/EventSource; inline + data: + blob: are allowed
+// so legitimately self-contained works still render.
+export const WORK_CSP =
+  "default-src 'none'; img-src data: blob:; media-src data: blob:; " +
+  "style-src 'unsafe-inline'; script-src 'unsafe-inline' 'unsafe-eval' blob:; " +
+  "font-src data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'";
+
 // ── Server ───────────────────────────────────────────────────────────────────
 function send(res: ServerResponse, status: number, type: string, body: string): void {
   res.writeHead(status, { "Content-Type": type });
@@ -200,7 +210,9 @@ async function handle(req: IncomingMessage, res: ServerResponse, cfg: Config): P
     if (req.method === "GET" && parts[2] === "work") {
       const work = loc ? join(loc.dir, "index.html") : null;
       if (!work || !existsSync(work)) return send(res, 404, "text/html; charset=utf-8", renderNotFound());
-      return send(res, 200, "text/html; charset=utf-8", readFileSync(work, "utf8"));
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Content-Security-Policy": WORK_CSP });
+      res.end(readFileSync(work, "utf8"));
+      return;
     }
 
     if (req.method === "POST" && (parts[2] === "approve" || parts[2] === "reject")) {

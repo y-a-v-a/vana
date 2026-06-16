@@ -181,7 +181,12 @@ See [`ops/DAEMON.md`](ops/DAEMON.md) and [`ops/DEPLOY.md`](ops/DEPLOY.md).
 - **The hard gate is sacred** — nothing reaches `published/` (and the live site)
   without an Approve click. The loop is write-only to `pending/` and `rejected/`.
 - **Two vendors, always** — generator ≠ jury.
-- **Self-contained or it fails** — any external request in a work is a gate failure.
+- **Self-contained, enforced in layers** — `validateSelfContained` (a regex
+  denylist) is a fast first pass that rejects obvious external requests at
+  generation time; the real guarantee is a restrictive **CSP + sandboxed iframe**
+  at render time (dashboard `/work` response and `vercel.json` on the public site),
+  so a vector the regex misses still cannot reach the network. An HTML
+  parser-based validator is a possible future third layer.
 - **`jury.json` is private** — committed as the record, never published to the site.
 - **DNA.md is the only taste authority** — tune the rubric there, not in code.
 - **Untrusted ids are validated** — an HTTP-supplied candidate id must pass

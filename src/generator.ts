@@ -68,17 +68,29 @@ Write index.html, motivation.md, and meta.json now.`;
 }
 
 // ── Self-containment validation (pure, testable) ─────────────────────────────
-// Patterns that trigger a network request on load. Note: <a href="http..."> is
-// allowed (user-initiated, e.g. the license link) and intentionally NOT flagged.
+// HEURISTIC FIRST PASS ONLY. This is a denylist and cannot be exhaustive; the
+// real guarantee is the restrictive CSP + sandboxed iframe applied when a work
+// is rendered (dashboard `/work` and the public site headers). A match here
+// fails fast at generation time so we don't waste a jury call on an obvious
+// violation. Note: <a href="http..."> is allowed (user-initiated license link).
 const EXTERNAL_PATTERNS: { name: string; re: RegExp }[] = [
   { name: "external src", re: /\bsrc\s*=\s*["']?\s*(?:https?:)?\/\//i },
+  { name: "external srcset", re: /\b(?:image)?srcset\s*=\s*["'][^"']*(?:https?:)?\/\//i },
   { name: "external <link href>", re: /<link\b[^>]*\bhref\s*=\s*["']?\s*(?:https?:)?\/\//i },
+  { name: "external <base href>", re: /<base\b[^>]*\bhref\s*=\s*["']?\s*(?:https?:)?\/\//i },
   { name: "css url() external", re: /url\(\s*["']?\s*(?:https?:)?\/\//i },
   { name: "@import external", re: /@import\s+(?:url\()?["']?\s*(?:https?:)?\/\//i },
   { name: "fetch()", re: /\bfetch\s*\(/i },
+  { name: "dynamic import() url", re: /\bimport\s*\(\s*["'`]?\s*(?:https?:)?\/\//i },
   { name: "XMLHttpRequest", re: /\bXMLHttpRequest\b/i },
+  { name: "sendBeacon", re: /\bsendBeacon\s*\(/i },
   { name: "WebSocket", re: /\bnew\s+WebSocket\b/i },
   { name: "EventSource", re: /\bnew\s+EventSource\b/i },
+  { name: "external form action", re: /\baction\s*=\s*["']?\s*(?:https?:)?\/\//i },
+  { name: "anchor ping", re: /\bping\s*=\s*["']?\s*(?:https?:)?\/\//i },
+  { name: "meta refresh redirect", re: /http-equiv\s*=\s*["']?\s*refresh[^>]*\burl\s*=/i },
+  { name: "external object/embed data", re: /\bdata\s*=\s*["']?\s*(?:https?:)?\/\//i },
+  { name: "import map", re: /<script[^>]+type\s*=\s*["']?importmap/i },
 ];
 
 /** Returns a list of self-containment violations (empty = clean). */
