@@ -2,7 +2,7 @@
 
 > A local, interval-driven agent loop that generates self-contained web artworks in
 > Vincent Bruijn / y-a-v-a's artistic DNA, has them graded by an independent AI jury,
-> and — only after human approval — publishes them to `ai.y-a-v-a.org`.
+> and — only after human approval — publishes them to `vana.y-a-v-a.org`.
 >
 > Source of artistic truth: [`identity/DNA.md`](identity/DNA.md). The harness does not
 > encode taste; it *applies* the DNA document.
@@ -68,7 +68,7 @@ jury report.**
                                             published/<id>/  + git commit & push
                                                         │
                                                         ▼
-                              GitHub Actions  ──▶  Vercel deploy  ──▶  ai.y-a-v-a.org
+                              GitHub Actions  ──▶  Vercel deploy  ──▶  vana.y-a-v-a.org
                                             (serves only published/ — the approved subset)
 ```
 
@@ -125,7 +125,7 @@ every INTERVAL (default 6h):
 - Jury model id: pick a strong **non-Anthropic** OpenRouter model for independence (set in config).
 - `OPENROUTER_API_KEY` is **not yet set in env** — required before first run.
 - Tailscale CLI not on PATH (Mac App Store build); daemon assumed running — detect tailnet host at runtime or set in config.
-- Public domain `ai.y-a-v-a.org` → Vercel project + CNAME wiring (deploy-time, not harness-blocking).
+- Public domain `vana.y-a-v-a.org` → Vercel project + CNAME wiring (deploy-time, not harness-blocking).
 - Upgrades noted for later: multimodal jury (screenshot), second juror w/ consensus, revision rounds, server-side "live" works (P4 bots/feeds/APIs).
 
 ---
@@ -192,7 +192,7 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - Hard gate: only Approve writes to `published/`.
 
 **Deploy** (`.github/workflows/deploy.yml`)
-- Trigger on push touching `published/**` → Vercel deploy of the published catalogue to `ai.y-a-v-a.org`.
+- Trigger on push touching `published/**` → Vercel deploy of the published catalogue to `vana.y-a-v-a.org`.
 
 ---
 
@@ -263,7 +263,7 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] Deploy path chosen: **Vercel native Git integration** (build `npm run build:site`, output `dist-site`); removed the Actions workflow (no secrets needed)
 - [x] `ops/DEPLOY.md`: click-by-click Vercel project + build settings + domain + verification
 - [x] Node engine relaxed to `>=22` for the Vercel builder
-- [ ] **Your action:** create the Vercel project (import `y-a-v-a/vana`), then point `ai.y-a-v-a.org` DNS
+- [ ] **Your action:** create the Vercel project (import `y-a-v-a/vana`), then point `vana.y-a-v-a.org` DNS
 
 ### Phase 9 — Ops  ✅ (code; `launchctl load` = your action)
 - [x] `src/daemon.ts`: serves dashboard continuously + self-schedules wakes (6h); `onAccepted`→email; SIGTERM/INT graceful; overlap-guarded
@@ -275,7 +275,7 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 ### Phase 10 — End-to-end dry run  ✅ (all but the deploy leg)
 - [x] Full cycle validated **live, piecemeal**: generate → jury → pending → email → dashboard → approve → published → pushed to GitHub (you ran it yourself from iOS)
 - [x] Thresholds sane: "The Original" scored 40/50 strong, you approved — calibration looks right at strong≥38
-- [ ] Final deploy leg (push→Vercel→ai.y-a-v-a.org) once the Vercel project + DNS exist
+- [ ] Final deploy leg (push→Vercel→vana.y-a-v-a.org) once the Vercel project + DNS exist
 - [ ] Tune thresholds/budgets over time; record changes here
 
 ---

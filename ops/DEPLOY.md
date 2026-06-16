@@ -1,4 +1,4 @@
-# Deploy — ai.y-a-v-a.org
+# Deploy — vana.y-a-v-a.org
 
 The public site is **assembled, not raw**: `npm run build:site` reads
 `workspace/published/*` and writes `dist-site/` containing, per work,
@@ -26,7 +26,7 @@ at `/<id>/motivation.md`.
    catalogue (it'll show "The Original"). You'll get a `*.vercel.app` URL.
 
 4. **Point the domain**
-   - Project → **Settings → Domains** → add `ai.y-a-v-a.org`
+   - Project → **Settings → Domains** → add `vana.y-a-v-a.org`
    - Vercel shows a DNS record (a CNAME to `cname.vercel-dns.com`). Add it at
      wherever `y-a-v-a.org`'s DNS is managed.
 

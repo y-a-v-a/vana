@@ -5,7 +5,7 @@ The question became: what to do now...? Think big!
 
 Versioned artworks
 An agent calling multiple models
-Artworks on subdomain https://ai.y-a-v-a.org (tbd)
+Artworks on subdomain https://vana.y-a-v-a.org
 Draws a DNA from my current works
 Uses the DNA as inspiration for new work
 Have a feedback loop that values the art work on 3 topics: (look up that guy on Instagram)
