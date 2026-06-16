@@ -184,4 +184,7 @@ See [`ops/DAEMON.md`](ops/DAEMON.md) and [`ops/DEPLOY.md`](ops/DEPLOY.md).
 - **Self-contained or it fails** — any external request in a work is a gate failure.
 - **`jury.json` is private** — committed as the record, never published to the site.
 - **DNA.md is the only taste authority** — tune the rubric there, not in code.
+- **Untrusted ids are validated** — an HTTP-supplied candidate id must pass
+  `isValidId` (the exact generated shape, no `.`/`/`/`\`) before it is joined into
+  any lifecycle path (dashboard routes, `promote.decide`).
 - **The budget is a fuse, not a target** — time first, dollars as the backstop.
