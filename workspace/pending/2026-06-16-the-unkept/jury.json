@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-16-the-unkept",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Tino Sehgal",
+    "constructed situations",
+    "The Original (2026, implicit inverse)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P9"
+  ],
+  "rationale": "The Unkept is a strong DNA candidate because the mechanism (Page Visibility API + blur/pagehide) is literally the argument: attention is the medium, and withdrawal of attention is destruction. This is a textbook P1 case, and the Sehgal reference adds a genuinely new patron saint to the catalogue's lineage rather than retreading Magritte/Malevich/Martin Creed territory. The inversion of The Original (2026) is precisely placed in the narrative arc — fake scarcity by localStorage answered by genuine un-keepability — and the museum wall label plus wry epitaph carry the cheerful-cynic voice without over-explaining. The chance/order axis is legible (rule-based orbiting forms, random seed, ephemeral individual).",
+  "reservations": "The generative forms themselves are pleasant but unremarkable warm radial gradients; the work's strength is almost entirely in the destruction mechanic and the framing, not in the 'situation' that gets destroyed. A more distinctive or Sehgal-adjacent visual content (e.g., something implying movement, voice, or presence) would deepen the double-coding. The piece is also close to a one-gesture work and risks being read as a clever trick unless the viewer lingers with the wall label.",
+  "revision_suggestion": "Consider making the live 'situation' more characterful — perhaps faintly evoking bodily presence or breath rather than abstract warm blobs — so the loss feels more pointed. A one-line artist statement beneath the wall label (e.g., a Sehgal quote used as a found object) would tighten the lineage reference without violating the no-documentation ethic of the work itself.",
+  "jury_model": "minimax/minimax-m3"
+}

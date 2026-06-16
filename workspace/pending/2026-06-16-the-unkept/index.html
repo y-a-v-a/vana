@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Unkept</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0e0d0b; overflow: hidden; }
+  body { font-family: Georgia, "Times New Roman", serif; color: #d8d2c6; }
+  #stage { display: block; width: 100vw; height: 100vh; }
+
+  /* Wall label, museum-style, bottom-left. Visible while the work lives. */
+  #label {
+    position: fixed; left: 24px; bottom: 22px; max-width: 320px;
+    font-size: 12.5px; line-height: 1.5; letter-spacing: .02em;
+    color: #b8b1a3; user-select: none; pointer-events: none;
+    transition: opacity .6s ease;
+  }
+  #label b { color: #efe9dd; font-weight: normal; font-style: italic; }
+  #label .meta { color: #837c6f; }
+
+  /* Epitaph, centred. Shown only once the work has been looked away from. */
+  #epitaph {
+    position: fixed; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    padding: 0 28px; gap: 14px; opacity: 0; pointer-events: none;
+    transition: opacity 1.2s ease;
+  }
+  #epitaph.show { opacity: 1; pointer-events: auto; }
+  #epitaph .line { font-size: 19px; font-style: italic; color: #cfc8ba; }
+  #epitaph .sub { font-size: 13px; color: #7c7568; max-width: 360px; line-height: 1.6; }
+  #epitaph a { color: #cfc8ba; text-decoration: underline; cursor: pointer; }
+
+  #cc {
+    position: fixed; right: 18px; bottom: 16px; font-size: 10.5px;
+    color: #565045; text-align: right; line-height: 1.5; user-select: none;
+  }
+  #cc a { color: #6e675b; text-decoration: none; }
+</style>
+</head>
+<body>
+  <canvas id="stage"></canvas>
+
+  <div id="label">
+    <b>The Unkept</b><br>
+    a constructed situation, generated for you alone<br>
+    <span class="meta">live render &middot; no recording &middot; do not look away</span>
+  </div>
+
+  <div id="epitaph">
+    <div class="line">You looked away.</div>
+    <div class="sub">It is gone, and it will not come back.
+      No copy was kept &mdash; not by you, not by me, not by the cache.
+      <a id="again">Reload</a> for another that will also not last.</div>
+  </div>
+
+  <div id="cc">
+    The Unkept &middot; y-a-v-a, after Tino Sehgal<br>
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>
+    &middot; no cookies, no tracking, nothing stored
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  var canvas = document.getElementById("stage");
+  var ctx = canvas.getContext("2d");
+  var label = document.getElementById("label");
+  var epitaph = document.getElementById("epitaph");
+  var dead = false;
+  var W = 0, H = 0, dpr = 1;
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + "px"; canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener("resize", resize);
+  resize();
+
+  // --- The situation: composed once, by chance, never to recur. ----------
+  // A small set of warm, near-monochrome forms drift on slow orbits.
+  // Faint trails make presence felt; nothing is permanent.
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+
+  var hueBase = rnd(18, 44);          // a warm, candle-coloured world
+  var count = Math.round(rnd(5, 9));
+  var forms = [];
+  for (var i = 0; i < count; i++) {
+    forms.push({
+      x: rnd(0, W), y: rnd(0, H),
+      r: rnd(Math.min(W, H) * 0.06, Math.min(W, H) * 0.22),
+      a: rnd(0, Math.PI * 2),
+      sp: rnd(0.0008, 0.0032) * (Math.random() < 0.5 ? -1 : 1),
+      cx: rnd(0, W), cy: rnd(0, H),
+      orbit: rnd(Math.min(W, H) * 0.08, Math.min(W, H) * 0.3),
+      hue: hueBase + rnd(-10, 10),
+      light: rnd(40, 80),
+      alpha: rnd(0.05, 0.16)
+    });
+  }
+
+  function frame() {
+    if (dead) return;
+    // Gentle fade of the previous frame: a fog of memory, not a record.
+    ctx.fillStyle = "rgba(14,13,11,0.045)";
+    ctx.fillRect(0, 0, W, H);
+
+    for (var i = 0; i < forms.length; i++) {
+      var f = forms[i];
+      f.a += f.sp;
+      f.x = f.cx + Math.cos(f.a) * f.orbit;
+      f.y = f.cy + Math.sin(f.a * 1.13) * f.orbit;
+      var g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r);
+      g.addColorStop(0, "hsla(" + f.hue + "," + 55 + "%," + f.light + "%," + f.alpha + ")");
+      g.addColorStop(1, "hsla(" + f.hue + ",55%," + f.light + "%,0)");
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // --- The refusal. ------------------------------------------------------
+  // The work exists only while it is being attended to. Look away — switch
+  // tab, minimise, defocus the window — and it is destroyed, irrevocably,
+  // for this visit. Nothing is persisted; reload births a different one.
+  function kill() {
+    if (dead) return;
+    dead = true;
+    label.style.opacity = "0";
+    // Blank the field. No final image is left to be captured.
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = "#0e0d0b";
+    ctx.fillRect(0, 0, W, H);
+    epitaph.classList.add("show");
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) kill();
+  });
+  window.addEventListener("blur", kill);
+  window.addEventListener("pagehide", kill);
+
+  document.getElementById("again").addEventListener("click", function () {
+    location.reload();
+  });
+})();
+</script>
+</body>
+</html>

@@ -190,5 +190,13 @@
     "source": "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Marcel Duchamp / the readymade; net.art",
     "mechanism": "Client-side Blob download of the page's own source plus a private localStorage edition counter that exposes scarcity as fiction.",
     "status": "published"
+  },
+  {
+    "id": "2026-06-16-the-unkept",
+    "title": "The Unkept",
+    "year": 2026,
+    "source": "Tino Sehgal; constructed situations / no documentation",
+    "mechanism": "Page Visibility API plus window blur/pagehide events irrevocably kill a live canvas render; deliberately no storage, cache, or persistence.",
+    "status": "pending"
   }
 ]
