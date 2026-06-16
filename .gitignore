@@ -19,3 +19,6 @@ workspace/.work/
 
 # built public site (assembled in CI)
 dist-site/
+
+# exported session transcripts
+claude-session-*.html
