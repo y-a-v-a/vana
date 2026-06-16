@@ -197,6 +197,6 @@
     "year": 2026,
     "source": "Tino Sehgal; constructed situations / no documentation",
     "mechanism": "Page Visibility API plus window blur/pagehide events irrevocably kill a live canvas render; deliberately no storage, cache, or persistence.",
-    "status": "pending"
+    "status": "published"
   }
 ]
