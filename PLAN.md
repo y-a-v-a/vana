@@ -218,12 +218,16 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 - [x] Task prompt = constraints + §8 gates + catalogue digest → `index.html` + `motivation.md` + `meta.json`
 - [x] `validateSelfContained()` enforces no external requests; `parseMeta()` (zod) — tested
 - [x] Unit tests via `node:test` + `node:assert` (16 passing); `npm test`
-- [ ] Live smoke run (`generateCandidate`) — real Opus call, verify a candidate is produced
+- [x] Live smoke run verified: produced a self-contained Yves Klein *Zone de Sensibilité* piece in ~200s, 0 violations (≈200s/generation ⇒ ~6 attempts fit a 20-min wake)
 
-### Phase 3 — Jury
-- [ ] `jury.ts`: OpenRouter call applying DNA §8; return §8.4 JSON
-- [ ] JSON-schema validate + retry; gate-first logic; thresholds §8.3
-- [ ] Write `jury.json` beside the candidate
+### Phase 3 — Jury  ✅ (code; live run blocked on key)
+- [x] `jury.ts`: OpenRouter call (fetch, JSON mode) applying DNA §8 → model judgments
+- [x] Deterministic in code (not trusted to LLM): weighting (§8.2), gate-first + thresholds (§8.1/§8.3), verdict
+- [x] `extractJson()` robust to fences/prose; zod-validated model reply; returns token usage for the fuse
+- [x] 14 jury unit tests (suite now 30 passing)
+- [ ] Live jury run — **BLOCKED: `OPENROUTER_API_KEY` not set**
+- [ ] Persist `jury.json` beside candidate — handled in Phase 4 loop
+- [ ] (follow-up) one retry on malformed jury JSON — add in Phase 4 error handling
 
 ### Phase 4 — Loop & budget
 - [ ] `cost.ts`: token→$ meter from API usage; per-wake + per-day fuse
