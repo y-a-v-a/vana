@@ -12,6 +12,7 @@
     "dev": "tsx watch src/daemon.ts",
     "seed": "tsx src/catalogue.ts seed",
     "once": "tsx src/loop.ts once",
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
     "typecheck": "tsc"
   },
   "dependencies": {

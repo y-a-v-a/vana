@@ -210,13 +210,15 @@ Candidate `id` = `<UTC-date>-<title-slug>` (e.g. `2026-06-16-but-is-it-art`).
 ### Phase 1 — Catalogue & DNA
 - [x] `catalogue.ts`: seed `catalogue.json` from DNA §7 (23 historical entries) — verified
 - [x] Load catalogue + `catalogueDigest()` for prompting; `upsertEntry()` for lifecycle
-- [ ] DNA.md loader (read §1–6/§8 for generator + jury prompts)
-- [ ] `id` generator (`<UTC-date>-<slug>`)
+- [x] `dna.ts`: DNA.md loader (used as generator/jury operating system)
+- [x] `ids.ts`: `slugify` + `makeId` (`<UTC-date>-<slug>`) — tested
 
-### Phase 2 — Generator
-- [ ] `generator.ts`: Agent SDK (Opus) with dir-scoped write tool
-- [ ] Prompt = DNA §1–6 + §10 checklist + catalogue (avoid dupes) → `index.html` + `motivation.md`
-- [ ] Enforce self-contained output (no external URLs/requests)
+### Phase 2 — Generator  ✅ (code; live run pending)
+- [x] `generator.ts`: Agent SDK (Opus), `claude_code` preset + DNA append, Read/Write tools, `cwd`-scoped
+- [x] Task prompt = constraints + §8 gates + catalogue digest → `index.html` + `motivation.md` + `meta.json`
+- [x] `validateSelfContained()` enforces no external requests; `parseMeta()` (zod) — tested
+- [x] Unit tests via `node:test` + `node:assert` (16 passing); `npm test`
+- [ ] Live smoke run (`generateCandidate`) — real Opus call, verify a candidate is produced
 
 ### Phase 3 — Jury
 - [ ] `jury.ts`: OpenRouter call applying DNA §8; return §8.4 JSON
