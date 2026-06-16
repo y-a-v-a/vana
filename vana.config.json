@@ -1,0 +1,20 @@
+{
+  "interval": { "hours": 6 },
+  "workBudget": { "minutes": 20 },
+  "costFuse": { "perWakeUsd": 5, "perDayUsd": 20 },
+  "models": {
+    "generator": "claude-opus-4-8",
+    "jury": "openai/gpt-4o"
+  },
+  "thresholds": { "strong": 38, "borderline": 30 },
+  "paths": {
+    "dna": "identity/DNA.md",
+    "catalogue": "catalogue.json",
+    "pending": "workspace/pending",
+    "published": "workspace/published",
+    "rejected": "workspace/rejected"
+  },
+  "dashboard": { "port": 4737, "tailnetHost": "" },
+  "email": { "to": "vebruijn@gmail.com" },
+  "git": { "remote": "origin", "branch": "main" }
+}

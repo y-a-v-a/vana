@@ -1,0 +1,186 @@
+[
+  {
+    "id": "the-agreeing-internet",
+    "title": "The Agreeing Internet",
+    "year": 2009,
+    "source": "the internet's conformity",
+    "mechanism": "site that always agrees",
+    "status": "historical"
+  },
+  {
+    "id": "the-internet-underexposed",
+    "title": "The Internet Underexposed",
+    "year": 2009,
+    "source": "net critique",
+    "mechanism": "—",
+    "status": "historical"
+  },
+  {
+    "id": "for-the-love-of-fame",
+    "title": "For the Love of Fame",
+    "year": 2009,
+    "source": "Hirst / fame & money (P6)",
+    "mechanism": "—",
+    "status": "historical"
+  },
+  {
+    "id": "maleglitch",
+    "title": "Maleglitch",
+    "year": 2010,
+    "source": "Malevich / Suprematism (P5 chance)",
+    "mechanism": "JPEG databending; live infinite Hypersuprematist compositions served via RSS + JSON API; format artifacts become the image",
+    "status": "historical"
+  },
+  {
+    "id": "l-h-o-o-q",
+    "title": "l-h-o-o-q.org",
+    "year": 2010,
+    "source": "Duchamp, L.H.O.O.Q. (P2)",
+    "mechanism": "Mona Lisa + perpetual loading state",
+    "status": "historical"
+  },
+  {
+    "id": "googlevich",
+    "title": "Googlevich",
+    "year": 2011,
+    "source": "Malevich + Google",
+    "mechanism": "—",
+    "status": "historical"
+  },
+  {
+    "id": "god-is-a-tj",
+    "title": "God is a TJ",
+    "year": 2011,
+    "source": "religion / absurdity",
+    "mechanism": "—",
+    "status": "historical"
+  },
+  {
+    "id": "la-trahison-des-images",
+    "title": "la-trahison-des-images.be",
+    "year": 2012,
+    "source": "Magritte (P1)",
+    "mechanism": "responsive layout stretches the pipe; the medium enacts 'this is not a pipe'",
+    "status": "historical"
+  },
+  {
+    "id": "i-m-too-sad-to-tell-you",
+    "title": "i-m-too-sad-to-tell-you",
+    "year": 2012,
+    "source": "Bas Jan Ader",
+    "mechanism": "—",
+    "status": "historical"
+  },
+  {
+    "id": "wewillmiss",
+    "title": "@wewillmiss",
+    "year": 2012,
+    "source": "bot / memory (P4)",
+    "mechanism": "'I miss #Beusy, I miss #Warhol...'",
+    "status": "historical"
+  },
+  {
+    "id": "modernipsum",
+    "title": "Modernipsum",
+    "year": 2012,
+    "source": "art-ism discourse (P9)",
+    "mechanism": "lorem-ipsum generator built from art 'isms'",
+    "status": "historical"
+  },
+  {
+    "id": "neuropolis-n",
+    "title": "Neuropolis N",
+    "year": 2012,
+    "source": "—",
+    "mechanism": "—",
+    "status": "historical"
+  },
+  {
+    "id": "art-is-money",
+    "title": "Art is Money",
+    "year": 2013,
+    "source": "Brener + Malevich (P6)",
+    "mechanism": "homage to the dollar-sign defacement",
+    "status": "historical"
+  },
+  {
+    "id": "hashtag-god",
+    "title": "@_hashtag_god",
+    "year": 2017,
+    "source": "the Bible / platform logic (P4)",
+    "mechanism": "bot tweeting the whole Bible, every word a #hashtag",
+    "status": "historical"
+  },
+  {
+    "id": "tableau-piege-en-ligne",
+    "title": "Tableau Piège En Ligne (bij-ons-aan-tafel.nl)",
+    "year": 2018,
+    "source": "Daniel Spoerri",
+    "mechanism": "'Spoerri meets/eats Google'",
+    "status": "historical"
+  },
+  {
+    "id": "three-ball-total-equilibrium-slot-machine",
+    "title": "Three Ball Total Equilibrium Slot Machine",
+    "year": 2020,
+    "source": "Jeff Koons (P6)",
+    "mechanism": "basketballs-in-tank as playable slot machine; staged with wall label, medium 'pixels on screen', price '$22,170,000', red sold dot",
+    "status": "historical"
+  },
+  {
+    "id": "pop-whaam",
+    "title": "Pop Whaam!",
+    "year": 2020,
+    "source": "Lichtenstein",
+    "mechanism": "—",
+    "status": "historical"
+  },
+  {
+    "id": "a-chance-of-order",
+    "title": "A Chance of Order",
+    "year": 2021,
+    "source": "Kenneth Martin (P5 order)",
+    "mechanism": "rule-based line-bundle compositions in HTML/CSS/JS",
+    "status": "historical"
+  },
+  {
+    "id": "the-webpage-going-on-and-off",
+    "title": "The webpage going on and off",
+    "year": 2023,
+    "source": "Martin Creed, Work No. 227 (P1)",
+    "mechanism": "page cycles white 7s / black 10s forever via the render loop",
+    "status": "historical"
+  },
+  {
+    "id": "but-is-it-art",
+    "title": "But is it art?",
+    "year": 2025,
+    "source": "the eternal question (P3)",
+    "mechanism": "a page that displays one word: YES",
+    "status": "historical"
+  },
+  {
+    "id": "tragedian",
+    "title": "Tragedian",
+    "year": 2025,
+    "source": "Cattelan, Comedian (P2)",
+    "mechanism": "morphing photoreal fruit + duct tape that vanishes on touch",
+    "status": "historical"
+  },
+  {
+    "id": "images-that-never-were",
+    "title": "Images That Never Were",
+    "year": 2025,
+    "source": "art-vandalism history + AI (P10)",
+    "mechanism": "cinematic AI tableaux of undocumented art attacks",
+    "status": "historical"
+  },
+  {
+    "id": "andy-warhol-eating-a-hamburger-svg",
+    "title": "Andy Warhol eating a hamburger (SVG)",
+    "year": 2026,
+    "source": "Warhol + Willison SVG-benchmark (P10)",
+    "mechanism": "LLM-generated SVGs compared across models, on Warhol color-bands",
+    "status": "historical"
+  }
+]

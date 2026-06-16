@@ -1,0 +1,98 @@
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { config as loadDotenv } from "dotenv";
+import { z } from "zod";
+
+// Repo root = parent of src/. All config paths resolve relative to it.
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+loadDotenv({ path: resolve(ROOT, ".env") });
+
+const ConfigSchema = z.object({
+  interval: z.object({ hours: z.number().positive() }),
+  workBudget: z.object({ minutes: z.number().positive() }),
+  costFuse: z.object({
+    perWakeUsd: z.number().positive(),
+    perDayUsd: z.number().positive(),
+  }),
+  models: z.object({
+    generator: z.string().min(1),
+    jury: z.string().min(1),
+  }),
+  thresholds: z.object({
+    strong: z.number(),
+    borderline: z.number(),
+  }),
+  paths: z.object({
+    dna: z.string(),
+    catalogue: z.string(),
+    pending: z.string(),
+    published: z.string(),
+    rejected: z.string(),
+  }),
+  dashboard: z.object({
+    port: z.number().int().positive(),
+    tailnetHost: z.string(),
+  }),
+  email: z.object({ to: z.string().email() }),
+  git: z.object({ remote: z.string(), branch: z.string() }),
+});
+
+export type Config = z.infer<typeof ConfigSchema> & {
+  /** Absolute filesystem paths, resolved from `paths` against the repo root. */
+  abs: {
+    root: string;
+    dna: string;
+    catalogue: string;
+    pending: string;
+    published: string;
+    rejected: string;
+  };
+};
+
+export type Secrets = {
+  anthropicApiKey: string;
+  openRouterApiKey: string;
+};
+
+let cached: Config | null = null;
+
+export function loadConfig(): Config {
+  if (cached) return cached;
+  const raw = JSON.parse(readFileSync(resolve(ROOT, "vana.config.json"), "utf8"));
+  const parsed = ConfigSchema.parse(raw);
+  cached = {
+    ...parsed,
+    abs: {
+      root: ROOT,
+      dna: resolve(ROOT, parsed.paths.dna),
+      catalogue: resolve(ROOT, parsed.paths.catalogue),
+      pending: resolve(ROOT, parsed.paths.pending),
+      published: resolve(ROOT, parsed.paths.published),
+      rejected: resolve(ROOT, parsed.paths.rejected),
+    },
+  };
+  return cached;
+}
+
+/**
+ * Read required secrets from the environment. Throws a clear, actionable error
+ * if either key is missing — the harness is useless without both.
+ */
+export function loadSecrets(): Secrets {
+  const anthropicApiKey = process.env.ANTHROPIC_API_KEY?.trim();
+  const openRouterApiKey = process.env.OPENROUTER_API_KEY?.trim();
+  const missing: string[] = [];
+  if (!anthropicApiKey) missing.push("ANTHROPIC_API_KEY (generator)");
+  if (!openRouterApiKey) missing.push("OPENROUTER_API_KEY (jury)");
+  if (missing.length > 0) {
+    throw new Error(
+      `Missing required secret(s): ${missing.join(", ")}. ` +
+        `Set them in .env (see .env.example).`,
+    );
+  }
+  return { anthropicApiKey: anthropicApiKey!, openRouterApiKey: openRouterApiKey! };
+}
+
+export const ROOT_DIR = ROOT;
