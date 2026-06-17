@@ -27,6 +27,7 @@ const ConfigSchema = z.object({
   paths: z.object({
     dna: z.string(),
     catalogue: z.string(),
+    guidance: z.string(),
     pending: z.string(),
     published: z.string(),
     rejected: z.string(),
@@ -45,6 +46,7 @@ export type Config = z.infer<typeof ConfigSchema> & {
     root: string;
     dna: string;
     catalogue: string;
+    guidance: string;
     pending: string;
     published: string;
     rejected: string;
@@ -77,6 +79,7 @@ export function loadConfig(): Config {
       root: ROOT,
       dna: resolve(ROOT, parsed.paths.dna),
       catalogue: resolve(ROOT, parsed.paths.catalogue),
+      guidance: resolve(ROOT, parsed.paths.guidance),
       pending: resolve(ROOT, parsed.paths.pending),
       published: resolve(ROOT, parsed.paths.published),
       rejected: resolve(ROOT, parsed.paths.rejected),

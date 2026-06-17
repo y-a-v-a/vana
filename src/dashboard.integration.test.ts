@@ -4,8 +4,9 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { handle, setRefiner } from "./dashboard.ts";
+import { handle, setRefiner, setDecider } from "./dashboard.ts";
 import { isRefining, runRefine } from "./refine.ts";
+import { decide } from "./promote.ts";
 import type { Config } from "./config.ts";
 
 // Drives the real request handler against a temp fixture with no socket and no
@@ -155,6 +156,27 @@ test("dashboard handler: routes, CSP, sandbox, traversal", async (t) => {
         assert.ok(isRefining(join(root, "pending", id)), "marker set");
       } finally {
         setRefiner(runRefine); // restore the real refiner for any later tests
+      }
+    });
+
+    await t.test("POST reject with a note passes the note to the decider", async () => {
+      const calls: { id: string; decision: string; note?: string }[] = [];
+      setDecider(async (rid, decision, o) => {
+        calls.push({ id: rid, decision, note: o?.note });
+      });
+      try {
+        const res = mockRes();
+        await handle(
+          postReq(`/candidate/${id}/reject`, "note=too+reverent"),
+          res as unknown as ServerResponse,
+          cfg,
+        );
+        assert.equal(res.statusCode, 303);
+        assert.equal(calls.length, 1);
+        assert.equal(calls[0]!.decision, "reject");
+        assert.equal(calls[0]!.note, "too reverent");
+      } finally {
+        setDecider(decide); // restore the real decider
       }
     });
   } finally {

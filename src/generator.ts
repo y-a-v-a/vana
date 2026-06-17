@@ -5,6 +5,7 @@ import { z } from "zod";
 import { loadConfig } from "./config.ts";
 import { loadDna } from "./dna.ts";
 import { catalogueDigest } from "./catalogue.ts";
+import { loadGuidance, recentGuidance } from "./guidance.ts";
 
 // ── Generated metadata (meta.json the generator must write) ──────────────────
 const MetaSchema = z.object({
@@ -46,7 +47,7 @@ export function buildGeneratorSystemAppend(dna: string): string {
 }
 
 /** The concrete task: produce one self-contained candidate as three files. */
-export function buildGeneratorTask(digest: string): string {
+export function buildGeneratorTask(digest: string, guidance = ""): string {
   return `Generate ONE new candidate artwork in the y-a-v-a DNA and write exactly three files into the current working directory:
 
 1. **index.html** — the work itself. Hard requirement: FULLY SELF-CONTAINED. All CSS and JS inline. NO external requests of any kind — no external \`src=\`, no \`<link href="http...">\`, no \`@import\`, no \`url(http...)\`, no web fonts, no \`fetch\`/\`XMLHttpRequest\`/\`WebSocket\`/\`EventSource\`, no analytics, no cookies, no trackers. Visibly state the Creative Commons license and attribution (y-a-v-a, plus the referenced artist/work).
@@ -60,7 +61,7 @@ Constraints:
 - Must clear the hard gates G1–G6 (DNA §8.1): web/AI-native (could not be a static print), a real conceptual point, mechanism enacts the idea, license + attribution + no trackers, dry cheerful-cynic voice, and materially distinct from every catalogued work below (G6).
 - Smallest build that completes the thought (P3). Self-contained, client-side only.
 - Commit to one strong idea. Do not ask questions.
-
+${guidance ? `\nThe artist has given accumulated guidance from past rejections. Treat it as binding direction and heed it:\n${guidance}\n` : ""}
 Do NOT duplicate any of these existing works:
 ${digest}
 
@@ -192,7 +193,8 @@ function collect(dir: string, result: SDKResultMessage): GenerationResult {
 /** Produce a fresh candidate in `workDir`. */
 export async function generateCandidate(workDir: string): Promise<GenerationResult> {
   mkdirSync(workDir, { recursive: true });
-  const result = await runAgent(workDir, buildGeneratorTask(catalogueDigest()), ["Read", "Write"]);
+  const task = buildGeneratorTask(catalogueDigest(), recentGuidance(loadGuidance()));
+  const result = await runAgent(workDir, task, ["Read", "Write"]);
   return collect(workDir, result);
 }
 

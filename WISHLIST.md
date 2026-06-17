@@ -19,6 +19,8 @@ on anything referenced here, see [ARCHITECTURE.md](ARCHITECTURE.md).
 ## Generation
 - [x] **Human-directed refinement** — the dashboard **Refine** action: feedback →
   the agent reworks the candidate in place → re-jury → email. Shipped (`refine.ts`).
+- [x] **Learn from rejections** — reject-with-note appends to `identity/guidance.md`,
+  which the generator heeds each round. Shipped (`guidance.ts`).
 - [ ] **Automatic revision rounds** — the jury-directed variant: on a near-miss,
   feed the jury's `revision_suggestion` back to the generator and re-jury (max K
   attempts) instead of discarding (Q10). *Value:* higher hit-rate per wake.

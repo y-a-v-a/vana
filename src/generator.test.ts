@@ -94,3 +94,13 @@ test("buildRefineTask embeds feedback + in-place refinement instructions", () =>
   assert.match(task, /self-contained/i);
   assert.match(task, /index\.html/);
 });
+
+test("buildGeneratorTask folds in accumulated guidance when present", () => {
+  const task = buildGeneratorTask("- Catalogued Work", '## 2026-06-16 — rejected "X"\nmore bite please');
+  assert.match(task, /accumulated guidance/i);
+  assert.match(task, /more bite please/);
+});
+
+test("buildGeneratorTask omits the guidance section when there is none", () => {
+  assert.doesNotMatch(buildGeneratorTask("- Catalogued Work", ""), /accumulated guidance/i);
+});

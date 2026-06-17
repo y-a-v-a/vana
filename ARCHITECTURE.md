@@ -72,15 +72,16 @@ wake:
 | `dna.ts` | Reads `identity/DNA.md` — the operating system for both agents |
 | `catalogue.ts` | `catalogue.json`: living index seeded from DNA §7; `catalogueDigest()` for prompts, `upsertEntry()` for lifecycle; G6 dedup source |
 | `ids.ts` | `slugify` + `makeId` → candidate id `<UTC-date>-<title-slug>` |
-| `generator.ts` | Runs Opus via the Agent SDK (`claude_code` preset + DNA appended, Read/Write tools, `cwd`-scoped) to write the candidate; `validateSelfContained()` blocks any external request; returns provider-accurate `total_cost_usd` |
+| `generator.ts` | Runs Opus via the Agent SDK (`claude_code` preset + DNA appended, Read/Write tools, `cwd`-scoped) to write the candidate; prompt = DNA + catalogue digest + **recent artist guidance**; `validateSelfContained()` blocks any external request; returns provider-accurate `total_cost_usd` |
+| `guidance.ts` | `identity/guidance.md` — artist guidance accumulated from reject-with-note. The **generator** reads recent entries each round and heeds them; the **jury never reads it**. Human-editable. |
 | `jury.ts` | One OpenRouter chat call (JSON mode) applying DNA §8; the **model supplies gate booleans + 0–5 scores**, the **harness computes** weighting (§8.2), gate-first logic and thresholds (§8.1/§8.3), and the verdict |
 | `cost.ts` | `CostMeter` (persists daily spend to `.vana-state.json`); OpenRouter pricing lookup; `fuseCheck` (per-wake + per-day ceilings) |
 | `loop.ts` | `runWake()` — the orchestration above; routes to pending/rejected; writes `jury.json`; upserts the catalogue; `npm run once` entrypoint |
 | `git.ts` | Scoped stage (`workspace/` + `catalogue.json`) + commit + optional push; tolerant of an empty commit |
 | `smtp.ts` | Dependency-free SMTP-over-implicit-TLS (465) client: RFC 2047 subject, base64 body, 20s timeout, AUTH LOGIN |
 | `notify.ts` | `buildEmail()` + `sendCandidateEmail()`; the email is the ping, the dashboard is the gate (the loop never reads an inbox) |
-| `dashboard.ts` | `node:http` server: lists `pending/`, renders a candidate (work iframe + motivation + jury), Approve / Reject / **Refine** (feedback textarea); status pages for decided candidates; serves `/work` |
-| `promote.ts` | `decide(id, approve|reject)` — moves pending→published/rejected, updates the catalogue, commits + pushes. **Approve is the only writer to `published/`.** |
+| `dashboard.ts` | `node:http` server: lists `pending/`, renders a candidate (work iframe + motivation + jury), Approve / Reject (**optional learning note**) / **Refine** (feedback textarea); status pages for decided candidates; serves `/work` |
+| `promote.ts` | `decide(id, approve|reject, {note})` — moves pending→published/rejected, updates the catalogue, commits + pushes. On reject-with-note, saves `rejection.md` and appends the note to `guidance.md`. **Approve is the only writer to `published/`.** |
 | `refine.ts` | `runRefine(id, feedback)` — the agent reworks a pending candidate **in place** from human feedback, re-juries it, logs the feedback (`refinements.md`), commits + pushes, emails. Stays in `pending/` for the gate; serialized with the wake via the lock; respects the $ fuse |
 | `lock.ts` | tiny in-process mutex (`withLock`) so a refine and a scheduled wake never run at once |
 | `site.ts` | `buildSite()` — assembles `dist-site/` for Vercel; copies per-work `index.html` + `motivation.md` + `meta.json`, **never `jury.json`**; writes the catalogue index |
@@ -193,7 +194,9 @@ See [`ops/DAEMON.md`](ops/DAEMON.md) and [`ops/DEPLOY.md`](ops/DEPLOY.md).
   so a vector the regex misses still cannot reach the network. An HTML
   parser-based validator is a possible future third layer.
 - **`jury.json` is private** — committed as the record, never published to the site.
-- **DNA.md is the only taste authority** — tune the rubric there, not in code.
+- **DNA.md is the only taste authority for the gate** — tune the jury rubric there.
+  `guidance.md` (from reject-with-note) steers the **generator** only; the jury
+  never reads it, so accumulated guidance can't drift the gate.
 - **Untrusted ids are validated** — an HTTP-supplied candidate id must pass
   `isValidId` (the exact generated shape, no `.`/`/`/`\`) before it is joined into
   any lifecycle path (dashboard routes, `promote.decide`).

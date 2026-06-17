@@ -14,6 +14,13 @@ export function setRefiner(fn: (id: string, feedback: string) => Promise<void>):
   refiner = fn;
 }
 
+// The decider (approve/reject) is injectable too, for hermetic route tests.
+type Decider = (id: string, decision: Decision, opts?: { push?: boolean; note?: string }) => Promise<unknown>;
+let decider: Decider = decide;
+export function setDecider(fn: Decider): void {
+  decider = fn;
+}
+
 export interface PendingItem {
   id: string;
   meta: GeneratedMeta;
@@ -119,7 +126,13 @@ export function renderCandidate(
     ? `<div class="card"><strong>Refining…</strong> the agent is reworking this candidate from your feedback. You'll be emailed when it's ready — reload to check.</div>`
     : `<div class="card">
     <form method="POST" action="/candidate/${enc}/approve"><button class="approve" type="submit">Approve → publish</button></form>
-    <form method="POST" action="/candidate/${enc}/reject"><button class="rejectbtn" type="submit">Reject</button></form>
+  </div>
+  <div class="card">
+    <form method="POST" action="/candidate/${enc}/reject">
+      <label for="note">Reject — optional note (the agent learns from it next round)</label>
+      <textarea id="note" name="note" rows="2" placeholder="e.g. too reverent — I want more bite in the market critique"></textarea>
+      <button class="rejectbtn" type="submit">Reject</button>
+    </form>
   </div>
   <div class="card">
     <form method="POST" action="/candidate/${enc}/refine">
@@ -267,8 +280,16 @@ export async function handle(req: IncomingMessage, res: ServerResponse, cfg: Con
 
     if (req.method === "POST" && (parts[2] === "approve" || parts[2] === "reject")) {
       const decision: Decision = parts[2] === "approve" ? "approve" : "reject";
+      let note: string | undefined;
+      if (decision === "reject") {
+        try {
+          note = parseFormBody(await readBody(req)).note?.trim() || undefined;
+        } catch {
+          note = undefined; // oversized/garbled body → reject without a note
+        }
+      }
       try {
-        await decide(id, decision);
+        await decider(id, decision, note ? { note } : {});
         res.writeHead(303, { Location: "/" });
         res.end();
       } catch (err) {

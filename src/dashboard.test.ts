@@ -89,6 +89,12 @@ test("renderCandidate shows 'Refining…' and hides actions while refining", () 
   assert.doesNotMatch(html, /\/approve"/);
 });
 
+test("renderCandidate reject form has an optional learning note textarea", () => {
+  const html = renderCandidate("2026-06-16-x", meta, verdict, "m");
+  assert.match(html, /name="note"/);
+  assert.match(html, /learns from it next round/);
+});
+
 test("parseFormBody decodes urlencoded fields (+ and %)", () => {
   assert.deepEqual(parseFormBody("feedback=fix+the+TypeError%20now&x=1"), {
     feedback: "fix the TypeError now",

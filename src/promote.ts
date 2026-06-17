@@ -1,8 +1,9 @@
-import { existsSync, renameSync } from "node:fs";
+import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { loadConfig } from "./config.ts";
 import { loadCatalogue, writeCatalogue, type CatalogueStatus } from "./catalogue.ts";
 import { isValidId } from "./ids.ts";
+import { appendGuidance } from "./guidance.ts";
 import { commitAndPush } from "./git.ts";
 
 export type Decision = "approve" | "reject";
@@ -40,7 +41,7 @@ function setCatalogueStatus(id: string, status: CatalogueStatus): void {
 export async function decide(
   id: string,
   decision: Decision,
-  opts: { push?: boolean } = {},
+  opts: { push?: boolean; note?: string } = {},
 ): Promise<DecisionResult> {
   if (!isValidId(id)) throw new Error(`Invalid candidate id: ${id}`);
   const cfg = loadConfig();
@@ -55,11 +56,27 @@ export async function decide(
   renameSync(src, dest);
   setCatalogueStatus(id, status);
 
-  await commitAndPush(`${verb}: ${id}`, {
+  const paths = ["workspace", "catalogue.json"];
+  const note = opts.note?.trim();
+  if (decision === "reject" && note) {
+    // Provenance with the work + accumulate it as generator guidance.
+    writeFileSync(join(dest, "rejection.md"), `# Rejection note\n\n${note}\n`, "utf8");
+    let title = id;
+    try {
+      title = (JSON.parse(readFileSync(join(dest, "meta.json"), "utf8")) as { title?: string }).title ?? id;
+    } catch {
+      // fall back to id
+    }
+    appendGuidance(title, note, new Date());
+    paths.push(cfg.paths.guidance);
+  }
+
+  await commitAndPush(`${verb}: ${id}${decision === "reject" && note ? " (+note)" : ""}`, {
     cwd: cfg.abs.root,
     remote: cfg.git.remote,
     branch: cfg.git.branch,
     push: opts.push ?? cfg.git.push,
+    paths,
   });
 
   return { id, status, dir: dest };

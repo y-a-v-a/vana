@@ -10,6 +10,7 @@
   "paths": {
     "dna": "identity/DNA.md",
     "catalogue": "catalogue.json",
+    "guidance": "identity/guidance.md",
     "pending": "workspace/pending",
     "published": "workspace/published",
     "rejected": "workspace/rejected"
