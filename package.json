@@ -21,7 +21,8 @@
     "daemon:restart": "launchctl unload \"$HOME/Library/LaunchAgents/com.yava.vana.plist\" 2>/dev/null; launchctl load -w \"$HOME/Library/LaunchAgents/com.yava.vana.plist\" && echo restarted",
     "daemon:logs": "tail -f logs/daemon.out.log",
     "test": "node --import tsx --test \"src/**/*.test.ts\"",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "check": "npm run typecheck && npm test && npm run build:site"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.3.178",

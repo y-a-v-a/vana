@@ -175,7 +175,7 @@ function send(res: ServerResponse, status: number, type: string, body: string): 
   res.end(body);
 }
 
-async function handle(req: IncomingMessage, res: ServerResponse, cfg: Config): Promise<void> {
+export async function handle(req: IncomingMessage, res: ServerResponse, cfg: Config): Promise<void> {
   const url = new URL(req.url ?? "/", "http://localhost");
   const parts = url.pathname.split("/").filter(Boolean); // e.g. ["candidate","<id>","work"]
 

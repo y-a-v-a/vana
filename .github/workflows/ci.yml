@@ -1,0 +1,25 @@
+name: ci
+
+# Tier 0 verification — free, deterministic, no API keys, no network.
+# Runs typecheck + the node:test suite (incl. the hermetic dashboard
+# integration test) + a real build:site smoke. This is the automated
+# "did anything break?" gate; the live-API and deploy checks are opt-in
+# scripts run locally (see ARCHITECTURE.md).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run check
