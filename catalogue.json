@@ -229,6 +229,6 @@
     "year": 2026,
     "source": "Piet Mondrian, Composition with Red, Blue and Yellow (c. 1930); net.art (browser chrome as material)",
     "mechanism": "Canvas-drawn recursive Mondrian set as the favicon via toDataURL + <link rel=icon>; the browser's mandatory 32px raster is Mondrian's grid.",
-    "status": "pending"
+    "status": "published"
   }
 ]
