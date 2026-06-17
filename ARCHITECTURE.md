@@ -167,7 +167,9 @@ Cost asymmetry: generation is ~99% of the spend (~$0.37–0.79/work), the jury i
 
 | Command | Purpose |
 |---|---|
-| `npm test` / `npm run typecheck` | unit tests / type check |
+| `npm run check` | typecheck + tests (incl. hermetic dashboard smoke) + `build:site` — the CI gate; run after any change |
+| `npm test` / `npm run typecheck` | the unit suite / type check alone |
+| `npm run test:live` | opt-in: one real jury call (~$0.005) to verify the live OpenRouter contract — run after touching the jury |
 | `npm run once` | run one wake now, on demand |
 | `npm run status` | health: launchd state, dashboard, recent wakes, today's spend, pending |
 | `npm run daemon:start` / `:stop` / `:restart` | launchd lifecycle (restart after a code change) |
