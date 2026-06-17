@@ -175,6 +175,7 @@ Cost asymmetry: generation is ~99% of the spend (~$0.37–0.79/work), the jury i
 | `npm run daemon:start` / `:stop` / `:restart` | launchd lifecycle (restart after a code change) |
 | `npm run daemon:logs` | tail the live log |
 | `npm run build:site` | assemble `dist-site/` locally |
+| `npm run verify:deploy` | post-deploy smoke: curls the live site for catalogue 200, CSP, work + motivation, and `jury.json` 404 |
 
 See [`ops/DAEMON.md`](ops/DAEMON.md) and [`ops/DEPLOY.md`](ops/DEPLOY.md).
 
