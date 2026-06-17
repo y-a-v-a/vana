@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-06-17-1965-1",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Roman Opałka, OPAŁKA 1965 / 1 – ∞ (Détails)",
+    "On Kawara, I Am Still Alive"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7"
+  ],
+  "rationale": "The mechanism genuinely enacts the argument: the same integer that drives the display also drives the interpolation toward the ground, so the count literally erases itself by existing, and the reload reset enacts the digital amnesia the work is elegising. The Opałka found-object is fresh for the catalogue and is double-coded cleanly — a casual viewer sees a fading number, a literate one sees blanc mérité as an asymptote and the cheerful-cynic point that stateless infinity costs nothing. The wall label that outlives the painting is a small, exact touch that makes the value-critique (P6) land without a paragraph of explanation.",
+  "reservations": "Adjacent to 'Today' (2026) in register: both are per-visit minimalist pieces invoking On Kawara, so the per-visit minimalist mode is becoming a recognisable pattern in the recent catalogue. The motivation.md is somewhat over-explained relative to the quiet restraint of the page itself. The SPEED constant and the +6000 asymptote denominator are arbitrary; a tighter mapping (e.g. the bleaching rate tied to Opałka's actual 1%-per-year schedule) would deepen the double-coding.",
+  "revision_suggestion": "Consider scaling the asymptote and the counting speed to mirror Opałka's actual 1%-per-year bleaching rate and his ~46-year span, so a viewer who knows the biography can feel the ratio and a viewer who doesn't still gets the fade-and-reset gag. Optionally trim the motivation to one short paragraph — the page does the work and the extra exposition risks breaking P7's surface-for-the-casual rule.",
+  "jury_model": "minimax/minimax-m3"
+}

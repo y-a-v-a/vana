@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1965 / 1 – ∞</title>
+<style>
+  :root{
+    /* Opałka's ground drifted toward white over a lifetime: this is his blanc. */
+    --ground: 230, 228, 222;
+  }
+  html,body{height:100%;margin:0}
+  body{
+    background: rgb(var(--ground));
+    color:#1a1a1a;
+    font-family: "Times New Roman", Georgia, serif;
+    display:flex;
+    flex-direction:column;
+    min-height:100%;
+    -webkit-font-smoothing:antialiased;
+  }
+  main{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6vh 4vw;
+  }
+  /* The count. It begins near-black and is interpolated toward the ground
+     as it rises — counting itself into invisibility. */
+  #count{
+    font-variant-numeric: tabular-nums;
+    font-weight:400;
+    letter-spacing:0.02em;
+    line-height:1;
+    font-size: clamp(3rem, 16vw, 14rem);
+    white-space:nowrap;
+    user-select:none;
+  }
+  /* The apparatus does NOT fade. The label outlives the painting. */
+  .label{
+    position:fixed; left:0; right:0; bottom:0;
+    display:flex; flex-wrap:wrap; gap:.4rem 1.4rem;
+    padding:.9rem 1.1rem;
+    font: 400 12px/1.5 ui-monospace, "Courier New", monospace;
+    color:#615e57;
+    border-top:1px solid rgba(0,0,0,.14);
+  }
+  .label b{font-weight:700;color:#3a3833}
+  .label .sep{opacity:.45}
+  a{color:inherit}
+  @media (prefers-reduced-motion: reduce){
+    /* Honour the request, but the work is a count: it still counts, just slower. */
+  }
+</style>
+</head>
+<body>
+  <main>
+    <div id="count" aria-live="off">1</div>
+  </main>
+
+  <footer class="label">
+    <span><b>1965 / 1 – ∞</b></span>
+    <span class="sep">·</span>
+    <span>after Roman Opałka, <i>OPAŁKA 1965 / 1 – ∞</i> (Détails)</span>
+    <span class="sep">·</span>
+    <span>medium: pixels on screen</span>
+    <span class="sep">·</span>
+    <span>each reload begins again at 1; he had only the one life</span>
+    <span class="sep">·</span>
+    <span>y-a-v-a, CC BY-NC 4.0</span>
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+  // Strict rule, no persistence, no network: a count that rises forever
+  // and bleaches toward the ground it is painted on. Opałka added 1% white
+  // to his canvas each year until the figures vanished into "blanc mérité".
+  // Here the bleaching is tied to the count, so you watch the number erase
+  // itself — and a reload resets it to 1, the amnesia the medium grants for free.
+
+  var el = document.getElementById("count");
+  var ground = getComputedStyle(document.documentElement)
+                 .getPropertyValue("--ground").trim()
+                 .split(",").map(function(n){return parseInt(n,10);});
+  var start = [26,26,26]; // near-black ink
+
+  var n = 1;
+  var last = 0;
+  var SPEED = 11; // figures per second; a lifetime, compressed
+
+  function lerp(a,b,t){ return Math.round(a + (b-a)*t); }
+
+  function tint(count){
+    // asymptotic approach to the ground: never fully arrives, like ∞
+    var t = count / (count + 6000);
+    return "rgb(" +
+      lerp(start[0],ground[0],t) + "," +
+      lerp(start[1],ground[1],t) + "," +
+      lerp(start[2],ground[2],t) + ")";
+  }
+
+  function frame(now){
+    if(!last) last = now;
+    var dt = (now - last) / 1000;
+    last = now;
+    n += SPEED * dt;
+    var shown = Math.floor(n);
+    el.textContent = shown.toLocaleString("en-US");
+    el.style.color = tint(shown);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

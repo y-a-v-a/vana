@@ -214,5 +214,13 @@
     "source": "Sol LeWitt, Wall Drawings; Sol LeWitt, Paragraphs on Conceptual Art (1967)",
     "mechanism": "Client-side JS executes a printed LeWitt-style instruction live per visit, generating the instruction text and the drawing from the same parameters; each load/click is a new draftsman, erased on navigation.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-17-1965-1",
+    "title": "1965 / 1 – ∞",
+    "year": 2026,
+    "source": "Roman Opałka, OPAŁKA 1965 / 1 – ∞ (Détails); On Kawara, I Am Still Alive",
+    "mechanism": "requestAnimationFrame increments an integer while a tint function interpolates its colour toward the page background as a function of the same count; no persistence, no network, reload restarts at 1.",
+    "status": "pending"
   }
 ]
