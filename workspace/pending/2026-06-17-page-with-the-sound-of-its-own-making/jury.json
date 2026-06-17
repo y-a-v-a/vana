@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-17-page-with-the-sound-of-its-own-making",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Robert Morris, Box with the Sound of Its Own Making (1961)",
+    "process art",
+    "net.art (page as its own medium)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The recursive sonification of outerHTML is a genuinely web-native gesture: a print cannot read itself, and a recording would betray the point by being made earlier, elsewhere. The mechanism enacts the concept (P1) with unusual fidelity — the script singing its own source is in the source being sung — and Morris is a fresh addition to the canon remix roster, distinct from The Original (downloads source as fake edition) and The webpage going on and off (Creed/timing). The chance/order axis is honestly staged: deterministic mapping of bytes to pitches, yet the melody was never authored. Tone is dry and cheerful-cynic; restraint is real.",
+  "reservations": "The Morris reference is apt but the broader gesture — code-as-sound self-sonification — sits near a known live-coding/shader-sound neighborhood; the DNA demands novelty of ontology/location, and this work's location (a single page that performs its own runtime) is novel but its core technique is not unprecedented. The black-box visual is clean but minimal; the sound design (square wave, char % 36 mapping) is functional rather than considered as composition. A casual viewer gets the box-humming-itself gag, but the Morris-specific recursion argument may require some wall-text literacy — the double-coding (P7) leans slightly toward the literate end.",
+  "revision_suggestion": "Consider tightening the double-coding at the surface level: the visual could more directly echo a Morris walnut box (e.g., a literal cube, or an audio waveform-as-object), so the Morris reference lands even before the viewer hears anything. The sound mapping could be made more deliberate — currently a uniform char-to-pitch grid; a more compositional rule (e.g., source-structure aware: tag, attribute, whitespace as distinct sonic classes) would strengthen the 'mechanism is the argument' claim and push toward nuance 5.",
+  "jury_model": "minimax/minimax-m3"
+}

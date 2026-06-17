@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page with the Sound of Its Own Making</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: #f4f3ee;
+    color: #111;
+    font: 14px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 28px;
+    min-height: 100%;
+  }
+  h1 { font-size: 15px; font-weight: 700; margin: 0; letter-spacing: .02em; }
+  .box {
+    width: min(720px, 92vw);
+    height: min(46vh, 360px);
+    overflow: hidden;
+    background: #0b0b0b;
+    border: 1px solid #000;
+    box-shadow: 0 1px 0 #fff inset, 6px 6px 0 #ddd;
+    padding: 14px 16px;
+  }
+  pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font: inherit;
+    color: #3a3a3a;          /* unmade: dim */
+    tab-size: 2;
+  }
+  pre .made   { color: #6f6f6f; }                 /* already sounded */
+  pre .cursor { background: #e7d34a; color: #000; box-shadow: 0 0 0 2px #e7d34a; }
+  .controls { display: flex; gap: 10px; align-items: center; }
+  button {
+    font: inherit;
+    padding: 8px 16px;
+    border: 1px solid #000;
+    background: #111;
+    color: #f4f3ee;
+    cursor: pointer;
+  }
+  button:disabled { opacity: .35; cursor: default; }
+  button.ghost { background: #f4f3ee; color: #111; }
+  .label {
+    width: min(720px, 92vw);
+    font-size: 12px;
+    line-height: 1.6;
+    color: #222;
+    border-top: 1px solid #bbb;
+    padding-top: 10px;
+  }
+  .label b { font-weight: 700; }
+  .label .dim { color: #666; }
+  .cnt { font-variant-numeric: tabular-nums; color: #666; min-width: 9ch; }
+  a { color: inherit; }
+</style>
+</head>
+<body>
+  <h1>Page with the Sound of Its Own Making</h1>
+
+  <div class="box" id="box"><pre id="src"></pre></div>
+
+  <div class="controls">
+    <button id="play">▶ make</button>
+    <button id="stop" class="ghost" disabled>■ stop</button>
+    <span class="cnt" id="cnt">0 / 0</span>
+  </div>
+
+  <div class="label">
+    <b>y-a-v-a</b>, <i>Page with the Sound of Its Own Making</i>, 2026.<br>
+    After Robert Morris, <i>Box with the Sound of Its Own Making</i> (1961) — a walnut box
+    containing the three-and-a-half-hour recording of itself being built.<br>
+    <span class="dim">Medium: the page's own source, read aloud by the machine that runs it.
+    Every character is a note; the whitespace is the rest. The script you are hearing
+    is in here too. No microphone, no server, no recording — only the making.<br>
+    Licensed <b>CC BY-SA 4.0</b>. No cookies, no trackers, no data leaves the box.</span>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  var srcEl = document.getElementById("src");
+  var boxEl = document.getElementById("box");
+  var playBtn = document.getElementById("play");
+  var stopBtn = document.getElementById("stop");
+  var cntEl = document.getElementById("cnt");
+
+  var STEP = 34;            // ms per character
+  var ctx = null, timer = null;
+  var source = "", i = 0;
+  var made, cursor, rest;   // the three spans
+
+  function captureSource() {
+    // The page sings its own source — including this very function.
+    return "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+  }
+
+  function buildView() {
+    srcEl.textContent = "";
+    made   = document.createElement("span"); made.className = "made";
+    cursor = document.createElement("span"); cursor.className = "cursor";
+    rest   = document.createElement("span");
+    srcEl.appendChild(made);
+    srcEl.appendChild(cursor);
+    srcEl.appendChild(rest);
+    made.textContent = "";
+    cursor.textContent = source.charAt(0);
+    rest.textContent = source.slice(1);
+  }
+
+  function tone(code) {
+    var o = ctx.createOscillator();
+    var g = ctx.createGain();
+    o.type = "square";
+    // map the byte across ~3 octaves; the source decides the melody
+    o.frequency.value = 110 * Math.pow(2, (code % 36) / 12);
+    var t = ctx.currentTime;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.16, t + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.11);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t + 0.12);
+  }
+
+  function step() {
+    if (i >= source.length) { finish(); return; }
+    var ch = source.charAt(i);
+    made.textContent = source.slice(0, i);
+    cursor.textContent = ch === "\n" ? "¶\n" : ch;
+    rest.textContent = source.slice(i + 1);
+    boxEl.scrollTop = cursor.offsetTop - boxEl.clientHeight / 2;
+    cntEl.textContent = (i + 1) + " / " + source.length;
+
+    var code = source.charCodeAt(i);
+    if (ch.trim() !== "") tone(code);   // whitespace is silence: the rest
+
+    i++;
+  }
+
+  function start() {
+    if (timer) return;
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === "suspended") ctx.resume();
+    if (!source) { source = captureSource(); buildView(); }
+    playBtn.disabled = true;
+    stopBtn.disabled = false;
+    timer = setInterval(step, STEP);
+  }
+
+  function halt() {
+    if (timer) { clearInterval(timer); timer = null; }
+    playBtn.disabled = false;
+    stopBtn.disabled = true;
+  }
+
+  function finish() {
+    halt();
+    playBtn.textContent = "▶ make again";
+    i = 0;
+  }
+
+  playBtn.addEventListener("click", start);
+  stopBtn.addEventListener("click", halt);
+
+  // Show the source at rest before any sound is made.
+  source = captureSource();
+  buildView();
+  cntEl.textContent = "0 / " + source.length;
+})();
+</script>
+</body>
+</html>
