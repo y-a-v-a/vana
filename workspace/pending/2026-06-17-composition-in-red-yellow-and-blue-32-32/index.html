@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Composition in Red, Yellow and Blue (32 × 32)</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
+<style>
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: #f7f5ef;
+    color: #14110f;
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+  }
+  .label {
+    max-width: 30rem;
+    padding: 2rem;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .label h1 {
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1.35rem;
+    margin: 0 0 .25rem;
+  }
+  .artist { font-variant: small-caps; letter-spacing: .04em; font-size: .95rem; }
+  .meta { font-size: .8rem; color: #5a564f; margin: .9rem 0 1.6rem; }
+  .point { font-size: 1rem; margin: 0 0 .4rem; }
+  .point .up { font-style: normal; }
+  .ephemeral { font-size: .82rem; color: #5a564f; }
+  a.another {
+    display: inline-block;
+    margin-top: 1.6rem;
+    font-size: .82rem;
+    color: #0047ab;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    cursor: pointer;
+  }
+  .license {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    padding: .6rem;
+    text-align: center;
+    font-size: .68rem;
+    color: #8a857c;
+  }
+  .license a { color: inherit; }
+</style>
+</head>
+<body>
+  <div class="label">
+    <h1>Composition in Red, Yellow and Blue (32&nbsp;×&nbsp;32)</h1>
+    <div class="artist">after Piet Mondrian</div>
+    <div class="meta">pixels in the browser tab · 32 × 32 px · generative, per&nbsp;visit</div>
+
+    <p class="point">The painting is not on this page.<br>
+    It is in the tab, <span class="up">above&nbsp;↑</span> — next to the title.</p>
+    <p class="point">That is its full size. There is no larger version.</p>
+
+    <p class="ephemeral">A new one is painted each visit and erased the moment you close the tab.</p>
+
+    <a class="another" id="again">acquire another ↻</a>
+  </div>
+
+  <div class="license">
+    “Composition in Red, Yellow and Blue (32 × 32)” — y-a-v-a, after Piet Mondrian (public&nbsp;domain).
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+    No cookies, no tracking, no data leaves your browser.
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  // Mondrian palette: the three primaries, plus off-white field and near-black grid.
+  var RED = "#c8102e", YELLOW = "#ffd200", BLUE = "#0047ab";
+  var WHITE = "#f7f5ef", BLACK = "#14110f";
+  var SIZE = 32;            // the browser's mandatory raster — and the smallest Neoplastic canvas
+  var MIN = 7;              // minimum cell, in pixels
+
+  var canvas = document.createElement("canvas");
+  canvas.width = SIZE;
+  canvas.height = SIZE;
+  var ctx = canvas.getContext("2d");
+
+  function rnd(n) { return Math.floor(Math.random() * n); }
+
+  // Order: recursive subdivision into rectangles, on a pixel grid.
+  // Chance: where to cut, when to stop, which cells take a primary.
+  function subdivide(r, depth, lines) {
+    var canV = r.w >= MIN * 2;
+    var canH = r.h >= MIN * 2;
+    if (depth <= 0 || (!canV && !canH) || Math.random() < 0.3) return [r];
+
+    var vertical = (canV && canH) ? (r.w === r.h ? Math.random() < 0.5 : r.w > r.h) : canV;
+    if (vertical) {
+      var px = MIN + rnd(r.w - 2 * MIN + 1);
+      lines.push({ vert: true, x: r.x + px, y: r.y, len: r.h });
+      return subdivide({ x: r.x, y: r.y, w: px, h: r.h }, depth - 1, lines)
+        .concat(subdivide({ x: r.x + px, y: r.y, w: r.w - px, h: r.h }, depth - 1, lines));
+    } else {
+      var py = MIN + rnd(r.h - 2 * MIN + 1);
+      lines.push({ vert: false, x: r.x, y: r.y + py, len: r.w });
+      return subdivide({ x: r.x, y: r.y, w: r.w, h: py }, depth - 1, lines)
+        .concat(subdivide({ x: r.x, y: r.y + py, w: r.w, h: r.h - py }, depth - 1, lines));
+    }
+  }
+
+  function paint() {
+    var lines = [];
+    var cells = subdivide({ x: 0, y: 0, w: SIZE, h: SIZE }, 4, lines);
+
+    ctx.fillStyle = WHITE;
+    ctx.fillRect(0, 0, SIZE, SIZE);
+
+    // A restrained sprinkle of primaries — Mondrian was sparing.
+    var primaries = [RED, YELLOW, BLUE];
+    for (var i = 0; i < cells.length; i++) {
+      var c = cells[i];
+      if (Math.random() < 0.30) {
+        ctx.fillStyle = primaries[rnd(primaries.length)];
+        ctx.fillRect(c.x, c.y, c.w, c.h);
+      }
+    }
+
+    // The black grid: the lines are the splits that made the painting.
+    ctx.strokeStyle = BLACK;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (var j = 0; j < lines.length; j++) {
+      var L = lines[j];
+      if (L.vert) { ctx.moveTo(L.x, L.y); ctx.lineTo(L.x, L.y + L.len); }
+      else { ctx.moveTo(L.x, L.y); ctx.lineTo(L.x + L.len, L.y); }
+    }
+    ctx.stroke();
+
+    // Frame.
+    ctx.lineWidth = 3;
+    ctx.strokeRect(0, 0, SIZE, SIZE);
+
+    setFavicon(canvas.toDataURL("image/png"));
+  }
+
+  // The favicon link is the frame. Replace the node to defeat browser caching.
+  function setFavicon(url) {
+    var old = document.querySelector("link[rel~='icon']");
+    if (old) old.parentNode.removeChild(old);
+    var link = document.createElement("link");
+    link.rel = "icon";
+    link.type = "image/png";
+    link.href = url;
+    document.head.appendChild(link);
+  }
+
+  document.getElementById("again").addEventListener("click", paint);
+  paint();
+})();
+</script>
+</body>
+</html>

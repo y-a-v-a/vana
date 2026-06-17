@@ -222,5 +222,13 @@
     "source": "Roman Opałka, OPAŁKA 1965 / 1 – ∞ (Détails); On Kawara, I Am Still Alive",
     "mechanism": "requestAnimationFrame increments an integer while a tint function interpolates its colour toward the page background as a function of the same count; no persistence, no network, reload restarts at 1.",
     "status": "published"
+  },
+  {
+    "id": "2026-06-17-composition-in-red-yellow-and-blue-32-32",
+    "title": "Composition in Red, Yellow and Blue (32 × 32)",
+    "year": 2026,
+    "source": "Piet Mondrian, Composition with Red, Blue and Yellow (c. 1930); net.art (browser chrome as material)",
+    "mechanism": "Canvas-drawn recursive Mondrian set as the favicon via toDataURL + <link rel=icon>; the browser's mandatory 32px raster is Mondrian's grid.",
+    "status": "pending"
   }
 ]

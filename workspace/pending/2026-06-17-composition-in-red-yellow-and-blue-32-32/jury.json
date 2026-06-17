@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-06-17-composition-in-red-yellow-and-blue-32-32",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Piet Mondrian, Composition with Red, Blue and Yellow (c. 1930)",
+    "net.art (browser chrome as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7"
+  ],
+  "rationale": "The favicon-as-gallery is a genuinely web-native ontological move: the browser's mandatory 32×32 raster is genuinely Neoplastic, and the work earns its argument by actually rendering a recursive Mondrian into that exact slot. Concept and execution collapse cleanly (P1): the lattice is the painting, and the 32×32 mandate is the joke that doubles as the argument. Tone is correctly deadpan-museum, the CC BY-SA / no-tracking footer is present, and the piece sits on the chance/order axis with clear attribution. It is materially distinct from the catalogue — Mondrian is a new reference and the favicon-as-frame is a new mechanism — answering the la-trahison-des-images.be / webpage-going-on-and-off line of works that turn browser chrome into conceptual material.",
+  "reservations": "The conceptual move is clean but a single stroke; it doesn't accrue depth on re-reading the way Maleglitch or A Chance of Order do. The favicon-as-art location has scattered precedent in net.art and demo culture, which slightly dilutes the 'new place for the work to live' claim. The 'acquire another ↻' link is a charming wink but is functionally decorative — it neither deepens the market/value critique (P6) nor interrogates the generative process (P10).",
+  "revision_suggestion": "Lean harder into the market-critique layer: have the 'acquire another' button do something that names the apparatus (e.g., temporarily display an institutional price, a 'sold' dot, a 'provenance' line that references the previous composition's seed), so the second click isn't just a re-roll but a small performance of acquisition. Alternatively, surface a tiny per-visit caption underneath the tab pointer — e.g., the random seed, or a short generated wall text — to make the generative act legible rather than invisible.",
+  "jury_model": "minimax/minimax-m3"
+}
