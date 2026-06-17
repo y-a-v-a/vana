@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vana — two loops</title>
+<!-- Standalone preview only. You'll lift the <section>s between the PASTE markers
+     into your own deck (head + tail). Theme/colors are yours; SVGs use
+     currentColor so they adapt automatically. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- ============================ SLIDES START ============================ -->
+<!--
+  SCREENSHOTS TO PLACE (search "SCREENSHOT" below):
+   S1  a live generative piece that visibly changes on reload
+   S4  identity/DNA.md (show the principles / "operating system" framing)
+   S6  the approval email on your phone + the Tailscale dashboard candidate page
+   S10 the /verify SKILL.md closing line ("if blocked, fix and update this skill")
+   S13 "The Original" piece + the "acquire the original" interaction
+  The two loop slides (S8, S9) are inline SVG — no screenshot needed.
+-->
+
+<!-- S1 — COLD OPEN: show a live piece, reload it, say nothing -->
+<section data-background-color="#000">
+  <!-- Best: just present the real browser at vana.y-a-v-a.org and hit reload.
+       This embedded version is a fallback. Point src at a piece that CHANGES on reload. -->
+  <iframe id="coldopen" src="https://vana.y-a-v-a.org/" style="width:90vw;height:64vh;border:0;border-radius:8px"></iframe>
+  <p style="margin-top:.4em">
+    <button onclick="var f=document.getElementById('coldopen');f.src=f.src;">↻ reload</button>
+  </p>
+  <aside class="notes">
+    Open cold. No title, no name. Show the piece. Hit reload two or three times so it
+    changes. Stay silent a beat. Let the room get curious. (~60–90s)
+    If the network is shaky, present the real site in a browser instead of this iframe.
+  </aside>
+</section>
+
+<!-- S2 — the question -->
+<section>
+  <h2>Who chose this?</h2>
+  <p class="fragment"><strong>Nobody did.</strong> 🤷</p>
+  <aside class="notes">
+    The hook. Nobody picked that image — no designer, no prompt I typed just now.
+    Then turn to how it got there.
+  </aside>
+</section>
+
+<!-- S3 — REVEAL / what it is -->
+<section>
+  <h1>vana</h1>
+  <p>An autonomous agent that <strong>makes art</strong> in my own artistic DNA,
+     has a <strong>different model judge it</strong>, and asks <strong>me</strong> for one tap to confirm. 🎨⚖️📱</p>
+  <p><small>y-a-v-a · Claude Community Meetup</small></p>
+  <aside class="notes">
+    The reveal. Name the project. One sentence on what it is. Don't list the stack yet —
+    that comes through the loops.
+  </aside>
+</section>
+
+<!-- S4 — the DNA -->
+<section>
+  <h2>🧬 It draws from a DNA</h2>
+  <div style="border:2px dashed currentColor;padding:1em;opacity:.75;border-radius:8px">
+    📸 SCREENSHOT: <em>identity/DNA.md</em> — the principles / "read this as an operating
+    system, not a biography" framing.
+  </div>
+  <p class="fragment" style="margin-top:.6em">Twenty years of y-a-v-a, distilled into a
+     document the agents read.</p>
+  <p class="fragment"><em>The harness has no taste. It applies mine.</em></p>
+  <aside class="notes">
+    The DNA is the single source of artistic truth. The generator reads it to make;
+    the jury reads it to judge. The system encodes no taste of its own.
+  </aside>
+</section>
+
+<!-- S5 — the cast / two vendors -->
+<section>
+  <h2>Two models, on purpose</h2>
+  <p>🎨 <strong>Generator</strong> (Claude Opus) proposes</p>
+  <p class="fragment">⚖️ <strong>Jury</strong> (a <em>different</em> vendor) disposes</p>
+  <p class="fragment">📱 <strong>I</strong> confirm</p>
+  <p class="fragment"><small>Never let a model grade its own work.</small></p>
+  <aside class="notes">
+    Division of labour is a design choice, not a detail: the maker and the critic are
+    different vendors so nothing flatters itself. The human is the third party.
+  </aside>
+</section>
+
+<!-- S6 — the human-in-the-loop beat -->
+<section>
+  <h2>📱 One tap. From anywhere.</h2>
+  <div style="border:2px dashed currentColor;padding:1em;opacity:.75;border-radius:8px">
+    📸 SCREENSHOT: <em>the approval email on your phone</em> → opening the candidate on
+    the <em>Tailscale dashboard</em> (work rendered + jury verdict + Approve / Reject).
+  </div>
+  <p class="fragment" style="margin-top:.6em">It emails me. I open it on my phone over a
+     Tailscale VPN, see the work and the jury's verdict, and approve — or not.</p>
+  <aside class="notes">
+    THE beat. The agent runs unattended on a Mac mini; when something clears the gate it
+    emails me; I review it from my phone over Tailscale and tap. Human-in-the-loop made
+    physical. Land this slowly.
+  </aside>
+</section>
+
+<!-- S7 — thesis -->
+<section>
+  <h2>🔁 Loops, not prompts</h2>
+  <p>The interesting behaviour comes from <strong>loop structure</strong>,
+     not a magic prompt.</p>
+  <p class="fragment">Two loops run this project.</p>
+  <aside class="notes">
+    The intellectual spine for a builder audience: agents get good when you put them in a
+    structured loop with checks and a human checkpoint — not when you find the perfect
+    prompt. Set up the two-loops section.
+  </aside>
+</section>
+
+<!-- S8 — the creative loop (SVG) -->
+<section>
+  <h3>🎨 The creative loop</h3>
+  <svg viewBox="0 0 1000 330" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L7,3 L0,6 Z" fill="currentColor"/>
+      </marker>
+    </defs>
+    <!-- boxes -->
+    <rect x="47"  y="60" width="165" height="104" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="232" y="60" width="165" height="104" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="417" y="60" width="165" height="104" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="602" y="60" width="165" height="104" rx="10" fill="none" stroke="currentColor" stroke-width="3"/>
+    <rect x="787" y="60" width="165" height="104" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <!-- arrows between -->
+    <path d="M212 112 L232 112" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrA)"/>
+    <path d="M397 112 L417 112" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrA)"/>
+    <path d="M582 112 L602 112" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrA)"/>
+    <path d="M767 112 L787 112" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrA)"/>
+    <!-- return loop -->
+    <path d="M869.5 164 L869.5 290 L129.5 290 L129.5 168" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arrA)"/>
+    <!-- text -->
+    <g fill="currentColor" text-anchor="middle">
+      <text x="129.5" y="98" font-size="28">🧬</text>
+      <text x="129.5" y="126" font-size="18" font-weight="bold">DNA</text>
+      <text x="129.5" y="146" font-size="12" opacity=".7">20 years of work</text>
+
+      <text x="314.5" y="98" font-size="28">🎨</text>
+      <text x="314.5" y="126" font-size="18" font-weight="bold">Generate</text>
+      <text x="314.5" y="146" font-size="12" opacity=".7">Claude Opus</text>
+
+      <text x="499.5" y="98" font-size="28">⚖️</text>
+      <text x="499.5" y="126" font-size="18" font-weight="bold">Jury</text>
+      <text x="499.5" y="146" font-size="12" opacity=".7">a different model</text>
+
+      <text x="684.5" y="98" font-size="28">📱</text>
+      <text x="684.5" y="126" font-size="18" font-weight="bold">I approve</text>
+      <text x="684.5" y="146" font-size="12" opacity=".7">Tailscale · phone</text>
+
+      <text x="869.5" y="98" font-size="28">🌐</text>
+      <text x="869.5" y="126" font-size="18" font-weight="bold">Publish</text>
+      <text x="869.5" y="146" font-size="12" opacity=".7">vana.y-a-v-a.org</text>
+
+      <text x="500" y="284" font-size="13" opacity=".7">every 3 hours · the catalogue grows · feeds the next round</text>
+    </g>
+  </svg>
+  <aside class="notes">
+    Walk it once, left to right. The only human box is "I approve" — and it's the only
+    bold one. Generation is ~$0.40; judging is half a cent; it runs every 3 hours whether
+    I'm watching or not.
+  </aside>
+</section>
+
+<!-- S9 — the development loop (SVG) -->
+<section>
+  <h3>🛠️ The development loop</h3>
+  <svg viewBox="0 0 1000 330" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arrB" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L7,3 L0,6 Z" fill="currentColor"/>
+      </marker>
+    </defs>
+    <rect x="95"  y="60" width="180" height="104" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="305" y="60" width="180" height="104" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="515" y="60" width="180" height="104" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <rect x="725" y="60" width="180" height="104" rx="10" fill="none" stroke="currentColor" stroke-width="3"/>
+    <path d="M275 112 L305 112" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrB)"/>
+    <path d="M485 112 L515 112" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrB)"/>
+    <path d="M695 112 L725 112" fill="none" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrB)"/>
+    <path d="M815 164 L815 290 L185 290 L185 168" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 5" marker-end="url(#arrB)"/>
+    <g fill="currentColor" text-anchor="middle">
+      <text x="185" y="98" font-size="28">✏️</text>
+      <text x="185" y="126" font-size="18" font-weight="bold">Change</text>
+      <text x="185" y="146" font-size="12" opacity=".7">edit the code</text>
+
+      <text x="395" y="98" font-size="28">✅</text>
+      <text x="395" y="126" font-size="18" font-weight="bold">Check</text>
+      <text x="395" y="146" font-size="12" opacity=".7">types + 84 tests</text>
+
+      <text x="605" y="98" font-size="28">🔌</text>
+      <text x="605" y="126" font-size="18" font-weight="bold">Verify</text>
+      <text x="605" y="146" font-size="12" opacity=".7">live jury · deploy</text>
+
+      <text x="815" y="98" font-size="28">📜</text>
+      <text x="815" y="126" font-size="18" font-weight="bold">/verify skill</text>
+      <text x="815" y="146" font-size="12" opacity=".7">self-improving</text>
+
+      <text x="500" y="284" font-size="13" opacity=".7">if blocked → fix it → and update the skill ✍️</text>
+    </g>
+  </svg>
+  <aside class="notes">
+    Same shape, different stakes. The bold box is a skill — a written playbook the agent
+    runs to validate the app after a change. Tiered by cost: free checks always, the paid
+    ones only when relevant.
+  </aside>
+</section>
+
+<!-- S10 — the self-improving skill -->
+<section>
+  <h2>📜 The skill rewrites itself</h2>
+  <div style="border:2px dashed currentColor;padding:1em;opacity:.75;border-radius:8px">
+    📸 SCREENSHOT: <em>.claude/skills/verify/SKILL.md</em> — the closing line:
+    "If you run into a blocker, find a solution and then <strong>update this skill</strong>."
+  </div>
+  <p class="fragment" style="margin-top:.6em">The playbook for testing the app ends by
+     telling the agent to <strong>improve the playbook</strong>.</p>
+  <p class="fragment">The dev loop tightens itself over time. 🔁</p>
+  <aside class="notes">
+    This is the part builders lean in for: the verification skill isn't static. When it
+    hits a wall, the instruction is to solve it AND amend the skill — so next time is
+    smoother. The loop learns.
+  </aside>
+</section>
+
+<!-- S11 — symmetry of the two loops -->
+<section>
+  <h2>Both loops have one checkpoint</h2>
+  <p>🎨 creative loop → the checkpoint is <strong>me</strong> 👤</p>
+  <p class="fragment">🛠️ dev loop → the checkpoint is <strong>a skill that improves itself</strong> 📜</p>
+  <p class="fragment"><small>One loop makes the art. The other makes the loop better.</small></p>
+  <aside class="notes">
+    Put them side by side conceptually. The symmetry is the takeaway: structure + a
+    checkpoint. In one, the checkpoint is human judgement; in the other, a self-revising
+    procedure.
+  </aside>
+</section>
+
+<!-- S12 — payoff turn -->
+<section>
+  <h2>But here's the thing…</h2>
+  <p class="fragment">the art is <strong>about this</strong>.</p>
+  <p class="fragment">Originals. Copies. Aura. 🖼️</p>
+  <aside class="notes">
+    The pivot from "how" to "why". Everything so far was mechanism; now the mechanism turns
+    out to be the subject.
+  </aside>
+</section>
+
+<!-- S13 — The Original / Benjamin -->
+<section>
+  <h2>🖼️ "The Original"</h2>
+  <div style="border:2px dashed currentColor;padding:1em;opacity:.75;border-radius:8px">
+    📸 SCREENSHOT / LIVE: <em>vana.y-a-v-a.org/2026-06-16-the-original/</em> — click
+    "acquire the original" and show it hands you a <strong>byte-faithful copy of the page itself</strong>.
+  </div>
+  <p class="fragment" style="margin-top:.6em">Walter Benjamin, 1935: the <em>aura</em> of the
+     original dies in the age of mechanical reproduction.</p>
+  <p class="fragment">This piece's "acquire the original" button gives every visitor an
+     identical copy. <em>Aura: none on record.</em></p>
+  <aside class="notes">
+    Demo it live if you can: click acquire → it downloads a copy of its own source. The
+    machine made a work whose subject is exactly the thing it is: a copy with no original.
+  </aside>
+</section>
+
+<!-- S14 — the machine arguing with itself -->
+<section>
+  <h2>A machine arguing with itself</h2>
+  <p>Its whole output is a running argument: <strong>can a machine make an original?</strong></p>
+  <p class="fragment">Every 3 hours it makes another move in that argument. 🔁</p>
+  <p class="fragment"><small>Maker and critic, in one system — and I'm the doubt in the middle.</small></p>
+  <aside class="notes">
+    The thesis, stated plainly. It's not a tool that makes images; it's an artist that
+    doesn't know whether it's an artist, and keeps producing evidence either way.
+  </aside>
+</section>
+
+<!-- S15 — the economic joke (optional; cut if short on time) -->
+<section>
+  <h2>An economic joke, baked in</h2>
+  <p>⚖️ a jury verdict: <strong>$0.0045</strong></p>
+  <p class="fragment">🎨 making the work: <strong>~$0.40</strong></p>
+  <p class="fragment"><small>Opinions are free; creation is expensive — the exact inversion
+     the art market runs on.</small></p>
+  <aside class="notes">
+    A light beat near the end. The cost asymmetry is funny and on-brand for a project about
+    value and "but is it art?". Cut this slide first if you're over time.
+  </aside>
+</section>
+
+<!-- S16 — close -->
+<section>
+  <h2>vana</h2>
+  <p>🌐 <strong>vana.y-a-v-a.org</strong></p>
+  <p>🔁 a new work every 3 hours · 📱 I approve from my phone</p>
+  <p class="fragment"><em>An autonomous artist that doesn't know if it's an artist.</em></p>
+  <p><small>Vincent Bruijn · y-a-v-a · Claude Community Ambassador</small></p>
+  <aside class="notes">
+    Land on the live URL — invite them to watch the catalogue grow. Restate the one-liner.
+    Thank you.
+  </aside>
+</section>
+
+<!-- ============================ SLIDES END ============================ -->
+
+</div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({ hash: true, controls: true, progress: true, plugins: [ RevealNotes ] });
+</script>
+</body>
+</html>
