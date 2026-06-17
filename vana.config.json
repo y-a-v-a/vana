@@ -1,5 +1,5 @@
 {
-  "interval": { "hours": 6 },
+  "interval": { "hours": 3 },
   "workBudget": { "minutes": 20 },
   "costFuse": { "perWakeUsd": 5, "perDayUsd": 20 },
   "models": {
