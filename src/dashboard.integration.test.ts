@@ -4,7 +4,8 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { handle } from "./dashboard.ts";
+import { handle, setRefiner } from "./dashboard.ts";
+import { isRefining, runRefine } from "./refine.ts";
 import type { Config } from "./config.ts";
 
 // Drives the real request handler against a temp fixture with no socket and no
@@ -53,6 +54,14 @@ async function request(cfg: Config, url: string): Promise<MockRes> {
   const req = { method: "GET", url } as unknown as IncomingMessage;
   await handle(req, res as unknown as ServerResponse, cfg);
   return res;
+}
+
+function postReq(url: string, body: string): IncomingMessage {
+  async function* gen(): AsyncGenerator<string> {
+    yield body;
+  }
+  const it = gen();
+  return { method: "POST", url, [Symbol.asyncIterator]: () => it } as unknown as IncomingMessage;
 }
 
 test("dashboard handler: routes, CSP, sandbox, traversal", async (t) => {
@@ -124,6 +133,29 @@ test("dashboard handler: routes, CSP, sandbox, traversal", async (t) => {
       const r = await request(cfg, "/candidate/2026-01-01-does-not-exist");
       assert.equal(r.statusCode, 303);
       assert.equal(r.headers["Location"], "/");
+    });
+
+    await t.test("POST refine marks refining, 303s back, and invokes the refiner", async () => {
+      const calls: { id: string; feedback: string }[] = [];
+      setRefiner(async (rid, fb) => {
+        calls.push({ id: rid, feedback: fb });
+      });
+      try {
+        const res = mockRes();
+        await handle(
+          postReq(`/candidate/${id}/refine`, "feedback=fix+the+TypeError"),
+          res as unknown as ServerResponse,
+          cfg,
+        );
+        assert.equal(res.statusCode, 303);
+        assert.equal(res.headers["Location"], `/candidate/${id}`);
+        assert.equal(calls.length, 1, "refiner invoked once");
+        assert.equal(calls[0]!.id, id);
+        assert.equal(calls[0]!.feedback, "fix the TypeError");
+        assert.ok(isRefining(join(root, "pending", id)), "marker set");
+      } finally {
+        setRefiner(runRefine); // restore the real refiner for any later tests
+      }
     });
   } finally {
     rmSync(root, { recursive: true, force: true });

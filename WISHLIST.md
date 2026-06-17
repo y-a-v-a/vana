@@ -17,9 +17,12 @@ on anything referenced here, see [ARCHITECTURE.md](ARCHITECTURE.md).
   borderline cases are surfaced differently in the email. *Effort: S.*
 
 ## Generation
-- [ ] **Revision rounds** — on a near-miss, feed the jury's `revision_suggestion`
-  back to the generator and re-jury (max K attempts) instead of discarding (Q10).
-  *Value:* higher hit-rate per wake. *Cost:* more Opus spend; gate on the fuse. *Effort: M.*
+- [x] **Human-directed refinement** — the dashboard **Refine** action: feedback →
+  the agent reworks the candidate in place → re-jury → email. Shipped (`refine.ts`).
+- [ ] **Automatic revision rounds** — the jury-directed variant: on a near-miss,
+  feed the jury's `revision_suggestion` back to the generator and re-jury (max K
+  attempts) instead of discarding (Q10). *Value:* higher hit-rate per wake.
+  *Cost:* more Opus spend; gate on the fuse. *Effort: M.*
 - [ ] **Server-side "live" works (P4)** — bots/feeds/APIs the DNA loves but that the
   static-only constraint (Q11) currently excludes. *Value:* unlocks a whole class of
   DNA-native pieces. *Effort: L* — needs hosting beyond static.

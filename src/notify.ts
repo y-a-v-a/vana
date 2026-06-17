@@ -20,11 +20,15 @@ export function buildEmail(
   meta: GeneratedMeta,
   verdict: JuryVerdict,
   url: string,
+  opts: { refined?: boolean } = {},
 ): Email {
   const s = verdict.scores;
-  const subject = `vana · ${verdict.verdict} ${verdict.weighted_total}/50 — ${meta.title}`;
+  const tag = opts.refined ? "refined" : verdict.verdict;
+  const subject = `vana · ${tag} ${verdict.weighted_total}/50 — ${meta.title}`;
   const body = [
-    "A new candidate passed the jury and is awaiting your confirmation.",
+    opts.refined
+      ? "Your refinement is ready, re-juried, and still awaiting your confirmation."
+      : "A new candidate passed the jury and is awaiting your confirmation.",
     "",
     `  ${meta.title}`,
     `  ${meta.summary}`,
@@ -54,9 +58,10 @@ export async function sendCandidateEmail(
   id: string,
   meta: GeneratedMeta,
   verdict: JuryVerdict,
+  opts: { refined?: boolean } = {},
 ): Promise<void> {
   const cfg = loadConfig();
   const smtp = loadSmtp();
-  const { subject, body } = buildEmail(id, meta, verdict, dashboardUrl(cfg, id));
+  const { subject, body } = buildEmail(id, meta, verdict, dashboardUrl(cfg, id), opts);
   await sendMail(smtp, { from: smtp.from, to: cfg.email.to, subject, body });
 }

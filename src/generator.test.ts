@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   buildGeneratorTask,
+  buildRefineTask,
   validateSelfContained,
   parseMeta,
 } from "./generator.ts";
@@ -84,4 +85,12 @@ test("parseMeta throws on missing required fields", () => {
 
 test("parseMeta throws on invalid JSON", () => {
   assert.throws(() => parseMeta("{not json"));
+});
+
+test("buildRefineTask embeds feedback + in-place refinement instructions", () => {
+  const task = buildRefineTask("the canvas throws a TypeError on click — fix it");
+  assert.match(task, /TypeError on click/);
+  assert.match(task, /REFINEMENT/i);
+  assert.match(task, /self-contained/i);
+  assert.match(task, /index\.html/);
 });

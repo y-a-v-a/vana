@@ -6,6 +6,13 @@ import type { GeneratedMeta } from "./generator.ts";
 import type { JuryVerdict } from "./jury.ts";
 import { isValidId } from "./ids.ts";
 import { decide, type Decision } from "./promote.ts";
+import { runRefine, isRefining, markRefining } from "./refine.ts";
+
+// The refiner is injectable so tests can stub it (a real refine drives Opus).
+let refiner: (id: string, feedback: string) => Promise<void> = runRefine;
+export function setRefiner(fn: (id: string, feedback: string) => Promise<void>): void {
+  refiner = fn;
+}
 
 export interface PendingItem {
   id: string;
@@ -20,6 +27,25 @@ export function escapeHtml(s: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
+}
+
+/** Parse an application/x-www-form-urlencoded body (pure, testable). */
+export function parseFormBody(raw: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const pair of raw.split("&")) {
+    if (!pair) continue;
+    const eq = pair.indexOf("=");
+    const rawKey = eq < 0 ? pair : pair.slice(0, eq);
+    const rawVal = eq < 0 ? "" : pair.slice(eq + 1);
+    try {
+      out[decodeURIComponent(rawKey.replace(/\+/g, " "))] = decodeURIComponent(
+        rawVal.replace(/\+/g, " "),
+      );
+    } catch {
+      // skip a malformed pair
+    }
+  }
+  return out;
 }
 
 const STYLE = `
@@ -40,6 +66,9 @@ const STYLE = `
   button{font:600 15px/1 Georgia,serif;padding:.6rem 1.4rem;border-radius:.3rem;border:1px solid var(--line);cursor:pointer}
   .approve{background:#1a7a3a;color:#fff;border-color:#1a7a3a}
   .rejectbtn{background:#fff;color:#a02020;border-color:#a02020;margin-left:.5rem}
+  label{display:block;font:600 14px/1.4 Georgia,serif;margin-bottom:.35rem}
+  textarea{width:100%;font:14px/1.5 Georgia,serif;padding:.6rem;border:1px solid var(--line);border-radius:.3rem;margin-bottom:.6rem;resize:vertical}
+  .refinebtn{background:var(--accent);color:#fff;border-color:var(--accent)}
 `;
 
 function shell(title: string, body: string): string {
@@ -83,15 +112,27 @@ export function renderCandidate(
   meta: GeneratedMeta,
   verdict: JuryVerdict,
   motivation: string,
+  refining = false,
 ): string {
+  const enc = encodeURIComponent(id);
+  const actions = refining
+    ? `<div class="card"><strong>Refining…</strong> the agent is reworking this candidate from your feedback. You'll be emailed when it's ready — reload to check.</div>`
+    : `<div class="card">
+    <form method="POST" action="/candidate/${enc}/approve"><button class="approve" type="submit">Approve → publish</button></form>
+    <form method="POST" action="/candidate/${enc}/reject"><button class="rejectbtn" type="submit">Reject</button></form>
+  </div>
+  <div class="card">
+    <form method="POST" action="/candidate/${enc}/refine">
+      <label for="feedback">Refine — tell the agent what to change</label>
+      <textarea id="feedback" name="feedback" rows="3" required placeholder="e.g. the canvas throws a TypeError on click — fix it; and raise the contrast"></textarea>
+      <button class="refinebtn" type="submit">Refine →</button>
+    </form>
+  </div>`;
   const body = `
   <h1>${escapeHtml(meta.title)} <span class="badge ${verdict.verdict}">${verdict.verdict} ${verdict.weighted_total}/50</span></h1>
   <p>${escapeHtml(meta.summary)}</p>
   ${workAndJury(id, meta, verdict)}
-  <div class="card">
-    <form method="POST" action="/candidate/${encodeURIComponent(id)}/approve"><button class="approve" type="submit">Approve → publish</button></form>
-    <form method="POST" action="/candidate/${encodeURIComponent(id)}/reject"><button class="rejectbtn" type="submit">Reject</button></form>
-  </div>
+  ${actions}
   <h2>Motivation</h2>
   <pre>${escapeHtml(motivation)}</pre>`;
   return shell(`vana · ${meta.title}`, body);
@@ -175,6 +216,15 @@ function send(res: ServerResponse, status: number, type: string, body: string): 
   res.end(body);
 }
 
+async function readBody(req: IncomingMessage, limit = 64 * 1024): Promise<string> {
+  let data = "";
+  for await (const chunk of req) {
+    data += chunk;
+    if (data.length > limit) throw new Error("request body too large");
+  }
+  return data;
+}
+
 export async function handle(req: IncomingMessage, res: ServerResponse, cfg: Config): Promise<void> {
   const url = new URL(req.url ?? "/", "http://localhost");
   const parts = url.pathname.split("/").filter(Boolean); // e.g. ["candidate","<id>","work"]
@@ -202,7 +252,7 @@ export async function handle(req: IncomingMessage, res: ServerResponse, cfg: Con
       const motivation = readFileSync(join(loc.dir, "motivation.md"), "utf8");
       const html =
         loc.status === "pending"
-          ? renderCandidate(id, meta, verdict, motivation)
+          ? renderCandidate(id, meta, verdict, motivation, isRefining(loc.dir))
           : renderResolved(id, meta, verdict, loc.status, motivation);
       return send(res, 200, "text/html; charset=utf-8", html);
     }
@@ -225,6 +275,34 @@ export async function handle(req: IncomingMessage, res: ServerResponse, cfg: Con
         send(res, 409, "text/html; charset=utf-8", renderNotFound());
       }
       return;
+    }
+
+    if (req.method === "POST" && parts[2] === "refine") {
+      const back = { Location: `/candidate/${encodeURIComponent(id)}` };
+      if (!loc || loc.status !== "pending") return send(res, 409, "text/html; charset=utf-8", renderNotFound());
+      if (isRefining(loc.dir)) {
+        res.writeHead(303, back);
+        return void res.end();
+      }
+      let feedback: string;
+      try {
+        feedback = (parseFormBody(await readBody(req)).feedback ?? "").trim();
+      } catch {
+        return send(res, 413, "text/html; charset=utf-8", renderNotFound());
+      }
+      if (!feedback) {
+        res.writeHead(303, back);
+        return void res.end();
+      }
+      try {
+        markRefining(loc.dir, feedback, new Date()); // exclusive; throws if one is in flight
+      } catch {
+        res.writeHead(303, back);
+        return void res.end();
+      }
+      void refiner(id, feedback).catch((err) => console.error(`[refine] ${id}: ${(err as Error).message}`));
+      res.writeHead(303, back);
+      return void res.end();
     }
   }
 

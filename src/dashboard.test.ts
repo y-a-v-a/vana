@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   escapeHtml,
+  parseFormBody,
   renderIndex,
   renderCandidate,
   renderResolved,
@@ -72,6 +73,31 @@ test("renderResolved shows published status, work, and no action forms", () => {
 
 test("renderResolved shows rejected status", () => {
   assert.match(renderResolved("id", meta, verdict, "rejected", ""), /Rejected/);
+});
+
+test("renderCandidate shows the refine textarea + actions when not refining", () => {
+  const html = renderCandidate("2026-06-16-x", meta, verdict, "m");
+  assert.match(html, /name="feedback"/);
+  assert.match(html, /\/candidate\/2026-06-16-x\/refine/);
+  assert.match(html, /Approve/);
+});
+
+test("renderCandidate shows 'Refining…' and hides actions while refining", () => {
+  const html = renderCandidate("2026-06-16-x", meta, verdict, "m", true);
+  assert.match(html, /Refining…/);
+  assert.doesNotMatch(html, /name="feedback"/);
+  assert.doesNotMatch(html, /\/approve"/);
+});
+
+test("parseFormBody decodes urlencoded fields (+ and %)", () => {
+  assert.deepEqual(parseFormBody("feedback=fix+the+TypeError%20now&x=1"), {
+    feedback: "fix the TypeError now",
+    x: "1",
+  });
+});
+
+test("parseFormBody returns {} for an empty body", () => {
+  assert.deepEqual(parseFormBody(""), {});
 });
 
 test("renderNotFound links back to the landing page", () => {

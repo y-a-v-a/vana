@@ -17,6 +17,9 @@ logs/
 # generator staging area
 workspace/.work/
 
+# in-flight refinement marker (transient, local-only)
+.refining
+
 # built public site (assembled in CI)
 dist-site/
 

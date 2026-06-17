@@ -79,8 +79,10 @@ wake:
 | `git.ts` | Scoped stage (`workspace/` + `catalogue.json`) + commit + optional push; tolerant of an empty commit |
 | `smtp.ts` | Dependency-free SMTP-over-implicit-TLS (465) client: RFC 2047 subject, base64 body, 20s timeout, AUTH LOGIN |
 | `notify.ts` | `buildEmail()` + `sendCandidateEmail()`; the email is the ping, the dashboard is the gate (the loop never reads an inbox) |
-| `dashboard.ts` | `node:http` server: lists `pending/`, renders a candidate (work iframe + motivation + jury), Approve/Reject; status pages for decided candidates; serves `/work` |
+| `dashboard.ts` | `node:http` server: lists `pending/`, renders a candidate (work iframe + motivation + jury), Approve / Reject / **Refine** (feedback textarea); status pages for decided candidates; serves `/work` |
 | `promote.ts` | `decide(id, approve|reject)` — moves pending→published/rejected, updates the catalogue, commits + pushes. **Approve is the only writer to `published/`.** |
+| `refine.ts` | `runRefine(id, feedback)` — the agent reworks a pending candidate **in place** from human feedback, re-juries it, logs the feedback (`refinements.md`), commits + pushes, emails. Stays in `pending/` for the gate; serialized with the wake via the lock; respects the $ fuse |
+| `lock.ts` | tiny in-process mutex (`withLock`) so a refine and a scheduled wake never run at once |
 | `site.ts` | `buildSite()` — assembles `dist-site/` for Vercel; copies per-work `index.html` + `motivation.md` + `meta.json`, **never `jury.json`**; writes the catalogue index |
 | `daemon.ts` | The long-running process: serves the dashboard continuously **and** self-schedules wakes; launchd target |
 

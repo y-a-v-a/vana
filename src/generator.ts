@@ -67,6 +67,23 @@ ${digest}
 Write index.html, motivation.md, and meta.json now.`;
 }
 
+/** Task for an in-place refinement driven by the artist's feedback. */
+export function buildRefineTask(feedback: string): string {
+  return `You previously generated the candidate artwork in the current working directory (index.html, motivation.md, meta.json). The artist reviewed it and asked for this refinement:
+
+"""
+${feedback}
+"""
+
+Revise the work to address the feedback. Read the current files first, then edit them in place. Requirements:
+- This is a REFINEMENT, not a new work — preserve the concept and identity unless the feedback explicitly asks to change it.
+- Keep index.html FULLY SELF-CONTAINED: all CSS/JS inline, NO external requests of any kind (no external src/href, @import, url(http), fetch, etc.).
+- If the change affects them, update motivation.md and meta.json; keep meta.json valid (same fields).
+- Still satisfy the DNA hard gates (G1–G6) and stay in the y-a-v-a voice.
+
+Make the edits now. Do not create unrelated files and do not ask questions.`;
+}
+
 // ── Self-containment validation (pure, testable) ─────────────────────────────
 // HEURISTIC FIRST PASS ONLY. This is a denylist and cannot be exhaustive; the
 // real guarantee is the restrictive CSP + sandboxed iframe applied when a work
@@ -124,18 +141,18 @@ export function readGeneratedFiles(dir: string): GeneratedFiles {
   return { html, motivation, meta };
 }
 
-// ── The agentic generation step (integration; exercised by `npm run once`) ────
-/**
- * Run the generator agent (Claude Opus via the Agent SDK) to produce a candidate
- * in `workDir`. Returns the read-back files plus any self-containment violations.
- */
-export async function generateCandidate(workDir: string): Promise<GenerationResult> {
+// ── The agentic step (integration; exercised by `npm run once` / refine) ──────
+
+/** Run the Opus agent in `workDir` with the given task + tools; return the result. */
+async function runAgent(
+  workDir: string,
+  task: string,
+  allowedTools: string[],
+): Promise<SDKResultMessage> {
   if (!process.env.ANTHROPIC_API_KEY) {
     throw new Error("ANTHROPIC_API_KEY is required for the generator (see .env.example).");
   }
   const cfg = loadConfig();
-  mkdirSync(workDir, { recursive: true });
-
   const options: Options = {
     model: cfg.models.generator,
     cwd: workDir,
@@ -144,35 +161,44 @@ export async function generateCandidate(workDir: string): Promise<GenerationResu
       preset: "claude_code",
       append: buildGeneratorSystemAppend(loadDna()),
     },
-    allowedTools: ["Read", "Write"],
+    allowedTools,
     permissionMode: "bypassPermissions",
     allowDangerouslySkipPermissions: true,
   };
-
-  const task = buildGeneratorTask(catalogueDigest());
-
   let finalResult: SDKResultMessage | null = null;
   for await (const message of query({ prompt: task, options })) {
     if (message.type === "result") finalResult = message;
   }
-  if (!finalResult) throw new Error("Generator produced no result message");
+  if (!finalResult) throw new Error("Agent produced no result message");
   if (finalResult.is_error) {
     const errs = "errors" in finalResult ? finalResult.errors.join("; ") : "";
-    throw new Error(`Generator failed (${finalResult.subtype}): ${errs}`);
+    throw new Error(`Agent failed (${finalResult.subtype}): ${errs}`);
   }
+  return finalResult;
+}
 
+function collect(dir: string, result: SDKResultMessage): GenerationResult {
   let files: GeneratedFiles;
   try {
-    files = readGeneratedFiles(workDir);
+    files = readGeneratedFiles(dir);
   } catch (err) {
     throw new Error(
-      `${(err as Error).message}\nAgent subtype: ${finalResult.subtype}, cost: $${finalResult.total_cost_usd}`,
+      `${(err as Error).message}\nAgent subtype: ${result.subtype}, cost: $${result.total_cost_usd}`,
     );
   }
+  return { files, violations: validateSelfContained(files.html), costUsd: result.total_cost_usd };
+}
 
-  return {
-    files,
-    violations: validateSelfContained(files.html),
-    costUsd: finalResult.total_cost_usd,
-  };
+/** Produce a fresh candidate in `workDir`. */
+export async function generateCandidate(workDir: string): Promise<GenerationResult> {
+  mkdirSync(workDir, { recursive: true });
+  const result = await runAgent(workDir, buildGeneratorTask(catalogueDigest()), ["Read", "Write"]);
+  return collect(workDir, result);
+}
+
+/** Refine the existing candidate in `dir` in place, per the artist's feedback. */
+export async function refineCandidate(dir: string, feedback: string): Promise<GenerationResult> {
+  if (!existsSync(dir)) throw new Error(`No candidate dir to refine: ${dir}`);
+  const result = await runAgent(dir, buildRefineTask(feedback), ["Read", "Write", "Edit"]);
+  return collect(dir, result);
 }

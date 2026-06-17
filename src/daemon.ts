@@ -4,6 +4,7 @@ import { loadConfig } from "./config.ts";
 import { runWake, type AcceptedContext } from "./loop.ts";
 import { sendCandidateEmail } from "./notify.ts";
 import { startDashboard } from "./dashboard.ts";
+import { withLock } from "./lock.ts";
 
 // The long-running process: serves the approval dashboard continuously AND
 // wakes on the configured interval to generate → jury → email. Designed to run
@@ -22,7 +23,8 @@ async function wake(): Promise<void> {
   const t0 = Date.now();
   console.log(`[daemon] ${ts()} wake start`);
   try {
-    const result = await runWake({
+    const result = await withLock(() =>
+      runWake({
       onAccepted: async (ctx: AcceptedContext) => {
         // An email failure must not crash the wake — the candidate is already
         // safely in pending/ and committed. Log and carry on.
@@ -33,7 +35,8 @@ async function wake(): Promise<void> {
           console.error(`[daemon] ${ts()} email failed for ${ctx.id}: ${(err as Error).message}`);
         }
       },
-    });
+      }),
+    );
     console.log(`[daemon] ${ts()} wake done in ${((Date.now() - t0) / 1000).toFixed(0)}s: ${JSON.stringify(result)}`);
   } catch (err) {
     console.error(`[daemon] ${ts()} wake error: ${(err as Error).message}`);
