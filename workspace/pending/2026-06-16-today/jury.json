@@ -6,17 +6,17 @@
     "G3": true,
     "G4": true,
     "G5": true,
-    "G6": true
+    "G6": false
   },
   "scores": {
-    "novelty": 4,
-    "nuance": 5,
-    "narrative": 4,
-    "craft": 5,
-    "wit": 5
+    "novelty": 2,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 3
   },
-  "weighted_total": 45,
-  "verdict": "strong",
+  "weighted_total": 31,
+  "verdict": "reject",
   "references_named": [
     "On Kawara, Today series (Date Paintings), 1966-2013"
   ],
@@ -31,8 +31,8 @@
     "P8",
     "P9"
   ],
-  "rationale": "The mechanism enacts the concept: the visitor's clock is the studio day, Intl.DateTimeFormat is the country, setInterval is the destruction rule, and 'Painted in 3 ms. He gave himself until midnight' is the labor/value argument embodied rather than illustrated. On Kawara is a genuinely new found-object in this catalogue, and the Esperanto fallback for non-Roman scripts is a precise, deep-cut double-code reward (P7). The build is exemplary in its restraint (P3) — a single muted ground, one line of text, one countdown, no dependencies, strict CSP, no persistence — and the cheerful-cynic tone is held cleanly throughout.",
-  "reservations": "Conceptual and structural proximity to The Unkept (2026): both works self-destruct with no persistence, and a viewer cataloguing the oeuvre may read them as sibling pieces. The work passes G6 because source (Kawara vs. Sehgal), mechanism (midnight countdown vs. Page Visibility API / blur), and argument (time/labor/value vs. documentation refusal) are materially distinct, but the DNA should be aware of the cluster. Narrative could be strengthened by explicitly naming which prior y-a-v-a work this answers (e.g., positioning itself against The Unkept's documentation-refusal argument or The webpage going on and off's cyclical-enactment mode).",
-  "revision_suggestion": "Add a single sentence to the wall label that locates the work inside the y-a-v-a argument — e.g., a quiet nod to The Unkept's no-record ethic or to The webpage going on and off's cyclical rule-enactment — so the narrative lens on chance/order and the twenty-year argument is legible on the page itself, not only in the motivation document.",
+  "rationale": "The mechanism-as-execution argument is clean: the visitor's clock and locale literally enact On Kawara's studio rules, and the midnight repaint enacts his destruction rule. The Esperanto fallback for non-Roman scripts is a genuinely literate double-coding touch. However, this work is materially identical to the already-catalogued 'Today (2026)' entry — same source (On Kawara), same mechanism (per-visit Intl locale render with midnight repaint, zero persistence), same argument. G6 fails on duplication. Novelty is also low because the work has already been claimed in the catalogue.",
+  "reservations": "G6 failure: the candidate is a duplicate of the existing 'Today (2026)' catalogue entry. The mechanism, source, and argument are essentially the same. Even setting duplication aside, the work sits comfortably inside territory already mapped by la-trahison-des-images.be (mechanism-as-message) and The webpage going on and off (live, self-erasing render loop), so its novelty of ontology is modest.",
+  "revision_suggestion": "To pass G6, either (a) pick a materially different source — e.g. a Kawara-adjacent but distinct gesture like the I Am Still Alive telegrams, or a different conceptual-art destruction/per-day rule (Hanne Darboven's calculations, Felix Gonzalez-Torres' candy piles that must be eaten) — or (b) keep Kawara but change the mechanism substantially: e.g. a multi-timezone 'today' grid that paints every timezone's current date simultaneously, or a bot that tweets one destroyed painting per day with no image retained. The current build is too close to the existing entry to be a new work.",
   "jury_model": "minimax/minimax-m3"
 }
