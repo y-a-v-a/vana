@@ -205,7 +205,7 @@
     "year": 2026,
     "source": "On Kawara, Today series (Date Paintings), 1966-2013",
     "mechanism": "Per-visit render of today's date via Intl locale formatting (Esperanto fallback for non-Roman scripts), with a setInterval counting down to local midnight that repaints and discards the painting — zero persistence, zero external requests.",
-    "status": "pending"
+    "status": "rejected"
   },
   {
     "id": "2026-06-17-wall-drawing-for-no-wall",
