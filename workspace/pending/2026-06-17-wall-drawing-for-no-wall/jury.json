@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-06-17-wall-drawing-for-no-wall",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Sol LeWitt, Wall Drawings",
+    "Sol LeWitt, Paragraphs on Conceptual Art (1967)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "A disciplined digital readymade of LeWitt's wall drawings. The instruction text and the canvas lines are generated from the same parameters (TOTAL, PER, PALETTE), so P1 holds cleanly and is provable from the source. The per-visit regeneration plus on-navigation erasure genuinely enacts LeWitt's separation of idea from execution — a static print could not make that case. The auction-value / CC-license juxtaposition, with the 'anonymous draftsman' framing, carries the value-and-authenticity argument (P6) without lecturing, and the chance-within-order shuffle sits firmly on the P5 axis.",
+  "reservations": "The principles array in meta.json claims nearly the whole DNA (P1–P9), which is over-claiming for a work of this scope; P10 is correctly absent but several of the others are present only weakly (P2/P9 are real, but the listing gives the impression of checklist coverage). The 'Draftsman: anonymous (client-side code)' label and the 'Summon another draftsman' button are slightly on-the-nose for a LeWitt piece — the irony is doing the work that a more restrained gallery-label voice could do. The visual output is intentionally simple, which is the point, but the only thing distinguishing one execution from another is the color shuffle, which slightly undercuts the claim that the instruction is rich enough to generate meaningful variety.",
+  "revision_suggestion": "Consider letting the per-visit parameter space vary more (e.g., number of colors, line count, or even occasional 45-degree constraints across executions) so each draftsman produces a visibly different class of LeWitt work, not just a recolor — this would strengthen the 'different picture, equally faithful' argument. Trim the principles list to the ones actually doing load-bearing work (P1, P2, P3, P4, P5, P6) and let the work demonstrate the rest. Optionally add a LeWitt-style signature line at the bottom of the drawing (date + execution notation) for the art-historically literate viewer.",
+  "jury_model": "minimax/minimax-m3"
+}

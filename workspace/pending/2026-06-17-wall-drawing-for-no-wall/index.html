@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wall Drawing for No Wall</title>
+<meta name="referrer" content="no-referrer">
+<style>
+  :root { --ink:#141414; --field:#ffffff; --label:#444; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; background:#f3f1ec; color:var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 6vmin 5vmin 12vmin; }
+  .frame { background: var(--field); padding: 4%; box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 24px 60px rgba(0,0,0,.10); }
+  .field { position: relative; width:100%; aspect-ratio: 1 / 1; }
+  canvas { display:block; width:100%; height:100%; }
+  .label { margin-top: 7vmin; font-size: 15px; line-height: 1.65; color: var(--label); }
+  .label h1 { font-size: 19px; letter-spacing:.01em; color: var(--ink); margin: 0 0 2px; font-weight: 600; }
+  .label .sub { color:#777; margin-bottom: 22px; }
+  .instruction { color: var(--ink); border-left: 2px solid var(--ink); padding: 4px 0 4px 18px; margin: 22px 0; max-width: 46ch; }
+  .meta { display:grid; grid-template-columns: max-content 1fr; gap: 2px 16px; margin: 22px 0; }
+  .meta dt { color:#999; }
+  .meta dd { margin:0; }
+  .quote { font-style: italic; color:#555; margin: 22px 0 6px; }
+  button { font: inherit; color: var(--ink); background:#fff; border:1px solid var(--ink);
+    padding: 9px 16px; cursor: pointer; }
+  button:hover { background: var(--ink); color:#fff; }
+  .foot { margin-top: 30px; font-size: 12.5px; color:#8a8a8a; line-height:1.6; }
+  .foot a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <div class="frame">
+    <div class="field"><canvas id="c"></canvas></div>
+  </div>
+
+  <section class="label">
+    <h1>Wall Drawing for No Wall</h1>
+    <div class="sub">y-a-v-a, 2026 — after Sol LeWitt</div>
+
+    <p>The artwork is the instruction below. The drawing above is only one execution of it.</p>
+
+    <blockquote class="instruction" id="instruction"></blockquote>
+
+    <dl class="meta">
+      <dt>Medium</dt><dd>the browser, following instructions</dd>
+      <dt>Draftsman</dt><dd>anonymous (client-side code)</dd>
+      <dt>First drawn</dt><dd>on your visit</dd>
+      <dt>Erased</dt><dd>when you leave</dd>
+    </dl>
+
+    <p>
+      <button id="redraw" type="button">Summon another draftsman</button>
+    </p>
+
+    <p class="quote">"The idea becomes a machine that makes the art."<br>
+      — Sol LeWitt, <em>Paragraphs on Conceptual Art</em>, 1967</p>
+
+    <p class="foot">
+      A LeWitt wall-drawing certificate — a few sentences on a sheet of paper — has
+      sold at auction for more than a million dollars; the wall is repainted when the
+      show closes. The instruction above is the same kind of object. Here it is given
+      away, and a fresh draftsman re-draws it for free, forever, on a wall that is only
+      borrowed from your screen.<br><br>
+      "Wall Drawing for No Wall" by y-a-v-a, after Sol LeWitt's wall drawings.
+      Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> —
+      execute it, alter it, pass it on. No cookies. No tracking. No data leaves your machine.
+    </p>
+  </section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---- The instruction's parameters. Text and drawing are generated from the
+  // ---- same numbers, so the words and the picture are one object, not two.
+  var TOTAL = 100;
+  var PALETTE = [
+    { name: "red",    css: "#d4271e" },
+    { name: "yellow", css: "#f4c800" },
+    { name: "blue",   css: "#1c39bb" },
+    { name: "black",  css: "#141414" }
+  ];
+  var PER = TOTAL / PALETTE.length;
+
+  // ---- Minimal integer-to-words so the instruction reads in LeWitt's voice
+  // ---- and stays true to TOTAL/PER if they ever change.
+  function words(n) {
+    var ones = ["zero","one","two","three","four","five","six","seven","eight","nine",
+      "ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen",
+      "eighteen","nineteen"];
+    var tens = ["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+    if (n < 20) return ones[n];
+    if (n < 100) return tens[Math.floor(n/10)] + (n%10 ? "-" + ones[n%10] : "");
+    var h = Math.floor(n/100), r = n%100;
+    return ones[h] + " hundred" + (r ? " " + words(r) : "");
+  }
+  function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  // ---- Write the instruction (the certificate / the actual artwork).
+  var parts = PALETTE.map(function (p) { return words(PER) + " are " + p.name; });
+  var lastPart = parts.pop();
+  document.getElementById("instruction").textContent =
+    cap(words(TOTAL)) + " straight lines are drawn within a square. " +
+    "Each line connects two points chosen at random on the edges of the square. " +
+    parts.join(", ") + ", and " + lastPart + ". " +
+    "The draftsman decides where each line falls.";
+
+  // ---- A draftsman = one faithful-but-free interpretation of the instruction.
+  // ---- Endpoints are stored normalized so resizing re-renders the SAME
+  // ---- execution rather than secretly hiring a new draftsman.
+  var canvas = document.getElementById("c");
+  var ctx = canvas.getContext("2d");
+  var lines = [];
+
+  function pointOnEdge() {
+    var t = Math.random() * 4, side = Math.floor(t), f = t - side;
+    if (side === 0) return [f, 0];
+    if (side === 1) return [1, f];
+    if (side === 2) return [1 - f, 1];
+    return [0, 1 - f];
+  }
+
+  function summonDraftsman() {
+    var colors = [];
+    PALETTE.forEach(function (p) { for (var i = 0; i < PER; i++) colors.push(p.css); });
+    for (var i = colors.length - 1; i > 0; i--) {            // shuffle (chance, within the rule)
+      var j = Math.floor(Math.random() * (i + 1)), tmp = colors[i];
+      colors[i] = colors[j]; colors[j] = tmp;
+    }
+    lines = colors.map(function (css) {
+      return { a: pointOnEdge(), b: pointOnEdge(), css: css };
+    });
+    render();
+  }
+
+  function render() {
+    var dpr = window.devicePixelRatio || 1;
+    var rect = canvas.getBoundingClientRect();
+    var w = Math.max(1, Math.round(rect.width));
+    var h = Math.max(1, Math.round(rect.height));
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    var pad = Math.round(Math.min(w, h) * 0.04);
+    var iw = w - pad * 2, ih = h - pad * 2;
+    ctx.lineWidth = Math.max(1, Math.min(w, h) / 600);
+    ctx.lineCap = "round";
+    lines.forEach(function (ln) {
+      ctx.strokeStyle = ln.css;
+      ctx.beginPath();
+      ctx.moveTo(pad + ln.a[0] * iw, pad + ln.a[1] * ih);
+      ctx.lineTo(pad + ln.b[0] * iw, pad + ln.b[1] * ih);
+      ctx.stroke();
+    });
+  }
+
+  var rt;
+  window.addEventListener("resize", function () {
+    clearTimeout(rt); rt = setTimeout(render, 120);
+  });
+  document.getElementById("redraw").addEventListener("click", summonDraftsman);
+
+  summonDraftsman(); // first draftsman, on your visit
+})();
+</script>
+</body>
+</html>
