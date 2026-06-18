@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abstract Painting (Backlit)</title>
+<meta name="author" content="y-a-v-a">
+<meta name="license" content="CC BY-NC-SA 4.0">
+<style>
+  :root { color-scheme: dark; }
+  html, body {
+    margin: 0; height: 100%; background: #000; color: #1a1a1a;
+    font: 13px/1.6 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100%; padding: 4vmin 4vw; box-sizing: border-box;
+    text-align: center;
+  }
+  /* the painting */
+  #frame { position: relative; }
+  canvas, #repro {
+    display: block;
+    width: min(80vmin, 560px); height: min(80vmin, 560px);
+    /* no border, no glow — the edge is found, not drawn */
+  }
+  #repro { display: none; }
+
+  /* everything that is not the painting is barely there, like a wall label
+     in a dark room. it brightens on hover, when you are close. */
+  .label {
+    max-width: min(80vmin, 560px);
+    margin: 3.2vmin auto 0;
+    transition: color 1.2s ease, opacity 1.2s ease;
+    color: #161616; opacity: .85;
+  }
+  body:hover .label { color: #3a3a3a; }
+  .label b { color: inherit; font-weight: 600; }
+  .label .t { font-style: italic; }
+  .note { margin-top: 1.4em; }
+  button {
+    background: none; border: 1px solid currentColor; color: inherit;
+    font: inherit; padding: .35em .8em; cursor: pointer; margin-top: 1.6em;
+    transition: color 1.2s ease, border-color 1.2s ease;
+  }
+  body:hover button { color: #555; }
+  button:hover, button:focus { color: #888 !important; outline: none; }
+  a { color: inherit; }
+  .lic { margin-top: 2.4em; font-size: 11px; }
+  .said { min-height: 1.6em; margin-top: 1.2em; }
+</style>
+</head>
+<body>
+
+  <div id="frame">
+    <canvas id="art" width="700" height="700" aria-label="A black painting."></canvas>
+    <img id="repro" alt="A reproduction of a black painting.">
+  </div>
+
+  <div class="label">
+    <p>
+      <b>Abstract Painting (Backlit)</b> · y-a-v-a, 2026<br>
+      after Ad Reinhardt, <span class="t">Abstract Painting</span>, 1960&ndash;66<br>
+      Medium: light emitted by your screen.
+    </p>
+    <p class="note">
+      Turn the room dark. Turn the screen up. Wait.<br>
+      A cross of three blacks is in there, at the edge of seeing.<br>
+      It is on every screen and the same on none of them.
+    </p>
+
+    <button id="repro-btn">Make a reproduction</button>
+    <p class="said" id="said"></p>
+
+    <p class="lic">
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>
+      · y-a-v-a, after Ad Reinhardt &mdash; whose black paintings descend from
+      Malevich&rsquo;s <span class="t">Black Square</span> (1915), and who asked that they never be reproduced.
+      No cookies. No trackers. Nothing sent anywhere.
+    </p>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  var cv = document.getElementById("art");
+  var ctx = cv.getContext("2d");
+  var N = cv.width;       // square, 700
+  var s = N / 3;          // cell size
+
+  // Nine near-black squares. The four corners are the ground; the four
+  // edge-centres and the centre form a Greek cross of tinted blacks —
+  // red-black, blue-black, green-black — exactly at the threshold of the
+  // eye. The differences are a handful of levels out of 255: present in
+  // live light, gone the instant the image is quantized.
+  var GROUND = "rgb(6,6,6)";
+  var grid = [
+    GROUND,            "rgb(10,10,15)",   GROUND,            // blue-black top
+    "rgb(10,15,10)",   "rgb(15,10,10)",   "rgb(10,15,10)",   // green | red | green
+    GROUND,            "rgb(10,10,15)",   GROUND             // blue-black bottom
+  ];
+
+  function paint() {
+    for (var i = 0; i < 9; i++) {
+      ctx.fillStyle = grid[i];
+      ctx.fillRect((i % 3) * s, ((i / 3) | 0) * s, s + 1, s + 1);
+    }
+  }
+  paint();
+
+  // "Make a reproduction" — the web's reflex. Take the canvas, encode it as
+  // a JPEG, and bring it back. DCT quantization and chroma subsampling do to
+  // the colored blacks exactly what a camera did to the paintings: erase
+  // them. The reproduction is honest. There is nothing in it.
+  var btn = document.getElementById("repro-btn");
+  var img = document.getElementById("repro");
+  var said = document.getElementById("said");
+  var reproduced = false;
+
+  btn.addEventListener("click", function () {
+    if (!reproduced) {
+      img.src = cv.toDataURL("image/jpeg", 0.4);
+      img.style.display = "block";
+      cv.style.display = "none";
+      said.textContent = "“A reproduction. There is nothing to see — as promised.”";
+      btn.textContent = "Return to the original";
+      reproduced = true;
+    } else {
+      img.style.display = "none";
+      cv.style.display = "block";
+      said.textContent = "";
+      btn.textContent = "Make a reproduction";
+      reproduced = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>
