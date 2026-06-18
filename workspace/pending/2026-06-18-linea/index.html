@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linea</title>
+<meta name="description" content="A line of declared length, genuinely drawn and permanently sealed. After Piero Manzoni.">
+<style>
+  :root{ color-scheme: light; }
+  html,body{ height:100%; margin:0; }
+  body{
+    background:#e9e6df;
+    color:#1a1a1a;
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    min-height:100%; padding:32px 20px; box-sizing:border-box; gap:22px;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1{
+    font-size:13px; letter-spacing:.5em; text-transform:uppercase;
+    font-weight:400; margin:0; opacity:.55; text-indent:.5em;
+  }
+  #vitrine{ width:100%; max-width:300px; }
+  svg{ width:100%; height:auto; display:block; filter: drop-shadow(0 14px 22px rgba(0,0,0,.22)); }
+  .caption{
+    max-width:34em; text-align:center; line-height:1.5; font-size:15px;
+    margin:0; opacity:.82;
+  }
+  .caption b{ font-weight:600; }
+  button{
+    font:inherit; font-size:13px; letter-spacing:.18em; text-transform:uppercase;
+    background:transparent; color:#1a1a1a; border:1px solid #1a1a1a;
+    padding:11px 22px; cursor:pointer; transition:background .15s,color .15s;
+  }
+  button:hover{ background:#1a1a1a; color:#e9e6df; }
+  footer{
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size:10.5px; line-height:1.7; text-align:center; opacity:.5; max-width:40em;
+  }
+  footer a{ color:inherit; }
+  .lost{ font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+  <h1>Linea</h1>
+
+  <div id="vitrine" aria-live="polite"></div>
+
+  <p class="caption">
+    Inside this tube is a line, <b id="cap-len">—</b> long, drawn here in full and rolled
+    away before it could appear. You will never see it. Neither will I.
+  </p>
+
+  <button id="seal" type="button">Seal another line</button>
+
+  <footer>
+    <span class="lost" id="tally"></span><br>
+    After Piero Manzoni, <i>Linea</i> (1959–60) and <i>Linea m 7,200</i> (Herning, 1960).<br>
+    y-a-v-a · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> · no cookies, no trackers, no network.
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var ROMAN = ["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
+  var lost = 0;
+
+  // Italian dating, as on Manzoni's labels: day . roman-month . year
+  function manzoniDate(d){
+    return d.getDate() + "." + ROMAN[d.getMonth()+1] + "." + d.getFullYear();
+  }
+
+  // Italian number convention: dot for thousands, comma for the decimal.
+  function manzoniMetres(m){
+    var s = m.toFixed(1).split(".");
+    s[0] = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return s[0] + "," + s[1];
+  }
+
+  // Pick a length the way Manzoni did: anything from a few centimetres
+  // to several kilometres. Log-uniform so the absurd lengths show up too.
+  function pickLength(){
+    var lo = Math.log(0.30), hi = Math.log(7400);
+    return Math.exp(lo + Math.random()*(hi-lo));
+  }
+
+  // Actually draw the line. A random walk whose segments are normalised so the
+  // total path length equals the declared length. This geometry is real and
+  // complete; it simply never reaches a visible surface. That withholding is
+  // the work. (Open the console: the line is attested, never illustrated.)
+  function drawAndSeal(metres){
+    var n = Math.min(2400, Math.max(24, Math.round(metres*4)));
+    var pts = new Float64Array(n*2);
+    var raw = 0, ang = Math.random()*6.283, x=0, y=0;
+    var segs = new Float64Array(n);
+    for(var i=0;i<n;i++){
+      ang += (Math.random()-0.5)*0.9;
+      var d = 0.4 + Math.random();
+      segs[i] = d; raw += d;
+      x += Math.cos(ang)*d; y += Math.sin(ang)*d;
+      pts[i*2]=x; pts[i*2+1]=y;
+    }
+    var k = metres / raw;          // normalise the genuine path to the label
+    for(var j=0;j<n*2;j++) pts[j]*=k;
+    // The line now exists, in memory, at full length. We do not paint it.
+    return { vertices:n, length:metres };
+  }
+
+  function render(){
+    var metres = pickLength();
+    var line = drawAndSeal(metres);
+    var label = manzoniMetres(metres);
+    var date = manzoniDate(new Date());
+
+    document.getElementById("cap-len").textContent = "m " + label;
+
+    document.getElementById("vitrine").innerHTML =
+      '<svg viewBox="0 0 200 460" role="img" aria-label="A sealed tube containing a line, m '+label+' long.">'+
+        '<defs>'+
+          '<linearGradient id="metal" x1="0" y1="0" x2="1" y2="0">'+
+            '<stop offset="0" stop-color="#6e7378"/>'+
+            '<stop offset=".18" stop-color="#c8ccce"/>'+
+            '<stop offset=".42" stop-color="#eef1f2"/>'+
+            '<stop offset=".62" stop-color="#aeb3b6"/>'+
+            '<stop offset="1" stop-color="#5b6064"/>'+
+          '</linearGradient>'+
+          '<linearGradient id="cap" x1="0" y1="0" x2="1" y2="0">'+
+            '<stop offset="0" stop-color="#4d5256"/>'+
+            '<stop offset=".4" stop-color="#9fa4a7"/>'+
+            '<stop offset=".7" stop-color="#71767a"/>'+
+            '<stop offset="1" stop-color="#3c4145"/>'+
+          '</linearGradient>'+
+        '</defs>'+
+        // body
+        '<rect x="56" y="40" width="88" height="380" rx="10" fill="url(#metal)" stroke="#3d4246" stroke-width="1"/>'+
+        // crimped seals top & bottom
+        '<rect x="52" y="30" width="96" height="22" rx="6" fill="url(#cap)" stroke="#2f3438" stroke-width="1"/>'+
+        '<rect x="52" y="408" width="96" height="22" rx="6" fill="url(#cap)" stroke="#2f3438" stroke-width="1"/>'+
+        '<line x1="56" y1="41" x2="56" y2="419" stroke="#ffffff" stroke-opacity=".5"/>'+
+        '<line x1="143" y1="41" x2="143" y2="419" stroke="#000000" stroke-opacity=".22"/>'+
+        // wax seal
+        '<circle cx="100" cy="41" r="8" fill="#7c1c1c" stroke="#561010"/>'+
+        '<text x="100" y="44.5" text-anchor="middle" font-family="serif" font-size="8" fill="#e9c7c7">y</text>'+
+        // paper label
+        '<rect x="44" y="150" width="112" height="150" rx="2" fill="#f4f1ea" stroke="#cdc7ba"/>'+
+        '<text x="100" y="178" text-anchor="middle" font-family="serif" font-size="13" letter-spacing="3" fill="#1a1a1a">LINEA</text>'+
+        '<line x1="62" y1="190" x2="138" y2="190" stroke="#1a1a1a" stroke-opacity=".25"/>'+
+        '<text x="100" y="224" text-anchor="middle" font-family="serif" font-size="18" fill="#1a1a1a">m '+label+'</text>'+
+        '<text x="100" y="262" text-anchor="middle" font-family="serif" font-style="italic" font-size="12" fill="#1a1a1a" opacity=".85">y-a-v-a</text>'+
+        '<text x="100" y="284" text-anchor="middle" font-family="monospace" font-size="10" fill="#1a1a1a" opacity=".7">'+date+'</text>'+
+      '</svg>';
+
+    lost++;
+    document.getElementById("tally").textContent =
+      lost === 1 ? "1 line drawn and sealed this visit."
+                 : lost + " lines drawn and sealed this visit, each lost on the next.";
+
+    // The connoisseur who "opens the tube" finds only measurement, never image.
+    try{
+      console.info("%cLINEA","font:600 14px serif",
+        "\n  length:   m "+label+
+        "\n  date:     "+date+
+        "\n  vertices: "+line.vertices+" (in memory)"+
+        "\n  rendered: 0 px"+
+        "\n  This line is genuine, complete, and sealed. CC BY-SA 4.0 · y-a-v-a, after Manzoni.");
+    }catch(e){}
+  }
+
+  document.getElementById("seal").addEventListener("click", render);
+  render();
+})();
+</script>
+</body>
+</html>

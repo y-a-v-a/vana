@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-18-linea",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 44,
+  "verdict": "strong",
+  "references_named": [
+    "Piero Manzoni, Linea (1959–60)",
+    "Piero Manzoni, Linea m 7,200 (Herning, 1960)",
+    "Marcel Duchamp / infrathin"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7"
+  ],
+  "rationale": "The mechanism is the argument: a real polyline is computed in memory, normalised to the declared length, and then deliberately never written to DOM or canvas. The console attestation is a precise infrathin gesture — the line exists-but-is-unseen, which is exactly the conceptual point. The sealed-tube SVG, Italian dating, and log-uniform length distribution honour Manzoni's labels faithfully while making the web's default verb (render) the very thing being refused. Tone is dry and restrained; the work sits cleanly on the chance/order axis and answers Manzoni's tubes in a way only the web can.",
+  "reservations": "The 'Seal another line' button is a small concession to interactivity that slightly softens the absolute sealing — Manzoni's tubes were never re-rolled by the viewer. Also, the catalogue already includes several 'withheld / invisible' gestures (The webpage going on and off, But is it art?, The Unkept), so the novelty of *negation* as a mechanism is not entirely fresh, though the specific Manzoni source and the genuine-but-unrendered polyline make this materially distinct.",
+  "revision_suggestion": "Consider whether the button is necessary at all — a single per-visit seal, with no affordance to repeat, would tighten the conceit and remove the only moment where the work gestures toward interactivity rather than refusal.",
+  "jury_model": "minimax/minimax-m3"
+}

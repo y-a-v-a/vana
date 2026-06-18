@@ -254,5 +254,13 @@
     "source": "Robert Rauschenberg, This Is a Portrait of Iris Clert If I Say So (1961); net.art (the URL as material)",
     "mechanism": "The sitter is bound to location.hash; saying-so becomes typing the address bar, read live on hashchange.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-18-linea",
+    "title": "Linea",
+    "year": 2026,
+    "source": "Piero Manzoni, Linea (1959–60); Piero Manzoni, Linea m 7,200 (Herning, 1960); Marcel Duchamp / infrathin",
+    "mechanism": "Per-visit JS generates a real normalised polyline of the labelled length but never renders it to DOM or canvas; the console attests it, no surface shows it.",
+    "status": "pending"
   }
 ]
