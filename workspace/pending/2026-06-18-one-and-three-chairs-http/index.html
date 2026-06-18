@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One and Three Chairs (HTTP)</title>
+<meta name="description" content="Joseph Kosuth's One and Three Chairs, for a medium that has no chairs. After Kosuth, 1965. By y-a-v-a.">
+<style>
+  :root { --ink:#141414; --paper:#f4f2ec; --faint:#8a857b; --line:#c9c4b8; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; }
+  body {
+    background:var(--paper); color:var(--ink);
+    font:16px/1.5 Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh; display:flex; flex-direction:column;
+    padding:clamp(18px,4vw,56px);
+  }
+  header { max-width:980px; margin:0 auto 2.2rem; width:100%; }
+  h1 { font-size:clamp(1.3rem,3.4vw,2rem); font-weight:normal; letter-spacing:.01em; margin:0 0 .35rem; }
+  .ref { color:var(--faint); font-style:italic; font-size:.95rem; margin:0; }
+  main {
+    max-width:980px; margin:0 auto; width:100%;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(14px,3vw,40px);
+    flex:1; align-content:start;
+  }
+  @media (max-width:720px){ main{ grid-template-columns:1fr; } }
+  figure { margin:0; display:flex; flex-direction:column; }
+  .panel {
+    border:1px solid var(--line); background:#fbfaf6;
+    aspect-ratio:3/4; display:flex; align-items:center; justify-content:center;
+    padding:14px; overflow:hidden;
+  }
+  .panel svg { width:100%; height:100%; display:block; }
+  /* Panel A: the only "actual chair" the web can hold. It renders as nothing. */
+  .panel--object { position:relative; }
+  chair { display:block; } /* an unknown element. the browser draws it as nothing. */
+  .panel--object .nothing {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:var(--line); font-style:italic; font-size:.9rem; user-select:none;
+  }
+  .def { font-size:.92rem; line-height:1.55; text-align:left; align-self:stretch; }
+  .def b { font-variant:small-caps; letter-spacing:.02em; }
+  .def .pron { color:var(--faint); }
+  .def ol { margin:.5rem 0 0; padding-left:1.2rem; }
+  .def li { margin:.25rem 0; }
+  figcaption { margin-top:.7rem; font-size:.8rem; line-height:1.45; color:var(--faint); }
+  figcaption b { color:var(--ink); font-weight:normal; font-style:italic; }
+  code { font-family:"SFMono-Regular",Menlo,Consolas,monospace; font-size:.82em; color:#5a5648; }
+  .reshoot { margin-top:.5rem; }
+  .reshoot button {
+    font:inherit; font-size:.78rem; color:var(--faint); background:none;
+    border:1px solid var(--line); padding:.2rem .6rem; cursor:pointer; border-radius:2px;
+  }
+  .reshoot button:hover { color:var(--ink); border-color:var(--ink); }
+  footer {
+    max-width:980px; margin:2.6rem auto 0; width:100%;
+    border-top:1px solid var(--line); padding-top:1rem;
+    font-size:.78rem; color:var(--faint); line-height:1.6;
+  }
+  footer a { color:inherit; }
+  .quip { font-style:italic; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>One and Three Chairs (HTTP)</h1>
+    <p class="ref">after Joseph Kosuth, <i>One and Three Chairs</i>, 1965 — the web edition, in which the chair never arrives.</p>
+  </header>
+
+  <main>
+    <figure>
+      <div class="panel panel--object" id="object">
+        <!-- The web's nearest thing to an actual chair: a real element with no definition. -->
+        <chair></chair>
+        <span class="nothing">(nothing)</span>
+      </div>
+      <figcaption>
+        <b>The chair.</b> A live <code>&lt;chair&gt;</code> element sits in this panel. The browser
+        knows no such thing, so it renders nothing. HTTP carries no objects — only their rumours.
+      </figcaption>
+    </figure>
+
+    <figure>
+      <div class="panel" id="photo" title="click for another photograph"></div>
+      <figcaption>
+        <b>A photograph of a chair.</b> Drawn fresh on every visit — never the same picture twice.
+        The image is the only term here that proliferates.
+        <span class="reshoot"><button id="reshoot" type="button">re-shoot</button></span>
+      </figcaption>
+    </figure>
+
+    <figure>
+      <div class="panel def">
+        <span><b>chair</b> <span class="pron">/tʃɛə/</span> <i>n.</i></span>
+        <ol>
+          <li>a separate seat for one person, typically with a back and four legs.</li>
+          <li>the person in charge of a meeting or organization.</li>
+          <li>a professorship.</li>
+        </ol>
+      </div>
+      <figcaption>
+        <b>The meaning of the word “chair.”</b> Language is the one thing the web transmits intact.
+        It also never sat anyone down.
+      </figcaption>
+    </figure>
+  </main>
+
+  <footer>
+    <p class="quip">Kosuth could wheel the chair into the gallery. We can’t. So here is its picture,
+    its definition, and an empty element where the object would be — which, on the web, is the whole truth of it.</p>
+    <p>
+      <b>One and Three Chairs (HTTP)</b> · pixels on screen · by
+      <a href="https://y-a-v-a.org" rel="noopener">y-a-v-a</a> (Vincent Bruijn) ·
+      after Joseph Kosuth, <i>One and Three Chairs</i> (1965).
+      Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license noopener">CC BY-SA 4.0</a>.
+      No cookies, no tracking, no data collected. Runs entirely in your browser.
+    </p>
+  </footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // A chair grammar: strict rules (order), random parameters (chance). P5.
+  function makeChair() {
+    var rnd = function (a, b) { return a + Math.random() * (b - a); };
+    var L = [];
+    var line = function (x1, y1, x2, y2) {
+      L.push('<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) +
+             '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '"/>');
+    };
+
+    var cx = 100;
+    var seatW = rnd(86, 138);
+    var x0 = cx - seatW / 2, x1 = cx + seatW / 2;
+    var seatY = rnd(150, 172);
+    var backH = rnd(66, 112);
+    var backTop = seatY - backH;
+    var legLen = rnd(72, 100);
+    var slats = Math.round(rnd(2, 5));
+    var sw = rnd(2.2, 3.4);
+
+    // back posts + top rail
+    line(x0 + 9, backTop, x0 + 9, seatY);
+    line(x1 - 9, backTop, x1 - 9, seatY);
+    line(x0 + 9, backTop, x1 - 9, backTop);
+    // slats
+    for (var i = 1; i <= slats; i++) {
+      var sx = (x0 + 9) + ((x1 - x0) - 18) * (i / (slats + 1));
+      line(sx, backTop + 6, sx, seatY - 5);
+    }
+    // seat
+    line(x0, seatY, x1, seatY);
+    line(x0, seatY, x0, seatY + 7);
+    line(x1, seatY, x1, seatY + 7);
+    // legs (two outer, two inset to suggest depth)
+    line(x0 + 7, seatY + 7, x0 + 7, seatY + 7 + legLen);
+    line(x1 - 7, seatY + 7, x1 - 7, seatY + 7 + legLen);
+    line(x0 + 21, seatY + 7, x0 + 21, seatY + 7 + legLen * 0.95);
+    line(x1 - 21, seatY + 7, x1 - 21, seatY + 7 + legLen * 0.95);
+
+    return '<svg viewBox="0 0 200 280" preserveAspectRatio="xMidYMid meet" ' +
+           'role="img" aria-label="line drawing of a chair">' +
+           '<g fill="none" stroke="#141414" stroke-width="' + sw.toFixed(2) +
+           '" stroke-linecap="round">' + L.join('') + '</g></svg>';
+  }
+
+  var photo = document.getElementById('photo');
+  function reshoot() { photo.innerHTML = makeChair(); }
+  reshoot();
+
+  document.getElementById('reshoot').addEventListener('click', function (e) {
+    e.stopPropagation(); reshoot();
+  });
+  photo.addEventListener('click', reshoot);
+
+  // The object is attested but unseen — the web's honest answer to "where is the chair?"
+  var actual = document.getElementsByTagName('chair');
+  // eslint-disable-next-line no-console
+  console.log('Actual chairs present in this document: ' + actual.length +
+    '. Visible: 0. (after Kosuth, 1965 — One and Three Chairs, HTTP edition)');
+})();
+</script>
+</body>
+</html>

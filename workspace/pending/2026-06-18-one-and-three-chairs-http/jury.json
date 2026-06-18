@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-18-one-and-three-chairs-http",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Joseph Kosuth, One and Three Chairs (1965)",
+    "Marcel Duchamp / the readymade",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "net.art"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The unknown `<chair>` element is the right kind of structural gesture for this DNA: a known browser behavior redeployed as a conceptual argument, so that the absence in the object panel is not illustration but mechanism (P1 honored). It names Kosuth as a new lineage node alongside the existing Duchamp/Magritte/Malevich constellation, and the Benjamin inflection — that the web has gone past aura-loss into referent-loss — gives the work a literate second reading beneath a clean museum gag (P7). The chance/order axis is legible in the three panels (fixed word, absent object, randomized image). All gates pass: CC BY-SA stated, no tracking, attribution clean, tone is the cheerful cynic, and the source artwork/mechanism are materially distinct from the existing catalogue.",
+  "reservations": "The inline `(nothing)` overlay in the object panel adds a small explanatory layer that slightly undercuts the strictness of the unknown-element gesture; the empty frame would be purer without it. The procedural chair is well-executed but is the least charged of the three panels — its randomness serves the work but doesn't carry much conceptual weight beyond 'the image is the only thing that proliferates,' which is told rather than shown.",
+  "revision_suggestion": "Drop the `(nothing)` overlay and let the unresolved tag speak entirely for itself; if a label is needed, move it to a museum-style caption below the panel like the other two. Consider making the procedural chair do more work — e.g., a chair-grammar that occasionally fails to assemble (legs that don't meet seat, backs too tall), so the proliferation of images visibly includes failed reproductions, tightening the Benjamin thread.",
+  "jury_model": "minimax/minimax-m3"
+}
