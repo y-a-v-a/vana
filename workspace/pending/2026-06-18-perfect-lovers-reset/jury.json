@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-18-perfect-lovers-reset",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 5,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 46,
+  "verdict": "strong",
+  "references_named": [
+    "Félix González-Torres, \"Untitled\" (Perfect Lovers), 1991",
+    "net.art (browser timer drift as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism is the elegy: two clocks driven by independent rates and draining batteries, with no resync, enact the drift that is the entire point of González-Torres's piece. Reload-as-reset is a clean web-native readymade of the certificate's instruction (P2), and the chance/order axis is legible in the tension between synchronized order and entropic separation (P5). Double-coding lands: a casual viewer sees two clocks quietly going out of step, a literate viewer gets the AIDS elegy and the futile curator's gesture (P7). The build is minimal and self-contained, CC BY-NC stated, no trackers, attribution present.",
+  "reservations": "The wit is restrained rather than sharp — the footer line carries the joke but the surface is somber, which is appropriate to the source but slightly undercuts the cheerful-cynic register. Novelty is high but not maximal: the timer-drift-as-material idea has web precedents, though the specific González-Torres staging is fresh.",
+  "revision_suggestion": "Consider a small, dry tonal nudge — perhaps a faint console message or a one-line aside that lets the cheerful-cynic voice surface without breaking the elegy — to push the wit score higher while preserving the restraint.",
+  "jury_model": "minimax/minimax-m3"
+}

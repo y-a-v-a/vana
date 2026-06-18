@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perfect Lovers (Reset)</title>
+<style>
+  :root { color-scheme: light; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: #c9d6dc;
+    color: #1c2226;
+    font: 13px/1.6 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    padding: 4vh 16px;
+    box-sizing: border-box;
+  }
+  #clocks {
+    display: flex;
+    /* the two cases touch, exactly as hung */
+    gap: 0;
+    filter: drop-shadow(0 6px 14px rgba(0,0,0,.18));
+  }
+  svg { display: block; width: min(38vw, 240px); height: auto; }
+  .face { fill: #fbfbf8; stroke: #15191c; stroke-width: 3; }
+  .tick { stroke: #15191c; }
+  .hand { stroke: #15191c; stroke-linecap: round; }
+  .sec  { stroke: #c02427; }
+  .pin  { fill: #15191c; }
+  footer {
+    margin-top: 5vh;
+    max-width: 540px;
+    text-align: center;
+    color: #2c343a;
+  }
+  footer .t { font-weight: 700; letter-spacing: .02em; }
+  footer .d { color: #4a555c; }
+  a { color: inherit; }
+  .stopped { opacity: .55; }
+</style>
+</head>
+<body>
+
+  <div id="clocks">
+    <svg id="A" viewBox="0 0 220 220" role="img" aria-label="Clock A"></svg>
+    <svg id="B" viewBox="0 0 220 220" role="img" aria-label="Clock B"></svg>
+  </div>
+
+  <footer>
+    <p class="t">Perfect Lovers (Reset)</p>
+    <p class="d">Two clocks, set to the same time. They will not be set again until you reload.</p>
+    <p class="d">
+      after Félix González-Torres, <em>&ldquo;Untitled&rdquo; (Perfect Lovers)</em>, 1991 &middot;
+      y-a-v-a &middot; CC BY-NC 4.0 &middot; no cookies, no tracking
+    </p>
+  </footer>
+
+<script>
+(function () {
+  "use strict";
+  var C = 110, R = 100;
+
+  function el(tag, attrs) {
+    var n = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+
+  // Build a clock face inside an <svg>, return its hand handles.
+  function build(svg) {
+    svg.appendChild(el("circle", { cx: C, cy: C, r: R, class: "face" }));
+    for (var i = 0; i < 60; i++) {
+      var big = (i % 5 === 0);
+      var a = i * 6 * Math.PI / 180;
+      var r1 = big ? R - 14 : R - 7, r2 = R - 3;
+      svg.appendChild(el("line", {
+        class: "tick",
+        "stroke-width": big ? 3 : 1.4,
+        x1: C + r1 * Math.sin(a), y1: C - r1 * Math.cos(a),
+        x2: C + r2 * Math.sin(a), y2: C - r2 * Math.cos(a)
+      }));
+    }
+    var hour = el("line",   { class: "hand", "stroke-width": 6, x1: C, y1: C, x2: C, y2: C - 52 });
+    var min  = el("line",   { class: "hand", "stroke-width": 4, x1: C, y1: C, x2: C, y2: C - 78 });
+    var sec  = el("line",   { class: "hand sec", "stroke-width": 1.8, x1: C, y1: C + 18, x2: C, y2: C - 86 });
+    svg.appendChild(hour); svg.appendChild(min); svg.appendChild(sec);
+    svg.appendChild(el("circle", { cx: C, cy: C, r: 4.5, class: "pin" }));
+    return { hour: hour, min: min, sec: sec };
+  }
+
+  function setHands(h, ms) {
+    var s = (ms / 1000) % 60;
+    var m = (ms / 60000) % 60;
+    var hr = (ms / 3600000) % 12;
+    rot(h.sec,  s * 6);
+    rot(h.min,  m * 6);
+    rot(h.hour, hr * 30);
+  }
+  function rot(node, deg) { node.setAttribute("transform", "rotate(" + deg + " " + C + " " + C + ")"); }
+
+  // Initial time of day, read once from the local clock — no network.
+  var now = new Date();
+  var t0 = (((now.getHours() * 60 + now.getMinutes()) * 60 + now.getSeconds()) * 1000) + now.getMilliseconds();
+
+  // Two lovers. Same starting time. Slightly different rate, slightly
+  // different battery. Entropy does the rest; nothing here resyncs.
+  var A = { svg: document.getElementById("A"), ms: t0, rate: 1.0000, charge: 1, life: 21600000, dead: false };
+  var B = { svg: document.getElementById("B"), ms: t0, rate: 0.9920, charge: 1, life:  9000000, dead: false };
+  A.h = build(A.svg);
+  B.h = build(B.svg);
+  setHands(A.h, A.ms); setHands(B.h, B.ms);
+
+  function advance(c, dt) {
+    if (c.dead) return;
+    c.charge -= dt / c.life;
+    if (c.charge <= 0) { c.charge = 0; c.dead = true; c.svg.classList.add("stopped"); return; }
+    // A dying battery runs slow before it stops (final eighth of charge).
+    var batt = Math.min(1, c.charge * 8);
+    c.ms += dt * c.rate * batt;
+    setHands(c.h, c.ms);
+  }
+
+  var last = null;
+  function frame(ts) {
+    if (last !== null) {
+      var dt = ts - last;
+      if (dt > 100) dt = 100; // a hidden tab pauses the lovers; it never fast-forwards them
+      advance(A, dt);
+      advance(B, dt);
+    }
+    last = ts;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

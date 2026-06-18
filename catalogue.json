@@ -286,5 +286,13 @@
     "source": "Yves Klein, Zones of Immaterial Pictorial Sensibility (1959-1962); Yves Klein, the receipt-burning ritual on the Seine (1962)",
     "mechanism": "A per-visit JS-minted receipt with a unique serial held only in closure; 'burn' irreversibly nulls it and the page persists nothing (no storage, cookies, server, or token), so reload shows no transaction ever existed.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-18-perfect-lovers-reset",
+    "title": "Perfect Lovers (Reset)",
+    "year": 2026,
+    "source": "Félix González-Torres, \"Untitled\" (Perfect Lovers), 1991; net.art (browser timer drift as material)",
+    "mechanism": "requestAnimationFrame advances two clocks at slightly different rates with a battery-depletion model and no resync to real time; reload re-sets them to the same time.",
+    "status": "pending"
   }
 ]
