@@ -294,5 +294,13 @@
     "source": "Félix González-Torres, \"Untitled\" (Perfect Lovers), 1991; net.art (browser timer drift as material)",
     "mechanism": "requestAnimationFrame advances two clocks at slightly different rates with a battery-depletion model and no resync to real time; reload re-sets them to the same time.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-18-each-being-equal",
+    "title": "Each Being Equal",
+    "year": 2026,
+    "source": "Lawrence Weiner, Declaration of Intent (1968); Conceptual art / language-as-material; net.art",
+    "mechanism": "Per-visit JS grammar mints a statement and declares it complete on receipt; the offered condition buttons resolve to no material change, enacting 'each being equal' as a dead call-to-action.",
+    "status": "pending"
   }
 ]

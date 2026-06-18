@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Each Being Equal</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: #fff;
+    color: #111;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: clamp(20px, 5vw, 64px);
+  }
+  main { flex: 1 0 auto; max-width: 980px; }
+  .statement {
+    font-size: clamp(28px, 6.5vw, 64px);
+    line-height: 1.08;
+    text-transform: uppercase;
+    margin: 0 0 0.5em 0;
+  }
+  .status {
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    color: #111;
+    text-transform: uppercase;
+    margin: 0 0 2.4em 0;
+  }
+  .status b { background: #111; color: #fff; padding: 2px 8px; }
+  .declaration {
+    font-size: 0.78rem;
+    line-height: 1.7;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    max-width: 60ch;
+    margin: 0 0 1.4em 0;
+  }
+  ol.conditions {
+    list-style: none;
+    counter-reset: c;
+    padding: 0;
+    margin: 0 0 1.6em 0;
+    max-width: 60ch;
+  }
+  ol.conditions li { counter-increment: c; margin: 0 0 10px 0; }
+  ol.conditions button {
+    counter-reset: none;
+    font: inherit;
+    font-size: 0.86rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: left;
+    width: 100%;
+    background: #fff;
+    color: #111;
+    border: 2px solid #111;
+    padding: 12px 14px;
+    cursor: pointer;
+  }
+  ol.conditions button::before { content: counter(c) ".\00a0\00a0"; }
+  ol.conditions button:hover { background: #111; color: #fff; }
+  ol.conditions button[aria-pressed="true"] { background: #111; color: #fff; }
+  .receipt {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    min-height: 1.4em;
+    margin: 0 0 1em 0;
+  }
+  footer {
+    flex-shrink: 0;
+    font-weight: 400;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: #555;
+    line-height: 1.6;
+    margin-top: 3em;
+    max-width: 70ch;
+  }
+  footer a { color: #555; }
+</style>
+</head>
+<body>
+<main>
+  <p class="statement" id="statement"></p>
+  <p class="status">THE WORK IS <b>COMPLETE</b> &mdash; RECEIVED UPON THE OCCASION OF READING.</p>
+
+  <p class="declaration">
+    Declaration of intent. Each being equal and consistent with the intent of the
+    artist, the decision as to condition rests with the receiver:
+  </p>
+
+  <ol class="conditions" id="conditions">
+    <li><button type="button" data-c="THE ARTIST MAY CONSTRUCT THE PIECE">The artist may construct the piece</button></li>
+    <li><button type="button" data-c="THE PIECE MAY BE FABRICATED">The piece may be fabricated</button></li>
+    <li><button type="button" data-c="THE PIECE NEED NOT BE BUILT">The piece need not be built</button></li>
+  </ol>
+
+  <p class="receipt" id="receipt"></p>
+</main>
+
+<footer>
+  <strong>Each Being Equal</strong> &mdash; y-a-v-a, 2026. After Lawrence Weiner,
+  <em>Declaration of Intent</em> (1968), and his language as material. A statement
+  is minted afresh each visit and is never rendered as an object: the receiver is
+  given the decision the theory promises and discovers it changes nothing, each
+  condition being equal. Reload for another. Licensed
+  <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC&nbsp;BY-NC&nbsp;4.0</a>.
+  No cookies, no trackers, no data collected. AI-generated, DNA-validated.
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var QUANTITY = ["A QUANTITY", "AN AMOUNT", "A MEASURE", "A PORTION", "ONE LITER"];
+  var MATERIAL = ["PAINT", "WATER", "PLASTER", "EARTH", "LAMP BLACK", "TAR",
+                  "INK", "SAND", "OIL", "PIGMENT", "DUST", "CHALK", "WAX"];
+  var ACTION   = ["POURED", "SPLASHED", "SCATTERED", "PLACED", "THROWN",
+                  "SPRAYED", "STAINED", "SMEARED", "DRIPPED", "BRUSHED", "PRESSED"];
+  var PREP     = ["UPON", "ACROSS", "AGAINST", "OVER", "ONTO"];
+  var SURFACE  = ["A WALL", "THE FLOOR", "A SURFACE", "A SUPPORT WALL",
+                  "THE GROUND", "A BOUNDARY", "AN AREA OF FLOOR", "A SECTION OF WALL"];
+  var REMOVAL  = ["A REMOVAL", "A TRANSFER", "A DISPLACEMENT", "A REDUCTION"];
+
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+  function statement() {
+    switch (Math.floor(Math.random() * 3)) {
+      case 0: return pick(QUANTITY) + " OF " + pick(MATERIAL) + " " +
+                     pick(ACTION) + " " + pick(PREP) + " " + pick(SURFACE);
+      case 1: return pick(MATERIAL) + " " + pick(ACTION) + " " +
+                     pick(PREP) + " " + pick(SURFACE);
+      default: return pick(REMOVAL) + " OF " + pick(MATERIAL) + " FROM " + pick(SURFACE);
+    }
+  }
+
+  document.getElementById("statement").textContent = statement();
+
+  var buttons = document.querySelectorAll("#conditions button");
+  var receipt = document.getElementById("receipt");
+
+  Array.prototype.forEach.call(buttons, function (b) {
+    b.addEventListener("click", function () {
+      Array.prototype.forEach.call(buttons, function (x) {
+        x.setAttribute("aria-pressed", "false");
+      });
+      b.setAttribute("aria-pressed", "true");
+      // The decision rests with the receiver. It changes nothing:
+      // each condition being equal, the statement remains the work.
+      receipt.textContent = "THE DECISION RESTED WITH THE RECEIVER. THE WORK IS UNCHANGED.";
+    });
+  });
+})();
+</script>
+</body>
+</html>

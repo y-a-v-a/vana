@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-06-18-each-being-equal",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 35,
+  "verdict": "borderline",
+  "references_named": [
+    "Lawrence Weiner, Declaration of Intent (1968)",
+    "Conceptual art / language-as-material",
+    "net.art"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P9"
+  ],
+  "rationale": "The dead-button mechanism is a clean enactment of Weiner's 'each being equal' clause: the web's core affordance — interactivity that resolves to nothing — becomes the literal content of the theory. The per-visit grammar produces plausible Weiner-style statements and the receipt text ('THE WORK IS UNCHANGED') lands the cheerful-cynic gag without explanation. The work is materially distinct from the catalogue: Weiner is a new source, and no prior piece stages the decision-as-immateriality argument this way.",
+  "reservations": "The dead-button / non-interactive-interaction gesture is a well-trodden net.art trope (jodi-adjacent territory), so the novelty of mechanism is modest even though the source is fresh. The narrative connection to the broader y-a-v-a argument is thin: it answers Weiner directly but does not name a prior catalogue work it answers, and the chance/order axis (P5) is invoked only via the trivial random grammar rather than staged as a tension. The double-coding works but the literate-viewer layer is light — the argument is essentially 'Weiner said the receiver decides; the web proves the decision is moot,' which is a single clean insight rather than a layered one.",
+  "revision_suggestion": "Strengthen the narrative by explicitly naming a prior y-a-v-a work this answers (e.g., positioning it against 'But is it art?' as the affirmative-yes vs. the indifferent-yes, or against 'A Chance of Order' as order-without-consequence). Consider making the grammar's chance/order tension more legible — e.g., letting the user see the rejected alternatives or the full parameter space, so the 'each being equal' claim is enacted not just in the buttons but in the visible structure of the language system.",
+  "jury_model": "minimax/minimax-m3"
+}
