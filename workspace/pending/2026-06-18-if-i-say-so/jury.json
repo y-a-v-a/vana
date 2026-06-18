@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-18-if-i-say-so",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 45,
+  "verdict": "strong",
+  "references_named": [
+    "Robert Rauschenberg, This Is a Portrait of Iris Clert If I Say So (1961)",
+    "net.art (URL as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7"
+  ],
+  "rationale": "The URL hash binding is a textbook P1 move: the address bar literally is the notary of the portrait, so the mechanism enacts Rauschenberg's authorship-by-assertion rather than illustrating it. The build is the smallest possible (one sentence, one frame, one hash) and the wall label — 'Medium: the address bar,' 'Authenticity: my word' — lands the double-coding cleanly without requiring wall text. It answers a specific prior work (Rauschenberg's 1961 telegram) and sits firmly on the order end of the chance/order axis, extending the catalogue's argument that web plumbing already embodies canonical conceptual gestures.",
+  "reservations": "The Rauschenberg reference is well-trodden in conceptual art discourse, so the novelty of the found-object is moderate rather than high; the freshness lives almost entirely in the web-native re-staging. The dialogue with the broader y-a-v-a catalogue (e.g., how this sits next to 'But is it art?' or 'The Original') is implicit rather than explicit.",
+  "revision_suggestion": "Consider a small secondary layer that makes the connection to the broader twenty-year argument more legible — e.g., a footer line naming one prior y-a-v-a work this answers, or a subtle visual echo of an existing piece — to strengthen the narrative thread without adding weight.",
+  "jury_model": "minimax/minimax-m3"
+}

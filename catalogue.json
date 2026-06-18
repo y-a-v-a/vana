@@ -246,5 +246,13 @@
     "source": "Robert Rauschenberg, Erased de Kooning Drawing (1953); Willem de Kooning; Marcel Duchamp / the readymade",
     "mechanism": "Destructive canvas compositing (destination-out) you perform by hand, with the erased state written irreversibly to localStorage and Ctrl+Z refused — the web's undo withheld.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-18-if-i-say-so",
+    "title": "If I Say So",
+    "year": 2026,
+    "source": "Robert Rauschenberg, This Is a Portrait of Iris Clert If I Say So (1961); net.art (the URL as material)",
+    "mechanism": "The sitter is bound to location.hash; saying-so becomes typing the address bar, read live on hashchange.",
+    "status": "pending"
   }
 ]
