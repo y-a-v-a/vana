@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-18-zone-de-sensibilite-picturale-immaterielle-web-series",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 5,
+    "nuance": 5,
+    "narrative": 5,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 50,
+  "verdict": "strong",
+  "references_named": [
+    "Yves Klein, Zones of Immaterial Pictorial Sensibility (1959-1962)",
+    "Yves Klein, the receipt-burning ritual on the Seine (1962)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "This is a near-perfect execution of the DNA. The mechanism enacts the idea: the receipt is the only material proof, and burning it (with a CSS animation) nullifies the serial in closure while the page persists nothing — reload proves the transaction never existed. The Klein reference is precise and the NFT critique is implicit in the structure rather than stated, exactly the cheerful-cynic double-coding the DNA rewards. The build is minimal (P3), the chance/order axis is legible (per-visit zone number as chance, ritual as order), and the work is materially distinct from the catalogue — no Klein, no receipt-burning, no anti-NFT gesture exists there.",
+  "reservations": null,
+  "revision_suggestion": null,
+  "jury_model": "minimax/minimax-m3"
+}

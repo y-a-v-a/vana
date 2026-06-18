@@ -278,5 +278,13 @@
     "source": "Ad Reinhardt, Abstract Painting (1960-66); Ad Reinhardt, Art-as-Art dogma; Kazimir Malevich, Black Square (1915); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "Canvas renders a near-threshold tinted black cross with no fixed per-device appearance; an on-demand canvas.toDataURL('image/jpeg',0.4) round-trip quantizes the colored blacks back to nothing, enacting reproduction-as-erasure live and client-side.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-18-zone-de-sensibilite-picturale-immaterielle-web-series",
+    "title": "Zone de Sensibilité Picturale Immatérielle (Web Series)",
+    "year": 2026,
+    "source": "Yves Klein, Zones of Immaterial Pictorial Sensibility (1959-1962); Yves Klein, the receipt-burning ritual on the Seine (1962)",
+    "mechanism": "A per-visit JS-minted receipt with a unique serial held only in closure; 'burn' irreversibly nulls it and the page persists nothing (no storage, cookies, server, or token), so reload shows no transaction ever existed.",
+    "status": "pending"
   }
 ]

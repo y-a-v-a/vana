@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zone de Sensibilité Picturale Immatérielle (Web Series)</title>
+<style>
+  :root{
+    --ikb:#002fa7;      /* International Klein Blue */
+    --gold:#d4af37;
+    --paper:#f4f1ea;
+    --ink:#1a1a1a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--ikb);
+    color:var(--gold);
+    font-family:ui-serif,Georgia,"Times New Roman",serif;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* The void is the work. Nothing is rendered into it. */
+  .void{position:fixed;inset:0;background:var(--ikb)}
+
+  .label{
+    position:fixed;left:1.4rem;bottom:1.4rem;right:1.4rem;
+    max-width:30rem;font-size:.8rem;line-height:1.5;
+    color:rgba(212,175,55,.85);letter-spacing:.01em;
+  }
+  .label b{font-weight:600;font-style:italic}
+  .label .lic{display:block;margin-top:.7rem;font-size:.68rem;color:rgba(212,175,55,.55)}
+
+  .stage{position:relative;z-index:2;text-align:center;padding:1.5rem}
+
+  button{
+    font-family:inherit;font-size:.95rem;letter-spacing:.04em;
+    color:var(--ikb);background:var(--gold);
+    border:none;padding:.7rem 1.4rem;cursor:pointer;
+    border-radius:1px;transition:transform .15s ease,opacity .2s;
+  }
+  button:hover{transform:translateY(-1px)}
+  button.ghost{background:transparent;color:rgba(212,175,55,.8);
+    border:1px solid rgba(212,175,55,.5)}
+
+  .price{font-size:.85rem;color:rgba(212,175,55,.7);margin-bottom:1.1rem;
+    font-style:italic;letter-spacing:.02em}
+
+  /* the receipt: the only material thing in an immaterial transaction */
+  .receipt{
+    background:var(--paper);color:var(--ink);
+    width:min(86vw,22rem);padding:1.6rem 1.5rem;
+    text-align:left;font-size:.82rem;line-height:1.55;
+    box-shadow:0 18px 50px rgba(0,0,0,.35);
+    border-radius:2px;
+    transform-origin:center top;
+  }
+  .receipt h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.18em;
+    font-weight:600;margin-bottom:.9rem;border-bottom:1px solid #cfc9ba;padding-bottom:.6rem}
+  .receipt dl{display:grid;grid-template-columns:auto 1fr;gap:.25rem .9rem;margin:.4rem 0 1rem}
+  .receipt dt{color:#7a7568}
+  .receipt dd{text-align:right;font-variant-numeric:tabular-nums}
+  .receipt .serial{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:.72rem;word-break:break-all}
+  .receipt .rite{font-style:italic;color:#5a5546;font-size:.76rem;border-top:1px dashed #cfc9ba;padding-top:.8rem}
+
+  .choices{display:flex;gap:.7rem;justify-content:center;margin-top:1.3rem;flex-wrap:wrap}
+
+  .verdict{color:var(--gold);font-size:1rem;line-height:1.6;max-width:24rem;
+    font-style:italic;letter-spacing:.01em}
+  .verdict small{display:block;margin-top:.9rem;font-style:normal;font-size:.75rem;color:rgba(212,175,55,.6)}
+
+  /* burning */
+  @keyframes burn{
+    0%{opacity:1;filter:none;transform:scale(1) rotate(0deg)}
+    40%{filter:sepia(1) brightness(.7) blur(.4px);transform:scale(.99) rotate(-.6deg)}
+    100%{opacity:0;filter:sepia(1) brightness(.2) blur(8px);transform:scale(.92) rotate(1.2deg)}
+  }
+  .burning{animation:burn 1.6s ease-in forwards}
+
+  @media (prefers-reduced-motion:reduce){
+    .burning{animation:none;opacity:0;transition:opacity .4s}
+    button{transition:none}
+  }
+  .hidden{display:none}
+</style>
+</head>
+<body>
+  <div class="void" aria-hidden="true"></div>
+
+  <main class="stage">
+    <!-- offer -->
+    <section id="offer">
+      <p class="price">Zone n°<span id="zoneNo">—</span> · immaterial · 160 g of fine gold (fictional)</p>
+      <button id="acquire">Acquire this zone</button>
+    </section>
+
+    <!-- receipt -->
+    <section id="deal" class="hidden">
+      <div class="receipt" id="receiptCard">
+        <h2>Receipt of Transfer</h2>
+        <dl>
+          <dt>Work</dt><dd>Zone de Sensibilité<br>Picturale Immatérielle</dd>
+          <dt>State</dt><dd>immaterial</dd>
+          <dt>Holder</dt><dd>bearer</dd>
+          <dt>Gold</dt><dd>160 g (fictional)</dd>
+          <dt>Issued</dt><dd id="rIssued">—</dd>
+        </dl>
+        <p class="serial">Serial <span id="rSerial">—</span></p>
+        <p class="rite">Per the ritual of 1962, the zone is truly transferred only when this receipt is burned and no proof of the sale remains. Keep the paper and you keep only the paper.</p>
+      </div>
+      <div class="choices">
+        <button id="burn">Burn the receipt</button>
+        <button id="keep" class="ghost">Keep the receipt</button>
+      </div>
+    </section>
+
+    <!-- outcome -->
+    <section id="outcome" class="hidden">
+      <p class="verdict" id="verdictText"></p>
+      <div class="choices"><button id="again" class="ghost">Again</button></div>
+    </section>
+  </main>
+
+  <p class="label">
+    <b>Zone de Sensibilité Picturale Immatérielle (Web Series)</b> — after Yves Klein,
+    <i>Zones of Immaterial Pictorial Sensibility</i> (1959–1962). The artwork is the void itself;
+    the receipt is the only material thing, and the only way to own the work is to destroy it.
+    This page keeps no record of any transaction — no cookies, no storage, no server, no certificate to mint.
+    <span class="lic">y-a-v-a · CC BY-SA 4.0 · referencing Yves Klein. We do not search, we serve.</span>
+  </p>
+
+<script>
+(function(){
+  "use strict";
+  var offer   = document.getElementById('offer');
+  var deal    = document.getElementById('deal');
+  var outcome = document.getElementById('outcome');
+  var card    = document.getElementById('receiptCard');
+  var verdict = document.getElementById('verdictText');
+
+  // a per-visit zone number; chance dressed as a registry (P5)
+  var zoneNo = 1 + Math.floor(Math.random() * 998);
+  document.getElementById('zoneNo').textContent = String(zoneNo).padStart(3,'0');
+
+  // the receipt's serial: the single piece of material proof. Held only in this closure.
+  var serial = null;
+
+  function mintSerial(){
+    var t = Date.now().toString(36).toUpperCase();
+    var r = Math.random().toString(36).slice(2,8).toUpperCase();
+    return 'KLEIN-' + zoneNo.toString().padStart(3,'0') + '-' + t + '-' + r;
+  }
+
+  function show(el){ el.classList.remove('hidden'); }
+  function hide(el){ el.classList.add('hidden'); }
+
+  document.getElementById('acquire').addEventListener('click', function(){
+    serial = mintSerial();
+    document.getElementById('rSerial').textContent = serial;
+    document.getElementById('rIssued').textContent =
+      new Date().toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
+    card.classList.remove('burning');
+    hide(offer); show(deal); hide(outcome);
+  });
+
+  document.getElementById('keep').addEventListener('click', function(){
+    // The proof survives. The zone does not transfer.
+    hide(deal); show(outcome);
+    verdict.innerHTML =
+      'You hold a receipt.<br>The zone remains immaterial — and unowned.' +
+      '<small>You have documentation. A mint, a certificate, a token of authenticity. ' +
+      'Everything except the work.</small>';
+    // serial is kept on screen; nothing is stored anywhere.
+  });
+
+  document.getElementById('burn').addEventListener('click', function(){
+    card.classList.add('burning');
+    // destroy the only proof, then forget the serial entirely.
+    var done = function(){
+      serial = null;                 // gone from memory
+      hide(deal); show(outcome);
+      verdict.innerHTML =
+        'It is yours.<br>There is no proof. There never was.' +
+        '<small>No serial survives. No order history. Nothing to verify, nothing to sell. ' +
+        'The immaterial cannot be documented without ceasing to be itself.</small>';
+    };
+    card.addEventListener('animationend', done, {once:true});
+    // reduced-motion / no-animation fallback
+    if (getComputedStyle(card).animationName === 'none') setTimeout(done, 420);
+  });
+
+  document.getElementById('again').addEventListener('click', function(){
+    serial = null;
+    zoneNo = 1 + Math.floor(Math.random() * 998);
+    document.getElementById('zoneNo').textContent = String(zoneNo).padStart(3,'0');
+    hide(outcome); hide(deal); show(offer);
+  });
+})();
+</script>
+</body>
+</html>
