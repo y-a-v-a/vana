@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Erased (No Undo)</title>
+<style>
+  :root{--wall:#141414;--paper:#e9e3d4;--gold:#9a7b33}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--wall);color:#cfcabb;
+    font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+    min-height:100%;padding:24px 24px 40px;overflow:hidden;
+    -webkit-user-select:none;user-select:none}
+  #frame{position:relative;background:var(--paper);
+    border:14px solid var(--gold);
+    box-shadow:0 30px 80px rgba(0,0,0,.6),inset 0 0 0 1px rgba(0,0,0,.15);
+    height:min(72vh,740px);aspect-ratio:8/10;max-width:92vw}
+  #paper{position:absolute;inset:0;
+    background:radial-gradient(120% 120% at 30% 20%,#f1ecdf,#e2dac6)}
+  canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair;display:block}
+  #label{max-width:540px;text-align:left;color:#a9a397;font-size:12.5px;letter-spacing:.2px}
+  #label b{color:#e8e3d6;font-weight:600}
+  #label i{color:#bdb7a8}
+  .pct{color:#caa84e}
+  #flash{position:fixed;top:18px;left:50%;transform:translateX(-50%);
+    background:#000;border:1px solid #333;color:#ddd;padding:8px 14px;border-radius:4px;
+    font-size:12.5px;max-width:90vw;text-align:center;opacity:0;transition:opacity .25s;pointer-events:none}
+  #cc{position:fixed;bottom:10px;left:0;right:0;text-align:center;color:#5e594f;font-size:11px;padding:0 12px}
+</style>
+</head>
+<body>
+  <div id="frame"><div id="paper"></div><canvas id="c" width="800" height="1000"></canvas></div>
+  <div id="label">
+    <b>Erased (No Undo)</b> — y-a-v-a, after Robert Rauschenberg, <i>Erased de Kooning Drawing</i> (1953).<br>
+    Graphite ghost on paper · pixels on screen. There is no de Kooning here; there hasn&rsquo;t been one since 1953,
+    so the page drew you a dense one to destroy. Erase it with the cursor. The browser will not undo this.
+    <span class="pct">Erased: 0%.</span>
+  </div>
+  <div id="flash"></div>
+  <div id="cc">CC BY-SA 4.0 · y-a-v-a · after Rauschenberg &amp; de Kooning · no cookies, no trackers, no network. The erasure is stored only on this device, and it is permanent.</div>
+<script>
+(function(){
+  var cv=document.getElementById('c'),ctx=cv.getContext('2d');
+  var W=cv.width,H=cv.height;
+  var KEY_IMG='erased.v1.img',KEY_INK='erased.v1.ink',KEY_SEED='erased.v1.seed';
+  var pctEl=document.querySelector('.pct'),flash=document.getElementById('flash');
+  var inkTotal=0,done=false,flashT;
+
+  function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+  function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function showFlash(m){flash.textContent=m;flash.style.opacity=1;clearTimeout(flashT);flashT=setTimeout(function(){flash.style.opacity=0},2200);}
+
+  function stroke(rnd,x,y,len,ang,w,a){
+    ctx.strokeStyle='rgba(30,28,24,'+a+')';
+    ctx.lineWidth=w;ctx.lineCap='round';
+    var cx=x+Math.cos(ang+(rnd()-.5))*len*.5, cy=y+Math.sin(ang+(rnd()-.5))*len*.5;
+    var ex=x+Math.cos(ang)*len, ey=y+Math.sin(ang)*len;
+    ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(cx,cy,ex,ey);ctx.stroke();
+  }
+  // de Kooning gave a drawing he would miss: dense, gestural, in several media.
+  // We honour that by making it genuinely laborious to remove.
+  function generate(seed){
+    var rnd=mulberry32(seed),i,r;
+    ctx.clearRect(0,0,W,H);
+    for(i=0;i<1500;i++){ // faint ground hatching
+      stroke(rnd,rnd()*W,rnd()*H,14+rnd()*46,rnd()*6.283,0.6+rnd()*1.2,0.04+rnd()*0.05);
+    }
+    for(r=0;r<5;r++){ // worked, crosshatched masses
+      var ox=120+rnd()*560,oy=120+rnd()*760,rad=120+rnd()*180;
+      for(i=0;i<900;i++){
+        var a2=rnd()*6.283,d=rnd()*rad;
+        stroke(rnd,ox+Math.cos(a2)*d,oy+Math.sin(a2)*d,8+rnd()*26,(r%2?0.6:-0.6)+(rnd()-.5)*0.4,0.6+rnd()*1.4,0.06+rnd()*0.08);
+      }
+    }
+    for(i=0;i<22;i++){ // bold gestures
+      stroke(rnd,80+rnd()*640,80+rnd()*840,120+rnd()*420,rnd()*6.283,2+rnd()*7,0.25+rnd()*0.45);
+    }
+  }
+  function countInk(){
+    var d=ctx.getImageData(0,0,W,H).data,c=0,i;
+    for(i=3;i<d.length;i+=16){ if(d[i]>14)c++; }
+    return c;
+  }
+  function updateLabel(){
+    if(done)return;
+    var now=countInk();
+    var pct=inkTotal?Math.max(0,Math.min(100,Math.round((1-now/inkTotal)*100))):0;
+    if(pct>=93){
+      done=true;
+      pctEl.textContent='Erased. A ghost remains, as it does in Rauschenberg’s. The work is complete — and it is signed over to you.';
+    } else {
+      pctEl.textContent='Erased: '+pct+'%.';
+    }
+  }
+  function save(){ try{ lsSet(KEY_IMG, cv.toDataURL('image/png')); }catch(e){} }
+
+  function init(){
+    var img=lsGet(KEY_IMG),ink=lsGet(KEY_INK);
+    if(img&&ink){
+      inkTotal=parseInt(ink,10)||0;
+      var im=new Image();
+      im.onload=function(){ctx.clearRect(0,0,W,H);ctx.drawImage(im,0,0,W,H);updateLabel();};
+      im.src=img;
+    } else {
+      var seed=parseInt(lsGet(KEY_SEED),10);
+      if(!seed){seed=Math.floor(Math.random()*1e9);lsSet(KEY_SEED,String(seed));}
+      generate(seed);
+      inkTotal=countInk();
+      lsSet(KEY_INK,String(inkTotal));
+      save();
+      updateLabel();
+    }
+  }
+
+  var erasing=false,lx=0,ly=0;
+  function toBuf(e){var r=cv.getBoundingClientRect();return [(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H];}
+  function erodeAt(x,y){
+    var rad=30;
+    ctx.save();ctx.globalCompositeOperation='destination-out';
+    var g=ctx.createRadialGradient(x,y,0,x,y,rad);
+    g.addColorStop(0,'rgba(0,0,0,1)');g.addColorStop(.6,'rgba(0,0,0,.9)');g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,rad,0,6.2832);ctx.fill();ctx.restore();
+  }
+  function trail(x0,y0,x1,y1){
+    var dx=x1-x0,dy=y1-y0,st=Math.max(1,Math.floor(Math.hypot(dx,dy)/6)),i;
+    for(i=0;i<=st;i++)erodeAt(x0+dx*i/st,y0+dy*i/st);
+  }
+  cv.addEventListener('pointerdown',function(e){if(done)return;erasing=true;try{cv.setPointerCapture(e.pointerId)}catch(_){}var p=toBuf(e);lx=p[0];ly=p[1];erodeAt(lx,ly);});
+  cv.addEventListener('pointermove',function(e){if(!erasing)return;var p=toBuf(e);trail(lx,ly,p[0],p[1]);lx=p[0];ly=p[1];});
+  function end(){if(!erasing)return;erasing=false;updateLabel();save();}
+  cv.addEventListener('pointerup',end);
+  cv.addEventListener('pointercancel',end);
+
+  window.addEventListener('keydown',function(e){
+    var k=(e.key||'').toLowerCase();
+    if((e.metaKey||e.ctrlKey)&&(k==='z'||k==='y')){
+      e.preventDefault();
+      showFlash('No undo. Rauschenberg didn’t get one either — it took him a month and a drawer of worn-out erasers.');
+    }
+  });
+
+  init();
+})();
+</script>
+</body>
+</html>

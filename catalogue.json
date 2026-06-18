@@ -238,5 +238,13 @@
     "source": "Robert Morris, Box with the Sound of Its Own Making (1961); process art; net.art (page as its own medium)",
     "mechanism": "Web Audio API sonifies document.documentElement.outerHTML one character at a time, client-side, no recording and no network; the source it sings includes the script doing the singing.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-18-erased-no-undo",
+    "title": "Erased (No Undo)",
+    "year": 2026,
+    "source": "Robert Rauschenberg, Erased de Kooning Drawing (1953); Willem de Kooning; Marcel Duchamp / the readymade",
+    "mechanism": "Destructive canvas compositing (destination-out) you perform by hand, with the erased state written irreversibly to localStorage and Ctrl+Z refused — the web's undo withheld.",
+    "status": "pending"
   }
 ]

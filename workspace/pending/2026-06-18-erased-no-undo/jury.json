@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-06-18-erased-no-undo",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 5
+  },
+  "weighted_total": 44,
+  "verdict": "strong",
+  "references_named": [
+    "Robert Rauschenberg, Erased de Kooning Drawing (1953)",
+    "Willem de Kooning",
+    "Marcel Duchamp / the readymade"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism enacts the concept with surgical precision: the browser's defining affordance (undo) is the very thing withheld, making the argument about erasure and authorship transfer literal rather than illustrative. The wall-label apparatus (gold frame, 'signed over to you,' 'graphite ghost on paper · pixels on screen') and the deliberate ~7% ghost threshold cleanly invoke P6 and Rauschenberg's actual result. The chance/order axis is legible: the seeded random drawing (chance) meets the viewer's willed, irreversible erasure (order). The flash message and label copy are dry, intelligent, and carry the idea without wall-text dependency.",
+  "reservations": "Rauschenberg is not in the explicit patron-saint list, so the lineage connection is one step more lateral than works that name Malevich or Koons directly; the narrative is strong but slightly less immediately legible as a node in the twenty-year argument. The localStorage persistence creates a per-device 'edition' that could be read as a scarcity mechanism (echoing 'The Original'), though here it serves the work's logic of irreversibility rather than Benjaminian aura.",
+  "revision_suggestion": "Consider a one-line wall text that more explicitly places the work in dialogue with an existing y-a-v-a piece (e.g., gesturing toward 'The Original' as the inverse: there, the page copies itself to assert scarcity; here, the page erases itself to assert loss), tightening the twenty-year argument. Optionally, a subtle 'edition' indicator in the corner could make the per-device ghost feel more like a Rauschenberg certificate and less like incidental state.",
+  "jury_model": "minimax/minimax-m3"
+}
