@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>this way browser</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #fff;
+    color: #111;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 6vmin;
+    box-sizing: border-box;
+    cursor: crosshair;
+    overflow: hidden;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  #d {
+    font-size: clamp(2.4rem, 11vmin, 9rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+  .unit { font-size: 0.32em; letter-spacing: 0; opacity: 0.6; }
+  #steps {
+    margin-top: 1.2rem;
+    font-size: clamp(0.8rem, 2.6vmin, 1.1rem);
+    opacity: 0.55;
+    font-variant-numeric: tabular-nums;
+  }
+  footer {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    padding: 1.4vmin 6vmin;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #999;
+    box-sizing: border-box;
+  }
+  footer a { color: #999; }
+  .hint { margin-bottom: 0.4rem; }
+</style>
+</head>
+<body>
+  <main>
+    <div id="d">0.000 <span class="unit">m</span></div>
+    <div id="steps">this way browser · 0 steps walked</div>
+  </main>
+
+  <footer>
+    <div class="hint" id="hint">move across the page. the distance you travel is the work. nothing is drawn, nothing is kept.</div>
+    <em>this way browser</em> — after stanley brouwn, “this way brouwn” (1961) and the distance works.
+    nothing is rendered, stored, transmitted or reproduced. no cookies, no trackers, no network.
+    a y-a-v-a work · <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>.
+  </footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // The CSS reference pixel is defined as 1/96 inch. We measure the journey
+  // of your pointer across the page and convert it to a physical distance.
+  // Like brouwn's units, the measure is exact and the truth is unknowable:
+  // your real screen is not our assumed screen. We declare the assumption and
+  // measure anyway. — That gap is the piece as much as the number is.
+  var MM_PER_PX = 25.4 / 96;
+  var STEP_MM   = 750; // one assumed pace, brouwn's own foot withheld
+
+  var dEl = document.getElementById("d");
+  var sEl = document.getElementById("steps");
+  var hint = document.getElementById("hint");
+
+  var totalMM = 0;
+  var lastX = null, lastY = null;
+  var pending = false;
+  var moved = false;
+
+  function paint() {
+    pending = false;
+    var m = totalMM / 1000;
+    dEl.innerHTML = m.toFixed(3) + ' <span class="unit">m</span>';
+    var steps = Math.floor(totalMM / STEP_MM);
+    sEl.textContent = "this way browser · " + steps + (steps === 1 ? " step walked" : " steps walked");
+  }
+
+  function onMove(e) {
+    var x = e.clientX, y = e.clientY;
+    if (lastX !== null) {
+      var dx = x - lastX, dy = y - lastY;
+      totalMM += Math.sqrt(dx * dx + dy * dy) * MM_PER_PX;
+      if (!moved) { moved = true; hint.textContent = "you are walking. there will be no record of the path."; }
+      if (!pending) { pending = true; requestAnimationFrame(paint); }
+    }
+    lastX = x; lastY = y;
+  }
+
+  // A new pointer contact starts a fresh leg (no phantom jump from a teleport).
+  function reset(e) { lastX = e.clientX; lastY = e.clientY; }
+
+  window.addEventListener("pointermove", onMove, { passive: true });
+  window.addEventListener("pointerdown", reset, { passive: true });
+  window.addEventListener("pointerleave", function () { lastX = lastY = null; }, { passive: true });
+})();
+</script>
+</body>
+</html>

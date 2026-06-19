@@ -318,5 +318,13 @@
     "source": "Tom Friedman, 1000 Hours of Staring (1992-1997); On Kawara, Today series; Roman Opalka, 1965 / 1 – ∞",
     "mechanism": "document.visibilityState + document.hasFocus() gate a time accumulator persisted only in localStorage; attention becomes the unprovable, unsellable medium.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-19-this-way-browser",
+    "title": "this way browser",
+    "year": 2026,
+    "source": "Stanley Brouwn, this way brouwn (1961); Stanley Brouwn, the distance / step works; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "pointermove deltas summed and converted to physical distance via the CSS reference pixel (1/96 inch); no rendering of the path, no storage, no network.",
+    "status": "pending"
   }
 ]

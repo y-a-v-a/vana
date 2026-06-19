@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-06-19-this-way-browser",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Stanley Brouwn, this way brouwn (1961)",
+    "Stanley Brouwn, distance / step works",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "A disciplined digital readymade of Brouwn's distance works: the pointer replaces the foot, the CSS reference pixel supplies a fake-but-declared conversion, and the path is refused exactly as Brouwn refused it. The mechanism is the concept (P1) — the page cannot be a print, cannot be screenshotted into the work, and forgets on close. The Brouwn/browser pun and the dry footer copy carry the cheerful-cynic voice well, and the restraint (one number, one step count, no path, no persistence) is exemplary of P3. Narrative placement in the twenty-year argument is coherent: a fresh web-native embodiment of a canonical gesture, sitting on the chance/order axis.",
+  "reservations": "The Benjamin framing is asserted in the motivation more than enacted in the work itself. The piece reads as a clean Brouwn digital readymade; the reproduction-problem gloss sits on top rather than being dramatized. The 750mm step length is a touch arbitrary (acknowledged as 'Brouwn's own foot withheld') — defensible but slightly soft. The work also risks slight category overlap with The Unkept and 1000 Hours of Staring in using browser attention/presence as material, though the mechanism and source are clearly distinct.",
+  "revision_suggestion": "Either dramatize the Benjamin dimension inside the page (e.g., a single line of running text noting that the number, unlike the path, is exactly reproducible — 'the work and its copy are the same number, which is the problem') or drop Benjamin from the references and let the piece stand cleanly as a Brouwn digital readymade. The current dual citation slightly dilutes the otherwise surgical focus.",
+  "jury_model": "minimax/minimax-m3"
+}
