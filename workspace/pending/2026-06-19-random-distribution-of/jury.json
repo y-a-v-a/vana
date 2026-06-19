@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-19-random-distribution-of",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "François Morellet, Répartition aléatoire de 40 000 carrés suivant les chiffres pairs et impairs d'un annuaire de téléphone (1960)",
+    "Kenneth Martin, Chance and Order",
+    "π / unbounded spigot algorithm (Gibbons, 2004)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The work is a precise digital readymade of Morellet that the web genuinely makes possible: π computed live and forever, extending the grid on scroll, rendering identically in every browser. Mechanism and idea collapse convincingly — the spigot IS the found number, the determinism IS the argument about chance collapsing into order. The double-coding is clean: a static-looking noise field whose sameness across all viewers is the conceptual punchline. It sits squarely on the chance/order axis next to A Chance of Order and answers Morellet from the deterministic end. Build is the smallest that completes the thought; voice is dry and unforced.",
+  "reservations": "The visual is quite close to Morellet's existing aesthetic without much visual invention beyond infinity, so a casual viewer may see only a black-and-white grid. The 'reproducible chance' paradox is real but a touch on-the-nose in the wall text; one could argue the surface gag is more about endurance/infinity than about determinism, and the determinism claim is somewhat over-explained in the header.",
+  "revision_suggestion": "Consider letting the determinism land more quietly — perhaps a single-line footnote rather than a full paragraph in the header — so the surface gag (an infinite grid) carries the work first, and the contradiction reveals itself on reflection. Could also vary cell weight or scale subtly so the grid breathes as you scroll, reinforcing the infinity visually rather than only through the counter.",
+  "jury_model": "minimax/minimax-m3"
+}

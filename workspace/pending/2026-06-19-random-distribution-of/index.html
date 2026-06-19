@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Random Distribution of π</title>
+<style>
+  :root { --cell: 15px; --ink: #14110f; --paper: #f3f0e9; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink);
+    font-family: ui-monospace, Menlo, Consolas, monospace; }
+  header {
+    position: sticky; top: 0; z-index: 2;
+    background: var(--paper); border-bottom: 1px solid var(--ink);
+    padding: 14px 16px 12px; line-height: 1.45;
+  }
+  h1 { font-size: 15px; margin: 0 0 6px; font-weight: 700; letter-spacing: .2px; }
+  header p { font-size: 12px; margin: 4px 0; max-width: 62ch; color: #3a352f; }
+  .count { font-variant-numeric: tabular-nums; }
+  footer { font-size: 11px; color: #6a655d; padding: 4px 16px 2px; max-width: 62ch; line-height: 1.5; }
+  footer a { color: inherit; }
+  #field {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--cell));
+    grid-auto-rows: var(--cell);
+    justify-content: center;
+    gap: 0;
+    padding: 10px 6px 40vh;
+  }
+  .c { width: var(--cell); height: var(--cell); }
+  .c.on { background: var(--ink); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Random Distribution of π</h1>
+  <p>One square per decimal digit of π, laid down in order. Odd digit, ink. Even digit, paper.
+  Nobody chose a single mark. The chooser is a number that has no end and belongs to no one.</p>
+  <p>It looks like noise. It is the opposite of noise: this exact field is the same in every browser, on every screen, for every visitor, forever. Reproducible chance. The most fixed image there is, merely unknown until you arrive.</p>
+  <p class="meta"><span class="count">0</span> digits served. Scroll: π keeps writing.</p>
+</header>
+<main id="field" aria-hidden="true"></main>
+<footer>
+  <em>Random Distribution of π</em> — y-a-v-a, after François Morellet,
+  <em>Répartition aléatoire de 40 000 carrés suivant les chiffres pairs et impairs d'un annuaire de téléphone</em> (1960).
+  Morellet read a phone book; this reads π, computed live in your browser — no server, no network, no cookies, no tracking.
+  Licensed <strong>CC BY-SA 4.0</strong>.
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // Unbounded spigot for the decimal digits of π (Gibbons, 2004). Exact, BigInt, infinite.
+  var q = 1n, r = 0n, t = 1n, k = 1n, n = 3n, l = 3n;
+  function nextDigit() {
+    for (;;) {
+      if (q * 4n + r - t < n * t) {
+        var d = n;
+        var r2 = (r - n * t) * 10n;
+        n = ((q * 3n + r) * 10n) / t - n * 10n;
+        q = q * 10n;
+        r = r2;
+        return d;
+      } else {
+        var rr = (q * 2n + r) * l;
+        var nn = (q * (k * 7n) + 2n + r * l) / (t * l);
+        q = q * k;
+        t = t * l;
+        l = l + 2n;
+        k = k + 1n;
+        n = nn;
+        r = rr;
+      }
+    }
+  }
+
+  var field = document.getElementById("field");
+  var counter = document.querySelector(".count");
+  var laid = 0;
+
+  function batch(amount) {
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < amount; i++) {
+      var d = nextDigit();
+      var cell = document.createElement("div");
+      cell.className = (d % 2n === 1n) ? "c on" : "c"; // odd = ink, even = paper
+      frag.appendChild(cell);
+      laid++;
+    }
+    field.appendChild(frag);
+    counter.textContent = laid.toLocaleString();
+  }
+
+  function fillToBottom() {
+    var guard = 0;
+    while (document.documentElement.scrollHeight <=
+           window.innerHeight + window.scrollY + 400 && guard < 200) {
+      batch(400);
+      guard++;
+    }
+  }
+
+  // π keeps writing as you scroll, with no end.
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () { fillToBottom(); ticking = false; });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
+
+  fillToBottom();
+})();
+</script>
+</body>
+</html>

@@ -342,5 +342,13 @@
     "source": "Walter De Maria, The Vertical Earth Kilometer (1977), Friedrichsplatz, Kassel",
     "mechanism": "A document with height:100000cm (one real CSS kilometre, ~3.78M px); a probe element measures the browser's own metre and a scroll handler reports depth, while the rod itself is never drawn.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-19-random-distribution-of",
+    "title": "Random Distribution of π",
+    "year": 2026,
+    "source": "François Morellet, Répartition aléatoire de 40 000 carrés suivant les chiffres pairs et impairs d'un annuaire de téléphone (1960); Kenneth Martin, Chance and Order; π / the unbounded spigot algorithm (Gibbons, 2004)",
+    "mechanism": "An unbounded BigInt spigot streams the exact decimal digits of π client-side; each digit's parity fills or clears a square in a grid extended infinitely on scroll — deterministic, identical in every browser, no network.",
+    "status": "pending"
   }
 ]
