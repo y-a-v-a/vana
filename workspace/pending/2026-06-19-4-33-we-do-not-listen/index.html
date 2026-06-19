@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4′33″ (We Do Not Listen)</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{
+    --ink:#111; --paper:#f6f4ef; --line:#cdc8bd; --dim:#8a857a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    min-height:100%; padding:6vh 5vw; gap:2.4rem;
+    -webkit-font-smoothing:antialiased;
+  }
+  .score{
+    width:min(640px,100%);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:1.6rem 0;
+  }
+  h1{
+    font-weight:normal; font-size:clamp(2.4rem,9vw,4.4rem);
+    letter-spacing:.02em; line-height:1; text-align:center;
+  }
+  .sub{ text-align:center; color:var(--dim); font-style:italic; margin-top:.7rem; font-size:.95rem }
+
+  .movements{ list-style:none; margin:2.2rem 0 0; }
+  .mv{
+    display:flex; align-items:baseline; gap:1rem;
+    padding:.55rem 0; border-bottom:1px dotted var(--line);
+    transition:opacity .4s, background .4s;
+    opacity:.45;
+  }
+  .mv:last-child{border-bottom:none}
+  .mv .num{ width:2.4em; font-variant:small-caps; letter-spacing:.08em }
+  .mv .tacet{ flex:1; letter-spacing:.5em; font-variant:small-caps }
+  .mv .dur{ color:var(--dim); font-variant-numeric:tabular-nums }
+  .mv.active{ opacity:1; background:rgba(0,0,0,.035) }
+  .mv.done{ opacity:.7 }
+
+  .transport{
+    width:min(640px,100%);
+    display:flex; flex-direction:column; gap:1.1rem; align-items:center;
+  }
+  .bar{
+    width:100%; height:3px; background:var(--line); position:relative; overflow:hidden;
+  }
+  .bar > i{
+    position:absolute; left:0; top:0; bottom:0; width:0%;
+    background:var(--ink); transition:width .15s linear;
+  }
+  .row{
+    width:100%; display:flex; align-items:center; justify-content:space-between;
+    font-variant-numeric:tabular-nums; color:var(--dim); font-size:.9rem;
+  }
+  button{
+    font-family:inherit; font-size:1rem; cursor:pointer;
+    background:var(--paper); color:var(--ink);
+    border:1px solid var(--ink); padding:.6rem 1.6rem; border-radius:999px;
+    letter-spacing:.16em; font-variant:small-caps; transition:background .2s,color .2s;
+  }
+  button:hover{ background:var(--ink); color:var(--paper) }
+  .clock{ font-variant-numeric:tabular-nums }
+
+  .label{
+    width:min(640px,100%); font-family:Georgia,serif; font-size:.8rem; line-height:1.7;
+    color:var(--dim);
+  }
+  .label b{ color:var(--ink); font-weight:normal }
+  .note{
+    width:min(640px,100%); text-align:center; font-style:italic;
+    font-size:.92rem; color:var(--dim); line-height:1.6;
+  }
+  a{ color:inherit }
+</style>
+</head>
+<body>
+
+  <div class="score">
+    <h1>4′33″</h1>
+    <p class="sub">for any browser · TACET</p>
+    <ol class="movements" id="movements">
+      <li class="mv" data-i="0"><span class="num">I</span><span class="tacet">tacet</span><span class="dur">0′30″</span></li>
+      <li class="mv" data-i="1"><span class="num">II</span><span class="tacet">tacet</span><span class="dur">2′23″</span></li>
+      <li class="mv" data-i="2"><span class="num">III</span><span class="tacet">tacet</span><span class="dur">1′40″</span></li>
+    </ol>
+  </div>
+
+  <div class="transport">
+    <div class="bar"><i id="fill"></i></div>
+    <div class="row">
+      <span class="clock" id="elapsed">0:00</span>
+      <button id="play" aria-live="polite">Listen</button>
+      <span class="clock" id="total">4:33</span>
+    </div>
+  </div>
+
+  <p class="note" id="note">
+    Press Listen. For four minutes and thirty-three seconds this page
+    plays the sounds of the room you are in — which it cannot hear and
+    does not record.
+  </p>
+
+  <div class="label">
+    <b>y-a-v-a</b>, <b>4′33″ (We Do Not Listen)</b>, 2026.<br>
+    After John Cage, <i>4′33″</i> (1952), première by David Tudor, Woodstock NY.
+    Three movements, durations after the premiere score (30″ · 2′23″ · 1′40″).<br>
+    Medium: pixels on screen; timed silence; no microphone, no recording, no network.<br>
+    No cookies, no trackers, no data leaves your browser. License:
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>.
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  // Premiere durations (seconds): 30 + 143 + 100 = 273 = 4'33".
+  var MOV = [30, 143, 100];
+  var TOTAL = MOV.reduce(function (a, b) { return a + b; }, 0);
+  // Cumulative boundaries: [0, 30, 173, 273]
+  var BOUND = [0];
+  MOV.forEach(function (d) { BOUND.push(BOUND[BOUND.length - 1] + d); });
+
+  var fill = document.getElementById("fill");
+  var elapsedEl = document.getElementById("elapsed");
+  var playBtn = document.getElementById("play");
+  var noteEl = document.getElementById("note");
+  var rows = Array.prototype.slice.call(document.querySelectorAll(".mv"));
+
+  var startAt = 0;     // performance timestamp of Listen
+  var raf = 0;         // animation frame handle
+  var playing = false;
+
+  function fmt(s) {
+    s = Math.max(0, Math.floor(s));
+    var m = Math.floor(s / 60);
+    var r = s % 60;
+    return m + ":" + (r < 10 ? "0" + r : r);
+  }
+
+  function currentMovement(t) {
+    for (var i = MOV.length - 1; i >= 0; i--) {
+      if (t >= BOUND[i]) return t >= TOTAL ? MOV.length : i;
+    }
+    return 0;
+  }
+
+  function paint(t) {
+    fill.style.width = (Math.min(t, TOTAL) / TOTAL * 100) + "%";
+    elapsedEl.textContent = fmt(t);
+    var active = currentMovement(t);
+    rows.forEach(function (r, i) {
+      r.classList.toggle("active", playing && i === active);
+      r.classList.toggle("done", playing && i < active);
+    });
+  }
+
+  // The performance: a real, timed silence. No AudioContext is created,
+  // no microphone is requested, nothing is scheduled to make a sound.
+  // The browser's only honest recording of your room is none.
+  function tick(now) {
+    var t = (now - startAt) / 1000;
+    if (t >= TOTAL) {
+      paint(TOTAL);
+      stop(true);
+      return;
+    }
+    paint(t);
+    raf = requestAnimationFrame(tick);
+  }
+
+  function start() {
+    playing = true;
+    startAt = performance.now();
+    playBtn.textContent = "Stop";
+    noteEl.textContent = "Silence is being performed. It is yours, and it stays with you.";
+    raf = requestAnimationFrame(tick);
+  }
+
+  function stop(completed) {
+    playing = false;
+    cancelAnimationFrame(raf);
+    playBtn.textContent = "Listen";
+    rows.forEach(function (r) { r.classList.remove("active"); });
+    if (completed) {
+      rows.forEach(function (r) { r.classList.add("done"); });
+      noteEl.textContent = "Four minutes, thirty-three seconds. Nothing was heard, nothing was kept.";
+    } else {
+      paint(0);
+      rows.forEach(function (r) { r.classList.remove("done"); });
+      noteEl.textContent = "Stopped. The recording that was never made is gone.";
+    }
+  }
+
+  playBtn.addEventListener("click", function () {
+    if (playing) stop(false);
+    else start();
+  });
+
+  paint(0);
+})();
+</script>
+</body>
+</html>

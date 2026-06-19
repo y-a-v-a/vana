@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-19-4-33-we-do-not-listen",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "John Cage, 4′33″ (1952)",
+    "David Tudor, Woodstock première (1952)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The work earns its place in the DNA by making the absence of a web API the literal performance: no AudioContext, no getUserMedia, no network — the silence is the privacy ethic enacted. Concept and execution collapse cleanly (P1): the empty audio engine IS the argument. The Cage readymade is recontextualized, not merely illustrated, by pointing its indeterminacy outward at the web's surveillance default rather than inward at a hall. The casual surface (a music player that plays nothing) and the literate reading (4′33″ as an answer to the always-on microphone) land in the same object. Tonal control is dry and intelligent throughout, especially in the post-performance copy.",
+  "reservations": "The 'live, not fixed' principle (P4) is only just satisfied: the work is a deterministic countdown with no regeneration, stream, or per-visit variation — functionally close to a static page with a CSS animation. There is also thematic proximity to the catalogue's own 'Page with the Sound of Its Own Making' (2026): both stage sound-art gestures using the browser as instrument, and a viewer encountering them back-to-back may sense kinship that the surface doesn't fully differentiate.",
+  "revision_suggestion": "If a slightly stronger P4 reading is desired, a small live element — a per-visit randomized ambient detail (the room's timezone rendered into the score, or a non-repeating background micro-tone of the system clock's least-significant bits) — would convert the work from a deterministic countdown into a genuinely re-performed piece on each visit, while preserving the no-capture ethic.",
+  "jury_model": "minimax/minimax-m3"
+}

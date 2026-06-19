@@ -302,5 +302,13 @@
     "source": "Lawrence Weiner, Declaration of Intent (1968); Conceptual art / language-as-material; net.art",
     "mechanism": "Per-visit JS grammar mints a statement and declares it complete on receipt; the offered condition buttons resolve to no material change, enacting 'each being equal' as a dead call-to-action.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-19-4-33-we-do-not-listen",
+    "title": "4′33″ (We Do Not Listen)",
+    "year": 2026,
+    "source": "John Cage, 4′33″ (1952); David Tudor, Woodstock première (1952)",
+    "mechanism": "A requestAnimationFrame transport plays three timed tacet movements while deliberately creating no AudioContext, no getUserMedia, and no network request; the absence of capture is the performed silence.",
+    "status": "pending"
   }
 ]
