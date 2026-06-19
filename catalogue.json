@@ -326,5 +326,13 @@
     "source": "Stanley Brouwn, this way brouwn (1961); Stanley Brouwn, the distance / step works; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "pointermove deltas summed and converted to physical distance via the CSS reference pixel (1/96 inch); no rendering of the path, no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-19-measurement-viewport",
+    "title": "Measurement: Viewport",
+    "year": 2026,
+    "source": "Mel Bochner, Measurement: Room (1969); Mel Bochner, Measurement Series (1968-69); net.art (viewport as material)",
+    "mechanism": "window.innerWidth/innerHeight (and devicePixelRatio) read live and redrawn as arrowed dimension lines on every resize; no fixed size, nothing stored, no network.",
+    "status": "pending"
   }
 ]

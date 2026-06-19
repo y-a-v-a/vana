@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-19-measurement-viewport",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 3
+  },
+  "weighted_total": 36,
+  "verdict": "borderline",
+  "references_named": [
+    "Mel Bochner, Measurement: Room (1969)",
+    "Mel Bochner, Measurement Series (1968-69)",
+    "net.art (viewport as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The work cleanly enacts Bochner's gesture in the browser: the page is the measurement of its own container, redrawn on every resize. Concept and execution collapse (P1): the dimension lines are not decoration, they are the work. The double-coding is solid — casual viewer sees the gag, literate viewer reads the conceptual-art claim. Ethics are stated and met. It is materially distinct from the catalogue: la-trahison-des-images stretches an image, this way browser sums pointer travel, and no existing work measures the viewport itself.",
+  "reservations": "Novelty is moderate rather than high: the Bochner-to-viewport transposition is legible and well-executed but not especially surprising; the chance/order axis is acknowledged but chance barely enters (only via the visitor's device). The wall-label text in the center slightly undercuts the 'nothing but the measurement' claim — it is a small P3 restraint issue. Wit is dry but not particularly sharp.",
+  "revision_suggestion": "Consider removing or shrinking the central label so the page truly contains only the dimension lines, tightening P3. A subtler way to introduce chance (e.g., a second measurement in a unit the visitor didn't choose, or a brief flicker on resize) would deepen the P5 axis without breaking the order of the piece.",
+  "jury_model": "minimax/minimax-m3"
+}

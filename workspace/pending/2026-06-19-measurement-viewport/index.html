@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Measurement: Viewport</title>
+<style>
+  :root { color-scheme: light; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #fbfbf9; }
+  body {
+    font-family: "Courier New", ui-monospace, monospace;
+    color: #111;
+    -webkit-font-smoothing: antialiased;
+  }
+  #stage { position: fixed; inset: 0; }
+  svg { display: block; width: 100%; height: 100%; }
+  text { font-family: "Courier New", ui-monospace, monospace; }
+  .dim { font-size: 15px; letter-spacing: 0.04em; fill: #111; }
+  .note { font-size: 11px; fill: #555; letter-spacing: 0.02em; }
+  line, path { stroke: #111; stroke-width: 1; fill: none; vector-effect: non-scaling-stroke; }
+  /* the museum label, written on the page that has nothing on it */
+  #label {
+    position: fixed;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    max-width: 30ch;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #333;
+    pointer-events: none;
+    user-select: none;
+  }
+  #label b { font-weight: 700; }
+  #label small { display: block; margin-top: 0.9em; color: #888; font-size: 10px; line-height: 1.5; }
+</style>
+</head>
+<body>
+  <main id="stage" aria-label="A live measurement of this browser viewport.">
+    <svg id="art" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <marker id="ah" markerWidth="10" markerHeight="10" refX="9" refY="3"
+                orient="auto" markerUnits="userSpaceOnUse">
+          <path d="M0,0 L9,3 L0,6" />
+        </marker>
+        <marker id="ah2" markerWidth="10" markerHeight="10" refX="1" refY="3"
+                orient="auto" markerUnits="userSpaceOnUse">
+          <path d="M9,0 L0,3 L9,6" />
+        </marker>
+      </defs>
+      <g id="lines"></g>
+    </svg>
+  </main>
+
+  <div id="label">
+    <b>Measurement: Viewport</b><br>
+    The work is the size of the space it is shown in.<br>
+    Resize the space; the work is re-measured.
+    <small>
+      y-a-v-a, after Mel Bochner, <i>Measurement: Room</i> (1969).<br>
+      Medium: pixels on screen. CC&nbsp;BY-SA&nbsp;4.0.<br>
+      No cookies, no trackers, nothing stored.
+    </small>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+  // Bochner measured the gallery and wrote the dimensions on its walls;
+  // the work was the measurement of the space, not an object hung in it.
+  // Here the space is the viewport. It has no fixed size, so the work is
+  // minted per visit and re-measured on every resize. Nothing is stored.
+  var svg = document.getElementById("art");
+  var g = document.getElementById("lines");
+  var M = 56; // distance of the dimension line from the edge it measures
+
+  function svgEl(name, attrs) {
+    var e = document.createElementNS("http://www.w3.org/2000/svg", name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  function tick(x1, y1, x2, y2) {
+    g.appendChild(svgEl("line", { x1: x1, y1: y1, x2: x2, y2: y2 }));
+  }
+
+  function dimLine(x1, y1, x2, y2) {
+    g.appendChild(svgEl("line", {
+      x1: x1, y1: y1, x2: x2, y2: y2,
+      "marker-start": "url(#ah2)", "marker-end": "url(#ah)"
+    }));
+  }
+
+  function txt(x, y, str, cls, rot) {
+    var t = svgEl("text", {
+      x: x, y: y, class: cls || "dim",
+      "text-anchor": "middle", "dominant-baseline": "middle"
+    });
+    if (rot) t.setAttribute("transform", "rotate(" + rot + " " + x + " " + y + ")");
+    t.textContent = str;
+    g.appendChild(t);
+    return t;
+  }
+
+  function draw() {
+    var W = window.innerWidth, H = window.innerHeight;
+    svg.setAttribute("width", W);
+    svg.setAttribute("height", H);
+    while (g.firstChild) g.removeChild(g.firstChild);
+
+    // --- width, measured across the top ---
+    tick(M, 12, M, M + 12);
+    tick(W - M, 12, W - M, M + 12);
+    dimLine(M, M, W - M, M);
+    txt(W / 2, M - 14, W + " px", "dim");
+
+    // --- height, measured down the left ---
+    tick(12, M, M + 12, M);
+    tick(12, H - M, M + 12, H - M);
+    dimLine(M, M, M, H - M);
+    txt(M - 16, H / 2, H + " px", "dim", -90);
+
+    // a draftsman's footnote: the unit is not fixed either.
+    var dpr = window.devicePixelRatio || 1;
+    txt(W - M, H - 18,
+        "@ " + dpr + "× device pixels  ·  " + (W * H).toLocaleString() + " px²",
+        "note");
+    var t = g.lastChild;
+    t.setAttribute("text-anchor", "end");
+  }
+
+  draw();
+  // The space is never the same twice — and never the same for long.
+  window.addEventListener("resize", draw, { passive: true });
+  window.addEventListener("orientationchange", draw, { passive: true });
+})();
+</script>
+</body>
+</html>
