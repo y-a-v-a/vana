@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1000 Hours of Staring</title>
+<style>
+  :root{
+    --wall:#d8d6d1;
+    --wall2:#cfcdc7;
+    --paper:#fbfbf9;
+    --ink:#2a2a28;
+    --faint:#6f6e69;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:
+      radial-gradient(120% 90% at 50% 8%, var(--wall) 0%, var(--wall2) 100%);
+    color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:100%;
+    padding:6vh 5vw;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* the blank sheet — almost nothing, the way he left it */
+  #sheet{
+    width:min(46vh,72vw);
+    aspect-ratio:3/4;
+    background:
+      radial-gradient(130% 110% at 50% 42%, #ffffff 0%, var(--paper) 70%, #f1f1ed 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.8) inset,
+      0 18px 40px -22px rgba(0,0,0,.45),
+      0 2px 6px -2px rgba(0,0,0,.18);
+    border:1px solid rgba(0,0,0,.06);
+    transition:filter 1.2s ease, opacity 1.2s ease;
+  }
+  body.away #sheet{filter:grayscale(1) brightness(.985);opacity:.9}
+  /* wall label */
+  #label{
+    margin-top:3.2vh;
+    width:min(46vh,72vw);
+    font-size:13px;
+    line-height:1.5;
+    color:var(--ink);
+  }
+  #label .t{font-style:italic}
+  #label .by{color:var(--faint)}
+  #label .med{color:var(--faint)}
+  #count{
+    margin-top:.5em;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:.01em;
+  }
+  #count b{font-weight:normal}
+  #status{
+    color:var(--faint);
+    font-style:italic;
+  }
+  #note,#lic{
+    margin-top:1.1em;
+    font-size:11px;
+    line-height:1.55;
+    color:var(--faint);
+    max-width:46ch;
+  }
+  #lic{margin-top:.8em}
+  a{color:inherit}
+</style>
+</head>
+<body class="away">
+
+  <div id="sheet" aria-hidden="true"></div>
+
+  <div id="label">
+    <div class="t">1000 Hours of Staring</div>
+    <div class="by">y-a-v-a, 2026 — after Tom Friedman, <span style="font-style:italic">1000 Hours of Staring</span> (1992–1997)</div>
+    <div class="med">Attention on screen, dimensions variable</div>
+    <div id="count"><b>Your contribution:</b> <span id="hms">0h 00m 00s</span> of 1000h <span id="pct">(0.00000%)</span></div>
+    <div id="status">— waiting to be looked at —</div>
+    <div id="note">
+      The clock runs only while this tab is looking back at you. It cannot tell
+      whether you actually are; it can only tell that you have not looked away.
+      Neither could his collectors. The total is kept on your machine alone —
+      unverifiable, unsellable, yours. <span id="remain"></span>
+    </div>
+    <div id="lic">
+      CC BY-SA 4.0 · y-a-v-a (yet another visual artist). References Tom Friedman,
+      <span style="font-style:italic">1000 Hours of Staring</span> (1992–1997).
+      No cookies, no trackers, no data leaves this page.
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  var TARGET = 1000 * 3600;            // one thousand hours, in seconds
+  var KEY = "y-a-v-a.staring.seconds";
+  var acc = 0;
+  try { acc = parseFloat(localStorage.getItem(KEY)) || 0; } catch(e){ acc = 0; }
+  if (!(acc >= 0)) acc = 0;
+
+  var last = (typeof performance !== "undefined" && performance.now) ? performance.now() : 0;
+  var saveDue = 0;
+
+  var hms = document.getElementById("hms");
+  var pct = document.getElementById("pct");
+  var status = document.getElementById("status");
+  var remain = document.getElementById("remain");
+
+  function looking(){
+    return document.visibilityState === "visible" && document.hasFocus();
+  }
+
+  function pad(n){ n = Math.floor(n); return (n < 10 ? "0" : "") + n; }
+
+  function fmt(s){
+    var h = Math.floor(s / 3600);
+    var m = Math.floor((s % 3600) / 60);
+    var sec = Math.floor(s % 60);
+    return h + "h " + pad(m) + "m " + pad(sec) + "s";
+  }
+
+  function render(){
+    hms.textContent = fmt(acc);
+    pct.textContent = "(" + ((acc / TARGET) * 100).toFixed(5) + "%)";
+    var leftH = (TARGET - acc) / 3600;
+    if (leftH <= 0){
+      remain.textContent = "It is finished. It changes nothing.";
+    } else {
+      remain.textContent = "≈ " + (leftH / 24).toFixed(1) +
+        " days of unbroken attention remain.";
+    }
+  }
+
+  function persist(){
+    try { localStorage.setItem(KEY, String(acc)); } catch(e){}
+  }
+
+  function tick(now){
+    var dt = (now - last) / 1000;
+    last = now;
+    if (dt < 0) dt = 0;
+    if (dt > 1.5) dt = 0;            // tab was throttled/backgrounded: don't credit it
+
+    if (looking() && acc < TARGET){
+      acc += dt;
+      if (acc > TARGET) acc = TARGET;
+      document.body.classList.remove("away");
+      status.textContent = "— the sheet is being looked at —";
+      saveDue += dt;
+      if (saveDue >= 5){ saveDue = 0; persist(); }
+    } else {
+      document.body.classList.add("away");
+      status.textContent = acc >= TARGET
+        ? "— it is finished —"
+        : "— you looked away; the staring stopped —";
+    }
+    render();
+    requestAnimationFrame(tick);
+  }
+
+  document.addEventListener("visibilitychange", persist);
+  window.addEventListener("blur", persist);
+  window.addEventListener("pagehide", persist);
+
+  render();
+  requestAnimationFrame(function(t){ last = t; requestAnimationFrame(tick); });
+})();
+</script>
+</body>
+</html>

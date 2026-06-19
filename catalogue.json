@@ -310,5 +310,13 @@
     "source": "John Cage, 4′33″ (1952); David Tudor, Woodstock première (1952)",
     "mechanism": "A requestAnimationFrame transport plays three timed tacet movements while deliberately creating no AudioContext, no getUserMedia, and no network request; the absence of capture is the performed silence.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-19-1000-hours-of-staring",
+    "title": "1000 Hours of Staring",
+    "year": 2026,
+    "source": "Tom Friedman, 1000 Hours of Staring (1992-1997); On Kawara, Today series; Roman Opalka, 1965 / 1 – ∞",
+    "mechanism": "document.visibilityState + document.hasFocus() gate a time accumulator persisted only in localStorage; attention becomes the unprovable, unsellable medium.",
+    "status": "pending"
   }
 ]
