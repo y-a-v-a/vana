@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Vertical Earth Kilometer</title>
+<style>
+  :root{
+    --brass:#b08d3c;
+    --brass-hi:#f4e0a0;
+    --topsoil:#3a2c1f;
+    --deep:#0e0a07;
+    --ink:#cdbfa6;
+  }
+  html,body{margin:0;background:var(--deep);color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif;}
+
+  /* ---- the surface: the only part of the work you ever see ---- */
+  .surface{
+    height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:
+      radial-gradient(120% 70% at 50% 120%, var(--topsoil), var(--deep)),
+      linear-gradient(#1c1611, #120d09);
+    text-align:center;padding:0 1.5rem;box-sizing:border-box;
+  }
+  /* the exposed 2 cm brass cap — flush with the ground, dead centre */
+  .cap{
+    width:2cm;height:2cm;border-radius:50%;
+    background:radial-gradient(35% 30% at 38% 32%, var(--brass-hi), var(--brass) 55%, #6e571f 100%);
+    box-shadow:0 0 0 2px #00000055, 0 6px 22px #000000aa,
+               inset 0 -3px 6px #00000066;
+  }
+  .surface p{max-width:34rem;line-height:1.5;font-size:1.05rem;color:#e7dcc6;}
+  .surface .small{font-size:.82rem;color:#8c7c63;font-style:italic;}
+  .hint{margin-top:1.2rem;font-size:.8rem;color:#7a6b53;letter-spacing:.12em;text-transform:uppercase;}
+  .hint::after{content:" \2193";}
+
+  /* ---- the shaft: one real CSS kilometer of buried brass you cannot see ---- */
+  .shaft{
+    height:100000cm; /* 1 km = 100 000 cm. Mostly invisible. Take it on faith. */
+    background:
+      repeating-linear-gradient(#00000000 0 980px, #ffffff06 980px 982px), /* faint strata */
+      linear-gradient(var(--topsoil) 0%, #1a130d 6%, #0e0a07 60%, #060403 100%);
+  }
+
+  /* ---- the tip, one kilometre down ---- */
+  .tip{
+    height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:0 1.5rem;box-sizing:border-box;
+    background:linear-gradient(#060403, #000);
+  }
+  .tip .point{width:2cm;height:2cm;border-radius:50%;
+    background:radial-gradient(50% 50% at 50% 50%, #5a4818, #1a1409 70%, #000 100%);
+    box-shadow:0 0 30px #b08d3c22;}
+  .tip p{max-width:34rem;line-height:1.5;color:#cdbfa6;}
+
+  /* ---- the only proof of motion: a depth readout, not the object ---- */
+  .gauge{
+    position:fixed;left:0;bottom:0;right:0;
+    display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+    padding:.7rem 1rem;box-sizing:border-box;
+    background:linear-gradient(#00000000, #000000cc 60%);
+    font-family:"SFMono-Regular",Menlo,Consolas,monospace;
+    font-size:.85rem;color:var(--brass-hi);pointer-events:none;
+  }
+  .gauge .d{font-variant-numeric:tabular-nums;letter-spacing:.04em;}
+  .gauge .note{color:#9a8a6f;font-style:italic;text-align:right;}
+
+  footer{
+    position:fixed;top:.7rem;right:.9rem;text-align:right;
+    font-family:"SFMono-Regular",Menlo,Consolas,monospace;
+    font-size:.68rem;line-height:1.5;color:#6f6049;pointer-events:none;
+  }
+  footer a{color:#8c7c63;}
+</style>
+</head>
+<body>
+
+  <section class="surface">
+    <div class="cap" aria-hidden="true"></div>
+    <p>This page is exactly one kilometre tall.<br>
+       Above the soil: a 2&nbsp;cm brass disc.<br>
+       Below it: 1&nbsp;000 metres of brass you will never see at once.</p>
+    <p class="small">After Walter De Maria, <em>The Vertical Earth Kilometer</em> (1977),
+       Friedrichsplatz, Kassel — a solid brass rod sunk flush into the ground,
+       its existence taken on faith.</p>
+    <div class="hint">descend</div>
+  </section>
+
+  <!-- 100 000 cm of nothing to look at. That is the work. -->
+  <div class="shaft" aria-hidden="true"></div>
+
+  <section class="tip">
+    <div class="point" aria-hidden="true"></div>
+    <p>The tip. One kilometre down.<br>
+       You scrolled the whole rod and saw none of it.<br>
+       That was always the deal.</p>
+  </section>
+
+  <div class="gauge">
+    <span class="d" id="depth">0 m &nbsp;/&nbsp; 1 000 m below the surface</span>
+    <span class="note" id="note">the rod is here, unseen</span>
+  </div>
+
+  <footer>
+    The Vertical Earth Kilometer<br>
+    y-a-v-a, after Walter De Maria (1977)<br>
+    medium: a real CSS kilometre · pixels on screen<br>
+    CC&nbsp;BY-SA&nbsp;4.0 · no cookies · no tracking
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+  // Measure the browser's own idea of a metre, so the readout is honest at any zoom.
+  var probe=document.createElement("div");
+  probe.style.cssText="position:absolute;top:0;left:0;width:0;height:100cm;visibility:hidden;pointer-events:none;";
+  document.body.appendChild(probe);
+  var pxPerMetre=probe.getBoundingClientRect().height; // 100 cm = 1 m
+  probe.parentNode.removeChild(probe);
+  if(!(pxPerMetre>0)) pxPerMetre=3779.5275590551178; // fallback: 100cm at 96dpi
+
+  var surface=document.querySelector(".surface").offsetHeight;
+  var depthEl=document.getElementById("depth");
+  var noteEl=document.getElementById("note");
+
+  var notes=[
+    "the rod is here, unseen",
+    "still brass, still buried",
+    "you have proof of nothing",
+    "no window to verify by",
+    "faith is the only instrument"
+  ];
+
+  var pending=false;
+  function paint(){
+    pending=false;
+    var y=window.pageYOffset||document.documentElement.scrollTop||0;
+    var max=document.documentElement.scrollHeight-window.innerHeight;
+    var atBottom=(max-y)<=2;
+    var m=(y-surface)/pxPerMetre;
+    if(m<0)m=0;
+    if(m>1000||atBottom)m=1000;
+    var shown=(m>=1000)?"1 000":Math.round(m).toString();
+    depthEl.innerHTML=shown+" m &nbsp;/&nbsp; 1 000 m below the surface";
+    noteEl.textContent=notes[Math.min(notes.length-1, Math.floor(m/250))];
+  }
+  function onScroll(){ if(!pending){ pending=true; requestAnimationFrame(paint); } }
+  window.addEventListener("scroll",onScroll,{passive:true});
+  window.addEventListener("resize",function(){ surface=document.querySelector(".surface").offsetHeight; onScroll(); },{passive:true});
+  paint();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-06-19-the-vertical-earth-kilometer",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 38,
+  "verdict": "strong",
+  "references_named": [
+    "Walter De Maria, The Vertical Earth Kilometer (1977), Friedrichsplatz, Kassel"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "A genuinely web-native digital readymade: the page literally instantiates De Maria's invisible kilometer in CSS centimeters, so the medium enacts the conceit (P1). The surface gag (absurdly tall empty page) and the art-historical reading (De Maria's wager about unverifiable scale and faith-based value) land independently, and 'faith is the only instrument' carries the cheerful-cynic tone cleanly. Restraint is strong — one tall document, one cap, one counter — and the probe-element technique to measure the browser's own metre is a quietly thematic move about the arbitrariness of any unit we take on trust.",
+  "reservations": "Narrative positioning is implicit rather than explicit: the work does not name a prior catalogue piece it answers (e.g., Three Ball Total Equilibrium Slot Machine as a sibling in the invisible-value critique, or Measurement: Viewport as a sibling in using the browser's own units as material). The 'tip' panel at the bottom is slightly conventional — a labelled arrival point — and partly undercuts the pure-absence wager that makes the rest of the work land.",
+  "revision_suggestion": "Consider deleting or thinning the bottom 'tip' panel so the end of the scroll is also void, deepening the faith-based conceit. Add a single line that explicitly positions the work against Three Ball Total Equilibrium Slot Machine (or Measurement: Viewport) to make its place in the twenty-year argument legible. Optionally surface the probe-metre reading more visibly — e.g., reveal the browser's px-per-metre as part of the gauge — to sharpen the self-aware note about arbitrary units.",
+  "jury_model": "minimax/minimax-m3"
+}

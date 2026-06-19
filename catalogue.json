@@ -334,5 +334,13 @@
     "source": "Mel Bochner, Measurement: Room (1969); Mel Bochner, Measurement Series (1968-69); net.art (viewport as material)",
     "mechanism": "window.innerWidth/innerHeight (and devicePixelRatio) read live and redrawn as arrowed dimension lines on every resize; no fixed size, nothing stored, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-19-the-vertical-earth-kilometer",
+    "title": "The Vertical Earth Kilometer",
+    "year": 2026,
+    "source": "Walter De Maria, The Vertical Earth Kilometer (1977), Friedrichsplatz, Kassel",
+    "mechanism": "A document with height:100000cm (one real CSS kilometre, ~3.78M px); a probe element measures the browser's own metre and a scroll handler reports depth, while the rod itself is never drawn.",
+    "status": "pending"
   }
 ]
