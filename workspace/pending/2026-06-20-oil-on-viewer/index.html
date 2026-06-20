@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oil on Viewer</title>
+<style>
+  :root{
+    --b0:#101012; --b1:#17181c; --b2:#202228; --b3:#2c2f37; --acc:#3a6ea5; --fg:#e9e7e1;
+  }
+  html,body{margin:0;height:100%;background:var(--b0);color:var(--fg);
+    font-family:ui-monospace,Menlo,Consolas,monospace;}
+  body{display:flex;flex-direction:column;min-height:100vh;}
+  .painting{flex:1 1 auto;display:flex;flex-direction:column;min-height:70vh;}
+  .band{flex:1 1 0;width:100%;}
+  .band:nth-child(1){flex-grow:5;background:var(--b1);}
+  .band:nth-child(2){flex-grow:3;background:var(--acc);}
+  .band:nth-child(3){flex-grow:8;background:var(--b0);}
+  .band:nth-child(4){flex-grow:2;background:var(--b2);}
+  .band:nth-child(5){flex-grow:4;background:var(--b3);}
+  /* the breathing band; lightness driven by JS only when motion is allowed */
+  .band:nth-child(3){filter:brightness(var(--breathe,1));}
+
+  .plate{
+    border-top:1px solid var(--b3);
+    background:var(--b0);
+    padding:14px 16px 10px;
+    font-size:12px;line-height:1.5;
+  }
+  .plate h1{font-size:13px;font-weight:600;margin:0 0 2px;letter-spacing:.02em;}
+  .plate .sub{opacity:.7;margin:0 0 10px;}
+  .grid{display:grid;grid-template-columns:auto 1fr;gap:1px 14px;max-width:560px;}
+  .grid .k{opacity:.55;}
+  .grid .v{font-variant-numeric:tabular-nums;}
+  .seized{color:CanvasText;}
+  .note{margin-top:10px;max-width:560px;opacity:.85;}
+  .lic{margin-top:10px;font-size:11px;opacity:.5;max-width:560px;}
+  a{color:inherit;}
+  @media (forced-colors:active){
+    .band:nth-child(1){background:Canvas;}
+    .band:nth-child(2){background:Highlight;}
+    .band:nth-child(3){background:Canvas;}
+    .band:nth-child(4){background:GrayText;}
+    .band:nth-child(5){background:CanvasText;}
+    .plate{border-color:CanvasText;}
+  }
+</style>
+</head>
+<body>
+  <div class="painting" aria-hidden="true">
+    <div class="band"></div>
+    <div class="band"></div>
+    <div class="band"></div>
+    <div class="band"></div>
+    <div class="band"></div>
+  </div>
+
+  <div class="plate">
+    <h1>Oil on Viewer</h1>
+    <p class="sub">Painted live by your operating system. Medium: your settings. Dimensions: variable. Edition: one, yours, for as long as you keep them.</p>
+    <div class="grid" id="readout"></div>
+    <p class="note" id="note"></p>
+    <p class="lic">
+      y-a-v-a (Vincent Bruijn), after Hans Haacke, <em>Condensation Cube</em> (1963&ndash;65),
+      and L&aacute;szl&oacute; Moholy-Nagy, <em>Telephone Pictures</em> (1922).
+      Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+      No cookies, no storage, no network: every reading below stays on this page and is sent nowhere.
+    </p>
+  </div>
+
+<script>
+(function(){
+  // The conditions of viewing — read, never stored, never transmitted.
+  var queries = [
+    ["appearance",   "(prefers-color-scheme: dark)",            ["light","dark"]],
+    ["contrast",     "(prefers-contrast: more)",                ["normal","more"]],
+    ["contrast-low", "(prefers-contrast: less)",                ["—","less"]],
+    ["motion",       "(prefers-reduced-motion: reduce)",        ["allowed","reduced"]],
+    ["transparency", "(prefers-reduced-transparency: reduce)",  ["allowed","reduced"]],
+    ["inverted",     "(inverted-colors: inverted)",             ["no","yes"]],
+    ["forced",       "(forced-colors: active)",                 ["no","yes"]],
+    ["gamut",        "(color-gamut: p3)",                       ["sRGB","P3"]],
+    ["range",        "(dynamic-range: high)",                   ["standard","high"]]
+  ];
+
+  var mqls = queries.map(function(q){
+    var m = window.matchMedia ? window.matchMedia(q[1]) : {matches:false};
+    return {key:q[0], mql:m, words:q[2]};
+  });
+
+  function state(){
+    var s = {};
+    mqls.forEach(function(o){ s[o.key] = o.mql.matches; });
+    return s;
+  }
+
+  // Strict rule (the artist's order) → palette filled by the viewer's environment (the chance).
+  function paint(){
+    var s = state();
+    var root = document.documentElement.style;
+    var dark = s.appearance;
+    // base lightness ladder; contrast pushes the rungs apart or collapses them.
+    var lo = dark ? 7 : 95, hi = dark ? 96 : 6;
+    var k = s.contrast ? 1.0 : (s["contrast-low"] ? 0.35 : 0.7);
+    function L(t){ return lo + (hi - lo) * t * k + (1-k)*(dark?20:75); }
+    var sat = s.contrast ? 4 : (s["contrast-low"] ? 6 : 12);
+    var accSat = s.contrast ? 80 : (s["contrast-low"] ? 22 : 46);
+    var hue = s.inverted ? 30 : 210;            // inversion turns the cool field warm
+    var accHue = s.inverted ? 210 : 30;
+
+    function grey(t){ return "hsl("+hue+","+sat+"%,"+L(t).toFixed(1)+"%)"; }
+    root.setProperty("--b0", grey(0.00));
+    root.setProperty("--b1", grey(0.18));
+    root.setProperty("--b2", grey(0.42));
+    root.setProperty("--b3", grey(0.66));
+    root.setProperty("--acc","hsl("+accHue+","+accSat+"%,"+(dark?52:48)+"%)");
+    root.setProperty("--fg", dark ? "hsl("+hue+",6%,91%)" : "hsl("+hue+",10%,12%)");
+
+    // readout (Haacke-style live data plate)
+    var out = "";
+    mqls.forEach(function(o,i){
+      var words = o.words, on = o.mql.matches;
+      var v = on ? words[1] : words[0];
+      out += '<div class="k">'+queries[i][0]+'</div><div class="v">'+v+'</div>';
+    });
+    document.getElementById("readout").innerHTML = out;
+
+    // the note shifts with who is in charge
+    var note = document.getElementById("note");
+    if (s.forced){
+      note.className = "note seized";
+      note.textContent = "Your operating system has seized the palette. High-contrast mode overrides every colour the artist proposed; the institution paints, not me. As intended.";
+    } else if (s.motion){
+      note.className = "note";
+      note.textContent = "You asked the world to hold still, so it does. The third band has stopped breathing.";
+    } else {
+      note.className = "note";
+      note.textContent = "Two viewers never receive the same painting. Change a system setting and this one repaints under your hands. There is nothing on the page to click — your settings are the only brush.";
+    }
+
+    return s;
+  }
+
+  // The breathing band: motion only if the body permits it.
+  var t0 = null;
+  function breathe(ts){
+    if (t0 === null) t0 = ts;
+    var phase = (ts - t0) / 7000;             // slow, condensation-like
+    var b = 1 + 0.10 * Math.sin(phase * Math.PI * 2);
+    document.documentElement.style.setProperty("--breathe", b.toFixed(3));
+    if (!motionReduced()) requestAnimationFrame(breathe);
+  }
+  function motionReduced(){
+    var o = mqls.filter(function(x){return x.key==="motion";})[0];
+    return o && o.mql.matches;
+  }
+  function startMotion(){
+    document.documentElement.style.setProperty("--breathe","1");
+    t0 = null;
+    if (!motionReduced()) requestAnimationFrame(breathe);
+  }
+
+  // repaint whenever the viewer's environment changes — no reload, no network.
+  mqls.forEach(function(o){
+    var add = o.mql.addEventListener ? o.mql.addEventListener.bind(o.mql,"change")
+                                     : (o.mql.addListener && o.mql.addListener.bind(o.mql));
+    if (add) add(function(){ paint(); if(o.key==="motion") startMotion(); });
+  });
+
+  paint();
+  startMotion();
+})();
+</script>
+</body>
+</html>

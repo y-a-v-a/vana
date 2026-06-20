@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-20-oil-on-viewer",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Hans Haacke, Condensation Cube (1963-65)",
+    "László Moholy-Nagy, Telephone Pictures (1922)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "Oil on Viewer passes all hard gates. The mechanism-as-message (P1) is genuinely collapsed: the media queries are literally the pigment, not decoration, and the Haacke-style data plate is rendered live from the same state. The OS-accessibility fingerprinting signals are an excellent contemporary found-object (P2) and a fresh web-native material not yet exploited in the catalogue (G6), and the anti-fingerprinting subtext (read what trackers harvest, send nothing) lands the current ethical chapter without preaching. Tone is exactly right: dry, cheerful-cynic, with the wall-label line ('Edition: one, yours, for as long as you keep them') and the forced-colors aside ('the institution paints, not me') doing real double-coding work.",
+  "reservations": "The chance/order claim (P5) is the softest spot: identical settings always yield an identical canvas, so the 'chance' is really the contingent viewer configuration rather than stochasticity in the Kenneth Martin / Morellet sense. The candidate is honest about this in motivation.md, but the analogy is a stretch. Also, the anti-fingerprinting gesture is shown rather than dramatized — a viewer who doesn't read the plate or the motivation won't register the ethical argument.",
+  "revision_suggestion": "Make the fingerprinting refusal legible without wall text: e.g., have the plate enumerate which signals are *typically* exfiltrated and visibly refuse them inline, or briefly flash a red 'BLOCKED' beside each readout to stage the refusal as an event rather than a note. This would push the P8/P10-adjacent argument from subtext into surface without sacrificing restraint.",
+  "jury_model": "minimax/minimax-m3"
+}

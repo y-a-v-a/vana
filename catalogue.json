@@ -350,5 +350,13 @@
     "source": "François Morellet, Répartition aléatoire de 40 000 carrés suivant les chiffres pairs et impairs d'un annuaire de téléphone (1960); Kenneth Martin, Chance and Order; π / the unbounded spigot algorithm (Gibbons, 2004)",
     "mechanism": "An unbounded BigInt spigot streams the exact decimal digits of π client-side; each digit's parity fills or clears a square in a grid extended infinitely on scroll — deterministic, identical in every browser, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-20-oil-on-viewer",
+    "title": "Oil on Viewer",
+    "year": 2026,
+    "source": "Hans Haacke, Condensation Cube (1963-65); Laszlo Moholy-Nagy, Telephone Pictures (1922); net.art (OS/browser as material)",
+    "mechanism": "matchMedia preference queries (prefers-color-scheme/contrast/reduced-motion/inverted-colors/forced-colors/color-gamut/dynamic-range) with live change events drive CSS custom properties and a Haacke-style real-time data plate; no controls, no storage, no network.",
+    "status": "pending"
   }
 ]
