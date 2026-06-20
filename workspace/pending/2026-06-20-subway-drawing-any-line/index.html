@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Subway Drawing</title>
+<style>
+  :root { --paper:#f4f1ea; --graphite:#2b2b2b; --faint:#8a857a; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; background:var(--paper); color:var(--graphite);
+    font:14px/1.5 Georgia, "Times New Roman", serif; overflow:hidden; }
+  #paper { position:fixed; inset:0; display:block; }
+  /* wall label */
+  #label { position:fixed; left:18px; bottom:16px; max-width:min(78vw,340px);
+    color:var(--faint); mix-blend-mode:multiply; pointer-events:none; }
+  #label h1 { font-size:15px; font-weight:normal; letter-spacing:.02em; color:var(--graphite); }
+  #label h1 em { font-style:italic; color:var(--faint); }
+  #label p { font-size:11px; margin-top:6px; }
+  #label .lic { margin-top:10px; font-size:10px; line-height:1.45; }
+  #label .lic a { color:inherit; }
+  /* data plate */
+  #plate { position:fixed; right:16px; top:14px; text-align:right;
+    color:var(--faint); mix-blend-mode:multiply; font:11px/1.5 "Courier New", monospace;
+    pointer-events:none; }
+  /* boarding gesture (iOS motion permission) */
+  #board { position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    background:var(--paper); }
+  #board button { background:none; border:1px solid var(--graphite); color:var(--graphite);
+    font:italic 16px/1 Georgia, serif; padding:14px 26px; cursor:pointer; letter-spacing:.04em; }
+  #board button:active { background:var(--graphite); color:var(--paper); }
+  #board p { position:absolute; bottom:18px; left:0; right:0; text-align:center;
+    color:var(--faint); font-size:11px; }
+  .hidden { display:none !important; }
+</style>
+</head>
+<body>
+<canvas id="paper"></canvas>
+
+<div id="board">
+  <button id="boardBtn">board the train</button>
+  <p>put it in your pocket and don't look</p>
+</div>
+
+<div id="plate">
+  <div id="state">listening</div>
+  <div id="mag">0.00 m/s²</div>
+  <div id="marks">0 marks</div>
+</div>
+
+<div id="label">
+  <h1>Subway Drawing <em>(any line)</em></h1>
+  <p>The drawing is made by the train, not the hand.
+     Eyes closed. The device trembles; the pencil obeys.
+     Stand still and it makes a still mark. Reload and the ride begins again — nothing is kept.</p>
+  <p class="lic">After William Anastasi, <em>Subway Drawings / Pocket Drawings</em> (1960s–).
+     A work by <strong>y-a-v-a</strong> (Vincent Bruijn).
+     Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+     No cookies, no tracking, no network. Pixels on screen.</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var canvas = document.getElementById("paper");
+  var ctx = canvas.getContext("2d");
+  var W = 0, H = 0, DPR = 1;
+
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    canvas.style.width = W + "px";
+    canvas.style.height = H + "px";
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    if (pen.x < 0) { pen.x = W / 2; pen.y = H / 2; }
+  }
+
+  // the pencil
+  var pen = { x: -1, y: -1 };
+  var marks = 0;
+  // high-pass baseline so steady gravity is removed and only jolts move the pen
+  var lp = { x: 0, y: 0 }, primed = false;
+
+  function plot(ax, ay) {
+    var px = pen.x, py = pen.y;
+    var scale = 1.9;                 // jolt -> displacement
+    var nx = px + ax * scale;
+    var ny = py - ay * scale;        // screen y is inverted vs. world up
+    // bounce gently at the edges of the paper
+    if (nx < 2 || nx > W - 2) nx = px - (nx - px);
+    if (ny < 2 || ny > H - 2) ny = py - (ny - py);
+    nx = Math.max(2, Math.min(W - 2, nx));
+    ny = Math.max(2, Math.min(H - 2, ny));
+
+    var speed = Math.hypot(nx - px, ny - py);
+    ctx.strokeStyle = "rgba(43,43,43," + Math.min(0.9, 0.25 + speed * 0.05) + ")";
+    ctx.lineWidth = Math.max(0.4, 1.4 - speed * 0.03);
+    ctx.beginPath();
+    ctx.moveTo(px, py);
+    ctx.lineTo(nx, ny);
+    ctx.stroke();
+
+    pen.x = nx; pen.y = ny;
+    marks++;
+  }
+
+  var stateEl = document.getElementById("state");
+  var magEl = document.getElementById("mag");
+  var marksEl = document.getElementById("marks");
+  var lastEvent = 0;
+
+  function onMotion(e) {
+    var a = e.accelerationIncludingGravity || e.acceleration;
+    if (!a || a.x === null) return;
+    lastEvent = performance.now();
+
+    if (!primed) { lp.x = a.x; lp.y = a.y; primed = true; }
+    lp.x = lp.x * 0.9 + a.x * 0.1;
+    lp.y = lp.y * 0.9 + a.y * 0.1;
+    var hx = a.x - lp.x;            // the jolt: deviation from the running average
+    var hy = a.y - lp.y;
+
+    plot(hx, hy);
+
+    if (marks % 6 === 0) {
+      var m = Math.hypot(a.x || 0, a.y || 0, a.z || 0);
+      magEl.textContent = m.toFixed(2) + " m/s²";
+      marksEl.textContent = marks + " marks";
+      stateEl.textContent = "drawing";
+    }
+  }
+
+  // honesty: tell the viewer when nothing is moving
+  setInterval(function () {
+    if (performance.now() - lastEvent > 1500) {
+      stateEl.textContent = primed ? "the train has stopped" : "waiting for a train";
+    }
+  }, 1000);
+
+  function begin() {
+    window.addEventListener("devicemotion", onMotion, { passive: true });
+  }
+
+  // iOS 13+ requires a user gesture to grant motion access
+  var board = document.getElementById("board");
+  var boardBtn = document.getElementById("boardBtn");
+  var needsPermission = typeof DeviceMotionEvent !== "undefined" &&
+    typeof DeviceMotionEvent.requestPermission === "function";
+
+  function start() {
+    board.classList.add("hidden");
+    begin();
+  }
+
+  if (needsPermission) {
+    boardBtn.addEventListener("click", function () {
+      DeviceMotionEvent.requestPermission().then(function (res) {
+        start();
+        if (res !== "granted") stateEl.textContent = "no sensor — a still page";
+      }).catch(function () { start(); stateEl.textContent = "no sensor — a still page"; });
+    });
+  } else if (typeof DeviceMotionEvent !== "undefined") {
+    // android / sensor-equipped: board with one tap, no system prompt
+    boardBtn.textContent = "board the train";
+    boardBtn.addEventListener("click", start);
+  } else {
+    // desktop, no accelerometer: the drawing is a single held breath
+    board.querySelector("p").textContent = "this device does not move — a still page is also a drawing";
+    boardBtn.textContent = "stand at the platform";
+    boardBtn.addEventListener("click", function () {
+      start();
+      stateEl.textContent = "no sensor — a still page";
+    });
+  }
+
+  window.addEventListener("resize", resize);
+  resize();
+})();
+</script>
+</body>
+</html>

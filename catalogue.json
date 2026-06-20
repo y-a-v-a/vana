@@ -374,5 +374,13 @@
     "source": "Ian Wilson, Oral Communication / The Discussions (1968– ); conceptual art / dematerialization of the art object; net.art (the browser as a copy machine made not to copy)",
     "mechanism": "Local Web Speech API (SpeechSynthesis, offline-preferred voice) recites a JS-only string never inserted into the DOM, deliberately paired with the absence of recording, storage, and network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-20-subway-drawing-any-line",
+    "title": "Subway Drawing (any line)",
+    "year": 2026,
+    "source": "William Anastasi, Subway Drawings (1960s–); William Anastasi, Pocket Drawings; Surrealist automatic drawing",
+    "mechanism": "DeviceMotionEvent accelerometer (high-pass filtered) drives a canvas polyline; iOS motion-permission gesture; no storage, no network, reload erases.",
+    "status": "pending"
   }
 ]

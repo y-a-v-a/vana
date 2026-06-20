@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-20-subway-drawing-any-line",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "William Anastasi, Subway Drawings (1960s–)",
+    "William Anastasi, Pocket Drawings",
+    "Surrealist automatic drawing"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The accelerometer is genuinely the pencil, not a metaphor for it: the high-pass filter that strips gravity and keeps only jolts is a conceptual move disguised as signal processing, and the deadpan 'the train has stopped' state when motion ceases is mechanism-as-message at its cleanest. The found-object (the phone's motion sensor, built to rotate maps and count steps, recontextualised as a seismograph for mark-making) is fresh to the catalogue and only the web-on-a-sensor can make it. Anastasi is a precise, previously uncited reference, and the meta-twist — a tracker that refuses to track back, with no storage and no network — lands the P8 ethic inside the concept rather than beside it.",
+  "reservations": "The work's reach is limited to sensor-equipped devices, though the desktop fallback ('a still page is also a drawing') handles this with conceptual honesty rather than apology. The connection to the broader twenty-year argument (the internet embodying 20th-century art gestures) is present but could be slightly more explicit in the on-page label.",
+  "revision_suggestion": "Consider adding a single line in the wall label that names the longer lineage (e.g., a nod to the readymade or to automatism's place in the catalogue's argument) so the literate viewer sees the work's position in the twenty-year thread without needing the motivation document.",
+  "jury_model": "minimax/minimax-m3"
+}
