@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-06-20-oral-communication",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Ian Wilson, Oral Communication / The Discussions (1968– )",
+    "conceptual art / dematerialization of the art object",
+    "net.art (the browser as a copy machine made not to copy)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The work is a clean restaging of Ian Wilson's anti-documentary gesture onto the most documentational machine ever built, and the mechanism — local SpeechSynthesis with deliberate absence of recording, storage, and network — enacts the immateriality rather than illustrating it. The double-coding lands: a casual visitor gets a website that speaks and refuses to show its words; a literate viewer reads a precise conceptual-art argument about value, authenticity, and the impossibility of owning speech. Craft is tight: one button, one utterance, no DOM insertion of the spoken text, graceful fallback when no voice is available, and the pagehide cancel prevents ghost utterances. It is materially distinct from the catalogue: unlike Morris's sonification of source, Cage's performed silence, or the text-as-material pieces, this is orality — language spoken, never legible on screen.",
+  "reservations": "The chance/order axis is acknowledged but thin: the text is fixed and only the voice choice varies, so the P5 staging is more asserted than dramatized. The 'cheerful cynic' voice in the spoken text is slightly more earnest than the catalogue's dry wit — the closing lines lean toward the sentimental-adjacent. Novelty is high but not maximal: Web Speech API as art medium has prior art elsewhere on the web, though the anti-documentary framing is the genuine contribution.",
+  "revision_suggestion": "Consider letting the spoken text itself vary per visit (a small pool of Wilson-style statements, or a generative line) so the chance pole of P5 is actually felt rather than named. Tighten the closing lines of the utterance toward drier, more laconic phrasing to keep the cheerful-cynic register consistent with the catalogue.",
+  "jury_model": "minimax/minimax-m3"
+}

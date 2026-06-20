@@ -366,5 +366,13 @@
     "source": "Anish Kapoor / Vantablack exclusive licence (2016); Stuart Semple, Black 2.0/3.0 and the Pinkest Pink ('except Anish Kapoor'); Kazimir Malevich, Black Square (1915); Ad Reinhardt, black paintings; net.art / the costless copy",
     "mechanism": "Click triggers a local navigator.clipboard.writeText('#000000') that transfers the work's whole material to the viewer; the device's maximal switched-off black plus an open-licence label, no network or storage.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-20-oral-communication",
+    "title": "Oral Communication",
+    "year": 2026,
+    "source": "Ian Wilson, Oral Communication / The Discussions (1968– ); conceptual art / dematerialization of the art object; net.art (the browser as a copy machine made not to copy)",
+    "mechanism": "Local Web Speech API (SpeechSynthesis, offline-preferred voice) recites a JS-only string never inserted into the DOM, deliberately paired with the absence of recording, storage, and network.",
+    "status": "pending"
   }
 ]

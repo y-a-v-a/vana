@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Oral Communication</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: #0a0a0a;
+    color: #e7e2d8;
+    font: 16px/1.55 Georgia, "Times New Roman", serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8vh 6vw;
+    gap: 2.2rem;
+  }
+  /* The work is spoken, not written: the stage is deliberately empty. */
+  #stage {
+    min-height: 1.4em;
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+    text-transform: lowercase;
+    color: #6e6a62;
+  }
+  #stage.live { color: #e7e2d8; }
+  button {
+    background: none;
+    color: #e7e2d8;
+    border: 1px solid #5b574e;
+    border-radius: 0;
+    font: inherit;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    padding: 0.85rem 1.8rem;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease;
+  }
+  button:hover { background: #e7e2d8; color: #0a0a0a; }
+  button:disabled { opacity: 0.4; cursor: default; }
+  button:disabled:hover { background: none; color: #e7e2d8; }
+  .label {
+    border-top: 1px solid #211f1b;
+    padding: 1.4rem 6vw 1.8rem;
+    font-size: 0.74rem;
+    line-height: 1.7;
+    color: #7d786e;
+    letter-spacing: 0.01em;
+  }
+  .label b { color: #b7b1a6; font-weight: normal; }
+  .label .t { font-style: italic; color: #cfc9bd; }
+  a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <div id="stage" aria-live="polite">silence</div>
+  <button id="speak" type="button">Speak the work</button>
+</main>
+
+<footer class="label">
+  <span class="t">Oral Communication</span> &nbsp;·&nbsp; y-a-v-a, 2026 &nbsp;·&nbsp;
+  Medium: <b>the spoken word (Web Speech API, your device's own voice)</b> &nbsp;·&nbsp;
+  Edition: <b>none — not recorded, not written here, not stored, not transmitted</b><br>
+  After <b>Ian Wilson</b>, <i>Oral Communication</i> / <i>The Discussions</i> (1968– ), in which spoken
+  language is the sole medium and no documentation is permitted.<br>
+  No cookies, no trackers, no network requests, no personal data. Licence:
+  <b>CC BY-NC 4.0</b>. The words exist only while they are being said.
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // The artwork. It lives here, in memory, and is spoken into the room.
+  // It is never inserted into the DOM, never recorded, never stored, never sent.
+  var WORK = [
+    "This is a work of art.",
+    "It exists only while I am speaking it.",
+    "It is not written down on this page, and it is not being recorded.",
+    "When my voice stops, the work is finished, and nothing of it remains —",
+    "no file, no copy, no proof.",
+    "You cannot save it. You cannot sell it. You cannot show it to anyone who was not here.",
+    "You were simply present to hear it. That is the whole of the work."
+  ].join(" ");
+
+  var btn = document.getElementById("speak");
+  var stage = document.getElementById("stage");
+  var synth = window.speechSynthesis;
+
+  function setStage(text, live) {
+    stage.textContent = text;
+    stage.classList.toggle("live", !!live);
+  }
+
+  if (!synth || typeof SpeechSynthesisUtterance === "undefined") {
+    // A cheerful refusal: a documentation machine that cannot speak.
+    btn.disabled = true;
+    btn.textContent = "no voice available";
+    setStage("this device has no voice. the work cannot be spoken here. that, too, is the work.", false);
+    return;
+  }
+
+  // Prefer a local (offline) voice so nothing ever leaves the device.
+  function pickVoice() {
+    var voices = synth.getVoices() || [];
+    var local = voices.filter(function (v) { return v.localService; });
+    var pool = local.length ? local : voices;
+    var en = pool.filter(function (v) { return /^en/i.test(v.lang || ""); });
+    return (en[0] || pool[0] || null);
+  }
+
+  // Voices populate asynchronously in some browsers.
+  if (typeof synth.onvoiceschanged !== "undefined") {
+    synth.onvoiceschanged = function () { /* pickVoice() reads live at speak time */ };
+  }
+
+  var speaking = false;
+
+  function speak() {
+    if (speaking) return;
+    synth.cancel(); // never overlap; only one utterance can be "the work"
+    var u = new SpeechSynthesisUtterance(WORK);
+    var v = pickVoice();
+    if (v) u.voice = v;
+    u.rate = 0.92;
+    u.pitch = 1.0;
+    u.volume = 1.0;
+
+    u.onstart = function () {
+      speaking = true;
+      btn.disabled = true;
+      btn.textContent = "speaking…";
+      setStage("the work is being spoken", true);
+    };
+    var done = function () {
+      speaking = false;
+      btn.disabled = false;
+      btn.textContent = "Speak it again";
+      setStage("silence — nothing was kept", false);
+    };
+    u.onend = done;
+    u.onerror = done;
+
+    synth.speak(u);
+  }
+
+  btn.addEventListener("click", speak); // a user gesture: we do not speak unbidden — we serve
+
+  // Browsers discard queued speech on navigation; we add no persistence of our own.
+  window.addEventListener("pagehide", function () { try { synth.cancel(); } catch (e) {} });
+})();
+</script>
+</body>
+</html>
