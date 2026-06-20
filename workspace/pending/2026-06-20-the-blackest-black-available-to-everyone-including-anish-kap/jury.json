@@ -1,0 +1,41 @@
+{
+  "work_id": "2026-06-20-the-blackest-black-available-to-everyone-including-anish-kap",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 42,
+  "verdict": "strong",
+  "references_named": [
+    "Anish Kapoor / Vantablack exclusive licence (2016)",
+    "Stuart Semple, Black 2.0/3.0 and the Pinkest Pink",
+    "Kazimir Malevich, Black Square (1915)",
+    "Ad Reinhardt, black paintings",
+    "net.art / the costless copy"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The work cleanly enacts its argument: the click is the gift, the clipboard transfer is the open licence made literal, and the wall-label staging frames the readymade of a market scandal. The double-coding lands — a casual visitor gets the gag of a black page that says 'it's yours,' while the literate viewer reads the Kapoor/Semple feud, the monochrome lineage (Malevich, Reinhardt), and net.art's anti-market ethic. Restraint is exemplary: a black field, a label, one click. The mechanism (clipboard grant) is genuinely web-native and could not exist as a print. Distinct from Abstract Painting (Backlit), which interrogates reproduction-as-erasure; this one interrogates ownership-as-fiction via a different mechanism and source.",
+  "reservations": "The novelty is real but the source material (Kapoor/Semple) is well-trodden internet lore; the work's freshness depends on the mechanism rather than the found-object. The session counter is a nice touch but the 'given away N times' line slightly over-explains the scarcity-collapse gag that the clipboard already performs.",
+  "revision_suggestion": "Consider letting the counter be silent or visual-only (a tiny dot that increments) so the scarcity-collapse punchline lands without being narrated; the clipboard grant alone already carries the argument.",
+  "jury_model": "minimax/minimax-m3"
+}

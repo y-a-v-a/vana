@@ -358,5 +358,13 @@
     "source": "Hans Haacke, Condensation Cube (1963-65); Laszlo Moholy-Nagy, Telephone Pictures (1922); net.art (OS/browser as material)",
     "mechanism": "matchMedia preference queries (prefers-color-scheme/contrast/reduced-motion/inverted-colors/forced-colors/color-gamut/dynamic-range) with live change events drive CSS custom properties and a Haacke-style real-time data plate; no controls, no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-20-the-blackest-black-available-to-everyone-including-anish-kap",
+    "title": "The Blackest Black (available to everyone, including Anish Kapoor)",
+    "year": 2026,
+    "source": "Anish Kapoor / Vantablack exclusive licence (2016); Stuart Semple, Black 2.0/3.0 and the Pinkest Pink ('except Anish Kapoor'); Kazimir Malevich, Black Square (1915); Ad Reinhardt, black paintings; net.art / the costless copy",
+    "mechanism": "Click triggers a local navigator.clipboard.writeText('#000000') that transfers the work's whole material to the viewer; the device's maximal switched-off black plus an open-licence label, no network or storage.",
+    "status": "pending"
   }
 ]

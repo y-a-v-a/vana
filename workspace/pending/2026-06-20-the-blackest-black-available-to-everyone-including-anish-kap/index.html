@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Blackest Black (available to everyone, including Anish Kapoor)</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: #000;               /* the deepest your screen can render: every subpixel off */
+    color: #5a5a5a;
+    font: 400 15px/1.55 ui-serif, Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+    cursor: crosshair;
+  }
+  main {
+    position: fixed; inset: 0;
+    display: block;
+    outline: none;
+  }
+  /* museum wall label, kept quiet so the black is the work */
+  figure {
+    position: fixed;
+    left: clamp(18px, 5vw, 64px);
+    bottom: clamp(18px, 5vh, 56px);
+    margin: 0;
+    max-width: 34rem;
+  }
+  h1 { font-size: 1.15rem; font-weight: 400; margin: 0; color: #767676; letter-spacing: .01em; }
+  .sub { font-style: italic; color: #4f4f4f; margin: .15rem 0 .9rem; }
+  .spec { margin: 0; font-size: .82rem; color: #444; }
+  .spec b { font-weight: 400; color: #6a6a6a; }
+  p.note { font-size: .9rem; color: #555; margin: .9rem 0 0; }
+  .swatch { color: #6f6f6f; }
+  #take {
+    margin-top: .9rem;
+    font: inherit; font-size: .85rem;
+    color: #7a7a7a; background: transparent;
+    border: 1px solid #333; padding: .35rem .7rem;
+    cursor: pointer; border-radius: 2px;
+  }
+  #take:hover, #take:focus-visible { color: #aaa; border-color: #555; outline: none; }
+  #feedback { display:block; min-height: 1.2em; margin-top: .7rem; font-size: .85rem; color: #6a6a6a; }
+  footer {
+    position: fixed; right: clamp(18px,5vw,64px); bottom: clamp(18px,5vh,56px);
+    font-size: .72rem; color: #303030; text-align: right; max-width: 18rem;
+  }
+  a { color: #4a4a4a; }
+  @media (max-width: 640px) {
+    footer { position: static; margin: 2rem clamp(18px,5vw,64px); text-align: left; }
+    figure { position: static; margin: 14vh auto 0; padding: 0 clamp(18px,5vw,64px); }
+  }
+</style>
+</head>
+<body>
+  <!-- The work is the field of black. Click it to take the colour. -->
+  <main id="field" tabindex="0" role="button" aria-label="Take the blackest black"></main>
+
+  <figure>
+    <h1>The Blackest Black</h1>
+    <div class="sub">(available to everyone, including Anish Kapoor)</div>
+    <p class="spec"><b>y-a-v-a</b>, 2026 &middot; after Anish Kapoor &amp; Stuart Semple</p>
+    <p class="spec">Medium: pixels, switched off &middot; Edition: everyone &middot; <span class="swatch">#000000</span></p>
+    <p class="note">In 2016 Anish Kapoor bought the exclusive artistic rights to Vantablack,
+      the blackest black on Earth. Stuart Semple made his blacks available to everyone
+      <em>except</em> Anish Kapoor. This black — the deepest your screen can render, every
+      subpixel off — is released to everyone. Kapoor included. It was always yours.</p>
+    <button id="take" type="button">Take this black</button>
+    <span id="feedback" aria-live="polite"></span>
+  </figure>
+
+  <footer>
+    This work is licensed CC BY 4.0 &middot; y-a-v-a (yet another visual artist).<br>
+    The colour #000000 is in the public domain — by nature, it never could be otherwise.<br>
+    No cookies, no trackers, no requests. Nothing leaves your machine.
+  </footer>
+
+<script>
+(function () {
+  "use strict";
+  var field = document.getElementById("field");
+  var take = document.getElementById("take");
+  var feedback = document.getElementById("feedback");
+  var given = 0;
+
+  function grant() {
+    given++;
+    var msg;
+    // Try to make the gift real: hand the colour straight to the clipboard, locally.
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText("#000000").then(function () {
+        say("#000000 — copied. It's yours. (So is everyone else's.)");
+      }).catch(function () {
+        say("#000000 — yours. (Select it freely; it was never owned.)");
+      });
+      return;
+    }
+    say("#000000 — yours. (Select it freely; it was never owned.)");
+  }
+
+  function say(text) {
+    var tail = given > 1 ? "  Given away " + given + " times this visit. There is no less of it." : "";
+    feedback.textContent = text + tail;
+  }
+
+  field.addEventListener("click", grant);
+  take.addEventListener("click", function (e) { e.stopPropagation(); grant(); });
+  field.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); grant(); }
+  });
+})();
+</script>
+</body>
+</html>
