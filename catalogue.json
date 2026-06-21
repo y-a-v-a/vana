@@ -333,7 +333,7 @@
     "year": 2026,
     "source": "Mel Bochner, Measurement: Room (1969); Mel Bochner, Measurement Series (1968-69); net.art (viewport as material)",
     "mechanism": "window.innerWidth/innerHeight (and devicePixelRatio) read live and redrawn as arrowed dimension lines on every resize; no fixed size, nothing stored, no network.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-19-the-vertical-earth-kilometer",
