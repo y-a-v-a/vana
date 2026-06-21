@@ -6,21 +6,21 @@
     "G3": true,
     "G4": true,
     "G5": true,
-    "G6": true
+    "G6": false
   },
   "scores": {
-    "novelty": 3,
+    "novelty": 1,
     "nuance": 4,
-    "narrative": 4,
+    "narrative": 3,
     "craft": 4,
     "wit": 4
   },
-  "weighted_total": 37,
-  "verdict": "borderline",
+  "weighted_total": 29,
+  "verdict": "reject",
   "references_named": [
     "Carl Andre, Equivalent VIII (1966)",
     "Carl Andre, Equivalent I–VIII (1966)",
-    "Tate acquisition / 'pile of bricks' press scandal (1972/1976)",
+    "Tate acquisition / the 'pile of bricks' press scandal (1972/1976)",
     "Marcel Duchamp / the readymade"
   ],
   "principles_invoked": [
@@ -30,8 +30,8 @@
     "P6",
     "P7"
   ],
-  "rationale": "A clean digital readymade of Andre's Equivalents that earns its P1: the brick count is hard-coded and invariant, so the mechanism literally cannot produce a 'richer' arrangement — equivalence is enforced, not described. Double-coding is strong (surface: tidy grid that reshuffles; depth: the Tate scandal and the readymade's value question), and the dry running counter ('rearranged N times. still 120 bricks. still equivalent.') carries the wit. Sits squarely on the chance/order axis and answers the Koons slot machine as the closest sibling in the P6 market-critique lineage.",
-  "reservations": "Novelty is moderate: the mechanism (click to re-grid) is web-native but not ontologically radical — it doesn't push into territory the catalogue hasn't already mapped (cf. Mondrian favicon, Zone de Sensibilité receipt). The resize handler duplicates the render logic, which is a minor craft smell. The work is somewhat safe — it illustrates Andre's point rather than surprising the viewer with a new one.",
-  "revision_suggestion": "Push the equivalence past description into structural surprise: animate the bricks physically migrating from one footprint to the next so the rearrangement itself becomes the artwork, or make the total area visibly constant across all eight layouts (e.g., a faint outline of the bounding box that persists through reshuffles). Either move would lift novelty from solid to strong without breaking the minimal gesture.",
+  "rationale": "The candidate is functionally the same work as the existing catalogue piece \"Equivalent (Any of the Eight)\" (2026): identical mechanism (per-click DOM re-render of a grid of identical bricks with a hard-coded invariant count and variable rectangular footprint), identical source (Andre's Equivalents + Tate scandal + the readymade), and the new argument is a footnote/clarification of the original rather than a new node. The motivation itself describes the work as a \"refinement\" of the prior piece. Under G6's requirement of material distinctness in source, mechanism, or argument, none of the three is materially changed — a different footprint total and divisor count yield a different number of shapes, but the conceptual gesture, the HTML/CSS/JS skeleton, the wall-plate text, and the running counter are all carried over.",
+  "reservations": "G6 failure: this is a parameter fork of an existing catalogue work, not a new piece. The lineage it claims to extend is the lineage it duplicates. The 'family size is a function of arithmetic' argument is genuinely interesting but reads as a sharpening of the prior work's joke rather than a separate artistic statement. As an 'edition' or follow-up it might be defensible, but the DNA treats materially-similar works as duplicates.",
+  "revision_suggestion": "If the arithmetic-of-equivalence insight is the real work here, separate it cleanly from the prior piece: keep the 360-brick constant and the per-click reshuffle, but change the mechanism to something the original does not already do — e.g., a visible divisor-table or a side-by-side comparison of the n=60 and n=180 families that stages the argument that Andre's 'eight' was arithmetic, not aesthetic. Alternatively, drop the brick vocabulary and rebuild the insight in a form (table, endpoint, feed) that the existing catalogue does not already host.",
   "jury_model": "minimax/minimax-m3"
 }

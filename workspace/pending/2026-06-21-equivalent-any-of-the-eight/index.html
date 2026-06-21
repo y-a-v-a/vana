@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Equivalent (Any of the Eight)</title>
+<title>Equivalent (Any of the Fourteen)</title>
 <meta name="author" content="y-a-v-a">
 <style>
   :root{
@@ -49,6 +49,7 @@
   }
   #label .roman{font-size:1.15rem;letter-spacing:.04em;}
   #label .count{font-style:italic;color:#555;}
+  #label .roman .of{color:#8a8a8a;font-style:italic;font-size:.82em;}
   #label .plate{
     margin-top:10px;font-size:.82rem;color:#5a5a5a;line-height:1.45;
   }
@@ -60,18 +61,21 @@
 </style>
 </head>
 <body title="Click to rearrange">
-  <div id="plan" aria-label="A plan view of 120 firebricks"></div>
+  <div id="plan" aria-label="A plan view of 180 firebricks"></div>
   <div id="label">
-    <div class="roman" id="roman">Equivalent&nbsp;I</div>
-    <div>120&nbsp;firebricks &middot; two courses &middot; <span id="foot"></span></div>
-    <div class="count" id="count">arranged once. still 120 bricks. still equivalent.</div>
+    <div class="roman" id="roman">Equivalent&nbsp;I <span class="of">of XIV</span></div>
+    <div>360&nbsp;firebricks &middot; two courses &middot; <span id="foot"></span></div>
+    <div class="count" id="count">arranged once. still 360 bricks. still equivalent.</div>
     <div class="plate">
-      After Carl Andre, <em>Equivalent&nbsp;VIII</em> (1966) &mdash; one of eight stacks of
-      120&nbsp;bricks, each a different rectangle, all the same matter. Tate bought it in 1972;
-      the press supplied the outrage. The price was the scandal, never the bricks.
+      After Carl Andre, <em>Equivalent&nbsp;VIII</em> (1966). Andre's rule was plain: stack the
+      bricks two courses high and keep every rectangle whose shortest side is at least three
+      bricks. For his footprint of sixty that rule yields exactly eight. Feed the same rule a
+      more divisible number and it yields more &mdash; here, fourteen. The matter never changes;
+      only the count of shapes it consents to. Tate bought one in 1972; the press supplied the
+      outrage. The price was the scandal, never the bricks.
     </div>
     <div class="cc">
-      <strong>y-a-v-a</strong>, <em>Equivalent (Any of the Eight)</em>, 2026 &middot; pixels on screen.
+      <strong>y-a-v-a</strong>, <em>Equivalent (Any of the Fourteen)</em>, 2026 &middot; pixels on screen.
       After Carl Andre. Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC&nbsp;BY-SA&nbsp;4.0</a>.
       No cookies, no tracking, nothing stored. <span class="hint">Click anywhere to rearrange.</span>
     </div>
@@ -80,48 +84,71 @@
 <script>
 (function(){
   "use strict";
-  // 120 bricks, laid 2 courses high. Each course is 60 bricks, shown here in plan.
-  // The eight Equivalents are the footprints of a 60-brick course (and their transposes).
-  // No arrangement uses more or fewer bricks than another: they are equivalent.
-  var FOOTPRINTS = [
-    [3,20],[20,3],   // I, II
-    [4,15],[15,4],   // III, IV
-    [5,12],[12,5],   // V, VI
-    [6,10],[10,6]    // VII, VIII
-  ];
-  var ROMAN = ["I","II","III","IV","V","VI","VII","VIII"];
-  var BRICK_RATIO = 2; // a brick reads twice as long as it is wide
+  // Andre's own rule for the Equivalents: stack the bricks two courses high and take
+  // every rectangle whose shortest side is at least three bricks. Applied to a footprint
+  // of 60 it yields exactly his eight. Applied to a more divisible number it yields more —
+  // the rule, and the equivalence, stay his; only the count of shapes grows. We feed it 180.
+  var FOOTPRINT  = 180;               // bricks per course, shown in plan
+  var COURSES    = 2;                 // Andre stacked two
+  var TOTAL      = FOOTPRINT*COURSES; // 360 firebricks, invariant
+  var MIN_SIDE   = 3;                 // Andre's selection rule
+  var BRICK_RATIO = 2;                // a brick reads twice as long as it is wide
 
-  var plan = document.getElementById("plan");
+  // Every rectangle (cols × rows) whose product is FOOTPRINT and whose shortest side >= 3.
+  function footprints(n){
+    var out = [];
+    for(var c=1;c<=n;c++){
+      if(n % c) continue;
+      var r = n/c;
+      if(c < MIN_SIDE || r < MIN_SIDE) continue;
+      out.push([c,r]);
+    }
+    out.sort(function(a,b){
+      var sa = Math.min(a[0],a[1]), sb = Math.min(b[0],b[1]);
+      return sa - sb || a[0] - b[0];   // read the family from squat to tall, transposes paired
+    });
+    return out;
+  }
+
+  function toRoman(num){
+    var map = [[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],
+      [50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];
+    var s = "";
+    for(var i=0;i<map.length;i++){ while(num>=map[i][0]){ s += map[i][1]; num -= map[i][0]; } }
+    return s;
+  }
+
+  var FOOTPRINTS = footprints(FOOTPRINT);
+  var N = FOOTPRINTS.length;
+  var TOTAL_ROMAN = toRoman(N);
+
+  var plan    = document.getElementById("plan");
   var romanEl = document.getElementById("roman");
-  var footEl = document.getElementById("foot");
+  var footEl  = document.getElementById("foot");
   var countEl = document.getElementById("count");
   var times = 0;
   var current = -1;
 
+  plan.setAttribute("aria-label", "A plan view of "+FOOTPRINT+" firebricks");
+
   function pick(){
-    var i = Math.floor(Math.random()*FOOTPRINTS.length);
-    if(i===current && FOOTPRINTS.length>1){ i = (i+1)%FOOTPRINTS.length; }
+    var i = Math.floor(Math.random()*N);
+    if(i===current && N>1){ i = (i+1)%N; }
     return i;
   }
 
-  function render(){
-    var i = pick();
-    current = i;
+  // Fit the plan inside the viewport; each brick is BRICK_RATIO long, 1 wide.
+  function layout(i){
     var cols = FOOTPRINTS[i][0];   // bricks across
     var rows = FOOTPRINTS[i][1];   // bricks deep
-    var count = cols*rows;         // always 60 per course
+    var count = cols*rows;         // always FOOTPRINT
 
-    // fit the plan inside the viewport; each brick is BRICK_RATIO long, 1 wide.
     var maxW = Math.min(window.innerWidth*0.9, 900);
     var maxH = window.innerHeight*0.55;
-    var unitFromW = maxW / cols;            // width of one brick
-    var unitFromH = maxH / (rows*BRICK_RATIO===0?1: (rows/BRICK_RATIO));
-    // brick width = u, brick height = u/BRICK_RATIO
     var u = Math.min(maxW/cols, (maxH/rows)*BRICK_RATIO);
-    u = Math.max(6, Math.floor(u));
+    u = Math.max(4, Math.floor(u));
     var bw = u;
-    var bh = Math.max(3, Math.floor(u/BRICK_RATIO));
+    var bh = Math.max(2, Math.floor(u/BRICK_RATIO));
 
     plan.style.gridTemplateColumns = "repeat("+cols+","+bw+"px)";
     plan.style.gridAutoRows = bh+"px";
@@ -133,34 +160,23 @@
       frag.appendChild(d);
     }
     plan.appendChild(frag);
-
-    romanEl.innerHTML = "Equivalent&nbsp;"+ROMAN[i];
     footEl.textContent = cols+" × "+rows+" plan";
+  }
+
+  function render(){
+    var i = pick();
+    current = i;
+    layout(i);
+    romanEl.innerHTML = "Equivalent&nbsp;"+toRoman(i+1)+" <span class=\"of\">of "+TOTAL_ROMAN+"</span>";
     times++;
     countEl.textContent = times===1
-      ? "arranged once. still 120 bricks. still equivalent."
-      : "rearranged "+times+" times. still 120 bricks. still equivalent.";
+      ? "arranged once. still "+TOTAL+" bricks. still equivalent."
+      : "rearranged "+times+" times. still "+TOTAL+" bricks. still equivalent.";
   }
 
   document.body.addEventListener("click", render);
   window.addEventListener("resize", function(){
-    // keep the same Equivalent, just refit
-    var saved = current; current = -1;
-    var keep = saved;
-    // re-render but force the same footprint
-    (function(){
-      var i = keep<0?0:keep; current=i;
-      var cols=FOOTPRINTS[i][0],rows=FOOTPRINTS[i][1],count=cols*rows;
-      var maxW=Math.min(window.innerWidth*0.9,900),maxH=window.innerHeight*0.55;
-      var u=Math.min(maxW/cols,(maxH/rows)*BRICK_RATIO);u=Math.max(6,Math.floor(u));
-      var bw=u,bh=Math.max(3,Math.floor(u/BRICK_RATIO));
-      plan.style.gridTemplateColumns="repeat("+cols+","+bw+"px)";
-      plan.style.gridAutoRows=bh+"px";
-      plan.textContent="";
-      var frag=document.createDocumentFragment();
-      for(var b=0;b<count;b++){var d=document.createElement("div");d.className="brick";frag.appendChild(d);}
-      plan.appendChild(frag);
-    })();
+    if(current>=0){ layout(current); }   // keep the same Equivalent, just refit
   });
 
   render();

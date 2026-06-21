@@ -393,10 +393,10 @@
   },
   {
     "id": "2026-06-21-equivalent-any-of-the-eight",
-    "title": "Equivalent (Any of the Eight)",
+    "title": "Equivalent (Any of the Fourteen)",
     "year": 2026,
     "source": "Carl Andre, Equivalent VIII (1966); Carl Andre, Equivalent I–VIII (1966); Tate acquisition / the 'pile of bricks' press scandal (1972/1976); Marcel Duchamp / the readymade",
-    "mechanism": "Per-click client-side DOM re-render that varies only the rectangular footprint while the brick count stays hard-coded and constant; no storage, no network.",
+    "mechanism": "Per-click client-side DOM re-render that varies only the rectangular footprint while the brick count stays hard-coded and constant; the footprints are computed by factoring a divisor-rich number (180) under Andre's shortest-side-≥-3 rule; no storage, no network.",
     "status": "pending"
   },
   {
