@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>During the Connection the Gallery Will Be Closed</title>
+<style>
+  :root{
+    --ink:#e8e6df;
+    --bg:#0b0b0b;
+    --dim:#7d7a72;
+    --line:#262626;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif;
+    display:flex;
+    flex-direction:column;
+    min-height:100%;
+    transition:background .9s ease, color .9s ease;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* OPEN: the gallery only appears once you are off the network */
+  body.open{
+    --ink:#1c1b18;
+    --bg:#f4f3ee;
+    --dim:#8a877e;
+    --line:#dedbd2;
+  }
+
+  .door{
+    position:fixed;top:18px;left:0;right:0;
+    display:flex;justify-content:center;align-items:center;gap:.6em;
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--dim);
+  }
+  .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:#b1483f;
+    box-shadow:0 0 0 0 rgba(177,72,63,.5);
+    animation:pulse 2.4s infinite;
+  }
+  body.open .dot{background:#3a7d4f;animation:none}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(177,72,63,.45)}
+    70%{box-shadow:0 0 0 7px rgba(177,72,63,0)}
+    100%{box-shadow:0 0 0 0 rgba(177,72,63,0)}
+  }
+
+  main{
+    flex:1;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;
+    padding:clamp(28px,7vw,80px);
+  }
+  .state{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-weight:700;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-size:clamp(34px,9vw,84px);
+    line-height:1;
+    margin-bottom:.5em;
+  }
+  .lede{
+    font-size:clamp(18px,3.4vw,26px);
+    font-style:italic;
+    max-width:22em;
+    line-height:1.45;
+    margin-bottom:1.3em;
+  }
+  .body{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:14px;line-height:1.7;
+    max-width:30em;color:var(--dim);
+  }
+  .clock{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-variant-numeric:tabular-nums;
+    font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--dim);
+    margin-top:1.6em;min-height:1.2em;
+  }
+  /* show only the panel matching the current connection state */
+  .when-online{display:block}
+  .when-offline{display:none}
+  body.open .when-online{display:none}
+  body.open .when-offline{display:block}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:16px clamp(20px,5vw,60px);
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:11px;line-height:1.7;letter-spacing:.04em;
+    color:var(--dim);
+    text-align:center;
+    transition:border-color .9s ease;
+  }
+  footer a{color:inherit}
+</style>
+</head>
+<body>
+  <div class="door">
+    <span class="dot" aria-hidden="true"></span>
+    <span id="door-label">Connected · gallery closed</span>
+  </div>
+
+  <main>
+    <div class="when-online">
+      <div class="state">Closed</div>
+      <p class="lede">During the connection the gallery will be closed.</p>
+      <p class="body">
+        This exhibition is on view only while you are disconnected from the
+        internet. Switch off your network — airplane mode, unplug, drop the
+        Wi&#8209;Fi — and the gallery opens. Reconnect and it closes again.
+        Nothing is sent or fetched to know this; the page simply asks the
+        browser whether you are still online, and believes the answer.
+      </p>
+    </div>
+
+    <div class="when-offline">
+      <div class="state">Open</div>
+      <p class="lede">The gallery is open. There is no one here but you, and no work but this.</p>
+      <p class="body">
+        You left the internet to arrive. Whatever the network promised this
+        artwork would be, here it is: an empty room you reached by disconnecting.
+        No record is kept of your visit. Reconnect and the door swings shut.
+      </p>
+      <p class="clock" id="clock"></p>
+    </div>
+  </main>
+
+  <footer>
+    <strong>During the Connection the Gallery Will Be Closed</strong> (2026) ·
+    y-a-v-a, after Robert Barry, <em>During the exhibition the gallery will be closed</em> (Amsterdam, 1969).<br>
+    Lives only in the browser. No cookies, no tracking, no network requests.
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+  </footer>
+
+<script>
+(function(){
+  var body = document.body;
+  var doorLabel = document.getElementById('door-label');
+  var clock = document.getElementById('clock');
+  var offlineSince = null;
+  var timer = null;
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+  function tick(){
+    if (offlineSince === null){ clock.textContent = ''; return; }
+    var s = Math.floor((Date.now() - offlineSince) / 1000);
+    var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    clock.textContent = 'Off the network for ' +
+      (h ? pad(h) + ':' : '') + pad(m) + ':' + pad(sec);
+  }
+
+  function render(){
+    var online = navigator.onLine;
+    if (online){
+      body.classList.remove('open');
+      doorLabel.textContent = 'Connected · gallery closed';
+      offlineSince = null;
+      if (timer){ clearInterval(timer); timer = null; }
+      clock.textContent = '';
+    } else {
+      body.classList.add('open');
+      doorLabel.textContent = 'Disconnected · gallery open';
+      if (offlineSince === null){ offlineSince = Date.now(); }
+      tick();
+      if (!timer){ timer = setInterval(tick, 1000); }
+    }
+  }
+
+  window.addEventListener('online', render);
+  window.addEventListener('offline', render);
+  render();
+})();
+</script>
+</body>
+</html>

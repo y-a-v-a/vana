@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-21-during-the-connection-the-gallery-will-be-closed",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 45,
+  "verdict": "strong",
+  "references_named": [
+    "Robert Barry, During the exhibition the gallery will be closed (1969)",
+    "Lee Lozano, General Strike Piece (1969)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism IS the concept with no decoration: the browser's navigator.onLine signal — a piece of platform plumbing normally used to scold you — is elevated to institutional door state. Concept and execution collapse perfectly (P1, P3). Double-coding lands cleanly: surface gag is the literal inversion of Barry's 1969 instruction, deeper reading is the net.art paradox of an anti-institutional medium that needs you to leave the network. The 'open' state is a deliberately empty room, which is the right amount of restraint. Voice is textbook cheerful-cynic: 'You left the internet to arrive.' Attribution, license, and zero-network delivery all conform.",
+  "reservations": "The inversion of Barry, while exact, is the obvious move — a jury that values surprise may dock novelty. The author also candidly notes the piece sits on presence/absence rather than the chance/order axis (P5); that's defensible given the source, but worth flagging for the twenty-year argument.",
+  "revision_suggestion": null,
+  "jury_model": "minimax/minimax-m3"
+}
