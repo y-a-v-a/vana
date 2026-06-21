@@ -389,7 +389,7 @@
     "year": 2026,
     "source": "Robert Barry, During the exhibition the gallery will be closed (1969); Lee Lozano, General Strike Piece (1969); net.art",
     "mechanism": "navigator.onLine plus online/offline events toggle the page between a closed and an open gallery; no requests, no storage.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-21-equivalent-any-of-the-eight",
