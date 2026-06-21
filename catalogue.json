@@ -405,6 +405,6 @@
     "year": 2026,
     "source": "Gustav Metzger, Acid Action Painting (1960); Gustav Metzger, Auto-Destructive Art manifesto (1959); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Jean Tinguely, Homage to New York (1960)",
     "mechanism": "Per-visit requestAnimationFrame removes real DOM cells in a chance-shuffled order over a declared finite lifespan, then strips every element under <body> — picture, label, and the script's own node — leaving an empty document; the only surviving trace is the <title> in the head, flipped to '(deleted — reload to resurrect)'; reload restores a perfect copy; no storage, no network.",
-    "status": "pending"
+    "status": "published"
   }
 ]
