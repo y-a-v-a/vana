@@ -237,7 +237,7 @@
     "year": 2026,
     "source": "Robert Morris, Box with the Sound of Its Own Making (1961); process art; net.art (page as its own medium)",
     "mechanism": "Web Audio API sonifies document.documentElement.outerHTML one character at a time, client-side, no recording and no network; the source it sings includes the script doing the singing.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-18-erased-no-undo",
