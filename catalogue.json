@@ -398,5 +398,13 @@
     "source": "Carl Andre, Equivalent VIII (1966); Carl Andre, Equivalent I–VIII (1966); Tate acquisition / the 'pile of bricks' press scandal (1972/1976); Marcel Duchamp / the readymade",
     "mechanism": "Per-click client-side DOM re-render that varies only the rectangular footprint while the brick count stays hard-coded and constant; no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-21-acid-action-painting-reload-to-resurrect",
+    "title": "Acid Action Painting (Reload to Resurrect)",
+    "year": 2026,
+    "source": "Gustav Metzger, Acid Action Painting (1960); Gustav Metzger, Auto-Destructive Art manifesto (1959); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Jean Tinguely, Homage to New York (1960)",
+    "mechanism": "Per-visit requestAnimationFrame removes real DOM cells in a chance-shuffled order over a declared finite lifespan, then deletes the picture and the script's own source; reload restores a perfect copy; no storage, no network.",
+    "status": "pending"
   }
 ]

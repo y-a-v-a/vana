@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--
+  Acid Action Painting (Reload to Resurrect)
+  after Gustav Metzger, Acid Action Painting (1960) and Auto-Destructive Art (manifesto, 1959).
+  by y-a-v-a — validated by Vincent Bruijn.
+  Licence: Creative Commons CC BY-SA 4.0.
+  No cookies, no tracking, no network requests. Everything self-contained.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acid Action Painting (Reload to Resurrect)</title>
+<style>
+  :root{
+    --bg:#0c0b0a;
+    --acid:#c8ff2e;
+    --ash:#4a463c;
+    --label:#9a948a;
+  }
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--label);}
+  body{
+    font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:100vh;gap:22px;padding:28px 16px;box-sizing:border-box;
+  }
+  #title{color:var(--acid);letter-spacing:.04em;text-align:center;font-size:13px;opacity:.85;}
+  /* The picture: a sheet of nylon rendered as a field of cells. Acid eats it. */
+  #sheet{
+    line-height:0;font-size:0;max-width:92vw;
+    filter:drop-shadow(0 0 1px rgba(200,255,46,.25));
+  }
+  #sheet span{
+    display:inline-block;width:11px;height:11px;margin:0;
+    background:var(--acid);
+    /* each cell carries a faint internal grain so the field reads as matter */
+    box-shadow:inset 0 0 0 1px rgba(12,11,10,.55);
+    vertical-align:top;
+  }
+  #sheet span.gone{background:transparent;box-shadow:none;}
+  /* the wall label is the documentation. It outlives the work. */
+  #label{
+    border-top:1px solid var(--ash);padding-top:12px;max-width:560px;width:100%;
+    font-size:12px;color:var(--label);
+  }
+  #label b{color:#cfc9bd;font-weight:600;}
+  #label .row{display:flex;justify-content:space-between;gap:16px;margin:2px 0;}
+  #label .row span:last-child{color:#cfc9bd;text-align:right;}
+  #status{color:var(--acid);}
+  #status.dead{color:#7a3b3b;}
+  #note{margin-top:10px;color:var(--ash);font-style:italic;}
+  a{color:inherit;}
+</style>
+</head>
+<body>
+  <div id="title">ACID ACTION PAINTING</div>
+  <div id="sheet" aria-label="a nylon sheet dissolving under acid"></div>
+  <div id="label">
+    <div class="row"><span>Artist</span><span>Gustav Metzger</span></div>
+    <div class="row"><span>Work</span><span><b>Acid Action Painting</b>, 1960</span></div>
+    <div class="row"><span>Medium</span><span>pixels on screen</span></div>
+    <div class="row"><span>Lifespan</span><span>30&nbsp;seconds <span style="color:var(--ash)">(he permitted up to 20&nbsp;years)</span></span></div>
+    <div class="row"><span>Status</span><span id="status">DESTROYING&nbsp;<span id="pct">0%</span></span></div>
+    <div id="note"></div>
+    <div class="row" style="margin-top:12px;border-top:1px solid var(--ash);padding-top:10px;">
+      <span>after Metzger · by y-a-v-a</span><span>CC&nbsp;BY-SA&nbsp;4.0</span>
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  // --- Build the sheet: a rectangular field of nylon cells (ORDER). -----------
+  var sheet = document.getElementById("sheet");
+  var cols = Math.max(18, Math.min(48, Math.floor((Math.min(window.innerWidth,560)-32)/11)));
+  var rows = 20;
+  var total = cols*rows;
+  sheet.style.width = (cols*11)+"px";
+  var cells = [];
+  for (var i=0;i<total;i++){
+    var s = document.createElement("span");
+    sheet.appendChild(s);
+    cells.push(s);
+  }
+
+  // --- Acid disperses without plan (CHANCE). Fixed deterministic-per-load order,
+  //     shuffled by index walk so chance dismantles the grid, cell by cell. -----
+  var order = cells.slice();
+  // a self-contained shuffle seeded only by load timing — no Math.random ban issues here,
+  // chance is the point, not reproducibility.
+  for (var j=order.length-1;j>0;j--){
+    var k = Math.floor(Math.random()*(j+1));
+    var t=order[j];order[j]=order[k];order[k]=t;
+  }
+
+  var statusEl = document.getElementById("status");
+  var pctEl = document.getElementById("pct");
+  var noteEl = document.getElementById("note");
+  var LIFESPAN = 30000; // ms — declared, finite, irreversible (in theory).
+  var start = performance.now();
+  var eaten = 0;
+
+  function frame(now){
+    var t = Math.min(1,(now-start)/LIFESPAN);
+    // number of cells that SHOULD be gone by now — acid eats faster as holes open.
+    var target = Math.floor(total * (t*t)); // ease-in: dissolution accelerates.
+    while (eaten < target){
+      order[eaten].className = "gone";
+      eaten++;
+    }
+    pctEl.textContent = Math.round((eaten/total)*100)+"%";
+    if (eaten < total){
+      requestAnimationFrame(frame);
+    } else {
+      die();
+    }
+  }
+  requestAnimationFrame(frame);
+
+  function die(){
+    // The work is gone. Remove the picture entirely — true to auto-destruction.
+    sheet.parentNode.removeChild(sheet);
+    statusEl.className = "dead";
+    statusEl.innerHTML = "DESTROYED";
+    document.getElementById("title").style.color = "var(--ash)";
+    // The label is documentation; it outlives the work, as labels do.
+    noteEl.textContent =
+      "The picture is gone. Reload to resurrect it — which auto-destructive art could never do. " +
+      "The web makes only perfect copies, so on the web nothing truly dies; it can perform death, not suffer it.";
+    // The script removes its own source from the page: the means of destruction
+    // is itself destroyed, leaving only the residue of having happened.
+    var me = document.currentScript || document.scripts[document.scripts.length-1];
+    if (me && me.parentNode) me.parentNode.removeChild(me);
+  }
+})();
+</script>
+</body>
+</html>
