@@ -390,5 +390,13 @@
     "source": "Robert Barry, During the exhibition the gallery will be closed (1969); Lee Lozano, General Strike Piece (1969); net.art",
     "mechanism": "navigator.onLine plus online/offline events toggle the page between a closed and an open gallery; no requests, no storage.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-21-equivalent-any-of-the-eight",
+    "title": "Equivalent (Any of the Eight)",
+    "year": 2026,
+    "source": "Carl Andre, Equivalent VIII (1966); Carl Andre, Equivalent I–VIII (1966); Tate acquisition / the 'pile of bricks' press scandal (1972/1976); Marcel Duchamp / the readymade",
+    "mechanism": "Per-click client-side DOM re-render that varies only the rectangular footprint while the brick count stays hard-coded and constant; no storage, no network.",
+    "status": "pending"
   }
 ]
