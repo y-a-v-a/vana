@@ -245,7 +245,7 @@
     "year": 2026,
     "source": "Robert Rauschenberg, Erased de Kooning Drawing (1953); Willem de Kooning; Marcel Duchamp / the readymade",
     "mechanism": "Destructive canvas compositing (destination-out) you perform by hand, with the erased state written irreversibly to localStorage and Ctrl+Z refused — the web's undo withheld.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-18-if-i-say-so",
