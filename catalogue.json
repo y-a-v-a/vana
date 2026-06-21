@@ -277,7 +277,7 @@
     "year": 2026,
     "source": "Ad Reinhardt, Abstract Painting (1960-66); Ad Reinhardt, Art-as-Art dogma; Kazimir Malevich, Black Square (1915); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "Canvas renders a near-threshold tinted black cross with no fixed per-device appearance; an on-demand canvas.toDataURL('image/jpeg',0.4) round-trip quantizes the colored blacks back to nothing, enacting reproduction-as-erasure live and client-side.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-18-zone-de-sensibilite-picturale-immaterielle-web-series",
