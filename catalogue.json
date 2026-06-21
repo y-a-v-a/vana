@@ -349,7 +349,7 @@
     "year": 2026,
     "source": "François Morellet, Répartition aléatoire de 40 000 carrés suivant les chiffres pairs et impairs d'un annuaire de téléphone (1960); Kenneth Martin, Chance and Order; π / the unbounded spigot algorithm (Gibbons, 2004)",
     "mechanism": "An unbounded BigInt spigot streams the exact decimal digits of π client-side; each digit's parity fills or clears a square in a grid extended infinitely on scroll — deterministic, identical in every browser, no network.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-20-oil-on-viewer",
