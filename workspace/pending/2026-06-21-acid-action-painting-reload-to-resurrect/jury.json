@@ -10,12 +10,12 @@
   },
   "scores": {
     "novelty": 4,
-    "nuance": 4,
-    "narrative": 4,
-    "craft": 4,
+    "nuance": 5,
+    "narrative": 5,
+    "craft": 5,
     "wit": 4
   },
-  "weighted_total": 40,
+  "weighted_total": 46,
   "verdict": "strong",
   "references_named": [
     "Gustav Metzger, Acid Action Painting (1960)",
@@ -31,8 +31,8 @@
     "P7",
     "P9"
   ],
-  "rationale": "Strong P1 alignment: the mechanism performs auto-destruction on its own body rather than depicting it — real DOM cells are removed, then the script element removes itself, leaving only the wall label. Metzger is materially new to the catalogue and the Benjamin twist (the web can perform death but never suffer it because of perfect reproducibility) lands as clean double-coding for casual and literate viewers. Tone is dry and cheerfully cynical, ethics and licensing are properly handled, and the self-removing script is an elegant closing gesture that also enacts the auto-destructive premise at the meta-level.",
-  "reservations": "The script 'self-deletion' removes only the DOM node, not the already-executed code — a reasonable web-native approximation but worth being explicit about. The 30-second lifespan is brisk; the dissolution arc reads more as a quick demo than as the slow ritual Metzger's nylon sheets demanded, and the chance-shuffle happens only once at load, so the visible behaviour per visit is deterministic apart from ordering.",
-  "revision_suggestion": "Consider a longer lifespan (60–90 s) and a slight progressive acceleration so the dissolution stage reads as matter thinning rather than countdown. Optional: surface a 'resurrect' affordance (a link or hint) in the pre-destruction state so the P7 punchline is set up rather than sprung on the viewer mid-burn; keep the actual resurrection bound to reload to preserve the Benjamin argument.",
+  "rationale": "The mechanism genuinely enacts the concept: real DOM nodes are removed in a chance-shuffled order, then the script removes every element under body including itself, leaving a truly empty document. The double-coding is precise — Metzger's auto-destruction answered by the web's perfect-copy resurrection, with the surviving trace migrating to the browser chrome (the title tag) rather than the page. The Benjamin framing is earned, not bolted on. Restraint is exemplary: smallest build that completes the thought, dry tone, no wall-text dependency for the surface gag.",
+  "reservations": "The wit lands slightly less sharply than the best catalogue pieces — the '(deleted — reload to resurrect)' punchline is good but the chance/order staging is somewhat conventional compared to e.g. Random Distribution of π. The Tinguely reference is named but not really enacted in the mechanism.",
+  "revision_suggestion": "Consider letting the chance-shuffled order itself be the visible argument (e.g. a brief on-page trace of the dissolution path before erasure) so the Tinguely sibling-machine reference earns its place in the mechanism rather than only in the rationale.",
   "jury_model": "minimax/minimax-m3"
 }

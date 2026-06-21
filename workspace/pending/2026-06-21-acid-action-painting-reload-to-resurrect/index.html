@@ -2,6 +2,8 @@
 <!--
   Acid Action Painting (Reload to Resurrect)
   after Gustav Metzger, Acid Action Painting (1960) and Auto-Destructive Art (manifesto, 1959).
+  The painting eats itself, then every element under <body> is removed and the page is
+  left genuinely empty — a real deleted document; only the <title> in the head survives.
   by y-a-v-a — validated by Vincent Bruijn.
   Licence: Creative Commons CC BY-SA 4.0.
   No cookies, no tracking, no network requests. Everything self-contained.
@@ -47,8 +49,6 @@
   #label .row{display:flex;justify-content:space-between;gap:16px;margin:2px 0;}
   #label .row span:last-child{color:#cfc9bd;text-align:right;}
   #status{color:var(--acid);}
-  #status.dead{color:#7a3b3b;}
-  #note{margin-top:10px;color:var(--ash);font-style:italic;}
   a{color:inherit;}
 </style>
 </head>
@@ -61,7 +61,6 @@
     <div class="row"><span>Medium</span><span>pixels on screen</span></div>
     <div class="row"><span>Lifespan</span><span>30&nbsp;seconds <span style="color:var(--ash)">(he permitted up to 20&nbsp;years)</span></span></div>
     <div class="row"><span>Status</span><span id="status">DESTROYING&nbsp;<span id="pct">0%</span></span></div>
-    <div id="note"></div>
     <div class="row" style="margin-top:12px;border-top:1px solid var(--ash);padding-top:10px;">
       <span>after Metzger · by y-a-v-a</span><span>CC&nbsp;BY-SA&nbsp;4.0</span>
     </div>
@@ -93,9 +92,7 @@
     var t=order[j];order[j]=order[k];order[k]=t;
   }
 
-  var statusEl = document.getElementById("status");
   var pctEl = document.getElementById("pct");
-  var noteEl = document.getElementById("note");
   var LIFESPAN = 30000; // ms — declared, finite, irreversible (in theory).
   var start = performance.now();
   var eaten = 0;
@@ -118,19 +115,17 @@
   requestAnimationFrame(frame);
 
   function die(){
-    // The work is gone. Remove the picture entirely — true to auto-destruction.
-    sheet.parentNode.removeChild(sheet);
-    statusEl.className = "dead";
-    statusEl.innerHTML = "DESTROYED";
-    document.getElementById("title").style.color = "var(--ash)";
-    // The label is documentation; it outlives the work, as labels do.
-    noteEl.textContent =
-      "The picture is gone. Reload to resurrect it — which auto-destructive art could never do. " +
-      "The web makes only perfect copies, so on the web nothing truly dies; it can perform death, not suffer it.";
-    // The script removes its own source from the page: the means of destruction
-    // is itself destroyed, leaving only the residue of having happened.
-    var me = document.currentScript || document.scripts[document.scripts.length-1];
-    if (me && me.parentNode) me.parentNode.removeChild(me);
+    // Auto-destruction taken to its conclusion. Not just the picture: remove
+    // EVERY element in the body — the title, the wall label, the status, and the
+    // script's own node last of all. The means of destruction destroys itself,
+    // and the document is left truly empty, a real deleted page.
+    while (document.body.firstChild){
+      document.body.removeChild(document.body.firstChild);
+    }
+    // The single residue survives outside the body, in the browser's own chrome:
+    // the <title> tag in the head. The documentation migrates from a painted-on
+    // wall label to the tab itself — the last place a label can outlive a body.
+    document.title = "(deleted — reload to resurrect)";
   }
 })();
 </script>
