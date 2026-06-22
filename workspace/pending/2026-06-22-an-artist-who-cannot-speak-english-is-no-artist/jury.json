@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-06-22-an-artist-who-cannot-speak-english-is-no-artist",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Mladen Stilinović, An Artist Who Cannot Speak English Is No Artist (1992)",
+    "Marcel Duchamp / the readymade",
+    "net.art (navigator.languages as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The work cleanly restages Stilinović's 1992 banner as a live browser gate that actually executes the test the original only implied. The mechanism (navigator.languages string check) is the argument: art-world legitimacy reduced to a locale tag, gameable by editing a preference. It reads at two depths (dry gag vs. critique of English hegemony), holds the ethics floor (no network, no storage, CC BY-SA, attribution visible regardless of verdict), and is materially distinct from the catalogue — no prior work uses navigator.languages as the gate. The aside lines land the double-coding without requiring wall text. Restraint is exemplary: one sentence, one check, one ruling.",
+  "reservations": "The 'artist' verdict's aside ('No further proof was required. A certificate is not available. There is nothing to frame.') is slightly more elegant than the 'no artist' aside, which leans a touch explanatory; the asymmetry is minor but worth noting. Novelty is high but not maximal — the navigator.languages-as-material move is a recognizable net.art gesture, even if not previously catalogued here.",
+  "revision_suggestion": "Consider tightening the 'no artist' aside so both branches land with equal restraint, e.g. matching the brevity of the 'artist' branch and letting the appeal instruction sit as a separate, smaller line rather than embedded in the aside paragraph.",
+  "jury_model": "minimax/minimax-m3"
+}
