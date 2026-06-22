@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-22-suitable-for-framing",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 42,
+  "verdict": "strong",
+  "references_named": [
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "Seth Siegelaub, Xerox Book / catalogue-as-exhibition (1968)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The print stylesheet is the artwork: a single CSS rule enacts the Benjamin argument by returning nothing on paper, which is exactly the kind of mechanism-as-message (P1) the DNA rewards. The Benjamin/Siegelaub inversion is precise and double-coded (P7): the surface gag lands without wall text, and the literate reading is genuinely there. Restraint is exemplary (P3) — one HTML file, ten lines of JS, no storage, no network. The chance axis (P5) is lightly present via per-visit hue, and the work clearly answers prior catalogue entries on reproduction (The Original, Abstract Painting Backlit, Acid Action Painting) without duplicating any of them.",
+  "reservations": "The chance/order axis is gestured at rather than staged — the per-visit hue is decorative rather than load-bearing. The Benjamin reference, while apt, is shared with several recent catalogue entries (The Original, Abstract Painting Backlit, Acid Action Painting), so the lineage claim is slightly crowded. The epitaph text is a touch long and explanatory for a work that prides itself on needing no wall text.",
+  "revision_suggestion": "Trim the epitaph to a single short line so the print sheet is more austere and the gag lands harder; consider making the per-visit hue do more conceptual work (e.g., tied to time-of-day or a visible seed) so chance is structural rather than ornamental.",
+  "jury_model": "minimax/minimax-m3"
+}
