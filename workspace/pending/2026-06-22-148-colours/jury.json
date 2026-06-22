@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-06-22-148-colours",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Gerhard Richter, 1024 Colours (1974)",
+    "Gerhard Richter, 256 Colours / 4096 Colours",
+    "Marcel Duchamp / the readymade",
+    "CSS Color Module Level 4 named colours (W3C)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The work cleanly enacts Richter's chance-ordered colour chart by handing authorship to a W3C committee and the visitor's own rendering engine. The mechanism (backgroundColor + getComputedStyle readback, per-visit shuffle, no persistence) is the argument: the artist mixed nothing, chose nothing, and did not decide the count. The rebeccapurple memorial detail and the absurd committee names give it double-coding depth. It is materially distinct from the catalogue — Richter is a new reference, and the readymade-of-a-spec angle is fresh.",
+  "reservations": "The chance/order axis is real but lightly staged; the 'order' pole is just the alphabetical list, which is a thin version of Richter's systematic mixing. The piece is also visually quiet — closer to a tool than a gag — so the surface wit is gentler than most catalogue entries.",
+  "revision_suggestion": "Consider seeding the shuffle from a non-obvious source (e.g., the visitor's locale, the time, or a hash of the names themselves) so the chance axis feels more pointed, and add a one-line wall-label-style caption that names the price/medium in the catalogue manner to land the P6 critique more visibly.",
+  "jury_model": "minimax/minimax-m3"
+}
