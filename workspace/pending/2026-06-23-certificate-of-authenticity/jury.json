@@ -1,0 +1,41 @@
+{
+  "work_id": "2026-06-23-certificate-of-authenticity",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Donald Judd (certificates of authenticity)",
+    "Dan Flavin (certificates / fabricated multiples)",
+    "the NFT / blockchain authenticity discourse",
+    "Marcel Duchamp (infrathin)",
+    "W3C Web Crypto API (SubtleCrypto)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "Strong P1 case: the SHA-256-of-own-source mechanism literally enacts the tautology it names, and the re-hash loop proves the certificate void the instant it is issued — the infrathin twist is built into the execution, not bolted on. The double-coding is clean (an official-looking certificate vs. the literal collapse of authenticity into faithful copying), the four-beat footer ('No cookies. No trackers. No network. No blockchain.') lands the NFT jab without preachiness, and the live, per-visit, client-side nature makes it unprintable. The Judd/Flavin lineage and the Duchampian infrathin are correctly placed within the catalogue's ongoing argument about value, authenticity, and reproduction.",
+  "reservations": "Materially distinct from The Original (2026) in mechanism (SHA-256 self-hash + staleness loop vs. Blob self-download + localStorage edition counter) and in argument (authentication-as-tautology vs. scarcity-as-fiction), but they share a Duchampian/Benjamin self-referential mode that has become a dominant mode in the 2026 entries; cumulative proximity to The Original and to several other self-referential 2026 pieces should be watched. The visible 'infrathin' note slightly explains a joke that was already legible from the console attesting — restraint could be tightened by removing the inline note and leaving only the console.",
+  "revision_suggestion": "Drop the on-page infrathin note so the staleness gap is attested only in the console (the surface stays an innocent certificate, the depth lives in devtools) — this deepens the double-coding and trusts the mechanism more.",
+  "jury_model": "minimax/minimax-m3"
+}

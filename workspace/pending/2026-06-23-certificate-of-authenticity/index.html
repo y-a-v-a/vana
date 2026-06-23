@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certificate of Authenticity</title>
+<style>
+  :root { color-scheme: light; }
+  html, body { margin: 0; }
+  body {
+    background: #d8d4cb;
+    color: #1a1a1a;
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.55;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 6vmin 4vmin;
+    box-sizing: border-box;
+  }
+  .cert {
+    background: #f6f3ea;
+    max-width: 44rem;
+    width: 100%;
+    padding: clamp(1.6rem, 5vmin, 3.4rem);
+    box-sizing: border-box;
+    border: 1px solid #1a1a1a;
+    outline: 1px solid #1a1a1a;
+    outline-offset: 5px;
+    box-shadow: 0 1px 0 #fff inset;
+  }
+  .kicker {
+    font-family: "Courier New", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 0.4rem;
+    color: #555;
+  }
+  h1 {
+    font-size: clamp(1.5rem, 5.5vmin, 2.4rem);
+    text-align: center;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    margin: 0 0 1.4rem;
+  }
+  .rule { border: 0; border-top: 1px solid #b9b3a4; margin: 1.4rem 0; }
+  p { margin: 0 0 1rem; }
+  .sig {
+    font-family: "Courier New", monospace;
+    font-size: clamp(0.8rem, 2.6vmin, 1.05rem);
+    word-break: break-all;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #1a1a1a;
+    padding: 0.9rem 0.8rem;
+    margin: 1.2rem 0;
+    letter-spacing: 0.06em;
+  }
+  .infrathin {
+    font-size: 0.82rem;
+    color: #555;
+    font-style: italic;
+  }
+  footer {
+    font-family: "Courier New", monospace;
+    font-size: 0.68rem;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+    color: #555;
+    text-transform: uppercase;
+    margin-top: 1.6rem;
+  }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+  <main class="cert" role="document">
+    <p class="kicker">y-a-v-a &middot; self-certifying edition</p>
+    <h1>Certificate of Authenticity</h1>
+
+    <p>At the moment this page loaded, the work computed a SHA&#8209;256 signature
+    of its own source and stamped it below. No ledger was consulted. No network
+    was used. Nothing was minted.</p>
+
+    <div class="sig" id="sig" aria-live="polite">&hellip; computing signature &hellip;</div>
+
+    <p>This signature certifies that the present document is a faithful,
+    byte&#8209;identical reproduction of itself. Any copy that reproduces this
+    signature is <em>equally</em> authentic; there is no original to forge and
+    nothing scarce to own. Alter a single character and the signature becomes
+    something else entirely &mdash; certifying <em>that</em> instead, just as
+    sincerely.</p>
+
+    <hr class="rule">
+
+    <p class="infrathin" id="infrathin" hidden>
+      Note: stamping this certificate altered the very document it certifies.
+      The page you are now reading no longer matches the signature above. The
+      gap is in the console.
+    </p>
+
+    <footer>
+      Medium: SHA&#8209;256 of pixels on screen &middot; Edition: every copy<br>
+      &copy; 2026 y-a-v-a &mdash; licensed CC BY&#8209;SA 4.0<br>
+      After Donald Judd &amp; Dan Flavin, certificates of authenticity;
+      against the NFT. Marcel Duchamp, infrathin.<br>
+      No cookies. No trackers. No network. No blockchain.
+    </footer>
+  </main>
+
+<script>
+(function () {
+  'use strict';
+  var out = document.getElementById('sig');
+  var note = document.getElementById('infrathin');
+
+  function toHex(buffer) {
+    var bytes = new Uint8Array(buffer), s = '';
+    for (var i = 0; i < bytes.length; i++) {
+      s += bytes[i].toString(16).padStart(2, '0');
+    }
+    return s;
+  }
+
+  function sha256(text) {
+    var data = new TextEncoder().encode(text);
+    return crypto.subtle.digest('SHA-256', data).then(toHex);
+  }
+
+  if (!(window.crypto && crypto.subtle && window.TextEncoder)) {
+    out.textContent = '— your browser declined to certify this work —';
+    return;
+  }
+
+  // Hash the document as authored, before the signature is stamped in.
+  var atIssue = document.documentElement.outerHTML;
+
+  sha256(atIssue).then(function (sig) {
+    out.textContent = sig;
+    note.hidden = false;
+    // The page has now changed. Re-hash to prove the certificate is already stale.
+    return sha256(document.documentElement.outerHTML).then(function (now) {
+      console.log('%cCertificate of Authenticity', 'font-weight:bold;font-size:14px');
+      console.log('signature at issue : ' + sig);
+      console.log('signature now      : ' + now);
+      console.log(sig === now
+        ? 'The document is unchanged.'
+        : 'The act of certifying altered the document it certifies. Infrathin.');
+    });
+  });
+})();
+</script>
+</body>
+</html>

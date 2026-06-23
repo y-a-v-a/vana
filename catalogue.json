@@ -430,5 +430,13 @@
     "source": "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Seth Siegelaub, Xerox Book / catalogue-as-exhibition (1968)",
     "mechanism": "A @media print stylesheet hides every element (body * display:none) and lets only a body::after epitaph through, so reproduction onto paper returns nothing; per-visit hues via client-side Math.random, no storage or network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-23-certificate-of-authenticity",
+    "title": "Certificate of Authenticity",
+    "year": 2026,
+    "source": "Donald Judd, certificates of authenticity; Dan Flavin, certificates / fabricated multiples; the NFT / blockchain authenticity discourse; Marcel Duchamp, infrathin; W3C Web Crypto API (SubtleCrypto)",
+    "mechanism": "Web Crypto API (crypto.subtle SHA-256) hashes document.documentElement.outerHTML per visit and stamps the digest into the page; a re-hash proves the certificate is stale the instant it is issued.",
+    "status": "pending"
   }
 ]
