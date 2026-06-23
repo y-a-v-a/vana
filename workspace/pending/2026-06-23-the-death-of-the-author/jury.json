@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-06-23-the-death-of-the-author",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Roland Barthes, The Death of the Author (1967)",
+    "Marcel Duchamp / the readymade",
+    "net.art (contenteditable / the DOM as material)",
+    "Erased (No Undo) (prior work answered)",
+    "The Original (prior work answered)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument: a contenteditable article whose first keystroke strikes the author's byline through, made browser-mechanical via beforeinput, and whose lack of persistence lets reload resurrect him unmarked. This is a strong P1 read — Barthes's claim is wired to the cursor, not quoted at it. The 'resurrection on reload' turn is the cheerful-cynic payload: the web both grants and silently revokes authorship, which lands as a critique of Barthes via the refresh button. Restrained single-file build, dry tone, open licence, no storage, and a fresh literary-theory angle for a catalogue that leans on visual-art lineage.",
+  "reservations": "contenteditable-as-material is well-trodden net.art territory, so novelty rests heavily on the Barthes framing rather than on the affordance itself; the chance/order axis (P5) is invoked but remains a bit decorative in the actual page — the mechanism is more about presence/absence of the author than about order vs. entropy in any visible way.",
+  "revision_suggestion": "Consider a small generative or stochastic element on first load (e.g., a randomized Barthes quote, or a different 'author' name drawn from a list, or a slight procedural variation in the struck-through styling) so the chance axis has a real per-visit behavior rather than being only an interpretive frame.",
+  "jury_model": "minimax/minimax-m3"
+}

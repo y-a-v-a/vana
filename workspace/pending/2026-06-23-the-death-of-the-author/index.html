@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Death of the Author</title>
+<style>
+  :root { --ink: #16130f; --paper: #f4f0e6; --rule: #ddd6c6; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.6;
+    display: flex; justify-content: center;
+    padding: 8vh 6vw;
+    -webkit-text-size-adjust: 100%;
+  }
+  main { width: 100%; max-width: 36rem; }
+  h1 { font-size: 1.9rem; font-weight: normal; letter-spacing: .01em; margin: 0 0 .2rem; }
+  .byline { font-style: italic; color: #5a5346; font-size: 1rem; margin: 0 0 2rem; }
+  .byline .dead { text-decoration: line-through; opacity: .55; }
+  .byline .reader { display: none; }
+  .byline.killed .reader { display: inline; }
+  hr { border: none; border-top: 1px solid var(--rule); margin: 2rem 0; }
+
+  /* the editable text: the only thing the reader can touch */
+  #text { outline: none; }
+  #text p { margin: 0 0 1rem; }
+  #text:focus { caret-color: var(--ink); }
+  blockquote { margin: 1.4rem 0; padding-left: 1rem; border-left: 2px solid var(--rule); color: #3c372d; }
+
+  .status {
+    margin-top: 2.5rem; font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: .72rem; letter-spacing: .04em; color: #6b6453; text-transform: uppercase;
+  }
+  footer {
+    margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .68rem;
+    line-height: 1.7; color: #6b6453;
+  }
+  footer a { color: inherit; }
+  /* footer is fixed authorship — the reader writes the body, not the colophon */
+  footer, h1, .byline { -webkit-user-modify: read-only; }
+</style>
+</head>
+<body>
+<main>
+  <h1>The Death of the Author</h1>
+  <p class="byline" id="byline"><span class="dead" id="author">by y‑a‑v‑a</span><span class="reader"> · written by the reader</span></p>
+
+  <hr>
+
+  <article id="text" contenteditable="true" spellcheck="false" aria-label="Editable text. Whatever you write here is the work.">
+    <p>This page has an author. You are reading his words now, set down in advance, fixed, finished — the way a text is supposed to come to you: closed, signed, owned.</p>
+    <blockquote>"The birth of the reader must be at the cost of the death of the Author."<br>— Roland Barthes, <i>The Death of the Author</i>, 1967</blockquote>
+    <p>So write. Click into this paragraph and change it. Delete it. Replace every word here with your own. The text was never the author's property; it was always only on loan to whoever holds the cursor. The instant you type, his name goes through.</p>
+    <p>He will not stay dead, of course. Reload the page and his words return, unmarked, as if you had never spoken. The web hands you authorship and quietly takes it back. Nothing you write is saved. We do not search; we serve.</p>
+  </article>
+
+  <p class="status" id="status">Author: alive · the page is in his words</p>
+
+  <footer>
+    <div>“The Death of the Author” — y‑a‑v‑a, 2026. After Roland Barthes, <i>La mort de l'auteur</i> (1967).</div>
+    <div>Whatever you typed exists nowhere but this tab. No cookies, no storage, no tracking, no network.</div>
+    <div>Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY‑SA 4.0</a> — rewrite it and pass it on. Attribution: y‑a‑v‑a (Vincent Bruijn).</div>
+  </footer>
+</main>
+
+<script>
+  // The reader is given the text. The moment the reader writes, the Author dies.
+  // No persistence: the death is local and temporary; reload resurrects him.
+  (function () {
+    var text = document.getElementById('text');
+    var byline = document.getElementById('byline');
+    var status = document.getElementById('status');
+    var killed = false;
+
+    function killAuthor() {
+      if (killed) return;
+      killed = true;
+      byline.classList.add('killed');
+      status.textContent = 'Author: dead · these are your words now (reload to resurrect him)';
+    }
+
+    // 'beforeinput' fires on the first real keystroke / paste / delete inside the text.
+    text.addEventListener('beforeinput', killAuthor);
+    text.addEventListener('input', killAuthor);
+  })();
+</script>
+</body>
+</html>
