@@ -446,5 +446,13 @@
     "source": "Roland Barthes, The Death of the Author (1967); Marcel Duchamp / the readymade; net.art (contenteditable / the DOM as material)",
     "mechanism": "A contenteditable article whose first beforeinput event strikes the author byline and reassigns the page to the reader; nothing persisted, so reload restores the original author.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-23-entropy-black-sand-white-sand",
+    "title": "Entropy (Black Sand, White Sand)",
+    "year": 2026,
+    "source": "Robert Smithson, Entropy and the New Monuments (1966); Robert Smithson, the sandbox parable; net.art (browser canvas as material)",
+    "mechanism": "Pointer-driven, sand-conserving neighbour-swaps on a canvas grid with a live boundary-count disorder meter that only climbs; reload is the sole reset, no storage, no network.",
+    "status": "pending"
   }
 ]

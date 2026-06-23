@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entropy (Black Sand, White Sand)</title>
+<style>
+  :root{ --paper:#dad7d0; --ink:#16151a; --line:#9a968c; }
+  html,body{ margin:0; height:100%; background:var(--paper); color:var(--ink);
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace; }
+  body{ display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:18px; padding:24px; box-sizing:border-box; min-height:100%; }
+  #frame{ background:#000; padding:8px; box-shadow:0 2px 0 #00000022, 0 18px 40px #00000033; }
+  canvas{ display:block; width:min(78vmin,520px); height:min(78vmin,520px);
+    image-rendering:pixelated; touch-action:none; cursor:crosshair; }
+  .plate{ max-width:min(78vmin,520px); width:100%; box-sizing:border-box;
+    border:1px solid var(--line); padding:12px 14px; background:#cfccc4;
+    font-size:12px; line-height:1.5; }
+  .plate h1{ font-size:13px; margin:0 0 2px; letter-spacing:.02em; }
+  .plate .by{ font-style:italic; opacity:.8; margin:0 0 8px; }
+  .row{ display:flex; justify-content:space-between; gap:12px; }
+  .row span:last-child{ font-variant-numeric:tabular-nums; }
+  .quote{ margin:8px 0; opacity:.85; }
+  .bar{ height:6px; background:#00000018; margin-top:3px; }
+  .bar i{ display:block; height:100%; background:var(--ink); width:0%; transition:width .15s linear; }
+  .controls{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  button{ font:inherit; font-size:11px; padding:6px 10px; background:#16151a; color:#dad7d0;
+    border:none; cursor:pointer; }
+  button:active{ transform:translateY(1px); }
+  .lic{ font-size:10px; opacity:.7; margin-top:9px; }
+  .lic a{ color:inherit; }
+</style>
+</head>
+<body>
+  <div id="frame"><canvas id="c" width="80" height="80" aria-label="A square of sand, black on the left, white on the right."></canvas></div>
+
+  <div class="plate">
+    <h1>Entropy (Black Sand, White Sand)</h1>
+    <p class="by">y-a-v-a, after Robert Smithson, <em>Entropy and the New Monuments</em> (1966) — pixels on screen.</p>
+    <p class="quote">&ldquo;Picture in your mind&rsquo;s eye a sandbox divided in half with black sand on one side and white sand on the other. We take a child and have him run hundreds of times clockwise in the box until the sand gets mixed&hellip; then we have him run anticlockwise. The result will not be a restoration of the original division but a greater degree of greyness.&rdquo;</p>
+    <p>Drag across the box to run in it. There is no anticlockwise that undoes a clockwise.</p>
+    <div class="row"><span>Disorder</span><span id="ent">0%</span></div>
+    <div class="bar"><i id="entbar"></i></div>
+    <div class="controls">
+      <button id="ccw">run anticlockwise</button>
+      <button id="reset">begin the universe again</button>
+    </div>
+    <p class="lic">CC BY-SA 4.0 — y-a-v-a (validated by Vincent Bruijn), after Robert Smithson. No cookies, no tracking, no data leaves your machine. The only way back is reload.</p>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  var N = 80, total = N*N;
+  var grid = new Uint8Array(total);     // 0 = black sand, 1 = white sand
+  var cv = document.getElementById("c");
+  var ctx = cv.getContext("2d");
+  var img = ctx.createImageData(N, N);
+  var entEl = document.getElementById("ent");
+  var barEl = document.getElementById("entbar");
+
+  // The maximum number of black/white neighbour boundaries is reached at full
+  // mixing (~half of all edges). We normalise disorder against that ceiling.
+  var EDGES = 2*N*(N-1);
+  var CEIL  = EDGES*0.5;
+
+  function divide(){                      // the original division: a clean seam
+    for(var y=0;y<N;y++) for(var x=0;x<N;x++) grid[y*N+x] = (x < N/2) ? 0 : 1;
+  }
+
+  function paint(){
+    var d = img.data;
+    for(var i=0;i<total;i++){
+      var v = grid[i] ? 232 : 22, p = i*4;
+      d[p]=v; d[p+1]=v; d[p+2]=v; d[p+3]=255;
+    }
+    ctx.putImageData(img,0,0);
+  }
+
+  function disorder(){                    // count differing-colour adjacencies
+    var b=0, x, y, i;
+    for(y=0;y<N;y++) for(x=0;x<N;x++){
+      i = y*N+x;
+      if(x+1<N && grid[i]!==grid[i+1]) b++;
+      if(y+1<N && grid[i]!==grid[i+N]) b++;
+    }
+    var pct = Math.min(100, Math.round(b/CEIL*100));
+    entEl.textContent = pct+"%";
+    barEl.style.width = pct+"%";
+  }
+
+  // "Running" = random diffusive swaps. Swapping conserves the amount of each
+  // sand exactly, yet relentlessly raises the boundary count toward its ceiling.
+  // This is why no direction of running restores the seam: the swap is blind to
+  // the arrow you think you are drawing.
+  function stir(cx, cy, r, k){
+    for(var n=0;n<k;n++){
+      var ax = cx + ((Math.random()*2-1)*r)|0;
+      var ay = cy + ((Math.random()*2-1)*r)|0;
+      if(ax<0||ay<0||ax>=N||ay>=N) continue;
+      // swap with a near neighbour — local mixing, like grains tumbling
+      var bx = ax + ((Math.random()*3)|0)-1;
+      var by = ay + ((Math.random()*3)|0)-1;
+      if(bx<0||by<0||bx>=N||by>=N) continue;
+      var ia = ay*N+ax, ib = by*N+bx, t = grid[ia];
+      grid[ia] = grid[ib]; grid[ib] = t;
+    }
+  }
+
+  // pointer interaction --------------------------------------------------------
+  var down=false;
+  function toCell(e){
+    var rect = cv.getBoundingClientRect();
+    return {
+      x: Math.floor((e.clientX-rect.left)/rect.width  * N),
+      y: Math.floor((e.clientY-rect.top )/rect.height * N)
+    };
+  }
+  function run(e){
+    if(!down) return;
+    var p = toCell(e);
+    stir(p.x, p.y, 6, 220);
+    paint(); disorder();
+  }
+  cv.addEventListener("pointerdown", function(e){ down=true; cv.setPointerCapture(e.pointerId); run(e); });
+  cv.addEventListener("pointermove", run);
+  window.addEventListener("pointerup", function(){ down=false; });
+
+  // "run anticlockwise" — a full-field run, offered as if it could undo. It cannot.
+  document.getElementById("ccw").addEventListener("click", function(){
+    var passes=0;
+    (function loop(){
+      stir((N/2)|0, (N/2)|0, N, 1400);
+      paint(); disorder();
+      if(++passes<14) requestAnimationFrame(loop);
+    })();
+  });
+
+  document.getElementById("reset").addEventListener("click", function(){
+    divide(); paint(); disorder();
+  });
+
+  ctx.imageSmoothingEnabled = false;
+  divide(); paint(); disorder();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-23-entropy-black-sand-white-sand",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Robert Smithson, Entropy and the New Monuments (1966)",
+    "Robert Smithson, the sandbox parable",
+    "net.art (browser canvas as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism enacts the argument cleanly: neighbor-swaps are locally reversible yet globally irreversible, and the disorder meter only climbs — the second law is not illustrated but performed. The 'run anticlockwise' button is a precise piece of double-coding, offering the web's universal undo gesture and refusing it on thermodynamic grounds. The Smithson reference is new to the catalogue and sits squarely on the chance/order axis, with order as the initial seam and chance as the diffusion that eats it. Voice is dry and wry ('begin the universe again'), license and ethics are stated, and the build is appropriately small.",
+  "reservations": "The P2 framing of entropy itself as a 'readymade' is a stretch — the actual found object is Smithson's parable, which is fine, but the motivation conflates the two. The 'run anticlockwise' button is poetically labeled but mechanically just performs more full-field stirring rather than any directional reversal; the joke lands but the literalism is loose. The visual is quite spare (two greys on a grid), which reads as restraint but could also be read as under-designed.",
+  "revision_suggestion": "Tighten the P2 claim to name Smithson's parable (not entropy) as the readymade. Consider making the 'run anticlockwise' button perform a genuinely directional sweep (e.g., a rotating stir pattern) so the futility is enacted rather than gestured at. A subtle visual cue when disorder crosses a threshold (e.g., the seam line fading) would reinforce the mechanism-as-argument without adding decoration.",
+  "jury_model": "minimax/minimax-m3"
+}
