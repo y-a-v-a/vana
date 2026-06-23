@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-23-inside-the-white-cube",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Brian O'Doherty, Inside the White Cube: The Ideology of the Gallery Space (1976)",
+    "Marcel Duchamp / the readymade",
+    "net.art (browser chrome / Fullscreen API as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P6",
+    "P7"
+  ],
+  "rationale": "The Fullscreen API is a genuinely apt mechanism-as-message choice: the browser's own context-erasure literally enacts O'Doherty's argument that the gallery manufactures value by deleting the world around the object. The before/after staging (ordinary webpage furniture vs. stripped white cube) makes the double-coding legible without wall text, and the faux-cube fallback is a sharp move that admits the apparatus can refuse — sharpening rather than softening the critique. The per-visit hue keeps it live (P4) and the build is minimal (P3).",
+  "reservations": "The reference to O'Doherty is precise and the Duchamp lineage is well-stated, but the work sits close in spirit to several existing catalogue entries that already use browser chrome as material (e.g., Composition in Red, Yellow and Blue (32 × 32) using favicon, Oil on Viewer using matchMedia, Measurement: Viewport using resize). The Fullscreen API is a fresh mechanism, but the 'browser chrome as gallery wall' gesture is a recognizable move in this catalogue; the work earns its place through the specific O'Doherty framing rather than a wholly new ontology. The 'Now it is art' verdict caption is slightly on-the-nose and could be read as explaining the joke rather than letting the mechanism carry it.",
+  "revision_suggestion": "Consider trimming the explicit 'Now it is art' caption — the transition from cluttered webpage to bare monochrome already performs the argument, and a quieter verdict (or none at all) would tighten the P7 double-coding and let the literate viewer arrive at the reading unaided. Also consider naming a prior catalogue work this one answers (e.g., positioning itself against Three Ball Total Equilibrium Slot Machine's market-staging or Tragedian's institutional critique) to strengthen the narrative arc.",
+  "jury_model": "minimax/minimax-m3"
+}

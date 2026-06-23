@@ -454,5 +454,13 @@
     "source": "Robert Smithson, Entropy and the New Monuments (1966); Robert Smithson, the sandbox parable; net.art (browser canvas as material)",
     "mechanism": "Pointer-driven, sand-conserving neighbour-swaps on a canvas grid with a live boundary-count disorder meter that only climbs; reload is the sole reset, no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-23-inside-the-white-cube",
+    "title": "Inside the White Cube",
+    "year": 2026,
+    "source": "Brian O'Doherty, Inside the White Cube: The Ideology of the Gallery Space (1976); Marcel Duchamp / the readymade; net.art (browser chrome / Fullscreen API as material)",
+    "mechanism": "Fullscreen API strips all browser/OS chrome on demand, enacting the white cube's context-erasure; fullscreenchange toggles the 'Now it is art' verdict, with a faux-cube fallback when the request is refused; per-visit hue via Math.random.",
+    "status": "pending"
   }
 ]

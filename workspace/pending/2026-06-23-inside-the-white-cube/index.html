@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inside the White Cube</title>
+<style>
+  :root { color-scheme: light; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: #d9d6cf;
+    color: #1a1a1a;
+    font: 16px/1.55 Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+
+  /* the ordinary internet furniture around the work */
+  header.furniture {
+    border-bottom: 1px solid #b6b2a8;
+    padding-bottom: 10px;
+    margin-bottom: 26px;
+    font-family: -apple-system, system-ui, sans-serif;
+    font-size: 13px;
+    color: #6a655c;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  header.furniture a { color: #6a655c; }
+
+  h1 { font-size: 22px; margin: 0 0 4px; font-weight: normal; }
+  .deck { color: #57534b; margin: 0 0 28px; font-style: italic; }
+
+  /* the work itself: a nothing, hung in a webpage */
+  .frame {
+    text-align: center;
+    margin: 0 auto;
+  }
+  #work {
+    width: 220px;
+    height: 220px;
+    margin: 0 auto;
+    background: #888;            /* replaced per visit */
+    box-shadow: 0 1px 0 #fff inset, 0 2px 14px rgba(0,0,0,.18);
+    transition: width .6s ease, height .6s ease, box-shadow .6s ease;
+  }
+  .label.furniture {
+    font-family: -apple-system, system-ui, sans-serif;
+    font-size: 12px;
+    color: #4a463f;
+    margin: 14px auto 22px;
+    line-height: 1.4;
+  }
+  .label .t { font-style: italic; }
+
+  #enter {
+    font: 14px -apple-system, system-ui, sans-serif;
+    padding: 9px 18px;
+    border: 1px solid #1a1a1a;
+    background: #1a1a1a;
+    color: #f4f2ec;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  #enter:hover { background: #333; }
+  .aside.furniture {
+    font-family: -apple-system, system-ui, sans-serif;
+    font-size: 12px;
+    color: #8a857b;
+    margin-top: 12px;
+  }
+
+  .body.furniture { margin-top: 34px; color: #3a372f; }
+
+  footer.furniture {
+    margin-top: 44px;
+    border-top: 1px solid #b6b2a8;
+    padding-top: 12px;
+    font-family: -apple-system, system-ui, sans-serif;
+    font-size: 11px;
+    color: #6a655c;
+    line-height: 1.6;
+  }
+  footer.furniture a { color: #6a655c; }
+
+  /* what only exists once you are inside the cube */
+  .cubeonly { display: none; }
+
+  /* ===== the white cube ===== */
+  body.cube { background: #ffffff; }
+  body.cube .furniture { display: none !important; }
+  body.cube main { max-width: none; padding: 0; height: 100%; }
+  body.cube .frame {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  body.cube #work {
+    box-shadow: 0 18px 60px rgba(0,0,0,.10);
+  }
+  body.cube .cubeonly {
+    display: block;
+    position: fixed;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: -apple-system, system-ui, sans-serif;
+    color: #111;
+  }
+  .verdict {
+    bottom: 11%;
+    font: italic 26px Georgia, serif;
+    margin: 0;
+    opacity: 0;
+    transition: opacity 1.6s ease 0.5s;
+  }
+  body.cube .verdict { opacity: 1; }
+  .esc {
+    bottom: 5%;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #9a9a9a;
+    margin: 0;
+  }
+  .cubeonly { /* positioning helpers share .cubeonly but need explicit bottoms */ }
+  .verdict, .esc { position: fixed; left: 0; right: 0; }
+</style>
+</head>
+<body>
+<main>
+  <header class="furniture">
+    <span>y-a-v-a &middot; pixels on screen</span>
+    <span>net.art &middot; no cookies &middot; no tracking</span>
+  </header>
+
+  <h1>Inside the White Cube</h1>
+  <p class="deck furniture">A monochrome, hung in a webpage.</p>
+
+  <div class="frame">
+    <div id="work" aria-label="the work"></div>
+    <p class="label furniture">
+      <span class="t">Untitled</span> &middot; <span id="medium">pixels on screen</span><br>
+      Here it is just a coloured square in a browser tab,
+      surrounded by a header, some prose, and a footer.
+    </p>
+    <button id="enter">Enter the gallery</button>
+    <p class="aside furniture">(The gallery is just fullscreen.)</p>
+
+    <!-- shown only once the browser strips the world away -->
+    <p class="verdict cubeonly">Now it is art.</p>
+    <p class="esc cubeonly">Esc to leave the gallery</p>
+  </div>
+
+  <div class="body furniture">
+    <p>
+      Brian O&rsquo;Doherty argued that the white cube &mdash; the windowless,
+      contextless modern gallery &mdash; is not neutral at all. By deleting the
+      world around the object, it manufactures the object&rsquo;s value and aura.
+      The wall does the work.
+    </p>
+    <p>
+      The browser has its own white cube: <em>fullscreen</em>. One call and the
+      tabs, the address bar, the operating system, the rest of the internet all
+      vanish. The square does not change. Its surroundings are deleted, and that
+      &mdash; apparently &mdash; is enough.
+    </p>
+  </div>
+
+  <footer class="furniture">
+    <strong>Inside the White Cube</strong> (2026) &mdash; y-a-v-a.<br>
+    After Brian O&rsquo;Doherty, <em>Inside the White Cube: The Ideology of the
+    Gallery Space</em> (1976). In the lineage of the readymade (Marcel Duchamp):
+    context, not the object, is what is signed.<br>
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>.
+    No cookies, no trackers, no data leaves your browser.
+  </footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // The work is a nothing made live: a fresh hue every visit, so it is never
+  // a fixed print, only a per-load monochrome.
+  var work = document.getElementById('work');
+  var hue = Math.floor(Math.random() * 360);
+  work.style.background = 'hsl(' + hue + ', 42%, 58%)';
+
+  var btn = document.getElementById('enter');
+  var doc = document.documentElement;
+
+  function requestFs() {
+    var fn = doc.requestFullscreen || doc.webkitRequestFullscreen ||
+             doc.msRequestFullscreen;
+    if (fn) {
+      try { return fn.call(doc); } catch (e) { return Promise.reject(e); }
+    }
+    return Promise.reject(new Error('no fullscreen'));
+  }
+
+  function fsElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || null;
+  }
+
+  // If the browser refuses the real cube, build a faux one — and admit it.
+  // Even the white cube is granted by an apparatus that can say no.
+  function fauxCube() {
+    document.body.classList.add('cube');
+    document.querySelector('.esc').textContent =
+      'click anywhere to leave the gallery';
+    document.addEventListener('click', leaveFaux, { once: true });
+  }
+  function leaveFaux() { document.body.classList.remove('cube'); }
+
+  btn.addEventListener('click', function () {
+    requestFs().catch(fauxCube);
+  });
+
+  function sync() {
+    document.body.classList.toggle('cube', !!fsElement());
+  }
+  document.addEventListener('fullscreenchange', sync);
+  document.addEventListener('webkitfullscreenchange', sync);
+})();
+</script>
+</body>
+</html>
