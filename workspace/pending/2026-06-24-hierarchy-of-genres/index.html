@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hierarchy of Genres</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0b0b0c; }
+  body {
+    font-family: ui-serif, Georgia, "Times New Roman", serif;
+    color: #e9e7e1;
+    overflow: hidden;
+    -webkit-user-select: none; user-select: none;
+  }
+  #stage { position: fixed; inset: 0; display: block; }
+
+  /* The wall label — the academy's apparatus, in HTML, crisp over the canvas. */
+  .label {
+    position: fixed; left: 24px; bottom: 24px;
+    max-width: min(78vw, 360px);
+    padding: 14px 16px;
+    background: rgba(10,10,11,.72);
+    border: 1px solid rgba(233,231,225,.22);
+    backdrop-filter: blur(2px);
+    line-height: 1.4;
+    font-size: 14px;
+  }
+  .label .genre { font-size: 22px; letter-spacing: .01em; margin: 0 0 2px; }
+  .label .rank { font-variant: small-caps; opacity: .85; margin: 0 0 8px; }
+  .label dl { display: grid; grid-template-columns: auto 1fr; gap: 1px 10px; margin: 0; font-size: 12.5px; }
+  .label dt { opacity: .55; }
+  .label dd { margin: 0; }
+  .hint {
+    position: fixed; top: 18px; left: 0; right: 0; text-align: center;
+    font-size: 12.5px; letter-spacing: .04em; opacity: .55; pointer-events: none;
+  }
+  .lic {
+    position: fixed; right: 20px; bottom: 22px; text-align: right;
+    font-size: 11px; line-height: 1.5; opacity: .5; max-width: 46vw;
+  }
+  .lic a { color: inherit; }
+  @media (max-width: 560px) { .lic { display: none; } }
+</style>
+</head>
+<body>
+  <canvas id="stage" aria-label="A generated painting whose genre is set by the orientation of your screen."></canvas>
+
+  <div class="hint" id="hint">rotate your device — or resize this window — to change the genre</div>
+
+  <figure class="label">
+    <p class="genre" id="genre">Landscape</p>
+    <p class="rank" id="rank">rank IV of V</p>
+    <dl>
+      <dt>Artist</dt><dd>y-a-v-a, after André Félibien</dd>
+      <dt>Medium</dt><dd>pixels on screen</dd>
+      <dt>Format</dt><dd id="format">—</dd>
+      <dt>Decided by</dt><dd>the way you hold it</dd>
+    </dl>
+  </figure>
+
+  <p class="lic">
+    “Hierarchy of Genres”, y-a-v-a, 2026.<br>
+    After André Félibien, <i>Préface aux Conférences</i> (1667) — the academic ranking of genres.<br>
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> · no cookies, no tracking, no data leaves your device.
+  </p>
+
+<script>
+(function () {
+  "use strict";
+
+  var cv = document.getElementById("stage");
+  var ctx = cv.getContext("2d");
+
+  // One hue fixed per visit, so rotating reframes THE SAME work rather than a new one.
+  var H = Math.floor(Math.random() * 360);
+
+  // Félibien's 1667 hierarchy, highest prestige first. History painting (rank I)
+  // needs figures-in-action this format cannot stage — so it is named, never shown.
+  var GENRES = {
+    portrait:  { name: "Portrait",   rank: "rank II of V" },
+    landscape: { name: "Landscape",  rank: "rank IV of V" },
+    still:     { name: "Still Life", rank: "rank V of V" }
+  };
+
+  var elGenre  = document.getElementById("genre");
+  var elRank   = document.getElementById("rank");
+  var elFormat = document.getElementById("format");
+
+  function hsl(h, s, l) { return "hsl(" + ((h % 360) + 360) % 360 + "," + s + "%," + l + "%)"; }
+
+  function frame(w, h) {
+    var pad = Math.round(Math.min(w, h) * 0.045);
+    ctx.lineWidth = Math.max(2, Math.round(pad * 0.18));
+    ctx.strokeStyle = hsl(H, 12, 14);
+    ctx.strokeRect(pad, pad, w - 2 * pad, h - 2 * pad);
+  }
+
+  function drawLandscape(w, h) {
+    var sky = ctx.createLinearGradient(0, 0, 0, h);
+    sky.addColorStop(0, hsl(H, 44, 72));
+    sky.addColorStop(1, hsl(H, 30, 88));
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, w, h);
+    // sun / moon
+    ctx.fillStyle = hsl(H + 40, 80, 78);
+    ctx.beginPath();
+    ctx.arc(w * 0.74, h * 0.30, Math.min(w, h) * 0.085, 0, Math.PI * 2);
+    ctx.fill();
+    // ground below the horizon
+    var hor = h * 0.62;
+    ctx.fillStyle = hsl(H + 95, 30, 34);
+    ctx.fillRect(0, hor, w, h - hor);
+    ctx.strokeStyle = hsl(H + 95, 30, 24);
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, hor); ctx.lineTo(w, hor); ctx.stroke();
+  }
+
+  function drawPortrait(w, h) {
+    ctx.fillStyle = hsl(H, 16, 19);                 // the dark studio wall
+    ctx.fillRect(0, 0, w, h);
+    var cx = w * 0.5, baseY = h * 0.72, u = Math.min(w, h);
+    var skin = hsl(H + 28, 26, 56);
+    // shoulders
+    ctx.fillStyle = hsl(H + 200, 22, 30);
+    ctx.beginPath();
+    ctx.moveTo(cx - u * 0.30, h);
+    ctx.quadraticCurveTo(cx - u * 0.30, baseY, cx, baseY - u * 0.04);
+    ctx.quadraticCurveTo(cx + u * 0.30, baseY, cx + u * 0.30, h);
+    ctx.closePath(); ctx.fill();
+    // neck
+    ctx.fillStyle = skin;
+    ctx.fillRect(cx - u * 0.07, baseY - u * 0.22, u * 0.14, u * 0.20);
+    // head
+    ctx.beginPath();
+    ctx.ellipse(cx, baseY - u * 0.30, u * 0.13, u * 0.17, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawStill(w, h) {
+    ctx.fillStyle = hsl(H, 14, 17);
+    ctx.fillRect(0, 0, w, h);
+    var tableY = h * 0.66, u = Math.min(w, h);
+    ctx.fillStyle = hsl(H, 22, 26);                 // table
+    ctx.fillRect(0, tableY, w, h - tableY);
+    // jug
+    var jx = w * 0.42;
+    ctx.fillStyle = hsl(H + 60, 40, 55);
+    ctx.beginPath();
+    ctx.ellipse(jx, tableY - u * 0.10, u * 0.11, u * 0.16, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect(jx - u * 0.035, tableY - u * 0.28, u * 0.07, u * 0.08); // neck
+    // fruit
+    ctx.fillStyle = hsl(H + 185, 52, 50);
+    ctx.beginPath();
+    ctx.arc(w * 0.60, tableY - u * 0.055, u * 0.06, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function classify(w, h) {
+    var r = w / h;
+    if (r > 1.12) return "landscape";
+    if (r < 0.89) return "portrait";
+    return "still";
+  }
+
+  function render() {
+    var w = window.innerWidth, h = window.innerHeight;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    var key = classify(w, h);
+    if (key === "landscape") drawLandscape(w, h);
+    else if (key === "portrait") drawPortrait(w, h);
+    else drawStill(w, h);
+    frame(w, h);
+
+    var g = GENRES[key];
+    elGenre.textContent = g.name;
+    elRank.textContent = g.rank;
+    elFormat.textContent = w + " × " + h + " px (" + (key === "still" ? "≈ square" : key) + ")";
+    document.title = "Hierarchy of Genres — " + g.name;
+  }
+
+  window.addEventListener("resize", render);
+  if (window.screen && screen.orientation && screen.orientation.addEventListener) {
+    screen.orientation.addEventListener("change", render);
+  } else {
+    window.addEventListener("orientationchange", render);
+  }
+  render();
+})();
+</script>
+</body>
+</html>

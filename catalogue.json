@@ -462,5 +462,13 @@
     "source": "Brian O'Doherty, Inside the White Cube: The Ideology of the Gallery Space (1976); Marcel Duchamp / the readymade; net.art (browser chrome / Fullscreen API as material)",
     "mechanism": "Fullscreen API strips all browser/OS chrome on demand, enacting the white cube's context-erasure; fullscreenchange toggles the 'Now it is art' verdict, with a faux-cube fallback when the request is refused; per-visit hue via Math.random.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-24-hierarchy-of-genres",
+    "title": "Hierarchy of Genres",
+    "year": 2026,
+    "source": "Andre Felibien, Preface aux Conferences de l'Academie royale (1667) — the hierarchy of genres; the academic genres: history painting, portrait, landscape, still life; Mel Bochner, Measurement series (1968-69); net.art (screen orientation as material)",
+    "mechanism": "Viewport aspect ratio via resize/orientationchange (the @media-orientation pun: portrait vs landscape) maps the rectangle's orientation onto Felibien's 1667 ranking of genres, redrawing the canvas and wall label per turn; per-visit hue via Math.random, no storage, no network.",
+    "status": "pending"
   }
 ]

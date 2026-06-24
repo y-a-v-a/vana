@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-06-24-hierarchy-of-genres",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "André Félibien, Preface aux Conferences de l'Academie royale (1667)",
+    "Mel Bochner, Measurement series (1968-69)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The orientation-as-genre pun is genuinely fresh and the mechanism enacts the idea cleanly: the viewport aspect ratio literally decides the academic rank, so the academy's prestige collapses into a wrist-flick. The structural absence of history painting (rank I, never shown because this format cannot stage figures-in-action) is a sophisticated touch that makes the hierarchy's apex structurally unreachable. The wall label with 'Decided by: the way you hold it' is dry, restrained, and lands the cheerful-cynic tone. It explicitly answers Bochner's Measurement series by measuring taste instead of quantity, and the Félibien reference is art-historically precise.",
+  "reservations": "The canvas renderings themselves are quite rudimentary — a sun and horizon for landscape, a head-and-shoulders silhouette for portrait, a jug and fruit for still life. This is appropriate for P3 minimalism but borders on thin. The 'history painting is never shown' conceit, while clever, also conveniently avoids rendering the most complex genre. The work sits in a growing cluster of viewport-driven generative pieces in the catalogue (Measurement: Viewport, Wall Drawing for No Wall, Today) and needs to earn its place through the specificity of its argument, which it largely does.",
+  "revision_suggestion": "Consider whether the canvas drawings could do slightly more work — even within P3 restraint, the current shapes feel closer to placeholder than to the genre conventions they're invoking. A single more specific gesture per genre (a Lichtenstein-style Benday dot for the portrait, a Richter-like squeegee smear for the landscape) would deepen the double-coding without breaking minimalism.",
+  "jury_model": "minimax/minimax-m3"
+}
