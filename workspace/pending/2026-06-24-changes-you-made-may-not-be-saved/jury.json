@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-24-changes-you-made-may-not-be-saved",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Bas Jan Ader, I'm too sad to tell you (1971)",
+    "y-a-v-a, i-m-too-sad-to-tell-you (2012)",
+    "browser vendors' deprecation of custom beforeunload messages (~2016)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The beforeunload suppression is a genuine web-native readymade: a platform behavior whose literal operation (discarding the artist's returnValue and substituting a fixed corporate sentence) enacts the concept of platform-imposed censorship of artistic voice. Concept and execution collapse cleanly — the script genuinely hands over the farewell, the browser genuinely throws it away, and the page shows both halves side by side. The chance/order axis is legible (random farewell vs. fixed browser message), the lineage to Bas Jan Ader and the 2012 i-m-too-sad-to-tell-you is explicitly named and productively inverted (internal aphasia → external gagging), and the farewell texts are well-crafted enough to carry the surface gag without the wall label.",
+  "reservations": "The literate reading leans slightly on the label — the Ader connection is stated rather than purely enacted. The beforeunload mechanism, while genuinely web-native, is a relatively well-documented platform quirk; the novelty sits more in the framing (platform censorship as artistic material) than in the mechanism itself. The mock dialog is a smart concession to visibility but slightly softens the 'you have to try to leave to see it' purity.",
+  "revision_suggestion": "Consider letting the farewell texts themselves carry more of the Ader echo without needing the label — e.g., one or two of the random farewells could be more directly about the act of being unable to speak, so the literate reading lands even for a viewer who skips the wall text. A subtle visual cue that the browser dialog is being actively suppressed (rather than just shown as a static mockup) could tighten the mechanism-as-message claim.",
+  "jury_model": "minimax/minimax-m3"
+}

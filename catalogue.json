@@ -470,5 +470,13 @@
     "source": "Andre Felibien, Preface aux Conferences de l'Academie royale (1667) — the hierarchy of genres; the academic genres: history painting, portrait, landscape, still life; Mel Bochner, Measurement series (1968-69); net.art (screen orientation as material)",
     "mechanism": "Viewport aspect ratio via resize/orientationchange (the @media-orientation pun: portrait vs landscape) maps the rectangle's orientation onto Felibien's 1667 ranking of genres, redrawing the canvas and wall label per turn; per-visit hue via Math.random, no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-24-changes-you-made-may-not-be-saved",
+    "title": "Changes You Made May Not Be Saved",
+    "year": 2026,
+    "source": "Bas Jan Ader, I'm too sad to tell you (1971); y-a-v-a, i-m-too-sad-to-tell-you (2012); browser vendors' deprecation of custom beforeunload messages (~2016)",
+    "mechanism": "The beforeunload event's returnValue is set to a per-visit farewell and ignored by browsers (custom strings deprecated ~2016), which speak a fixed corporate line instead.",
+    "status": "pending"
   }
 ]

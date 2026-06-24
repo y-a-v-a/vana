@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changes You Made May Not Be Saved</title>
+<style>
+  :root { --accent: #6a4caf; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: #f4f2ec;
+    color: #1a1a1a;
+    font: 17px/1.55 Georgia, "Times New Roman", serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6vh 5vw;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 40rem; width: 100%; }
+  h1 {
+    font-size: clamp(1.5rem, 4.5vw, 2.4rem);
+    font-weight: normal;
+    letter-spacing: .005em;
+    margin: 0 0 1.6rem;
+    line-height: 1.2;
+  }
+  p { margin: 0 0 1.1rem; }
+  .lead { color: #444; }
+  .farewell {
+    font-size: clamp(1.3rem, 4vw, 1.9rem);
+    color: var(--accent);
+    font-style: italic;
+    margin: 1.4rem 0 1.8rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--accent);
+    line-height: 1.3;
+  }
+  .said {
+    font-style: normal;
+  }
+  .dialog {
+    background: #e9e9eb;
+    border: 1px solid #c4c4c8;
+    border-radius: 10px;
+    box-shadow: 0 6px 22px rgba(0,0,0,.12);
+    padding: 1.1rem 1.2rem 1.2rem;
+    margin: 1.4rem 0 1.9rem;
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    color: #1d1d1f;
+    max-width: 26rem;
+  }
+  .dialog strong { display: block; font-size: 1.02rem; margin-bottom: .35rem; }
+  .dialog span { display: block; color: #555; font-size: .94rem; margin-bottom: .9rem; }
+  .dialog .btns { text-align: right; }
+  .dialog button {
+    font: inherit; font-size: .9rem;
+    border: 1px solid #b9b9bd; background: #fbfbfd;
+    border-radius: 6px; padding: .3rem .85rem; margin-left: .4rem;
+    color: #1d1d1f; cursor: default;
+  }
+  .dialog button.primary { background: #3367d6; border-color: #3367d6; color: #fff; }
+  .note { font-size: .82rem; color: #777; }
+  hr { border: none; border-top: 1px solid #ddd9cf; margin: 2.2rem 0 1.3rem; }
+  .label {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: .78rem; color: #555; line-height: 1.7;
+  }
+  .label b { color: #222; font-weight: 600; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Changes you made<br>may not be saved.</h1>
+
+  <p class="lead">When you try to leave this page, I will try to tell you:</p>
+
+  <blockquote class="farewell" id="farewell">&nbsp;</blockquote>
+
+  <p class="lead">The browser will not allow it. In my place, it will say only:</p>
+
+  <div class="dialog" role="img" aria-label="A browser confirmation dialog reading: Leave site? Changes you made may not be saved.">
+    <strong>Leave site?</strong>
+    <span>Changes you made may not be saved.</span>
+    <div class="btns">
+      <button type="button">Cancel</button>
+      <button type="button" class="primary">Leave</button>
+    </div>
+  </div>
+
+  <p class="note">Your browser may phrase it differently — but never in my words.
+  Around 2016 every major browser quietly removed the artist's ability to write a
+  farewell into this moment, to stop the message from being abused. The gesture is
+  still permitted. The words are not. So I hand mine over each time you go, and each
+  time they are thrown away and replaced with a sentence about saving.</p>
+
+  <hr>
+
+  <div class="label">
+    <b>y-a-v-a</b> (Vincent Bruijn) &mdash; <i>Changes You Made May Not Be Saved</i>, 2026<br>
+    Medium: the <code>beforeunload</code> event; pixels on screen<br>
+    After Bas Jan Ader, <i>I'm too sad to tell you</i> (1971), and after y-a-v-a,
+    <i>i-m-too-sad-to-tell-you</i> (2012) &mdash; the artist who could not speak, now gagged.<br>
+    A new farewell is chosen at random on every visit. Nothing is stored, sent, or remembered.<br>
+    Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>.
+    No cookies. No tracking. No personal data.
+  </div>
+</main>
+
+<script>
+  // A small set of partings. Each visitor is handed a different one;
+  // the platform discards all of them with equal, flat indifference.
+  var farewells = [
+    "Thank you for looking. I know you have other tabs.",
+    "It was art while you were here. After this it is only history.",
+    "Take nothing. It was free, which is to say it was never yours, which is to say it is.",
+    "I was present. You were present. That was the whole of it.",
+    "Close it gently. The pixels do not survive your leaving.",
+    "I would have said more, but they only gave me this much room to be silenced in.",
+    "Goodbye is the one word the medium will not let me keep.",
+    "You came, the page changed, you went. That is the entire career."
+  ];
+
+  var pick = farewells[Math.floor(Math.random() * farewells.length)];
+  document.getElementById("farewell").textContent = "“" + pick + "”";
+
+  var hue = Math.floor(Math.random() * 360);
+  document.documentElement.style.setProperty(
+    "--accent", "hsl(" + hue + " 52% 46%)"
+  );
+
+  // The gesture, in code: I write my farewell into returnValue and offer it to
+  // the browser at the threshold of departure. The browser keeps the prompt and
+  // throws the words away, speaking its own sentence about unsaved changes.
+  // Setting the value IS the artwork; its suppression IS the medium.
+  window.addEventListener("beforeunload", function (e) {
+    e.preventDefault();
+    e.returnValue = pick; // handed over. discarded. replaced.
+    return pick;
+  });
+</script>
+</body>
+</html>
