@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-06-24-optical-mixture",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 38,
+  "verdict": "strong",
+  "references_named": [
+    "Georges Seurat, Un dimanche apres-midi a l'Ile de la Grande Jatte (1884-86)",
+    "Paul Signac / pointillism / divisionism",
+    "Chevreul, law of simultaneous contrast"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "All six hard gates pass. The mechanism (visualViewport.scale + devicePixelRatio driving dot spread) is genuinely web-native — a print cannot void its own viewing-distance contract — and the zoom event literally enacts the conceptual argument, a clean P1 collapse. Double-coding works: the casual viewer gets the shimmer-then-shatter gag, the literate viewer gets Seurat, Signac, and Chevreul. The hint text ('Whatever you do, do not zoom in') and the VOID status are dry, intelligent, and land the cheerful-cynic voice. The reference (Seurat/pointillism) is fresh for the catalogue and materially distinct from every prior work.",
+  "reservations": "Narrative connection to the central twenty-year argument is looser than the strongest works in the catalogue: it extends the 'internet embodies 20th-century art gestures' thesis to perception and viewing conditions, but does not directly engage value, authenticity, or AI — the current arc's load-bearing themes. The chance/order axis is present but only on the order side. The work is somewhat single-layered in its argument compared to multi-valent pieces like 'The Blackest Black' or 'Inside the White Cube.'",
+  "revision_suggestion": "Consider tightening the narrative hook to the catalogue's central concerns — e.g., a price tag or 'sold' dot that voids alongside the optical mixture, or a brief wall-label line that names a prior y-a-v-a work this answers (perhaps la-trahison-des-images.be as the other 'medium-enacts-the-claim' piece). Even one sentence linking the viewing-distance contract to the value/authenticity axis would deepen the narrative score without disturbing the restraint.",
+  "jury_model": "minimax/minimax-m3"
+}

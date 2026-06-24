@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=10, user-scalable=yes">
+<title>Optical Mixture</title>
+<style>
+  :root { --wall:#171410; --cream:#ece6d6; --ink:#cfc7b4; --void:#d0654f; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--wall); color:var(--ink);
+    font:15px/1.5 Georgia,"Times New Roman",serif; -webkit-font-smoothing:antialiased; }
+  #stage { min-height:100%; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:26px; padding:40px 18px; }
+  #frame { background:var(--cream); padding:14px; border:1px solid #0c0a08;
+    box-shadow:0 18px 60px rgba(0,0,0,.6), inset 0 0 0 1px rgba(0,0,0,.04); }
+  canvas { display:block; image-rendering:auto; }
+  #label { max-width:560px; width:100%; border-top:1px solid #2c271f; padding-top:14px;
+    font-size:13px; letter-spacing:.2px; }
+  #label h1 { font-size:15px; font-style:italic; margin:0 0 2px; color:var(--cream); font-weight:normal; }
+  #label .sub { color:#8d8470; margin:0 0 12px; }
+  #label dl { display:grid; grid-template-columns:auto 1fr; gap:3px 14px; margin:0 0 12px; }
+  #label dt { color:#8d8470; }
+  #label dd { margin:0; }
+  #status b { font-variant-numeric:tabular-nums; }
+  .void { color:var(--void); }
+  .note { color:#8d8470; font-style:italic; }
+  footer { max-width:560px; width:100%; font-size:11px; color:#6e6655; line-height:1.6; }
+  footer a { color:#8d8470; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="frame"><canvas id="art" aria-label="A field of broken colour after Seurat"></canvas></div>
+  <div id="label">
+    <h1>Optical Mixture</h1>
+    <p class="sub">after Georges Seurat &mdash; pixels on screen, undated</p>
+    <dl>
+      <dt>Medium</dt><dd>broken colour; mixing performed by the viewer's retina</dd>
+      <dt>Viewing distance</dt><dd id="status">&mdash;</dd>
+    </dl>
+    <p class="note" id="hint">The colours are not mixed on the screen. They are mixed in your eye, at a distance. Step back, or squint. Whatever you do, do not zoom in.</p>
+  </div>
+  <footer>
+    A field of complementary dots — orange and blue — that average into a luminous neutral only when small and adjacent.
+    Seurat let the eye do the mixing, on the assumption of a fixed viewing distance. The browser grants infinite, free zoom,
+    so that assumption is a contract the viewer can void at any time: the closer you look, the further the dots drift apart, and
+    the picture you came for stops existing.<br><br>
+    y-a-v-a &mdash; after Georges Seurat, <i>Un dimanche après-midi à l'Île de la Grande Jatte</i> (1884&ndash;86); pointillism / divisionism; Chevreul's law of simultaneous contrast.
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>. No cookies, no trackers, no requests — the work runs entirely in your browser.
+  </footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var GROUND = "#ece6d6", WARM = "#e8743b", COOL = "#3b6fe8";
+  var BASE_GAP = 5, DOT_R = 1.7, VOID_AT = 1.15;
+  var cv = document.getElementById("art"), ctx = cv.getContext("2d");
+  var statusEl = document.getElementById("status"), hintEl = document.getElementById("hint");
+  var baseDPR = window.devicePixelRatio || 1;
+
+  function zoom() {
+    var z = (window.devicePixelRatio || 1) / baseDPR;
+    if (window.visualViewport && window.visualViewport.scale) z *= window.visualViewport.scale;
+    return z;
+  }
+
+  function draw() {
+    var z = zoom();
+    var side = Math.min(window.innerWidth * 0.82, window.innerHeight * 0.6, 540);
+    if (side < 120) side = 120;
+    var dpr = window.devicePixelRatio || 1;
+    cv.style.width = side + "px"; cv.style.height = side + "px";
+    cv.width = Math.round(side * dpr); cv.height = Math.round(side * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = GROUND; ctx.fillRect(0, 0, side, side);
+
+    // The closer you look (higher zoom), the further the dots drift apart.
+    var spread = Math.max(0, z - 1);
+    var gap = BASE_GAP * (1 + spread * 3.4);
+    var cx = side / 2, cy = side / 2, maxr = side * 0.5;
+
+    ctx.globalAlpha = 0.86;
+    for (var y = gap / 2, j = 0; y < side; y += gap, j++) {
+      for (var x = gap / 2, i = 0; x < side; x += gap, i++) {
+        var dx = (x - cx) / maxr, dy = (y - cy) / maxr;
+        var r = Math.sqrt(dx * dx + dy * dy);
+        var L = Math.max(0, 1 - r);                 // luminous disc: dense centre, sparse edge
+        var h = ((i * 73856093) ^ (j * 19349663)) >>> 0;
+        if ((h % 1000) / 1000 > 0.22 + 0.78 * L) continue;
+        ctx.fillStyle = ((i + j) & 1) === 0 ? WARM : COOL;
+        ctx.beginPath(); ctx.arc(x, y, DOT_R, 0, 6.2831853); ctx.fill();
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    var pct = Math.round(z * 100);
+    var voided = z > VOID_AT;
+    statusEl.innerHTML = "<b>" + pct + "%</b> &mdash; optical mixture: <b class='" +
+      (voided ? "void" : "") + "'>" + (voided ? "VOID" : "active") + "</b>";
+    hintEl.className = voided ? "note void" : "note";
+    hintEl.textContent = voided
+      ? "You looked too closely. The contract is void; the dots are only dots now. Step back."
+      : "The colours are not mixed on the screen. They are mixed in your eye, at a distance. Step back, or squint. Whatever you do, do not zoom in.";
+  }
+
+  var pending = false;
+  function schedule() { if (!pending) { pending = true; requestAnimationFrame(function () { pending = false; draw(); }); } }
+
+  window.addEventListener("resize", schedule);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", schedule);
+    window.visualViewport.addEventListener("scroll", schedule);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>

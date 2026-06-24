@@ -478,5 +478,13 @@
     "source": "Bas Jan Ader, I'm too sad to tell you (1971); y-a-v-a, i-m-too-sad-to-tell-you (2012); browser vendors' deprecation of custom beforeunload messages (~2016)",
     "mechanism": "The beforeunload event's returnValue is set to a per-visit farewell and ignored by browsers (custom strings deprecated ~2016), which speak a fixed corporate line instead.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-24-optical-mixture",
+    "title": "Optical Mixture",
+    "year": 2026,
+    "source": "Georges Seurat, Un dimanche apres-midi a l'Ile de la Grande Jatte (1884-86); Paul Signac / pointillism / divisionism; Chevreul, law of simultaneous contrast",
+    "mechanism": "Live zoom detection (visualViewport.scale + devicePixelRatio baseline) drives a deterministic complementary-dot canvas apart as the viewer looks closer, so leaning in dissolves the optical mixture; no storage, no network.",
+    "status": "pending"
   }
 ]
