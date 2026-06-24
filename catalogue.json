@@ -486,5 +486,13 @@
     "source": "Georges Seurat, Un dimanche apres-midi a l'Ile de la Grande Jatte (1884-86); Paul Signac / pointillism / divisionism; Chevreul, law of simultaneous contrast",
     "mechanism": "Live zoom detection (visualViewport.scale + devicePixelRatio baseline) drives a deterministic complementary-dot canvas apart as the viewer looks closer, so leaning in dissolves the optical mixture; no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-24-time-clock-piece-you-will-miss-the-next-one",
+    "title": "Time Clock Piece (You Will Miss the Next One)",
+    "year": 2026,
+    "source": "Tehching Hsieh, One Year Performance 1980-1981 (Time Clock Piece); On Kawara, Today series",
+    "mechanism": "A punch button gated to the first 60 seconds of each clock hour, with a localStorage-anchored year-grid (8,760 cells) that retroactively marks every elapsed un-punched hour as a permanent miss; system clock only, no network.",
+    "status": "pending"
   }
 ]

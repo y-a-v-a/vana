@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-06-24-time-clock-piece-you-will-miss-the-next-one",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 5,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 42,
+  "verdict": "strong",
+  "references_named": [
+    "Tehching Hsieh, One Year Performance 1980-1981 (Time Clock Piece)",
+    "On Kawara, Today series"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7"
+  ],
+  "rationale": "The mechanism enacts the concept: a punch button gated to the first 60 seconds of each hour, with a year-grid that retroactively marks every elapsed un-punched hour as a permanent miss. The system clock manufactures absence on its own, which is precisely Hsieh's paradox — the misses are the proof — translated into web-native logic. The piece is materially distinct from the catalogue: it is not a Kawara date painting (Today already covers that), and no existing work restages Hsieh's time-clock discipline. Tone is dry and cheerful-cynic; license and attribution are stated; no network, no trackers. The double-coding lands: a humiliating punch-clock gag on the surface, a precise durational-performance argument underneath.",
+  "reservations": "The localStorage anchor means the 'performance' is bound to first-visit hour, which slightly softens the rigor — a user who clears storage gets a fresh start, and the piece acknowledges this as the punchline rather than a flaw. The 8,760-cell grid is visually legible but the canvas resolution (146x60) is modest; the work could be slightly tighter on the 'current hour' highlight (yellow) which is a small visual flourish not strictly needed.",
+  "revision_suggestion": "Consider making the 'current hour' cell visually identical to 'not yet' so the only color states are punched/missed/future — purer P3 restraint. Optionally surface the Hsieh 8,627/133 ratio as a static reference line in the grid so the comparison is structural rather than only in the footer.",
+  "jury_model": "minimax/minimax-m3"
+}
