@@ -518,5 +518,13 @@
     "source": "Jasper Johns, Flag (1954-55); Jasper Johns, afterimage flag demonstration; Ewald Hering, opponent-process theory of colour vision",
     "mechanism": "Timed two-state surface: 20s fixation on a complementary-colour SVG flag, then a crossfade to a neutral field where the opponent-process afterimage forms in the viewer's eye, not on screen.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-25-un-coup-de-des-le-hasard-n-est-pas-aboli",
+    "title": "Un Coup de Dés (le hasard n'est pas aboli)",
+    "year": 2026,
+    "source": "Marcel Broodthaers, Un Coup de Dés Jamais N'Abolira Le Hasard (Image) (1969); Stéphane Mallarmé, Un Coup de Dés Jamais N'Abolira Le Hasard (1897); net.art (browser layout engine as material)",
+    "mechanism": "Words rendered as opaque bars via color:transparent on their own black inline-boxes, still selectable/copyable/in-source, with browser reflow re-throwing the constellation and a resize counter.",
+    "status": "pending"
   }
 ]

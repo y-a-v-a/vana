@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4f1ea">
+<title>Un Coup de Dés (le hasard n'est pas aboli)</title>
+<style>
+  :root { --paper:#f4f1ea; --ink:#111110; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); }
+  body {
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", Times, serif;
+    min-height: 100vh;
+    padding: 9vh 7vw 16vh;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Each word is real, present, selectable text — rendered as an opaque bar
+     by the browser's own type-setting engine. color:transparent hides the
+     letters; the black background is the word's exact rendered box. */
+  .w {
+    background: var(--ink);
+    color: transparent;
+    padding: .02em .14em;
+    border-radius: 1px;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    white-space: nowrap;
+  }
+  /* The medium can lift its own veil: dragging a selection reveals
+     what the ink could never give back. */
+  ::selection { color: #fff; background: var(--ink); }
+  .w::selection { color: #fff; background: var(--ink); }
+
+  .line { margin: 0 0 .2em; }
+  .gap  { height: clamp(2.2rem, 7vh, 6rem); }
+
+  .xl { font-size: clamp(1.8rem, 7vw, 4.4rem); letter-spacing: .02em; }
+  .l  { font-size: clamp(1.3rem, 4.6vw, 2.6rem); }
+  .m  { font-size: clamp(1.0rem, 3vw, 1.6rem); }
+  .s  { font-size: clamp(.85rem, 2.1vw, 1.15rem); font-style: italic; }
+
+  .throw {
+    position: fixed; left: 7vw; bottom: 5.2vh;
+    font-size: .8rem; font-style: italic; color: #8a857a;
+    letter-spacing: .02em; pointer-events: none;
+  }
+
+  .colophon {
+    position: fixed; right: 7vw; bottom: 4.6vh; max-width: min(46ch, 80vw);
+    font-size: .7rem; line-height: 1.55; color: #8a857a; text-align: right;
+  }
+  .colophon b { color: #6f6a5f; font-weight: normal; font-style: italic; }
+  .colophon span { white-space: nowrap; }
+</style>
+</head>
+<body>
+
+  <div class="line xl" style="margin-left:2%"><i class="w">UN</i> <i class="w">COUP</i> <i class="w">DE</i> <i class="w">DÉS</i></div>
+  <div class="line xl" style="margin-left:34%"><i class="w">JAMAIS</i></div>
+  <div class="line l"  style="margin-left:12%"><i class="w">N’ABOLIRA</i></div>
+  <div class="line xl" style="margin-left:52%"><i class="w">LE</i> <i class="w">HASARD</i></div>
+
+  <div class="gap"></div>
+
+  <div class="line l"  style="margin-left:6%"><i class="w">RIEN</i></div>
+  <div class="line m"  style="margin-left:28%"><i class="w">n’aura</i> <i class="w">eu</i> <i class="w">lieu</i></div>
+  <div class="line m"  style="margin-left:46%"><i class="w">que</i> <i class="w">le</i> <i class="w">lieu</i></div>
+
+  <div class="gap"></div>
+
+  <div class="line l"  style="margin-left:20%"><i class="w">EXCEPTÉ</i></div>
+  <div class="line m"  style="margin-left:40%"><i class="w">peut-être</i></div>
+  <div class="line l"  style="margin-left:8%"><i class="w">UNE</i> <i class="w">CONSTELLATION</i></div>
+  <div class="line s"  style="margin-left:30%"><i class="w">froide</i> <i class="w">d’oubli</i> <i class="w">et</i> <i class="w">de</i> <i class="w">désuétude</i></div>
+
+  <div class="gap"></div>
+
+  <div class="line m" style="margin-left:4%"><i class="w">TOUTE</i> <i class="w">PENSÉE</i> <i class="w">ÉMET</i> <i class="w">UN</i> <i class="w">COUP</i> <i class="w">DE</i> <i class="w">DÉS</i></div>
+
+  <div class="throw" id="throw">jet n° 1 — le hasard n’est pas aboli</div>
+
+  <div class="colophon">
+    <b>Un Coup de Dés (le hasard n’est pas aboli)</b>, y-a-v-a, 2026.<br>
+    After Marcel Broodthaers, <span>“Un Coup de Dés…”</span> (1969), after
+    Stéphane Mallarmé (1897). Broodthaers blacked the words out in ink;
+    here the words are still there — <span>select them</span>, copy them,
+    view the source. Each browser reflow is another throw.<br>
+    <span>CC BY-SA 4.0</span> · no cookies, no trackers, no requests.
+  </div>
+
+<script>
+  // The browser's layout engine throws the dice; resize is the next throw.
+  // It rearranges the constellation forever and abolishes nothing.
+  (function () {
+    var el = document.getElementById('throw');
+    var n = 1;
+    addEventListener('resize', function () {
+      n++;
+      el.textContent = 'jet n° ' + n + ' — le hasard n’est pas aboli';
+    }, { passive: true });
+  })();
+</script>
+</body>
+</html>

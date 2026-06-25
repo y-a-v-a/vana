@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-25-un-coup-de-des-le-hasard-n-est-pas-aboli",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 44,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Broodthaers, Un Coup de Dés Jamais N'Abolira Le Hasard (Image) (1969)",
+    "Stéphane Mallarmé, Un Coup de Dés Jamais N'Abolira Le Hasard (1897)",
+    "net.art (browser layout engine as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument: color:transparent on real, selectable, copyable text means the redaction is a stylesheet the substrate refuses to keep, which is a genuinely web-native ontological move a print cannot make. The Mallarmé/Broodthaers lineage is precise and the chance/order axis is honored by handing the dice to the browser's reflow loop. Double-coding lands cleanly — surface gag (censorship) and literate reading (the medium lifting its own veil) both work without wall text. The build is minimal, the ethics are stated, and the tone is dry.",
+  "reservations": "The 'jet' counter is a small flourish that risks feeling decorative rather than load-bearing; the work would survive without it. The constellation is hand-laid rather than truly generative, so the 'throw' is mostly the viewer's own resize rather than the work's own chance engine — a touch more procedural re-typesetting would deepen the P5 claim.",
+  "revision_suggestion": "Consider letting the reflow itself do more work — e.g., a small chance-driven re-typeset on each visit (shuffling line indents or word groupings within Mallarmé's typographic constraints) so the 'throw' is genuinely the work's, not only the viewer's. Otherwise the piece is essentially complete.",
+  "jury_model": "minimax/minimax-m3"
+}
