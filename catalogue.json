@@ -525,6 +525,6 @@
     "year": 2026,
     "source": "Marcel Broodthaers, Un Coup de Dés Jamais N'Abolira Le Hasard (Image) (1969); Stéphane Mallarmé, Un Coup de Dés Jamais N'Abolira Le Hasard (1897); net.art (browser layout engine as material)",
     "mechanism": "Words rendered as opaque bars via color:transparent on their own black inline-boxes, still selectable/copyable/in-source, with browser reflow re-throwing the constellation and a resize counter.",
-    "status": "pending"
+    "status": "published"
   }
 ]
