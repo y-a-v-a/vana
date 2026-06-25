@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-25-afterimage-not-on-this-page",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 42,
+  "verdict": "strong",
+  "references_named": [
+    "Jasper Johns, Flag (1954-55)",
+    "Jasper Johns, afterimage flag demonstration",
+    "Ewald Hering, opponent-process theory of colour vision"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The work earns a strong novelty of location: the artwork literally does not exist on screen at the moment of its completion — it is rendered by the viewer's own retina after the timed withdrawal. Concept and execution collapse cleanly (P1): the 20s timed fade, fixation dot and depleting ring are the physiological instrument, not decoration. Johns is a fresh patron saint for the catalogue and slots into the Pop/appropriation lineage beside Pop Whaam! and the Warhol hamburger. The caption's dry inversion of the house line 'the pixels are the message' is the cheerful-cynic voice landing precisely.",
+  "reservations": "The afterimage depends on viewer physiology, ambient light and display quality — the work will fail partially in bright rooms, on washed-out laptop screens, or for inattentive viewers, which slightly undercuts the universality claim implicit in P3. The underlying optical phenomenon is centuries old; the novelty must rest entirely on the timed web surface and the Johns framing, which it does, but the effect itself is not new to human experience.",
+  "revision_suggestion": "Consider a subtle honesty signal in the caption — e.g., a one-line 'best in a dim room' note already in the intro, or a tiny 'if the flag didn't appear, your screen is too bright' line — that turns the contingency into part of the conceptual frame rather than a hidden failure mode. Optionally, log a brief localStorage-free fixation-stability probe to deepen P1's claim that the mechanism is doing real physiological work.",
+  "jury_model": "minimax/minimax-m3"
+}

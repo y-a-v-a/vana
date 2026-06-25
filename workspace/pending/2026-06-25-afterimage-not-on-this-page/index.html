@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<!--
+  Afterimage (Not on This Page) — y-a-v-a
+  After Jasper Johns, "Flag" (1954–55) and the afterimage flag demonstration.
+  Licensed CC BY-SA 4.0. No cookies, no trackers, no external requests.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Afterimage (Not on This Page)</title>
+<style>
+  :root { --field: #f4f4f4; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: var(--field);
+    color: #111;
+    font: 16px/1.5 Georgia, 'Times New Roman', serif;
+    overflow: hidden;
+    -webkit-user-select: none; user-select: none;
+    -webkit-touch-callout: none;
+  }
+  #stage { position: fixed; inset: 0; background: var(--field); }
+  #flag {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    opacity: 0; transition: opacity 0.45s ease;
+  }
+  #stage.staring #flag { opacity: 1; }
+
+  /* fixation dot + depleting ring, dead-centre, so the eye never moves */
+  #fix {
+    position: absolute; top: 50%; left: 50%;
+    width: 96px; height: 96px; margin: -48px 0 0 -48px;
+    opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
+  }
+  #stage.staring #fix, #stage.revealed #fix { opacity: 1; }
+  #fix .dot { fill: #111; }
+  #fix .track { fill: none; stroke: rgba(17,17,17,.18); stroke-width: 3; }
+  #fix .ring  { fill: none; stroke: #111; stroke-width: 3; stroke-linecap: round;
+                transform: rotate(-90deg); transform-origin: 48px 48px; }
+  #stage.revealed #fix .track, #stage.revealed #fix .ring { opacity: 0; }
+
+  /* the intro card and the closing caption share a centred-overlay style */
+  .overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 6vmin; gap: 1.1em;
+  }
+  #intro { background: var(--field); transition: opacity 0.4s ease; }
+  #stage.staring #intro, #stage.revealed #intro { opacity: 0; pointer-events: none; }
+  h1 { font-size: clamp(26px, 6vmin, 52px); font-weight: normal; letter-spacing: .01em; }
+  .sub { max-width: 30em; color: #333; }
+  button {
+    font: inherit; font-size: 1.05em; color: #f4f4f4; background: #111;
+    border: none; padding: .7em 1.8em; cursor: pointer; border-radius: 2px;
+  }
+  button:hover { background: #333; }
+
+  #caption {
+    opacity: 0; transition: opacity 1.4s ease; pointer-events: none;
+    bottom: 0; top: auto; justify-content: flex-end; padding-bottom: 9vmin;
+  }
+  #stage.revealed #caption { opacity: 1; pointer-events: auto; }
+  #caption p { max-width: 34em; }
+  #caption .lead { font-size: clamp(18px, 3.4vmin, 26px); }
+  #caption .small { color: #444; font-size: .92em; }
+  #again {
+    font: inherit; color: #111; background: none; border: none;
+    border-bottom: 1px solid #111; padding: 0 0 1px; border-radius: 0;
+    cursor: pointer; margin-top: .4em;
+  }
+  #again:hover { background: none; color: #555; border-color: #555; }
+
+  footer {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    font: 11px/1.4 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    color: #999; text-align: center; padding: 7px 10px; pointer-events: none;
+  }
+  footer a { color: #999; }
+  @media (prefers-reduced-motion: reduce) {
+    #flag, #intro, #caption, #fix, #fix .track, #fix .ring { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <svg id="flag" viewBox="0 0 1235 650" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+
+  <svg id="fix" viewBox="0 0 96 96" aria-hidden="true">
+    <circle class="track" cx="48" cy="48" r="40"></circle>
+    <circle class="ring"  cx="48" cy="48" r="40"></circle>
+    <circle class="dot"   cx="48" cy="48" r="4.5"></circle>
+  </svg>
+
+  <div id="intro" class="overlay">
+    <h1>Afterimage</h1>
+    <p class="sub">There is a flag on this page, in the wrong colours.
+      Stare at the black dot in its centre and do not let your eyes drift.
+      When the ring runs out, the page will go blank — and the real flag will appear.
+      Not here. In you.</p>
+    <button id="begin" type="button">Stare</button>
+    <p class="sub" style="font-size:.85em;color:#888">Twenty seconds. Best in a dim room.</p>
+  </div>
+
+  <div id="caption" class="overlay">
+    <p class="lead">There it is — the Stars and Stripes, in red, white and blue.</p>
+    <p>Not one of those three colours is anywhere on this screen.
+       You painted the flag yourself, on the inside of your own eyes.
+       We supplied the wrong one and a blank wall.</p>
+    <p class="small">Jasper Johns hung the flag where the mind already kept it.
+       We hung it where your retina keeps it — for about four seconds.</p>
+    <button id="again" type="button">Look again</button>
+  </div>
+</div>
+
+<footer>
+  CC BY-SA 4.0 · y-a-v-a (yet another visual artist) · after Jasper Johns, <em>Flag</em> (1954–55) ·
+  opponent-process afterimage (Hering) · no cookies, no tracking, no requests
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var STARE_MS = 20000;
+  var stage   = document.getElementById('stage');
+  var flag    = document.getElementById('flag');
+  var ring    = document.querySelector('#fix .ring');
+
+  // ---- build the flag in complementary (opponent) colours --------------
+  // green stripes -> red afterimage, black stripes -> white,
+  // orange canton -> blue, black stars -> white.
+  var GREEN = '#00a884', BLACK = '#101010', ORANGE = '#ff7a00';
+  var W = 1235, H = 650, STRIPE = H / 13;          // 13 stripes
+  var unionW = 494, unionH = STRIPE * 7;           // union over the top 7 stripes
+
+  function starPath(cx, cy, r) {
+    var pts = [], i, ang, rad;
+    for (i = 0; i < 10; i++) {
+      rad = (i % 2 === 0) ? r : r * 0.382;
+      ang = (-90 + i * 36) * Math.PI / 180;
+      pts.push((cx + rad * Math.cos(ang)).toFixed(2) + ',' + (cy + rad * Math.sin(ang)).toFixed(2));
+    }
+    return '<polygon points="' + pts.join(' ') + '" fill="' + BLACK + '"/>';
+  }
+
+  var svg = '';
+  // stripes: index 0 starts green; evens green (7), odds black (6)
+  for (var s = 0; s < 13; s++) {
+    svg += '<rect x="0" y="' + (s * STRIPE).toFixed(2) + '" width="' + W +
+           '" height="' + (STRIPE + 0.6).toFixed(2) + '" fill="' + (s % 2 === 0 ? GREEN : BLACK) + '"/>';
+  }
+  // canton
+  svg += '<rect x="0" y="0" width="' + unionW + '" height="' + unionH.toFixed(2) + '" fill="' + ORANGE + '"/>';
+  // 50 stars: 9 rows, staggered 6/5 across 12 horizontal / 10 vertical slots
+  var sx = unionW / 12, sy = unionH / 10, r = sy * 0.45;
+  for (var row = 1; row <= 9; row++) {
+    var odd = (row % 2 === 1);
+    var cols = odd ? [1,3,5,7,9,11] : [2,4,6,8,10];
+    for (var c = 0; c < cols.length; c++) {
+      svg += starPath(cols[c] * sx, row * sy, r);
+    }
+  }
+  flag.innerHTML = svg;
+
+  // ---- fixation ring geometry -----------------------------------------
+  var C = 2 * Math.PI * 40;
+  ring.setAttribute('stroke-dasharray', C.toFixed(2));
+  ring.setAttribute('stroke-dashoffset', '0');
+
+  // ---- state machine ---------------------------------------------------
+  var raf = null, t0 = 0;
+
+  function tick(now) {
+    var p = Math.min(1, (now - t0) / STARE_MS);
+    ring.setAttribute('stroke-dashoffset', (C * p).toFixed(2));   // deplete clockwise
+    if (p >= 1) { reveal(); return; }
+    raf = requestAnimationFrame(tick);
+  }
+
+  function stare() {
+    stage.className = 'staring';
+    t0 = (window.performance && performance.now) ? performance.now() : 0;
+    ring.setAttribute('stroke-dashoffset', '0');
+    raf = requestAnimationFrame(tick);
+  }
+
+  function reveal() {
+    if (raf) cancelAnimationFrame(raf), raf = null;
+    stage.className = 'revealed';   // flag fades to the blank field; afterimage blooms in the eye
+  }
+
+  function restart() {
+    if (raf) cancelAnimationFrame(raf), raf = null;
+    stage.className = '';
+  }
+
+  document.getElementById('begin').addEventListener('click', stare);
+  document.getElementById('again').addEventListener('click', restart);
+})();
+</script>
+</body>
+</html>

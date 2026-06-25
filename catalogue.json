@@ -510,5 +510,13 @@
     "source": "Aleksandr Rodchenko, Pure Red Colour / Pure Yellow Colour / Pure Blue Colour (1921); the monochrome / end-of-painting tradition; net.art (browser & OS chrome as material)",
     "mechanism": "A live <input type=\"color\"> IS the painting; clicking it summons the operating system's native colour dialog, which floods the viewport and theme-color with a single chosen monochrome.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-25-afterimage-not-on-this-page",
+    "title": "Afterimage (Not on This Page)",
+    "year": 2026,
+    "source": "Jasper Johns, Flag (1954-55); Jasper Johns, afterimage flag demonstration; Ewald Hering, opponent-process theory of colour vision",
+    "mechanism": "Timed two-state surface: 20s fixation on a complementary-colour SVG flag, then a crossfade to a neutral field where the opponent-process afterimage forms in the viewer's eye, not on screen.",
+    "status": "pending"
   }
 ]
