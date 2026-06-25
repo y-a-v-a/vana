@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inert Gas — From a Measured Volume to Indefinite Expansion</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: #07080a;
+    color: #d7dadf;
+    font: 16px/1.5 ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 6vh 20px 40px;
+  }
+  main { width: 100%; max-width: 640px; }
+  header { margin-bottom: 30px; }
+  h1 { font-size: 20px; font-weight: 600; letter-spacing: .2px; margin: 0 0 4px; }
+  .subtitle { font-style: italic; color: #8c919a; font-size: 14px; margin: 0 0 16px; }
+  .label { font-size: 13px; color: #757a83; max-width: 56ch; }
+  .label b { color: #9aa0a8; font-weight: 600; }
+
+  .readout {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    font-size: 12px; letter-spacing: .3px; color: #9aa0a8;
+    border-top: 1px solid #16191e; border-bottom: 1px solid #16191e;
+    padding: 12px 0; margin: 22px 0;
+  }
+  .readout span b { font-variant-numeric: tabular-nums; color: #e7eaef; font-size: 15px; }
+
+  .canister {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 16px; margin: 8px 0;
+    border: 1px solid #16191e; border-radius: 10px;
+    background: #0b0d11;
+    transition: opacity 2.2s ease, filter 2.2s ease, transform 2.2s ease;
+    will-change: opacity, filter, transform;
+  }
+  .canister.released {
+    opacity: 0; filter: blur(16px);
+    transform: translateY(-46px) scale(1.18);
+  }
+  .glow {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--c); box-shadow: 0 0 14px 3px var(--c);
+    flex: 0 0 auto;
+  }
+  .meta { flex: 1 1 auto; min-width: 0; }
+  .meta .name { font-weight: 600; color: #e7eaef; }
+  .meta .name .sym { color: var(--c); }
+  .meta .z { font-size: 12px; color: #757a83; }
+  .touch {
+    font: inherit; font-size: 12px; color: #c7ccd3;
+    background: #14171c; border: 1px solid #23272e; border-radius: 6px;
+    padding: 6px 12px; cursor: pointer; white-space: nowrap;
+  }
+  .touch:hover { border-color: var(--c); }
+  .flash { color: var(--c); font-size: 12px; min-height: 1em; margin-left: 2px; }
+
+  .controls { margin: 26px 0 8px; }
+  button.release {
+    font: inherit; font-size: 14px; font-weight: 600;
+    color: #07080a; background: #d7dadf; border: 0; border-radius: 8px;
+    padding: 11px 20px; cursor: pointer;
+  }
+  button.release:hover { background: #fff; }
+  button.release[disabled] { opacity: .4; cursor: default; }
+
+  .verdict { margin-top: 22px; font-size: 14px; color: #8c919a; min-height: 2.4em; }
+  .verdict.full { color: #d7dadf; }
+
+  footer {
+    margin-top: 40px; padding-top: 16px; border-top: 1px solid #16191e;
+    font-size: 11.5px; line-height: 1.7; color: #5d626b; max-width: 640px; width: 100%;
+  }
+  footer a { color: #7a808a; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Inert Gas</h1>
+    <p class="subtitle">From a Measured Volume to Indefinite Expansion</p>
+    <p class="label">
+      After <b>Robert Barry, <i>Inert Gas Series</i> (1969)</b>: a measured volume of a
+      noble gas released into the atmosphere, expanding without limit, invisible and
+      unrecoverable. Here each gas is held in a canister you can still reach. Release it
+      and it is set <b>inert</b> — present in the page, but gone from the pointer, the tab
+      order and the accessibility tree. The instruments that perceive this page can no
+      longer find it.
+    </p>
+  </header>
+
+  <section class="readout" aria-hidden="true">
+    <span>measured volume (reachable): <b id="reach">5</b></span>
+    <span>indefinite expansion (inert): <b id="gone">0</b></span>
+  </section>
+
+  <div id="series"></div>
+
+  <div class="controls">
+    <button class="release" id="release">Release into the atmosphere</button>
+  </div>
+
+  <p class="verdict" id="verdict"></p>
+</main>
+
+<footer>
+  <strong>Inert Gas (From a Measured Volume to Indefinite Expansion)</strong>, 2026.
+  Medium: the HTML <code>inert</code> attribute; pixels on screen. After Robert Barry,
+  <em>Inert Gas Series</em> (1969). By <strong>y-a-v-a</strong> (Vincent Bruijn),
+  validated by Vincent Bruijn. AI-generated, DNA-validated.<br>
+  Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>.
+  No cookies, no tracking, no personal data, no network requests — this page never
+  phones home. Reload refills the canisters.
+</footer>
+
+<script>
+(function () {
+  // Noble gases of Barry's series, tinted by their gas-discharge glow colour.
+  var GASES = [
+    { name: "Helium",  sym: "He", z: 2,  c: "#ff9d76" },
+    { name: "Neon",    sym: "Ne", z: 10, c: "#ff5a3c" },
+    { name: "Argon",   sym: "Ar", z: 18, c: "#9b8cff" },
+    { name: "Krypton", sym: "Kr", z: 36, c: "#a8e6a1" },
+    { name: "Xenon",   sym: "Xe", z: 54, c: "#6ec6ff" }
+  ];
+
+  var series  = document.getElementById("series");
+  var reachEl = document.getElementById("reach");
+  var goneEl  = document.getElementById("gone");
+  var verdict = document.getElementById("verdict");
+  var btn     = document.getElementById("release");
+
+  GASES.forEach(function (g) {
+    var row = document.createElement("div");
+    row.className = "canister";
+    row.style.setProperty("--c", g.c);
+
+    var glow = document.createElement("span");
+    glow.className = "glow";
+
+    var meta = document.createElement("div");
+    meta.className = "meta";
+    var nm = document.createElement("div");
+    nm.className = "name";
+    nm.innerHTML = g.name + ' <span class="sym">' + g.sym + "</span>";
+    var z = document.createElement("div");
+    z.className = "z";
+    z.textContent = "atomic number " + g.z + " — measured volume, held";
+    meta.appendChild(nm); meta.appendChild(z);
+
+    var touch = document.createElement("button");
+    touch.className = "touch";
+    touch.type = "button";
+    touch.textContent = "touch the gas";
+    var flash = document.createElement("span");
+    flash.className = "flash";
+    var ft;
+    touch.addEventListener("click", function () {
+      flash.textContent = "still here";
+      clearTimeout(ft);
+      ft = setTimeout(function () { flash.textContent = ""; }, 1100);
+    });
+
+    row.appendChild(glow);
+    row.appendChild(meta);
+    row.appendChild(touch);
+    row.appendChild(flash);
+    series.appendChild(row);
+    g.el = row;
+  });
+
+  function recount() {
+    // Honest tally: an element counts as released only while it is actually inert.
+    var reachable = GASES.filter(function (g) { return !g.el.inert; }).length;
+    reachEl.textContent = reachable;
+    goneEl.textContent  = GASES.length - reachable;
+  }
+
+  function release(g) {
+    g.el.inert = true;            // <- the work: present in the DOM, unreachable.
+    g.el.classList.add("released");
+    g.el.querySelector(".z").textContent = "indefinite expansion — beyond reach";
+    recount();
+  }
+
+  btn.addEventListener("click", function go() {
+    btn.disabled = true;
+    btn.textContent = "Releasing…";
+    GASES.forEach(function (g, i) {
+      setTimeout(function () {
+        release(g);
+        if (i === GASES.length - 1) {
+          setTimeout(function () {
+            verdict.textContent =
+              "All five are released. They are still on the page and reachable " +
+              "nowhere. The work is now everywhere — owned by no one, perceived by " +
+              "nothing. Only reload (outside the document) can call it back.";
+            verdict.className = "verdict full";
+            // The apparatus disperses too: label, controls and tally go inert.
+            document.querySelector("header").inert = true;
+            document.querySelector(".readout").inert = true;
+            verdict.inert = true;
+            btn.inert = true;
+          }, 2400);
+        }
+      }, 1200 * (i + 1));
+    });
+  });
+})();
+</script>
+</body>
+</html>

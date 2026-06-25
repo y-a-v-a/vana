@@ -494,5 +494,13 @@
     "source": "Tehching Hsieh, One Year Performance 1980-1981 (Time Clock Piece); On Kawara, Today series",
     "mechanism": "A punch button gated to the first 60 seconds of each clock hour, with a localStorage-anchored year-grid (8,760 cells) that retroactively marks every elapsed un-punched hour as a permanent miss; system clock only, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-25-inert-gas-from-a-measured-volume-to-indefinite-expansion",
+    "title": "Inert Gas (From a Measured Volume to Indefinite Expansion)",
+    "year": 2026,
+    "source": "Robert Barry, Inert Gas Series (1969); Robert Barry, From a Measured Volume to Indefinite Expansion (1969); conceptual art / dematerialization of the art object; net.art (the accessibility tree / DOM as material)",
+    "mechanism": "The HTML inert attribute progressively removes each gas element from pointer events, the focus order and the accessibility tree (present in the DOM, unreachable), then inerts the whole apparatus; reload refills; no storage, no network.",
+    "status": "pending"
   }
 ]

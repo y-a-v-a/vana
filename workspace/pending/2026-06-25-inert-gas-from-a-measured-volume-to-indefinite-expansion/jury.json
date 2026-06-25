@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-25-inert-gas-from-a-measured-volume-to-indefinite-expansion",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Robert Barry, Inert Gas Series (1969)",
+    "Robert Barry, From a Measured Volume to Indefinite Expansion (1969)",
+    "conceptual art / dematerialization of the art object",
+    "net.art (the accessibility tree / DOM as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The `inert` attribute is a genuinely tight mechanism-as-concept: Barry's literal gesture (inert gas, present-and-gone) is enacted by a literal browser primitive (inert DOM, present-and-unreachable), with the accessibility tree serving as the conceptual 'atmosphere' into which the work expands. The chemical/DOM pun lands at the surface, and underneath the piece asks a real question about where an artwork lives once it can be seen but not held or indexed. The honest tally via the live `.inert` property is good craft, and the build is the smallest one that completes the thought. Materially distinct from the catalogue's other Barry piece, which runs on navigator.onLine; this one uses a different web primitive for a different Barry work.",
+  "reservations": "The final verdict line ('owned by no one, perceived by nothing') tilts slightly more declarative than the rest of the piece's restraint; the work is stronger when it lets the inert state do the talking. Also, the visual dematerialization (opacity/blur/translateY) is a small concession to spectacle that the conceptual purity of the attribute alone does not require — it is defensible but worth noting.",
+  "revision_suggestion": "Consider letting the final state be silence (or a single dry factual line) rather than the closing paragraph, and consider whether the blur/translateY transition is necessary or whether a plain opacity fade would let the `inert` attribute carry more of the argument.",
+  "jury_model": "minimax/minimax-m3"
+}
