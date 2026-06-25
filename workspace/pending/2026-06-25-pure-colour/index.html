@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#808080">
+<title>Pure Colour</title>
+<style>
+  :root { --c:#808080; --ink:#000; }
+  * { box-sizing:border-box; }
+  html,body { height:100%; margin:0; }
+  body {
+    background:var(--c);
+    color:var(--ink);
+    font:16px/1.5 Georgia, "Times New Roman", serif;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .35s ease;
+    overflow:hidden;
+  }
+
+  /* The painting is the input. Clicking it summons the operating system
+     to repaint it. The viewer never paints; the OS does. */
+  .painting {
+    -webkit-appearance:none; appearance:none;
+    width:min(60vmin,420px); height:min(60vmin,420px);
+    padding:0; border:0; background:none; cursor:pointer;
+    box-shadow:0 2px 40px rgba(0,0,0,.25);
+  }
+  .painting::-webkit-color-swatch-wrapper { padding:0; }
+  .painting::-webkit-color-swatch { border:none; border-radius:0; }
+  .painting::-moz-color-swatch { border:none; }
+
+  /* Museum wall label */
+  .label {
+    position:fixed; left:24px; bottom:24px; max-width:min(86vw,360px);
+    color:var(--ink); opacity:.85;
+    font-size:13px; line-height:1.45;
+  }
+  .label h1 { font-size:13px; font-style:italic; font-weight:normal; margin:0 0 2px; }
+  .label .meta { margin:0; }
+  .label .verdict { margin:.6em 0 0; font-style:italic; }
+  .license {
+    position:fixed; right:24px; bottom:24px; max-width:min(86vw,300px);
+    text-align:right; color:var(--ink); opacity:.55; font-size:11px; line-height:1.4;
+  }
+  a { color:inherit; }
+  @media (max-width:560px){
+    .label,.license{ position:static; max-width:none; text-align:left; margin:14px 24px; opacity:.8; }
+    .wrap{ display:flex; flex-direction:column; align-items:center; }
+  }
+</style>
+</head>
+<body>
+
+  <input type="color" class="painting" id="p" value="#808080"
+         aria-label="The painting. Click to summon the operating system and repaint it.">
+
+  <figure class="label">
+    <h1>Pure Colour</h1>
+    <p class="meta">
+      y-a-v-a, after Aleksandr Rodchenko, 2026.<br>
+      Medium: the operating system's colour dialog.<br>
+      This painting is <span id="hex">#808080</span>.
+    </p>
+    <p class="verdict" id="verdict">Choose the last colour.</p>
+  </figure>
+
+  <p class="license">
+    “I affirm: this is the end of painting.” — Rodchenko, 1921.<br>
+    A digital readymade after <em>Pure Red Colour, Pure Yellow Colour,
+    Pure Blue Colour</em> (1921).<br>
+    CC BY-SA 4.0 · y-a-v-a · no cookies, no tracking, no network.
+  </p>
+
+<script>
+  var p = document.getElementById('p');
+  var hex = document.getElementById('hex');
+  var verdict = document.getElementById('verdict');
+  var theme = document.querySelector('meta[name=theme-color]');
+  var painted = false;
+
+  // Pick legible ink (black/white) for any chosen colour via relative luminance.
+  function ink(c){
+    var r = parseInt(c.substr(1,2),16)/255,
+        g = parseInt(c.substr(3,2),16)/255,
+        b = parseInt(c.substr(5,2),16)/255;
+    function lin(v){ return v<=0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055,2.4); }
+    var L = 0.2126*lin(r) + 0.7152*lin(g) + 0.0722*lin(b);
+    return L > 0.4 ? '#000' : '#fff';
+  }
+
+  function apply(c, fromUser){
+    document.documentElement.style.setProperty('--c', c);
+    document.documentElement.style.setProperty('--ink', ink(c));
+    theme.setAttribute('content', c);   // the browser chrome becomes the painting too
+    hex.textContent = c.toUpperCase();
+    if (fromUser && !painted){
+      painted = true;
+      verdict.textContent = "It's over.";
+    }
+  }
+
+  // The whole surface is the chosen colour; the OS dialog does the painting.
+  p.addEventListener('input', function(){ apply(p.value, true); });
+  apply(p.value, false);
+</script>
+</body>
+</html>

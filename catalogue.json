@@ -502,5 +502,13 @@
     "source": "Robert Barry, Inert Gas Series (1969); Robert Barry, From a Measured Volume to Indefinite Expansion (1969); conceptual art / dematerialization of the art object; net.art (the accessibility tree / DOM as material)",
     "mechanism": "The HTML inert attribute progressively removes each gas element from pointer events, the focus order and the accessibility tree (present in the DOM, unreachable), then inerts the whole apparatus; reload refills; no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-25-pure-colour",
+    "title": "Pure Colour",
+    "year": 2026,
+    "source": "Aleksandr Rodchenko, Pure Red Colour / Pure Yellow Colour / Pure Blue Colour (1921); the monochrome / end-of-painting tradition; net.art (browser & OS chrome as material)",
+    "mechanism": "A live <input type=\"color\"> IS the painting; clicking it summons the operating system's native colour dialog, which floods the viewport and theme-color with a single chosen monochrome.",
+    "status": "pending"
   }
 ]

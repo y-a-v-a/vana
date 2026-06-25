@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-25-pure-colour",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 5
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Aleksandr Rodchenko, Pure Red Colour / Pure Yellow Colour / Pure Blue Colour (1921)",
+    "the monochrome / end-of-painting tradition",
+    "net.art (browser & OS chrome as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8"
+  ],
+  "rationale": "Pure Colour hands the title of painting to a stock <input type=\"color\">, so the OS dialog does the painting the viewer never makes — a clean mechanism-as-argument for Rodchenko's 1921 death-of-painting claim. The default-grey starting state and the verdict flip ('Choose the last colour' → 'It's over.') carry the conceit dryly and with restraint. theme-color extending the flood into the browser chrome is a nice P1 touch. Distinct from The Blackest Black (clipboard), 148 Colours (Richter/W3C swatches), and Abstract Painting (Backlit) (Reinhardt/JPEG round-trip) in source, mechanism, and argument.",
+  "reservations": "The 'painting' on first load is the browser's native swatch styling for an <input type=\"color\">, which several engines only thinly restyle despite the CSS overrides — the 60vmin grey rectangle may not read as a painting on every browser, weakening the initial tableau. The default #808080 is conceptually right (the unauthored readymade) but visually inert compared to a Rodchenko primary. Stays inside the well-trodden 'OS/browser chrome as material' lane rather than opening new ground.",
+  "revision_suggestion": "Set the default value to a Rodchenko primary (#FF0000, #FFFF00, or #0000FF) so the opening tableau already looks like a monochrome painting before the viewer touches it; this would sharpen the moment of the user's first pick and tie the conceit to the actual 1921 works. Consider a short native-dialog hint on mobile (where the color input is a tray, not a modal) so the gesture survives touch.",
+  "jury_model": "minimax/minimax-m3"
+}
