@@ -445,7 +445,7 @@
     "year": 2026,
     "source": "Roland Barthes, The Death of the Author (1967); Marcel Duchamp / the readymade; net.art (contenteditable / the DOM as material)",
     "mechanism": "A contenteditable article whose first beforeinput event strikes the author byline and reassigns the page to the reader; nothing persisted, so reload restores the original author.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-23-entropy-black-sand-white-sand",
