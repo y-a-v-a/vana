@@ -485,7 +485,7 @@
     "year": 2026,
     "source": "Georges Seurat, Un dimanche apres-midi a l'Ile de la Grande Jatte (1884-86); Paul Signac / pointillism / divisionism; Chevreul, law of simultaneous contrast",
     "mechanism": "Live zoom detection (visualViewport.scale + devicePixelRatio baseline) drives a deterministic complementary-dot canvas apart as the viewer looks closer, so leaning in dissolves the optical mixture; no storage, no network.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-24-time-clock-piece-you-will-miss-the-next-one",
