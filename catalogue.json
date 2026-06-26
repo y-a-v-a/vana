@@ -541,7 +541,7 @@
     "year": 2026,
     "source": "Jenny Holzer, Truisms (1977-79); Jenny Holzer, Spectacolor LED board, Times Square (1982); net.art (the scrolling-title trick / browser chrome as material)",
     "mechanism": "A character-clock marquee streams appropriated truisms through document.title, which persists across tab-switches as the web's public signage.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-26-concetto-spaziale-attese",
