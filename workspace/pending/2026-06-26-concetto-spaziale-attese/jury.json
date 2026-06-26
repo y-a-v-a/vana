@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-26-concetto-spaziale-attese",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Lucio Fontana, Concetto Spaziale, «Attese» (1958-1968)",
+    "Lucio Fontana, Spatialism / White Manifesto (1946)",
+    "net.art (the document plane as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "A clean digital readymade of Fontana's slashed canvases where the mechanism (clip-path evenodd punching real holes) genuinely enacts the concept (the taglio revealing what lies behind the picture plane). The ontological twist — Fontana claimed infinite space behind the canvas, the browser answers with void — is the kind of double-coded argument the DNA rewards. The cap of seven cuts enforces the attesa (expectation/waiting) restraint, the random field color keeps it on the chance/order axis, and the delivery ethic is impeccable: CC BY-SA stated, no storage, no network, proper attribution. The Fontana reference is a genuinely new patron saint for the catalogue and answers the destructive works (Erased, Acid Action Painting) with a constructive-destructive gesture that reveals rather than removes.",
+  "reservations": "The radial gradient on the void layer slightly undermines the 'pure void' argument — it's not quite nothing behind the page. The interaction is elegant but shallow: once you've made your seven cuts, the work is done; there is no second depth beyond the initial gesture. The reading of Fontana is somewhat literal — Fontana's cut was less about revealing what was already there and more about asserting a new spatial dimension, and the work flattens that distinction.",
+  "revision_suggestion": "Flatten the void layer to pure #000 with no gradient to sharpen the ontological punchline. Consider whether the cap of seven is the right number — attesa is singular in Italian, and a single held-breath cut might land harder than seven. A subtle haptic or audio cue on commit (synthesized client-side, no network) could deepen the gesture without violating the ethic.",
+  "jury_model": "minimax/minimax-m3"
+}

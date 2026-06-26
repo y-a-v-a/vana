@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Concetto Spaziale, «Attese» — after Fontana</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #000;
+    font-family: ui-monospace, Menlo, Consolas, monospace; }
+  #space {
+    position: fixed; inset: 0;
+    background: radial-gradient(62% 62% at 50% 47%, #16161c, #000 76%);
+  }
+  #canvas {
+    position: fixed; inset: 0;
+    clip-path: url(#cuts);
+    cursor: crosshair;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #lips { position: fixed; inset: 0; pointer-events: none; }
+  #label {
+    position: fixed; left: 16px; bottom: 14px; z-index: 5;
+    max-width: 70vw; pointer-events: none;
+    font-size: 11px; line-height: 1.5; letter-spacing: .02em;
+    color: rgba(255,255,255,.78); text-shadow: 0 1px 2px rgba(0,0,0,.7);
+    mix-blend-mode: difference;
+  }
+  #label b { font-weight: 600; }
+  #label .dim { color: rgba(255,255,255,.5); }
+  #label a { color: inherit; }
+  #hint {
+    position: fixed; left: 0; right: 0; top: 50%; z-index: 5;
+    transform: translateY(-50%); text-align: center;
+    font-size: 13px; letter-spacing: .04em;
+    color: rgba(255,255,255,.6); text-shadow: 0 1px 3px rgba(0,0,0,.6);
+    mix-blend-mode: difference; pointer-events: none;
+    transition: opacity .8s ease;
+  }
+  #hint.gone { opacity: 0; }
+</style>
+</head>
+<body>
+  <div id="space"></div>
+  <div id="canvas"></div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <clipPath id="cuts" clipPathUnits="userSpaceOnUse">
+        <path id="cutpath" clip-rule="evenodd" d=""></path>
+      </clipPath>
+    </defs>
+  </svg>
+  <svg id="lips" aria-hidden="true"></svg>
+
+  <div id="hint">Drag one deliberate cut. The blade reveals what is behind the page.</div>
+
+  <div id="label">
+    <b>Lucio Fontana</b> (after) — <i>Concetto Spaziale, «Attese»</i><br>
+    <span id="state" class="dim">tagli: 0 — waterpaint on the document plane, void behind</span><br>
+    <span class="dim">y-a-v-a, 2026 · pixels on screen · no cookies, no network ·
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></span>
+  </div>
+
+  <script>
+  (function () {
+    var C  = document.getElementById('canvas');
+    var CP = document.getElementById('cutpath');
+    var L  = document.getElementById('lips');
+    var ST = document.getElementById('state');
+    var HT = document.getElementById('hint');
+
+    // Fontana made the series in many monochromes. One per visit (P5 chance, P4 live).
+    var FIELDS = ['#ece7dd', '#b4332b', '#1f2c6b', '#184734', '#b9912e'];
+    var field  = FIELDS[Math.floor(Math.random() * FIELDS.length)];
+    C.style.background = field;
+
+    function lum(hex) {
+      var n = parseInt(hex.slice(1), 16);
+      return (0.299 * (n >> 16 & 255) + 0.587 * (n >> 8 & 255) + 0.114 * (n & 255)) / 255;
+    }
+    // The lip of the cut catches light: dark edge on light canvas, bright edge on dark.
+    var lipCol = lum(field) > 0.5 ? 'rgba(0,0,0,.42)' : 'rgba(255,255,255,.30)';
+
+    var W = 0, H = 0;
+    var cuts = [];          // committed cuts: [ [x,y], [x,y] ]
+    var preview = null;     // the cut being dragged, not yet made
+    var dragging = false, start = null;
+    var CAP = 7;            // the Attese are restrained; a held breath, not a scribble
+
+    // A vesica (pointed oval) between two points — the gape of a single cut.
+    function lens(a, b) {
+      var dx = b[0] - a[0], dy = b[1] - a[1];
+      var len = Math.hypot(dx, dy) || 1;
+      var w = Math.max(4, Math.min(16, len * 0.10));
+      var nx = -dy / len * w, ny = dx / len * w;
+      var mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2;
+      return 'M' + a[0].toFixed(1) + ' ' + a[1].toFixed(1) +
+             ' Q' + (mx + nx).toFixed(1) + ' ' + (my + ny).toFixed(1) + ' ' + b[0].toFixed(1) + ' ' + b[1].toFixed(1) +
+             ' Q' + (mx - nx).toFixed(1) + ' ' + (my - ny).toFixed(1) + ' ' + a[0].toFixed(1) + ' ' + a[1].toFixed(1) + 'Z';
+    }
+
+    function rebuild() {
+      var all = cuts.slice();
+      if (preview) all.push(preview);
+      var d = 'M0 0H' + W + 'V' + H + 'H0Z';   // the taut canvas
+      var lips = '';
+      for (var i = 0; i < all.length; i++) {
+        var p = lens(all[i][0], all[i][1]);
+        d += p;                                  // evenodd: each lens punches a hole, the void shows through
+        lips += '<path d="' + p + '" fill="none" stroke="' + lipCol + '" stroke-width="1.3"/>';
+      }
+      CP.setAttribute('d', d);
+      L.innerHTML = lips;
+    }
+
+    function state() {
+      var n = cuts.length;
+      ST.textContent = (n >= CAP)
+        ? 'tagli: ' + n + ' — attese complete · reload heals everything'
+        : 'tagli: ' + n + ' — waterpaint on the document plane, void behind';
+      document.title = 'Concetto Spaziale (' + n + ') — y-a-v-a after Fontana';
+    }
+
+    function resize() {
+      W = window.innerWidth; H = window.innerHeight;
+      L.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      L.setAttribute('width', W); L.setAttribute('height', H);
+      rebuild();
+    }
+    window.addEventListener('resize', resize);
+
+    C.addEventListener('pointerdown', function (e) {
+      if (cuts.length >= CAP) return;
+      dragging = true; start = [e.clientX, e.clientY];
+      try { C.setPointerCapture(e.pointerId); } catch (x) {}
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      preview = [start, [e.clientX, e.clientY]];
+      rebuild();
+    });
+    window.addEventListener('pointerup', function (e) {
+      if (!dragging) return;
+      dragging = false; preview = null;
+      var end = [e.clientX, e.clientY];
+      var len = Math.hypot(end[0] - start[0], end[1] - start[1]);
+      if (len >= 34 && cuts.length < CAP) {       // a tap is not a cut, only the held breath before one
+        cuts.push([start, end]);
+        HT.className = 'gone';
+        state();
+      }
+      rebuild();
+    });
+
+    resize(); state();
+  })();
+  </script>
+</body>
+</html>
