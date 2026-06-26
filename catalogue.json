@@ -517,7 +517,7 @@
     "year": 2026,
     "source": "Jasper Johns, Flag (1954-55); Jasper Johns, afterimage flag demonstration; Ewald Hering, opponent-process theory of colour vision",
     "mechanism": "Timed two-state surface: each visit randomly picks one of sixteen flags (built as inline SVG in per-channel inverted colours) and rotates it to a random angle; 20s fixation on a centred dot, then a crossfade to a neutral field where the opponent-process afterimage forms in the viewer's eye, not on screen.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-25-un-coup-de-des-le-hasard-n-est-pas-aboli",
