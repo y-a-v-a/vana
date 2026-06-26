@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hammer Price</title>
+<style>
+  :root{
+    --paper:#e9e6df; --ink:#16140f; --line:#bfb9ad;
+    --sold:#d11; --gold:#9a7b22;
+  }
+  html,body{margin:0;height:100%}
+  body{
+    background:#1b1a17;color:#cfcabb;
+    font:15px/1.5 "Georgia","Times New Roman",serif;
+    display:flex;min-height:100%;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;padding:32px 18px;box-sizing:border-box;
+  }
+  main{width:min(560px,100%)}
+  figure{margin:0}
+  #art{
+    display:block;width:100%;height:auto;
+    background:var(--paper);
+    box-shadow:0 2px 0 #000, 0 24px 60px rgba(0,0,0,.55);
+    border:10px solid #2a2823;outline:1px solid #000;
+    transition:filter 1.4s ease;position:relative;
+  }
+  .frame{position:relative}
+  .veil{
+    position:absolute;inset:10px;display:flex;align-items:center;justify-content:center;
+    text-align:center;background:rgba(20,19,16,.86);color:#8a857a;
+    font-style:italic;font-size:14px;letter-spacing:.02em;padding:0 24px;
+    opacity:0;pointer-events:none;transition:opacity 1.4s ease;
+  }
+  .sold #art{filter:grayscale(1) brightness(.78) contrast(.92)}
+  .sold .veil{opacity:1}
+
+  .label{
+    margin:22px auto 0;max-width:380px;color:#bdb7a8;
+    font-size:13px;line-height:1.7;letter-spacing:.01em;text-align:left;
+    border-top:1px solid #3a382f;padding-top:14px;
+  }
+  .label .lot{letter-spacing:.22em;text-transform:uppercase;font-size:11px;color:#8d887a}
+  .label em{color:#e7e1d2}
+  .label b{color:#e7e1d2;font-weight:600}
+  .label .muted{color:#8d887a}
+
+  .auction{margin:26px auto 0;max-width:380px}
+  label.bidlbl{display:block;letter-spacing:.18em;text-transform:uppercase;font-size:11px;color:#8d887a;margin-bottom:10px}
+  input[type=range]{
+    width:100%;accent-color:var(--gold);cursor:grab;height:26px;
+  }
+  input[type=range]:active{cursor:grabbing}
+  input[type=range]:disabled{cursor:not-allowed;opacity:.5}
+  #bid{margin-top:12px;font-size:22px;color:#efe9da;font-variant-numeric:tabular-nums}
+  #status{margin-top:4px;font-size:12px;color:#8d887a;font-style:italic;min-height:1.4em}
+
+  #result{margin:18px auto 0;max-width:380px;font-size:13px;line-height:1.7}
+  #result[hidden]{display:none}
+  .dot{display:inline-block;width:.62em;height:.62em;border-radius:50%;background:var(--sold);margin-right:.4em;vertical-align:baseline}
+  .soldline{letter-spacing:.16em;text-transform:uppercase;font-size:12px;color:#e7e1d2}
+  #result .row{display:flex;justify-content:space-between;border-bottom:1px dotted #3a382f;padding:3px 0}
+  #result .row b{color:#efe9da;font-weight:600;font-variant-numeric:tabular-nums}
+  #result .zero{color:var(--sold)}
+
+  footer{
+    margin:34px auto 0;max-width:380px;font-size:11px;line-height:1.6;color:#6f6b60;
+    border-top:1px solid #2c2a23;padding-top:12px;
+  }
+  footer a{color:#8d887a}
+</style>
+</head>
+<body>
+<main>
+  <figure class="frame">
+    <svg id="art" viewBox="0 0 480 360" role="img" aria-label="An abstract painting offered at auction"></svg>
+    <div class="veil">Image withheld at the owner's request.<br>Withdrawn to a private collection.</div>
+  </figure>
+
+  <section class="label">
+    <div class="lot">Lot 1</div>
+    <div><em>Untitled</em>, after the Scull Sale</div>
+    <div class="muted">pixels on screen</div>
+    <div class="muted">Acquired by the consignor in 1958 for <b>$900</b></div>
+  </section>
+
+  <div class="auction">
+    <label class="bidlbl" for="paddle">Your bid</label>
+    <input id="paddle" type="range" min="900" max="1000000" step="100" value="900" aria-describedby="bid">
+    <div id="bid">$900</div>
+    <div id="status">Reserve not yet met. Raise your paddle.</div>
+  </div>
+
+  <div id="result" hidden>
+    <div class="soldline"><span class="dot"></span>Sold</div>
+    <div class="row"><span>Hammer price</span><b id="hammer"></b></div>
+    <div class="row"><span>Consignor's profit</span><b id="profit"></b></div>
+    <div class="row"><span>The artist receives</span><b class="zero">$0</b></div>
+  </div>
+
+  <footer>
+    <strong>Hammer Price</strong> — y-a-v-a (yet another visual artist).
+    After the sale of the Robert &amp; Ethel Scull collection, Sotheby Parke-Bernet, New York, 18&nbsp;October&nbsp;1973,
+    where Robert Rauschenberg's painting bought for $900 hammered at $85,000 and the artist received nothing.
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC&nbsp;BY-SA&nbsp;4.0</a>.
+    No cookies, no tracking; nothing leaves your browser, and the reserve is forgotten on reload.
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var fmt = new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+
+  // Per-visit painting: a small modernist field. Order (a grid of bands)
+  // disturbed by one chance gesture. New on every load — never a fixed print.
+  (function paint(){
+    var svg = document.getElementById('art');
+    var hue = Math.floor(Math.random()*360);
+    var parts = ['<rect width="480" height="360" fill="hsl('+hue+',22%,90%)"/>'];
+    var bands = 3 + Math.floor(Math.random()*4);
+    for (var i=0;i<bands;i++){
+      var x = Math.random()*360, y = Math.random()*240;
+      var w = 60 + Math.random()*200, h = 40 + Math.random()*160;
+      var h2 = (hue + 40 + Math.random()*280) % 360;
+      var a = 0.35 + Math.random()*0.4;
+      parts.push('<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+h.toFixed(1)+
+        '" fill="hsl('+Math.floor(h2)+',55%,'+(38+Math.floor(Math.random()*28))+'%)" opacity="'+a.toFixed(2)+'"/>');
+    }
+    // the gesture
+    var gx = 40 + Math.random()*360, gy = 30 + Math.random()*300;
+    parts.push('<path d="M'+gx.toFixed(0)+' '+gy.toFixed(0)+' Q '+(gx+120).toFixed(0)+' '+(gy-90).toFixed(0)+
+      ' '+(gx+260).toFixed(0)+' '+(gy+40).toFixed(0)+'" stroke="hsl('+((hue+180)%360)+',60%,20%)" '+
+      'stroke-width="'+(6+Math.random()*10).toFixed(0)+'" fill="none" stroke-linecap="round" opacity="0.85"/>');
+    svg.innerHTML = parts.join('');
+  })();
+
+  // Hidden reserve, drawn fresh per visit. You can never see it; you can only
+  // cross it — and crossing it is what takes the work away from you.
+  var reserve = 75000 + Math.floor(Math.random()*175000);
+  var FLOOR = 900;
+
+  var paddle = document.getElementById('paddle');
+  var bidEl  = document.getElementById('bid');
+  var statusEl = document.getElementById('status');
+  var resultEl = document.getElementById('result');
+  var sold = false;
+
+  function sell(price){
+    sold = true;
+    paddle.disabled = true;
+    document.body.classList.add('sold');
+    statusEl.textContent = 'Hammer down. The market has spoken.';
+    document.getElementById('hammer').textContent = fmt.format(price);
+    document.getElementById('profit').textContent = '+' + fmt.format(price - FLOOR);
+    resultEl.hidden = false;
+  }
+
+  paddle.addEventListener('input', function(){
+    if (sold) return;
+    var bid = parseInt(paddle.value, 10);
+    bidEl.textContent = fmt.format(bid);
+    if (bid >= reserve){
+      sell(bid);
+    } else {
+      var near = bid > reserve * 0.6;
+      statusEl.textContent = near ? 'Bidding on the wire…' : 'Reserve not yet met. Raise your paddle.';
+    }
+  });
+})();
+</script>
+</body>
+</html>

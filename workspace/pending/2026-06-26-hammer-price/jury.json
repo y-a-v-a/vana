@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-26-hammer-price",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 5,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 42,
+  "verdict": "strong",
+  "references_named": [
+    "Robert & Ethel Scull collection sale, Sotheby Parke-Bernet, 18 October 1973",
+    "Robert Rauschenberg",
+    "Marcel Duchamp / the readymade"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument: a range slider that only goes up is the literal enactment of speculative bidding, and crossing the hidden reserve is what removes the work from view. The Scull/Rauschenberg anchor is precise and historically literate, and the $0 line for the artist lands the resale-royalty critique without a wall text. It extends the catalogue's value/authenticity line (Three Ball Total Equilibrium Slot Machine, For the Love of Fame, Art is Money) with a new mechanism — the bid as instrument of disappearance — and the per-visit hidden reserve plus the chance gesture in the painting keep it on the chance/order axis. Voice is dry auctioneer deadpan, license and privacy are stated, and the work is materially distinct from every catalogued entry.",
+  "reservations": "The painting itself is a thin placeholder (a few coloured rects plus a curve); the conceptual weight lives entirely in the bidding mechanic and the ledger, which is fine but means the visual surface is the weakest part. The reserve range (75k–250k) is a touch arbitrary and could be tightened to make the crossing feel more inevitable.",
+  "revision_suggestion": "Consider giving the painting a more recognisable 'after Rauschenberg' visual cue (a single off-white field with one gestural mark, say) so the surface gag — that this specific kind of work is what the market removes — reads even faster, and tighten the reserve band so the crossing is more reliably dramatic.",
+  "jury_model": "minimax/minimax-m3"
+}

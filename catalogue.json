@@ -550,5 +550,13 @@
     "source": "Lucio Fontana, Concetto Spaziale, «Attese» (1958-1968); Lucio Fontana, Spatialism / White Manifesto (1946); net.art (the document plane as material)",
     "mechanism": "Pointer-drag appends a vesica to an evenodd clip-path, punching real holes in the coloured document plane so a black void layer behind is revealed; capped at seven, irreversible per visit, reload heals; no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-26-hammer-price",
+    "title": "Hammer Price",
+    "year": 2026,
+    "source": "The Robert & Ethel Scull collection sale, Sotheby Parke-Bernet, New York, 18 October 1973; Robert Rauschenberg; Marcel Duchamp / the readymade",
+    "mechanism": "An <input type=range> bid against a per-visit hidden reserve; crossing it greys the canvas, veils it as 'withdrawn to a private collection,' and settles a live ledger (hammer price, consignor's profit, artist $0) — client-side only, no storage, no network.",
+    "status": "pending"
   }
 ]
