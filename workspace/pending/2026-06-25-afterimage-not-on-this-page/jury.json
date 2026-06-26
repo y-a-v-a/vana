@@ -6,17 +6,17 @@
     "G3": true,
     "G4": true,
     "G5": true,
-    "G6": true
+    "G6": false
   },
   "scores": {
     "novelty": 4,
     "nuance": 4,
     "narrative": 4,
-    "craft": 5,
-    "wit": 5
+    "craft": 4,
+    "wit": 4
   },
-  "weighted_total": 42,
-  "verdict": "strong",
+  "weighted_total": 40,
+  "verdict": "reject",
   "references_named": [
     "Jasper Johns, Flag (1954-55)",
     "Jasper Johns, afterimage flag demonstration",
@@ -31,8 +31,8 @@
     "P7",
     "P9"
   ],
-  "rationale": "The work earns a strong novelty of location: the artwork literally does not exist on screen at the moment of its completion — it is rendered by the viewer's own retina after the timed withdrawal. Concept and execution collapse cleanly (P1): the 20s timed fade, fixation dot and depleting ring are the physiological instrument, not decoration. Johns is a fresh patron saint for the catalogue and slots into the Pop/appropriation lineage beside Pop Whaam! and the Warhol hamburger. The caption's dry inversion of the house line 'the pixels are the message' is the cheerful-cynic voice landing precisely.",
-  "reservations": "The afterimage depends on viewer physiology, ambient light and display quality — the work will fail partially in bright rooms, on washed-out laptop screens, or for inattentive viewers, which slightly undercuts the universality claim implicit in P3. The underlying optical phenomenon is centuries old; the novelty must rest entirely on the timed web surface and the Johns framing, which it does, but the effect itself is not new to human experience.",
-  "revision_suggestion": "Consider a subtle honesty signal in the caption — e.g., a one-line 'best in a dim room' note already in the intro, or a tiny 'if the flag didn't appear, your screen is too bright' line — that turns the contingency into part of the conceptual frame rather than a hidden failure mode. Optionally, log a brief localStorage-free fixation-stability probe to deepen P1's claim that the mechanism is doing real physiological work.",
+  "rationale": "The work is a strong conceptual piece: the timed two-state surface (negative flag → blank field) enacts the opponent-process afterimage as the artwork itself, with the mechanism being the argument (P1). It cleanly answers Johns's Flag and the afterimage-flag demonstration, double-codes as optical trick and conceptual argument (P7), and stages chance/order via random nation/angle against deterministic retinal physics (P5). However, G6 fails: the candidate is materially identical to the already-catalogued 'Afterimage (Not on This Page)' (2026) — same title, same Johns/Hering references, same mechanism, same per-visit random flag in negative with 20s fixation and crossfade to neutral field. This is a duplicate of an existing catalogue entry, not a new work.",
+  "reservations": "G6 fails: this is the same work as the catalogued 'Afterimage (Not on This Page)' (2026). The candidate meta.json, motivation, and index.html match the existing entry in title, references, mechanism, and execution. No materially distinct source, mechanism, or argument is offered.",
+  "revision_suggestion": "To pass G6, propose a genuinely distinct afterimage-based work: e.g., a different source artwork (not Johns's Flag), a different physiological phenomenon (not opponent-process), a different timed structure (not 20s fixation + crossfade), or a different found-object (not national flags). Alternatively, develop the Johns-afterimage idea into a new mechanism — e.g., afterimage as a function of scroll velocity, or as a function of viewport size, or paired with a different reference (Albers's Interaction of Color, or Anni Albers, or the Ben-Day dot tradition).",
   "jury_model": "minimax/minimax-m3"
 }

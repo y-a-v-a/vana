@@ -39,9 +39,11 @@
     opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
   }
   #stage.staring #fix, #stage.revealed #fix { opacity: 1; }
-  #fix .dot { fill: #111; }
-  #fix .track { fill: none; stroke: rgba(17,17,17,.18); stroke-width: 3; }
-  #fix .ring  { fill: none; stroke: #111; stroke-width: 3; stroke-linecap: round;
+  /* mid-grey, so the dot stays visible on any negative — white flags invert
+     to black, where a black dot would disappear */
+  #fix .dot { fill: #808080; }
+  #fix .track { fill: none; stroke: rgba(128,128,128,.4); stroke-width: 3; }
+  #fix .ring  { fill: none; stroke: #808080; stroke-width: 3; stroke-linecap: round;
                 transform: rotate(-90deg); transform-origin: 48px 48px; }
   #stage.revealed #fix .track, #stage.revealed #fix .ring { opacity: 0; }
 
@@ -101,7 +103,7 @@
     <h1>Afterimage</h1>
     <p class="sub">Somewhere on this page is a national flag — photographed in
       negative and turned to a random angle. Which nation is chance; the colours
-      are wrong on purpose. Stare at the black dot in its centre and do not let
+      are wrong on purpose. Stare at the grey dot in its centre and do not let
       your eyes drift. When the ring runs out, the page goes blank, and the flag
       returns in full, correct colour. Not here. In you.</p>
     <button id="begin" type="button">Stare</button>

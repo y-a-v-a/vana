@@ -1,7 +1,9 @@
 # Afterimage (Not on This Page)
 
 The page shows a national flag — but in photographic negative, every colour
-inverted, and turned to a random angle — with a black dot to fix your gaze on.
+inverted, and turned to a random angle — with a mid-grey dot to fix your gaze on
+(grey, not black, so the fixation mark stays visible even where a white flag
+inverts to black).
 Each visit it is a *different nation*, drawn at random from sixteen (the United
 States, France, Japan, the Netherlands, Sweden, Nigeria, Ukraine and more), and
 tilted to an angle nobody chose. After twenty seconds the flag dissolves to a
