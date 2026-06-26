@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I Do Not Wish to Add Any More</title>
+<style>
+  :root { --ink:#161616; --paper:#f4f2ec; --line:#cbc7bb; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 16px/1.55 Georgia, "Times New Roman", serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6vh 6vw;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 40rem; width:100%; }
+  .statement {
+    font-size: clamp(1.3rem, 3.6vw, 2.1rem);
+    line-height: 1.3;
+    margin: 0 0 1.6rem;
+    text-wrap: balance;
+  }
+  .statement b { font-weight: normal; border-bottom: 1px solid var(--ink); }
+  .attribution { font-size: .8rem; letter-spacing:.02em; color:#5a564c; margin:0 0 2.4rem; }
+  #world {
+    border: 1px solid var(--line);
+    min-height: 5.5rem;
+    margin: 0 0 1.4rem;
+    padding: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    align-content: flex-start;
+    background: repeating-linear-gradient(45deg,transparent,transparent 11px,rgba(0,0,0,.02) 11px,rgba(0,0,0,.02) 12px);
+  }
+  #world:empty::after {
+    content: "(the world, unchanged)";
+    color: #8a8678;
+    font-style: italic;
+    font-size: .85rem;
+  }
+  .object { font-size: 1.1rem; line-height: 1; }
+  .tally { display:flex; gap:2.2rem; font-size:.9rem; margin:0 0 1.6rem; }
+  .tally span { display:block; font-size:1.5rem; }
+  .tally div:first-child span { font-variant-numeric: tabular-nums; }
+  button {
+    font: inherit;
+    font-size: 1rem;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: .6rem 1.1rem;
+    cursor: pointer;
+  }
+  button:active { transform: translateY(1px); }
+  .license {
+    margin-top: 2.6rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font: .72rem/1.5 Georgia, serif;
+    color: #6c6859;
+  }
+  .license a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <p class="statement">The world is full of objects, more or less interesting; I do not wish to <b>add</b> any more.</p>
+  <p class="attribution">— Douglas Huebler, statement for <i>January 5–31, 1969</i> (Seth Siegelaub).</p>
+
+  <div id="world" aria-live="off"></div>
+
+  <div class="tally">
+    <div>Objects in the world<span id="kept">0</span></div>
+    <div>Objects refused<span id="refused">0</span></div>
+  </div>
+
+  <button id="add" type="button">Add an object to the world</button>
+
+  <div class="license">
+    <strong>I Do Not Wish to Add Any More</strong> — y-a-v-a, 2026. After Douglas Huebler,
+    <i>The world is full of objects…</i> (1969). The work is the page: a MutationObserver
+    refuses every node added to this document, including any you append from the console.
+    Try. Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+    No cookies, no tracking, no data leaves your browser.
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // Seal the world: everything that exists right now is permitted to remain.
+  document.querySelectorAll("*").forEach(function (el) {
+    el.setAttribute("data-original", "");
+  });
+
+  var keptEl = document.getElementById("kept");
+  var refusedEl = document.getElementById("refused");
+  var world = document.getElementById("world");
+  var refused = 0;
+
+  // The state of things, stated in terms of number — never increased.
+  keptEl.textContent = String(document.querySelectorAll("[data-original]").length);
+
+  // Huebler's refusal, enforced as a law of this document's physics.
+  var observer = new MutationObserver(function (mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      var added = mutations[i].addedNodes;
+      for (var j = 0; j < added.length; j++) {
+        var node = added[j];
+        if (node.nodeType === 1 && !node.hasAttribute("data-original")) {
+          node.parentNode && node.parentNode.removeChild(node);
+          refused += 1;
+          refusedEl.textContent = String(refused);
+        }
+      }
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  // The gallery offers you the gesture of addition. The work declines it.
+  document.getElementById("add").addEventListener("click", function () {
+    var obj = document.createElement("div");
+    obj.className = "object";
+    obj.textContent = "▪"; // a small black square: another object, more or less interesting
+    world.appendChild(obj); // appears for one frame; the observer states it out of existence
+  });
+})();
+</script>
+</body>
+</html>

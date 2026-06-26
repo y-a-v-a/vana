@@ -2,6 +2,8 @@
 <!--
   Afterimage (Not on This Page) — y-a-v-a
   After Jasper Johns, "Flag" (1954–55) and the afterimage flag demonstration.
+  A random nation's flag, shown in photographic negative and turned to a random
+  angle; the true flag is rendered only by the viewer's retina, off-screen.
   Licensed CC BY-SA 4.0. No cookies, no trackers, no external requests.
 -->
 <html lang="en">
@@ -23,8 +25,9 @@
   }
   #stage { position: fixed; inset: 0; background: var(--field); }
   #flag {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
+    position: absolute; top: 50%; left: 50%;
+    width: 68vmin; height: 68vmin; margin: -34vmin 0 0 -34vmin;
+    transform: rotate(0deg);            /* random angle set per visit, in JS */
     opacity: 0; transition: opacity 0.45s ease;
   }
   #stage.staring #flag { opacity: 1; }
@@ -96,28 +99,30 @@
 
   <div id="intro" class="overlay">
     <h1>Afterimage</h1>
-    <p class="sub">There is a flag on this page, in the wrong colours.
-      Stare at the black dot in its centre and do not let your eyes drift.
-      When the ring runs out, the page will go blank — and the real flag will appear.
-      Not here. In you.</p>
+    <p class="sub">Somewhere on this page is a national flag — photographed in
+      negative and turned to a random angle. Which nation is chance; the colours
+      are wrong on purpose. Stare at the black dot in its centre and do not let
+      your eyes drift. When the ring runs out, the page goes blank, and the flag
+      returns in full, correct colour. Not here. In you.</p>
     <button id="begin" type="button">Stare</button>
     <p class="sub" style="font-size:.85em;color:#888">Twenty seconds. Best in a dim room.</p>
   </div>
 
   <div id="caption" class="overlay">
-    <p class="lead">There it is — the Stars and Stripes, in red, white and blue.</p>
-    <p>Not one of those three colours is anywhere on this screen.
-       You painted the flag yourself, on the inside of your own eyes.
-       We supplied the wrong one and a blank wall.</p>
+    <p class="lead">There it is — <span id="nation">the flag</span>, in colours
+       that are nowhere on this screen, at an angle you did not choose.</p>
+    <p>You painted it yourself, on the inside of your own eyes. We supplied the
+       negative and a blank wall; your retina developed the positive.</p>
     <p class="small">Jasper Johns hung the flag where the mind already kept it.
-       We hung it where your retina keeps it — for about four seconds.</p>
+       We hand you a different nation each visit — your eye renders them all in
+       the same four seconds, by the same physics, in the same dark.</p>
     <button id="again" type="button">Look again</button>
   </div>
 </div>
 
 <footer>
   CC BY-SA 4.0 · y-a-v-a (yet another visual artist) · after Jasper Johns, <em>Flag</em> (1954–55) ·
-  opponent-process afterimage (Hering) · no cookies, no tracking, no requests
+  flags shown in negative · opponent-process afterimage (Hering) · no cookies, no tracking, no requests
 </footer>
 
 <script>
@@ -126,44 +131,94 @@
 
   var STARE_MS = 20000;
   var stage   = document.getElementById('stage');
-  var flag    = document.getElementById('flag');
+  var flagEl  = document.getElementById('flag');
   var ring    = document.querySelector('#fix .ring');
+  var nation  = document.getElementById('nation');
 
-  // ---- build the flag in complementary (opponent) colours --------------
-  // green stripes -> red afterimage, black stripes -> white,
-  // orange canton -> blue, black stars -> white.
-  var GREEN = '#00a884', BLACK = '#101010', ORANGE = '#ff7a00';
-  var W = 1235, H = 650, STRIPE = H / 13;          // 13 stripes
-  var unionW = 494, unionH = STRIPE * 7;           // union over the top 7 stripes
-
-  function starPath(cx, cy, r) {
+  // ---- afterimage = the photographic negative --------------------------
+  // Every flag is shown inverted per channel; the fatigued opponent-process
+  // channels rebound to the TRUE colour the instant the screen goes blank.
+  function inv(hex) {
+    var n = parseInt(hex.slice(1), 16);
+    var r = 255 - ((n >> 16) & 255), g = 255 - ((n >> 8) & 255), b = 255 - (n & 255);
+    return '#' + (0x1000000 + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+  function rect(x, y, w, h, c) {
+    return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h +
+           '" fill="' + inv(c) + '"/>';
+  }
+  function star(cx, cy, r, fill) {
     var pts = [], i, ang, rad;
     for (i = 0; i < 10; i++) {
       rad = (i % 2 === 0) ? r : r * 0.382;
       ang = (-90 + i * 36) * Math.PI / 180;
       pts.push((cx + rad * Math.cos(ang)).toFixed(2) + ',' + (cy + rad * Math.sin(ang)).toFixed(2));
     }
-    return '<polygon points="' + pts.join(' ') + '" fill="' + BLACK + '"/>';
+    return '<polygon points="' + pts.join(' ') + '" fill="' + fill + '"/>';
   }
 
-  var svg = '';
-  // stripes: index 0 starts green; evens green (7), odds black (6)
-  for (var s = 0; s < 13; s++) {
-    svg += '<rect x="0" y="' + (s * STRIPE).toFixed(2) + '" width="' + W +
-           '" height="' + (STRIPE + 0.6).toFixed(2) + '" fill="' + (s % 2 === 0 ? GREEN : BLACK) + '"/>';
+  // ---- flag builders (fed TRUE colours; inv() does the inverting) -------
+  function vbands(cols) {
+    var W = 900, H = 600, bw = W / cols.length, s = '';
+    for (var i = 0; i < cols.length; i++) s += rect(i * bw, 0, bw + 0.6, H, cols[i]);
+    return { w: W, h: H, svg: s };
   }
-  // canton
-  svg += '<rect x="0" y="0" width="' + unionW + '" height="' + unionH.toFixed(2) + '" fill="' + ORANGE + '"/>';
-  // 50 stars: 9 rows, staggered 6/5 across 12 horizontal / 10 vertical slots
-  var sx = unionW / 12, sy = unionH / 10, r = sy * 0.45;
-  for (var row = 1; row <= 9; row++) {
-    var odd = (row % 2 === 1);
-    var cols = odd ? [1,3,5,7,9,11] : [2,4,6,8,10];
-    for (var c = 0; c < cols.length; c++) {
-      svg += starPath(cols[c] * sx, row * sy, r);
+  function hbands(cols) {
+    var W = 900, H = 600, bh = H / cols.length, s = '';
+    for (var i = 0; i < cols.length; i++) s += rect(0, i * bh, W, bh + 0.6, cols[i]);
+    return { w: W, h: H, svg: s };
+  }
+  function disc(d) {
+    var W = 900, H = 600;
+    return { w: W, h: H, svg: rect(0, 0, W, H, d.field) +
+      '<circle cx="450" cy="300" r="180" fill="' + inv(d.disc) + '"/>' };
+  }
+  function cross(d) {                    // Nordic cross, bar offset toward the hoist
+    var W = 900, H = 600;
+    return { w: W, h: H, svg: rect(0, 0, W, H, d.field) +
+      rect(250, 0, 100, H, d.bar) + rect(0, 250, W, 100, d.bar) };
+  }
+  function usa() {
+    var W = 1235, H = 650, STRIPE = H / 13, uW = 494, uH = STRIPE * 7;
+    var RED = '#b22234', WHITE = '#ffffff', BLUE = '#3c3b6e', s = '';
+    for (var i = 0; i < 13; i++) s += rect(0, i * STRIPE, W, STRIPE + 0.6, i % 2 === 0 ? RED : WHITE);
+    s += '<rect x="0" y="0" width="' + uW + '" height="' + uH.toFixed(2) + '" fill="' + inv(BLUE) + '"/>';
+    var sx = uW / 12, sy = uH / 10, r = sy * 0.45, sf = inv(WHITE);
+    for (var row = 1; row <= 9; row++) {
+      var cols = (row % 2 === 1) ? [1,3,5,7,9,11] : [2,4,6,8,10];
+      for (var c = 0; c < cols.length; c++) s += star(cols[c] * sx, row * sy, r, sf);
     }
+    return { w: W, h: H, svg: s };
   }
-  flag.innerHTML = svg;
+
+  // ---- the nations: one true flag each, rendered in negative -----------
+  var FLAGS = [
+    { name: 'the United States', f: usa },
+    { name: 'France',          f: function () { return vbands(['#0055a4','#ffffff','#ef4135']); } },
+    { name: 'Italy',           f: function () { return vbands(['#008c45','#f4f5f0','#cd212a']); } },
+    { name: 'Ireland',         f: function () { return vbands(['#169b62','#ffffff','#ff883e']); } },
+    { name: 'Belgium',         f: function () { return vbands(['#000000','#fae042','#ed2939']); } },
+    { name: 'Nigeria',         f: function () { return vbands(['#008751','#ffffff','#008751']); } },
+    { name: 'Germany',         f: function () { return hbands(['#000000','#dd0000','#ffce00']); } },
+    { name: 'the Netherlands', f: function () { return hbands(['#ae1c28','#ffffff','#21468b']); } },
+    { name: 'Russia',          f: function () { return hbands(['#ffffff','#0039a6','#d52b1e']); } },
+    { name: 'Austria',         f: function () { return hbands(['#ed2939','#ffffff','#ed2939']); } },
+    { name: 'Hungary',         f: function () { return hbands(['#cd2a3e','#ffffff','#436f4d']); } },
+    { name: 'Ukraine',         f: function () { return hbands(['#0057b7','#ffd700']); } },
+    { name: 'Japan',           f: function () { return disc({ field: '#ffffff', disc: '#bc002d' }); } },
+    { name: 'Sweden',          f: function () { return cross({ field: '#006aa7', bar: '#fecc00' }); } },
+    { name: 'Denmark',         f: function () { return cross({ field: '#c8102e', bar: '#ffffff' }); } },
+    { name: 'Finland',         f: function () { return cross({ field: '#ffffff', bar: '#003580' }); } }
+  ];
+
+  function pick() {
+    var flag = FLAGS[Math.floor(Math.random() * FLAGS.length)];
+    var built = flag.f();
+    flagEl.setAttribute('viewBox', '0 0 ' + built.w + ' ' + built.h);
+    flagEl.innerHTML = built.svg;
+    flagEl.style.transform = 'rotate(' + (Math.random() * 360 - 180).toFixed(1) + 'deg)';
+    nation.textContent = 'the flag of ' + flag.name;
+  }
 
   // ---- fixation ring geometry -----------------------------------------
   var C = 2 * Math.PI * 40;
@@ -194,9 +249,11 @@
 
   function restart() {
     if (raf) cancelAnimationFrame(raf), raf = null;
+    pick();                          // a new nation, a new angle, for the next look
     stage.className = '';
   }
 
+  pick();
   document.getElementById('begin').addEventListener('click', stare);
   document.getElementById('again').addEventListener('click', restart);
 })();

@@ -526,5 +526,13 @@
     "source": "Marcel Broodthaers, Un Coup de Dés Jamais N'Abolira Le Hasard (Image) (1969); Stéphane Mallarmé, Un Coup de Dés Jamais N'Abolira Le Hasard (1897); net.art (browser layout engine as material)",
     "mechanism": "Words rendered as opaque bars via color:transparent on their own black inline-boxes, still selectable/copyable/in-source, with browser reflow re-throwing the constellation and a resize counter.",
     "status": "published"
+  },
+  {
+    "id": "2026-06-26-i-do-not-wish-to-add-any-more",
+    "title": "I Do Not Wish to Add Any More",
+    "year": 2026,
+    "source": "Douglas Huebler, statement for January 5-31, 1969 (Seth Siegelaub); Lawrence Weiner, Declaration of Intent (1968); net.art (the DOM as material)",
+    "mechanism": "A MutationObserver removes any newly added DOM element (including console-appended nodes) while a tally counts refusals, never additions.",
+    "status": "pending"
   }
 ]
