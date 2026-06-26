@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-26-truisms-tab",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Jenny Holzer, Truisms (1977-79)",
+    "Jenny Holzer, Spectacolor LED board, Times Square (1982)",
+    "net.art (the scrolling-title trick / browser chrome as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism is the message: Holzer's anonymous authority-issuing truisms are relocated to document.title, the browser's one persistent public signage slot that follows the viewer across tab switches. The page itself is demoted to a footnote pointing back up at the tab, which is exactly the right inversion — the chrome is the gallery, the LED board, and the voice. The chance/order axis is legible (shuffled truisms driven by a strict character clock), the readymade logic is clean, and the double-coding lands: a funny tab editorialising at you on the surface, a precise Holzer critique underneath. Craft is restrained and complete: no storage, no network, CC BY-NC stated, attribution to Holzer and y-a-v-a, prefers-reduced-motion respected.",
+  "reservations": "The 1990s scrolling-title gag is well-trodden net.art territory, so the novelty sits more in the precise Holzer framing than in the underlying trick. The catalogue already has several 'browser chrome as material' pieces (favicon-Mondrian, title-flip in Acid Action Painting, theme-color in Pure Colour), so the work's distinctiveness rests on the Holzer appropriation and the deliberate demotion of the page — which is genuinely fresh, but worth flagging.",
+  "revision_suggestion": "Consider letting the truisms occasionally pause on a single line for a beat (a 'held' truism) before resuming the marquee, to mimic how Spectacolor boards actually dwell on statements — this would deepen the P5 tension and push the piece further from the generic scrolling-title trope.",
+  "jury_model": "minimax/minimax-m3"
+}

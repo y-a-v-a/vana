@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- TRUISMS (TAB) — after Jenny Holzer, Truisms (1977-79).
+     The work is in the title bar. This page is only a footnote to its own tab.
+     y-a-v-a (yet another visual artist). CC BY-NC 4.0. No cookies, no trackers, no network. -->
+<title>TRUISMS</title>
+<style>
+  :root{ --led:#ffb000; --bg:#0a0805; }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; }
+  body{
+    background:var(--bg);
+    color:var(--led);
+    font:16px/1.5 ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    display:flex; flex-direction:column;
+    min-height:100%;
+    /* faint horizontal scanlines — a gradient, not an image */
+    background-image:repeating-linear-gradient(
+      to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.28) 2px 3px);
+  }
+  main{
+    flex:1 1 auto; display:flex; align-items:center; justify-content:center;
+    padding:6vmin; overflow:hidden;
+  }
+  #sign{
+    text-align:center;
+    font-weight:700;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    font-size:clamp(20px,6.2vw,68px);
+    line-height:1.12;
+    max-width:18ch;
+    text-shadow:0 0 .04em var(--led), 0 0 .5em rgba(255,176,0,.55);
+    transition:opacity .5s ease;
+  }
+  #sign.flick{ opacity:.12; }
+  .arrow{ color:#6b5a3a; font-size:.5em; vertical-align:.18em; }
+  footer{
+    flex:0 0 auto;
+    border-top:1px solid rgba(255,176,0,.22);
+    padding:14px 18px;
+    color:#9a8862;
+    font-size:12px; line-height:1.6;
+    background:rgba(0,0,0,.35);
+  }
+  footer b{ color:var(--led); font-weight:600; }
+  footer a{ color:#c9a24a; }
+  .hint{ color:#7c6c46; margin-top:6px; }
+  @media (prefers-reduced-motion:reduce){
+    #sign.flick{ opacity:1; }
+  }
+</style>
+</head>
+<body>
+  <main>
+    <p id="sign">ABUSE OF POWER COMES AS NO SURPRISE <span class="arrow" aria-hidden="true">&#8598;</span></p>
+  </main>
+  <footer>
+    <div><b>Truisms (Tab)</b> &mdash; after <b>Jenny Holzer</b>, <i>Truisms</i> (1977&ndash;79) and her LED signage.
+    The real work is scrolling in your browser tab, where you weren&rsquo;t looking.
+    It keeps talking when you switch away.</div>
+    <div class="hint">Pixels on screen. <b>y-a-v-a</b> (yet another visual artist).
+    Texts appropriated from Holzer as a readymade. Licence: <b>CC&nbsp;BY-NC&nbsp;4.0</b>.
+    No cookies, no trackers, no network requests.</div>
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // Holzer's Truisms, appropriated verbatim as a digital readymade (P2).
+  var TRUISMS = [
+    "ABUSE OF POWER COMES AS NO SURPRISE",
+    "MONEY CREATES TASTE",
+    "PROTECT ME FROM WHAT I WANT",
+    "PRIVATE PROPERTY CREATED CRIME",
+    "A LITTLE KNOWLEDGE CAN GO A LONG WAY",
+    "ANY SURPLUS IS IMMORAL",
+    "AN ELITE IS INEVITABLE",
+    "A SENSE OF TIMING IS THE MARK OF GENIUS",
+    "BOREDOM MAKES YOU DO CRAZY THINGS",
+    "YOU ARE A VICTIM OF THE RULES YOU LIVE BY",
+    "WORDS TEND TO BE INADEQUATE",
+    "THE FUTURE IS STUPID",
+    "SELFISHNESS IS THE MOST BASIC MOTIVATION",
+    "ROMANTIC LOVE WAS INVENTED TO MANIPULATE WOMEN",
+    "RAISE BOYS AND GIRLS THE SAME WAY",
+    "MUCH WAS DECIDED BEFORE YOU WERE BORN",
+    "IT IS A GIFT TO THE WORLD NOT TO HAVE BABIES",
+    "EXPIRING FOR LOVE IS BEAUTIFUL BUT STUPID"
+  ];
+
+  // Chance: shuffle the order of received wisdom, once per visit (P5).
+  for (var i = TRUISMS.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = TRUISMS[i]; TRUISMS[i] = TRUISMS[j]; TRUISMS[j] = t;
+  }
+
+  // --- The work itself: the browser tab as a public LED ticker. ---
+  var SEP = "      ●      "; // ● spacer between truisms, like a sign's bullet
+  var stream = TRUISMS.join(SEP) + SEP;
+  var WIN = 40;                  // characters visible in the title window
+  var padded = stream + stream.slice(0, WIN);
+  var pos = 0;
+
+  function tick(){
+    document.title = padded.substr(pos, WIN);
+    pos = (pos + 1) % stream.length;
+  }
+  // Order: a strict character clock drives the marquee (P5 order vs chance).
+  var titleTimer = setInterval(tick, 230);
+  tick();
+
+  // --- The footnote: the page below the tab calmly states one line at a time. ---
+  var sign = document.getElementById("sign");
+  var ARROW = ' <span class="arrow" aria-hidden="true">↖</span>';
+  var idx = 0;
+
+  function show(){
+    sign.classList.add("flick");           // brief LED flicker on change
+    setTimeout(function(){
+      idx = (idx + 1) % TRUISMS.length;
+      sign.innerHTML = TRUISMS[idx] + ARROW;
+      sign.classList.remove("flick");
+    }, 260);
+  }
+  sign.innerHTML = TRUISMS[0] + ARROW;
+  setInterval(show, 4200);
+
+  // Nothing is stored. Reload reshuffles. The tab keeps preaching regardless.
+})();
+</script>
+</body>
+</html>

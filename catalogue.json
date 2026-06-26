@@ -534,5 +534,13 @@
     "source": "Douglas Huebler, statement for January 5-31, 1969 (Seth Siegelaub); Lawrence Weiner, Declaration of Intent (1968); net.art (the DOM as material)",
     "mechanism": "A MutationObserver removes any newly added DOM element (including console-appended nodes) while a tally counts refusals, never additions.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-26-truisms-tab",
+    "title": "Truisms (Tab)",
+    "year": 2026,
+    "source": "Jenny Holzer, Truisms (1977-79); Jenny Holzer, Spectacolor LED board, Times Square (1982); net.art (the scrolling-title trick / browser chrome as material)",
+    "mechanism": "A character-clock marquee streams appropriated truisms through document.title, which persists across tab-switches as the web's public signage.",
+    "status": "pending"
   }
 ]
