@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Following Piece (Nothing Recorded)</title>
+<style>
+  :root{
+    --bg:#0b0b0c;
+    --ink:#e9e7e2;
+    --dim:#7d7a73;
+    --accent:#888;          /* set per visit */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    overflow:hidden;
+    cursor:crosshair;
+    -webkit-user-select:none;user-select:none;
+    touch-action:none;
+  }
+  /* the street */
+  #field{position:fixed;inset:0;z-index:0}
+  /* the follower + sightline */
+  #ring{
+    position:fixed;top:0;left:0;width:34px;height:34px;margin:-17px 0 0 -17px;
+    border:1.5px solid var(--accent);border-radius:50%;
+    z-index:3;pointer-events:none;
+    transition:opacity .6s ease;
+  }
+  #ring::after{
+    content:"";position:absolute;inset:13px;border-radius:50%;
+    background:var(--accent);opacity:.85;
+  }
+  #line{position:fixed;inset:0;z-index:2;pointer-events:none}
+  #line line{stroke:var(--accent);stroke-width:1;stroke-dasharray:2 5;opacity:.4}
+
+  /* wall label */
+  #label{
+    position:fixed;left:22px;bottom:20px;z-index:5;max-width:min(420px,86vw);
+    border-left:2px solid var(--accent);padding:2px 0 2px 14px;
+  }
+  #label h1{font-size:15px;font-weight:600;letter-spacing:.2px}
+  #label .meta{color:var(--dim);font-size:12px;margin-top:7px}
+  #label .meta b{color:var(--ink);font-weight:600}
+  #label .note{color:var(--dim);font-size:12px;margin-top:9px;font-style:italic}
+  #label a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+
+  /* the report */
+  #report{
+    position:fixed;right:22px;top:20px;z-index:5;text-align:right;
+    font-size:12px;color:var(--dim);
+  }
+  #state{font-size:13px;color:var(--ink);letter-spacing:.4px;text-transform:uppercase}
+  #report .row{margin-top:3px}
+  #report .row b{color:var(--accent);font-weight:600}
+  #recorded b{color:var(--ink)}
+</style>
+</head>
+<body>
+  <canvas id="field"></canvas>
+
+  <svg id="line" xmlns="http://www.w3.org/2000/svg">
+    <line x1="0" y1="0" x2="0" y2="0"></line>
+  </svg>
+  <div id="ring" style="opacity:0"></div>
+
+  <div id="report" aria-live="polite">
+    <div id="state">looking for a subject</div>
+    <div class="row">distance <b id="dist">—</b></div>
+    <div class="row">subjects followed <b id="count">0</b></div>
+    <div class="row" id="recorded">recorded <b>nothing · 0 bytes</b></div>
+  </div>
+
+  <div id="label">
+    <h1>Following Piece <span style="color:var(--dim);font-weight:400">(Nothing Recorded)</span></h1>
+    <div class="meta">
+      <b>y-a-v-a</b>, 2026 &nbsp;·&nbsp; medium: <b>your cursor</b>, pixels on screen<br>
+      after <b>Vito Acconci</b>, <i>Following Piece</i> (1969)
+    </div>
+    <div class="note">
+      It follows, at a distance, as long as you stay in the open. Stop, and it
+      stands with you. Leave the frame and you have entered private space: the
+      follow ends. It keeps no cookie, no storage, no log — the only ethical stalker.
+    </div>
+    <div class="meta" style="margin-top:9px">
+      CC BY-SA 4.0 · no cookies · no tracking · nothing leaves this page ·
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license" onclick="return false">by-sa/4.0</a>
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+
+  // per-visit hue — house style: the work is never twice the same colour
+  var hue = Math.floor(Math.random()*360);
+  var accent = "hsl("+hue+",55%,62%)";
+  document.documentElement.style.setProperty("--accent", accent);
+
+  var ring   = document.getElementById("ring");
+  var seg    = document.querySelector("#line line");
+  var elState= document.getElementById("state");
+  var elDist = document.getElementById("dist");
+  var elCount= document.getElementById("count");
+  var canvas = document.getElementById("field");
+  var ctx    = canvas.getContext("2d");
+
+  var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2);
+  function resize(){
+    W=window.innerWidth; H=window.innerHeight;
+    canvas.width=W*DPR; canvas.height=H*DPR;
+    canvas.style.width=W+"px"; canvas.style.height=H+"px";
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  // target = the subject (last known cursor position). follower = the artist, lagging.
+  var tx=W/2, ty=H/2;          // subject
+  var fx=W/2, fy=H/2;          // follower
+  var hasSubject=false;        // have we ever seen one this pursuit
+  var lastMove=0;
+  var count=0;
+  var STILL_MS=1100;
+
+  // the faint trail the subject leaves underfoot — drawn, never stored
+  function fade(){
+    ctx.fillStyle="rgba(11,11,12,0.06)";
+    ctx.fillRect(0,0,W,H);
+  }
+
+  function setState(t){ elState.textContent=t; }
+
+  function acquire(x,y){
+    tx=x; ty=y; lastMove=Date.now();
+    if(!hasSubject){ hasSubject=true; ring.style.opacity="1"; }
+  }
+
+  // entering private space ends the follow
+  function lose(reason){
+    if(!hasSubject) return;
+    hasSubject=false;
+    count++;
+    elCount.textContent=count;
+    ring.style.opacity="0";
+    setState(reason);
+    elDist.textContent="—";
+    seg.setAttribute("x2", seg.getAttribute("x1"));
+    seg.setAttribute("y2", seg.getAttribute("y1"));
+  }
+
+  // --- the surveillance primitive, kept memoryless ---
+  window.addEventListener("pointermove", function(e){
+    acquire(e.clientX, e.clientY);
+  }, {passive:true});
+
+  // cursor leaves the viewport: subject has gone indoors
+  document.addEventListener("mouseout", function(e){
+    if(!e.relatedTarget && !e.toElement){ lose("subject entered private space"); }
+  });
+  window.addEventListener("blur", function(){ lose("subject out of sight"); });
+
+  // touch: the finger lifting is the subject vanishing
+  window.addEventListener("pointerup", function(e){
+    if(e.pointerType!=="mouse"){ lose("subject entered private space"); }
+  });
+  window.addEventListener("pointercancel", function(){ lose("subject out of sight"); });
+
+  function loop(){
+    fade();
+
+    if(hasSubject){
+      // follow at a distance: ease, never quite arrive (Acconci's discreet lag)
+      fx += (tx-fx)*0.075;
+      fy += (ty-fy)*0.075;
+
+      // mark the subject's path underfoot
+      ctx.fillStyle=accent;
+      ctx.globalAlpha=.5;
+      ctx.beginPath(); ctx.arc(tx,ty,1.4,0,6.2832); ctx.fill();
+      ctx.globalAlpha=1;
+
+      ring.style.transform="translate("+fx+"px,"+fy+"px)";
+
+      var dx=tx-fx, dy=ty-fy, d=Math.sqrt(dx*dx+dy*dy);
+      seg.setAttribute("x1",fx); seg.setAttribute("y1",fy);
+      seg.setAttribute("x2",tx); seg.setAttribute("y2",ty);
+      elDist.textContent=Math.round(d)+" px";
+
+      if(Date.now()-lastMove>STILL_MS){ setState("subject has stopped — standing with them"); }
+      else { setState("following"); }
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

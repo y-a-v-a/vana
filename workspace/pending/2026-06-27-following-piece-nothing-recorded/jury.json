@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-27-following-piece-nothing-recorded",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Vito Acconci, Following Piece (1969)",
+    "net.art / mouse-tracking surveillance analytics"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument with unusual precision: pointermove is literally the primitive on which every heatmap and session-replay vendor runs, so a follower that uses it to enact Acconci's pursuit while refusing to persist anything stages the catalogue's anti-surveillance ethic as form, not as wall text. Double-coding is clean — the surface gag (a thing chases my cursor) carries a literate argument about where the violation in surveillance actually sits (the keeping, not the following). The 'only ethical stalker' line and the standing 'recorded: nothing · 0 bytes' ledger are the kind of restraint-plus-wit the DNA rewards. Distinct from the pointer-driven 'this way browser' (which is about Brouwn's measured walking) and from other catalogue entries.",
+  "reservations": "The P5 chance/order claim is the weakest invocation: the work is genuinely order (deterministic easing) plus external chance (human hand), but it does not visibly stage the tension the way Maleglitch or A Chance of Order do. Per-visit hue is a minor gesture rather than a meaningful parameter, and the easing constant (0.075) is hard-coded rather than treated as material.",
+  "revision_suggestion": "To thicken P5, make the easing curve itself a per-visit generated function (e.g., easing constant drawn from a small ordered set mapped against date or visit index), so the order/chance axis is felt in the follower rather than only narrated in the rationale. Optionally add one more dry line of label prose — the current wall text is tight but slightly under-delivers the 'keeping is the violation' thesis that the code already performs.",
+  "jury_model": "minimax/minimax-m3"
+}

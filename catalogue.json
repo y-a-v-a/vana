@@ -566,5 +566,13 @@
     "source": "Richard Serra, Verb List Compilation: Actions to Relate to Oneself (1967-68); Process art / Anti-Form; Lawrence Weiner, Declaration of Intent (1968); net.art (CSS transforms and the DOM as material)",
     "mechanism": "A menu of transitive verbs (to twist, to smear, to scatter, to remove) each triggers its literal CSS transform/filter or DOM mutation on the slab, accumulating per click; reload resets, no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-27-following-piece-nothing-recorded",
+    "title": "Following Piece (Nothing Recorded)",
+    "year": 2026,
+    "source": "Vito Acconci, Following Piece (1969); net.art / mouse-tracking surveillance analytics",
+    "mechanism": "pointermove (the analytics/heatmap primitive) drives an easing cursor-pursuit that ends on mouseout/blur ('private space'); no cookie, storage, network, or log — the ledger reads 0 bytes and resets on reload.",
+    "status": "pending"
   }
 ]
