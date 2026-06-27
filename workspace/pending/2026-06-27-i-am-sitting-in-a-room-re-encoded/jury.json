@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-27-i-am-sitting-in-a-room-re-encoded",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 44,
+  "verdict": "strong",
+  "references_named": [
+    "Alvin Lucier, I Am Sitting in a Room (1969)",
+    "net.art / generational loss",
+    "JPEG / discrete cosine transform basis functions"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument with exemplary economy: a recursive toDataURL → drawImage loop literally enacts Lucier's iterative re-recording, and the DCT block structure that emerges is a literal reading of the codec's resonant modes. Concept and execution collapse cleanly (P1), and the double-coding works — the casual viewer gets a hypnotic dissolve, the literate viewer gets the precise claim that compression algorithms have eigenmodes. The work sits squarely on the chance/order axis (P5): deterministic codec curdling into emergent resonance, answering both Maleglitch and Abstract Painting (Backlit) from within the catalogue while opening a new lineage (sound art as web-native material). Tone is dry and intelligent throughout, with the line 'No microphone was harmed. The room is the codec' landing the cheerful-cynic register perfectly. Build is small and restrained (480px, quality 0.28, 96 generations), open license stated, no network or storage, attributed to Lucier and y-a-v-a.",
+  "reservations": "Novelty sits at 4 rather than 5 because generational-loss feedback loops are a well-trodden net.art trope; the work's strength is the precise Lucier analogy and DCT-eigenmode reading rather than a genuinely new mechanism. The slight rotation+zoom per pass is a small liberty that could be read as a decorative flourish, though it serves the 'room' metaphor. The sound-art lineage is new for this catalogue, which is a feature but means the candidate is less directly anchored in the visual-art canon the corpus usually draws from.",
+  "revision_suggestion": "Consider stating the quality constant and the 96-generation cap on the page as part of the score (a small printed parameter block beside the canvas) so the viewer knows the room is tuned — this would deepen the Lucier-as-instruction-score double-coding without adding decorative code, and would harden the argument that the codec itself is the instrument.",
+  "jury_model": "minimax/minimax-m3"
+}

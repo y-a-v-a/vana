@@ -574,5 +574,13 @@
     "source": "Vito Acconci, Following Piece (1969); net.art / mouse-tracking surveillance analytics",
     "mechanism": "pointermove (the analytics/heatmap primitive) drives an easing cursor-pursuit that ends on mouseout/blur ('private space'); no cookie, storage, network, or log — the ledger reads 0 bytes and resets on reload.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-27-i-am-sitting-in-a-room-re-encoded",
+    "title": "I Am Sitting in a Room (Re-encoded)",
+    "year": 2026,
+    "source": "Alvin Lucier, I Am Sitting in a Room (1969); net.art / generational loss (the re-uploaded, re-encoded file); JPEG / discrete cosine transform basis functions",
+    "mechanism": "Recursive client-side canvas.toDataURL('image/jpeg') feedback loop (re-encode + slight zoom/rotate each generation) whose accumulating 8x8 DCT block artifacts are the medium's resonant modes.",
+    "status": "pending"
   }
 ]

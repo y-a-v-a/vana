@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111111">
+<title>I Am Sitting in a Room (Re-encoded)</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: #111;
+    color: #cfcfcf;
+    font: 15px/1.55 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 28px;
+    min-height: 100%;
+  }
+  figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .stage {
+    position: relative;
+    width: min(72vmin, 480px);
+    aspect-ratio: 1 / 1;
+    background: #000;
+    box-shadow: 0 0 0 1px #2a2a2a, 0 24px 60px -24px #000;
+  }
+  canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+  .counter {
+    position: absolute; left: 8px; bottom: 7px;
+    font-size: 11px; letter-spacing: .08em;
+    color: #8a8a8a; background: rgba(0,0,0,.45);
+    padding: 2px 6px; pointer-events: none;
+  }
+  .controls { display: flex; gap: 10px; }
+  button {
+    font: inherit; font-size: 13px;
+    color: #ddd; background: #1c1c1c;
+    border: 1px solid #3a3a3a; border-radius: 2px;
+    padding: 7px 14px; cursor: pointer;
+  }
+  button:hover { background: #262626; border-color: #555; }
+  figcaption {
+    max-width: min(72vmin, 480px);
+    font-size: 12.5px; line-height: 1.6; color: #9a9a9a;
+  }
+  figcaption b { color: #ccc; font-weight: 600; }
+  .label { letter-spacing: .04em; }
+  .label .t { color: #e8e8e8; font-style: italic; }
+  footer {
+    font-size: 11px; color: #6f6f6f; line-height: 1.6;
+    max-width: min(72vmin, 480px); text-align: left;
+  }
+  footer a { color: #8f8f8f; }
+</style>
+</head>
+<body>
+  <figure>
+    <div class="stage">
+      <canvas id="c" width="480" height="480" aria-label="A square panel of text dissolving into compression artifacts."></canvas>
+      <div class="counter" id="counter">generation 0</div>
+    </div>
+    <div class="controls">
+      <button id="play">Pause</button>
+      <button id="replay">Replay</button>
+    </div>
+    <figcaption>
+      <p class="label"><span class="t">I am a picture in a window different from the one you are in
+      now. I am encoding the light of my own pixels and drawing it back into the canvas
+      again and again until the resonant frequencies of the codec reinforce themselves,
+      so that any semblance of these words is destroyed.</span></p>
+      <p>What survives is not the text but the <b>room</b> — the eight-by-eight blocks
+      the compressor was built to sing. No microphone was harmed. The room is the codec.</p>
+    </figcaption>
+  </figure>
+
+  <footer>
+    <b>I Am Sitting in a Room (Re-encoded)</b> — y-a-v-a (yet another visual artist), 2026.
+    After Alvin Lucier, <i>I Am Sitting in a Room</i> (1969). The panel re-encodes itself as
+    JPEG every frame; the discrete-cosine basis functions are the room's resonant modes.
+    Runs entirely in your browser — no network, no cookies, no storage, no tracking.
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>.
+  </footer>
+
+<script>
+(function () {
+  "use strict";
+  var SIZE = 480;
+  var Q = 0.28;          // JPEG quality: low enough that the blocks bloom
+  var ZOOM = 1.016;      // each pass over-fills the panel (the room feeds back)
+  var ROT = 0.0055;      // radians per pass: a slow acoustic swirl
+  var MAX = 96;          // generations until the words are gone
+  var FPS = 13;
+
+  var canvas = document.getElementById("c");
+  var ctx = canvas.getContext("2d");
+  var counter = document.getElementById("counter");
+  var playBtn = document.getElementById("play");
+  var replayBtn = document.getElementById("replay");
+
+  var gen = 0, running = true, timer = null, busy = false;
+
+  var LINES = [
+    "I am a picture in a",
+    "window different from",
+    "the one you are in now.",
+    "",
+    "I am encoding the light",
+    "of my own pixels and",
+    "drawing it back into",
+    "the canvas again and",
+    "again until the resonant",
+    "frequencies of the codec",
+    "reinforce themselves,",
+    "so that any semblance",
+    "of these words is",
+    "destroyed."
+  ];
+
+  function drawSource() {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, SIZE, SIZE);
+    ctx.fillStyle = "#101010";
+    ctx.font = "600 22px Georgia, 'Times New Roman', serif";
+    ctx.textBaseline = "alphabetic";
+    var lh = 29, top = 52, x = 34;
+    for (var i = 0; i < LINES.length; i++) {
+      ctx.fillText(LINES[i], x, top + i * lh);
+    }
+  }
+
+  function setCounter() {
+    counter.textContent = gen === 0
+      ? "generation 0"
+      : (gen >= MAX ? "generation " + gen + " — only the room remains"
+                    : "generation " + gen);
+  }
+
+  function step() {
+    if (!running || busy || gen >= MAX) return;
+    busy = true;
+    var data = canvas.toDataURL("image/jpeg", Q); // local, no network
+    var img = new Image();
+    img.onload = function () {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.save();
+      ctx.translate(SIZE / 2, SIZE / 2);
+      ctx.rotate(ROT);
+      ctx.scale(ZOOM, ZOOM);
+      ctx.drawImage(img, -SIZE / 2, -SIZE / 2, SIZE, SIZE);
+      ctx.restore();
+      gen++;
+      setCounter();
+      busy = false;
+      if (gen >= MAX) {
+        running = false;
+        playBtn.textContent = "Play";
+      }
+    };
+    img.src = data;
+  }
+
+  function tick() {
+    step();
+    timer = setTimeout(function () {
+      requestAnimationFrame(tick);
+    }, 1000 / FPS);
+  }
+
+  function start() {
+    if (timer) { clearTimeout(timer); }
+    gen = 0; busy = false; running = true;
+    drawSource(); setCounter();
+    playBtn.textContent = "Pause";
+    tick();
+  }
+
+  playBtn.addEventListener("click", function () {
+    if (gen >= MAX) { start(); return; }
+    running = !running;
+    playBtn.textContent = running ? "Pause" : "Play";
+  });
+  replayBtn.addEventListener("click", start);
+
+  start();
+})();
+</script>
+</body>
+</html>
