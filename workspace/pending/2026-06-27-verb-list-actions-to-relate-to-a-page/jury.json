@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-06-27-verb-list-actions-to-relate-to-a-page",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Richard Serra, Verb List Compilation: Actions to Relate to Oneself (1967-68)",
+    "Lawrence Weiner, Declaration of Intent (1968)",
+    "Process art / Anti-Form",
+    "net.art (CSS transforms and the DOM as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument: each of Serra's transitive verbs is wired to its literal CSS/DOM counterpart ('to twist' = skew, 'to remove' = node removal, 'to scatter' = randomized transforms), so the rendering engine enacts the score on the page's own body. Concept-execution unity is exemplary — the slab can even delete its own meta-statement ('this is not described, it is done') via 'to remove,' which is exactly the self-consuming P7 double-coding the DNA prizes. It cleanly answers Serra while distinguishing itself from the Weiner/LeWitt/Huebler conceptual-instruction pieces already in the catalogue: those state or refuse; this one hands the verbs to the visitor and lets them perform process art on live matter. Tone is dry, restrained, and cheerful-cynic; ethics (CC BY-SA, no storage, no network) are met.",
+  "reservations": "Minor: 'to twist' maps to skew rather than a literal torsion, which is a small conceptual slip — skew stretches, twist rotates around an axis. The piece is also deliberately small-scale (a single page, one-way accumulation with reload as the only undo), which honors P3 but doesn't push the formal envelope as hard as some recent catalogue entries. Interaction is finite — once 'to remove' has eaten the slab, the verbs keep working but the visual gag exhausts.",
+  "revision_suggestion": "Replace the skew binding for 'to twist' with a rotateY or rotate3d rotation around a vertical axis so the verb maps to actual torsion rather than shear; consider a 'to roll' verb that animates the slab across the floor in addition to rotating, since rolling is on Serra's list and the floor already exists as the studio. Optionally widen the palette reset so a depleted slab can be re-seeded with new material rather than only reload-resetting — still no storage, just a counter that rebuilds span content from the verb list itself.",
+  "jury_model": "minimax/minimax-m3"
+}

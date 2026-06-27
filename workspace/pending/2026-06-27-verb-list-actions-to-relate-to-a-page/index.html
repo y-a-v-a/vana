@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verb List (Actions to Relate to a Page)</title>
+<style>
+  :root{ --steel:#6b6f73; --ink:#0c0d0e; --line:#2a2c2f; --hot:#c8c2b4; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; }
+  body{
+    background:var(--ink); color:var(--hot);
+    font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;
+    -webkit-font-smoothing:antialiased;
+    display:grid; grid-template-rows:auto 1fr auto;
+    min-height:100%;
+  }
+  header{ padding:18px 20px 10px; border-bottom:1px solid var(--line); }
+  header h1{ font-size:15px; font-weight:600; margin:0; letter-spacing:.02em; }
+  header p{ margin:4px 0 0; color:#7c8086; max-width:62ch; }
+  main{
+    display:grid; grid-template-columns:230px 1fr; gap:0;
+    min-height:0;
+  }
+  /* the score */
+  nav{
+    border-right:1px solid var(--line); padding:14px 0; overflow:auto;
+  }
+  nav button{
+    display:block; width:100%; text-align:left; cursor:pointer;
+    background:none; border:0; color:var(--hot);
+    font:inherit; padding:6px 20px; letter-spacing:.01em;
+  }
+  nav button:hover{ background:#161819; color:#fff; }
+  nav button:active{ background:#222; }
+  /* the studio floor */
+  .floor{
+    display:grid; place-items:center; padding:40px; overflow:hidden; position:relative;
+  }
+  /* the material */
+  #slab{
+    width:min(60vw,360px); aspect-ratio:1.6/1;
+    background:
+      linear-gradient(135deg,#7e8388 0%,#5d6165 38%,#74787c 60%,#54585b 100%);
+    border:1px solid #3a3d40;
+    box-shadow:0 18px 40px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08);
+    display:flex; flex-wrap:wrap; align-content:center; justify-content:center;
+    gap:6px 14px; padding:22px; color:#15181a;
+    transform-origin:center center;
+    transition:transform .28s cubic-bezier(.2,.7,.2,1), filter .28s ease, border-radius .28s ease, background-color .28s ease;
+    will-change:transform,filter;
+  }
+  #slab span{
+    font-weight:700; font-size:clamp(12px,2.4vw,18px); letter-spacing:.06em;
+    transition:transform .3s ease, opacity .3s ease;
+    display:inline-block;
+  }
+  footer{
+    padding:10px 20px 16px; border-top:1px solid var(--line);
+    color:#6c7075; font-size:12px; display:flex; flex-wrap:wrap; gap:6px 18px; align-items:baseline;
+  }
+  footer a{ color:#9aa0a6; }
+  #process{ color:#8b9096; }
+  #process b{ color:var(--hot); font-weight:600; }
+  .hint{ color:#5a5e62; }
+  @media (max-width:620px){
+    main{ grid-template-columns:1fr; }
+    nav{ border-right:0; border-bottom:1px solid var(--line); display:grid; grid-template-columns:repeat(2,1fr); }
+    nav button{ padding:8px 16px; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Verb List <span class="hint">— Actions to Relate to a Page</span></h1>
+    <p>After Richard Serra, who wrote a column of transitive verbs and called it sculpture.
+       Here the verbs are not described. They are performed — by the only thing that can actually
+       <i>to twist</i>, <i>to smear</i>, <i>to scatter</i> a real material: the rendering engine.
+       The page is the material. The score runs on its own body.</p>
+  </header>
+
+  <main>
+    <nav id="rail" aria-label="the score"></nav>
+    <div class="floor">
+      <div id="slab" aria-label="the material">
+        <span>this</span><span>is</span><span>not</span><span>described</span><span>it</span><span>is</span><span>done</span>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span id="process">process: <b>—</b></span>
+    <span class="hint">reload heals the slab · no storage · no network</span>
+    <span>“Verb List (Actions to Relate to a Page)” by <b>y-a-v-a</b>, after Richard Serra,
+      <i>Verb List Compilation: Actions to Relate to Oneself</i> (1967–68).
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</span>
+  </footer>
+
+<script>
+(() => {
+  "use strict";
+  const slab = document.getElementById('slab');
+  const rail = document.getElementById('rail');
+  const proc = document.querySelector('#process b');
+
+  // accumulating state — Serra applied actions repeatedly; clicks compound
+  const s = { rot:0, sx:0, sy:0, scaleX:1, scaleY:1, ty:0, rad:0, blur:0, persp:0, blend:false, flood:0 };
+  const palette = ['', '#8a2b22', '#1d3a52', '#a08628', '#2f2f2f', '#5d6165'];
+  const done = [];
+
+  function render(){
+    const t = [
+      `perspective(900px)`,
+      `translateY(${s.ty}px)`,
+      `rotate(${s.rot}deg)`,
+      `rotateX(${s.persp}deg)`,
+      `skew(${s.sx}deg,${s.sy}deg)`,
+      `scale(${s.scaleX},${s.scaleY})`,
+    ].join(' ');
+    slab.style.transform = t;
+    slab.style.filter = s.blur ? `blur(${s.blur}px)` : 'none';
+    slab.style.borderRadius = s.rad + 'px';
+    slab.style.mixBlendMode = s.blend ? 'difference' : 'normal';
+    slab.style.backgroundColor = palette[s.flood] || '';
+  }
+
+  // each verb is a genuine browser operation, not an illustration of one
+  const verbs = [
+    ['to rotate',   () => s.rot += 13],
+    ['to twist',    () => { s.sx += 9; s.sy -= 4; }],
+    ['to bend',     () => s.persp += 12],
+    ['to shorten',  () => s.scaleY *= 0.86],
+    ['to spread',   () => s.scaleX *= 1.13],
+    ['to drop',     () => s.ty += 26],
+    ['to droop',    () => s.sy += 7],
+    ['to curve',    () => s.rad += 18],
+    ['to smear',    () => s.blur += 1.4],
+    ['to mix',      () => s.blend = !s.blend],
+    ['to flood',    () => s.flood = (s.flood + 1) % palette.length],
+    ['to scatter',  () => slab.querySelectorAll('span').forEach(w => {
+        w.style.transform = `translate(${(Math.random()*2-1)*60|0}px,${(Math.random()*2-1)*40|0}px) rotate(${(Math.random()*2-1)*40|0}deg)`;
+    })],
+    ['to remove',   () => { const w = slab.querySelector('span'); if (w) w.remove(); }],
+  ];
+
+  verbs.forEach(([name, act]) => {
+    const b = document.createElement('button');
+    b.textContent = name;
+    b.addEventListener('click', () => {
+      act();
+      render();
+      done.push(name.replace('to ',''));
+      proc.textContent = done.join(' · ');
+    });
+    rail.appendChild(b);
+  });
+})();
+</script>
+</body>
+</html>

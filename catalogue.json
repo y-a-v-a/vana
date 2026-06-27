@@ -558,5 +558,13 @@
     "source": "The Robert & Ethel Scull collection sale, Sotheby Parke-Bernet, New York, 18 October 1973; Robert Rauschenberg; Marcel Duchamp / the readymade",
     "mechanism": "An <input type=range> bid against a per-visit hidden reserve; crossing it greys the canvas, veils it as 'withdrawn to a private collection,' and settles a live ledger (hammer price, consignor's profit, artist $0) — client-side only, no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-27-verb-list-actions-to-relate-to-a-page",
+    "title": "Verb List (Actions to Relate to a Page)",
+    "year": 2026,
+    "source": "Richard Serra, Verb List Compilation: Actions to Relate to Oneself (1967-68); Process art / Anti-Form; Lawrence Weiner, Declaration of Intent (1968); net.art (CSS transforms and the DOM as material)",
+    "mechanism": "A menu of transitive verbs (to twist, to smear, to scatter, to remove) each triggers its literal CSS transform/filter or DOM mutation on the slab, accumulating per click; reload resets, no storage, no network.",
+    "status": "pending"
   }
 ]
