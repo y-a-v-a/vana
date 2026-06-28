@@ -590,5 +590,13 @@
     "source": "Marcel Duchamp, 3 Standard Stoppages (1913-14); the CSS reference pixel (1in = 96px, CSS Values); Mel Bochner, Measurement series",
     "mechanism": "Per-visit Math.random drops three threads of true arc-length 96px (the CSS reference inch); each crumpled chord is adopted as a unit and divides window.innerWidth live on resize, so one exact pixel width yields three quarrelling measurements.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-28-not-your-backdrop",
+    "title": "Not Your Backdrop",
+    "year": 2026,
+    "source": "Mark Rothko, Seagram Murals (1958-59); The Four Seasons / Seagram Building commission, withdrawn by the artist 1959; net.art frame-busting; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "Frame-bust detection (window.self !== window.top) blanks the painting to a refusal when iframed; a button feeds the page's own source to an inline <iframe srcdoc> copy that withdraws on cue, no network.",
+    "status": "pending"
   }
 ]

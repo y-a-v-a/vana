@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-06-28-not-your-backdrop",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Mark Rothko, Seagram Murals (1958–59)",
+    "Four Seasons / Seagram Building commission, withdrawn by the artist 1959",
+    "net.art frame-busting",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The iframe-detection (window.self !== window.top with cross-origin try/catch) is the literal enactment of Rothko's Seagram withdrawal: the mechanism refuses to be décor because it is being used as décor. The self-referential srcdoc demo — a perfect copy of the page embedded inline captioned as The Four Seasons, which then withdraws — is an elegant staging that also carries the Benjamin aura joke (mechanical reproduction identical to original, yet worthless as decoration). Concept and execution are one object. Reads cleanly at two depths. Web-only mechanism; fresh source within the catalogue.",
+  "reservations": "The P5/chance claim is thin — the per-visit oxblood mix and inner-form jitter are minimal, and the dominant gesture is order (deterministic withdrawal). The Rothko CSS approximation is functional rather than evocative. The work doesn't explicitly name a prior work in the y-a-v-a catalogue it answers, only art-historical and web-historical precedents.",
+  "revision_suggestion": "Strengthen the chance/order axis by making the withdrawal itself vary per visit — e.g., sometimes the painting persists a few seconds before going dark, sometimes the refusal message changes tone — so chance has real stake in the gesture, not just in the color palette. Optionally tighten the lineage to an explicit prior work (e.g., position this as a web-native answer to Tragedian's vanishing fruit or to the withdrawal gestures in Hammer Price / Inside the White Cube).",
+  "jury_model": "minimax/minimax-m3"
+}

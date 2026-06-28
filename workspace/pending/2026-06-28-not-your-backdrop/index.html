@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not Your Backdrop</title>
+<style>
+  :root{
+    --ground:#3a1418;
+    --outer:#220a0d;
+    --inner:#120508;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:#0a0809;
+    color:#9a8a8c;
+    font:14px/1.55 Georgia,"Times New Roman",serif;
+    display:flex;flex-direction:column;align-items:center;
+    min-height:100%;
+    padding:5vh 4vw 6vh;
+    /* the dim room Rothko insisted on */
+    background-image:radial-gradient(120% 90% at 50% 42%, rgba(40,18,20,.25), rgba(0,0,0,.85));
+  }
+
+  /* ---- the painting ---- */
+  #room{
+    width:min(86vw,560px);
+    aspect-ratio:4/5;
+    position:relative;
+    background:var(--ground);
+    filter:saturate(1.05);
+    box-shadow:0 0 70px 20px rgba(0,0,0,.6), 0 30px 80px rgba(0,0,0,.5);
+  }
+  .form{position:absolute;border-radius:2px}
+  .outer{
+    inset:9% 11%;
+    background:var(--outer);
+    filter:blur(9px);
+  }
+  .inner{
+    inset:24% 26%;
+    background:var(--inner);
+    filter:blur(13px);
+  }
+
+  /* ---- wall label ---- */
+  #label{
+    width:min(86vw,560px);
+    margin-top:26px;
+    border-top:1px solid #2a2224;
+    padding-top:14px;
+    color:#8a7a7c;
+    font-size:12.5px;
+  }
+  #label .ttl{color:#cdbcbe;font-style:italic;letter-spacing:.2px}
+  #label .line{margin-top:5px}
+  #label .dim{color:#6c5e60;font-size:11.5px}
+  button{
+    margin-top:14px;
+    background:#1a1416;color:#caa;border:1px solid #3a2a2c;
+    font:12.5px Georgia,serif;font-style:italic;
+    padding:7px 13px;border-radius:3px;cursor:pointer;
+  }
+  button:hover{background:#241a1c;color:#e7c9cb}
+  a{color:#8a7a7c}
+
+  /* ---- the demonstration: hung in a restaurant ---- */
+  #demo{width:min(86vw,560px);margin-top:18px}
+  #demo .cap{font-size:11.5px;color:#6c5e60;font-style:italic;margin-bottom:6px}
+  #demo iframe{
+    width:100%;height:230px;border:8px solid #1c1416;border-radius:2px;
+    background:#050505;box-shadow:0 8px 30px rgba(0,0,0,.6);
+  }
+
+  /* ---- withdrawn state (shown only when this page is embedded) ---- */
+  .withdrawn{
+    position:fixed;inset:0;background:#050304;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:6vw;color:#5e2a2e;
+    font:13px/1.6 Georgia,serif;
+  }
+  .withdrawn .w-main{font-size:clamp(22px,7vw,40px);letter-spacing:.06em;color:#6e2f33}
+  .withdrawn .w-sub{margin-top:14px;color:#7a4a4d;font-style:italic;max-width:30em}
+  .withdrawn .w-ref{margin-top:18px;color:#3f2426;font-size:11px;max-width:30em}
+  .withdrawn .w-cc{margin-top:22px;color:#2e1c1d;font-size:10.5px}
+</style>
+</head>
+<body>
+  <div id="room" aria-label="A dark maroon Rothko-style mural with two floating rectangular forms">
+    <div class="form outer"></div>
+    <div class="form inner"></div>
+  </div>
+
+  <div id="label">
+    <div class="ttl">Not Your Backdrop</div>
+    <div class="line">after Mark Rothko, <em>Seagram Murals</em> (1958–59) — the Four Seasons commission, withdrawn by the artist in 1959.</div>
+    <div class="line dim">Medium: pixels on screen. Best seen dim, at arm's length. Each visit mixes its own oxblood.</div>
+    <button id="hang">Hang it in a restaurant</button>
+    <div class="line dim" style="margin-top:14px">
+      y-a-v-a (yet another visual artist) · Licensed <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="license">CC&nbsp;BY-NC&nbsp;4.0</a> · no cookies, no trackers, no requests.
+    </div>
+  </div>
+
+  <div id="demo"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  // Capture the page's own source BEFORE we mutate anything, so the
+  // demonstration can embed a perfect, self-running copy of this work.
+  var ORIGINAL_SOURCE = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+
+  function isFramed(){
+    // Cross-origin access to window.top throws — which also means we are framed.
+    try { return window.self !== window.top; } catch (e){ return true; }
+  }
+
+  // ---- WITHDRAWN: the work refuses to be anyone's decor ----
+  function renderWithdrawn(){
+    document.documentElement.style.background = "#050304";
+    document.title = "Withdrawn";
+    document.body.innerHTML =
+      '<div class="withdrawn">' +
+        '<p class="w-main">Withdrawn.</p>' +
+        '<p class="w-sub">This painting declines to be the décor of your establishment.</p>' +
+        '<p class="w-ref">after Mark Rothko — <em>Seagram Murals</em> (1958–59), removed by the artist from the Four Seasons restaurant, 1959.</p>' +
+        '<p class="w-cc">“Not Your Backdrop” · y-a-v-a · CC BY-NC 4.0</p>' +
+      '</div>';
+  }
+
+  // ---- HUNG: per-visit oxblood mix + the demonstration button ----
+  function renderPainting(){
+    var rnd = Math.random;
+    var h = (348 + Math.floor(rnd()*16)) % 360;            // maroon band
+    var s = 40 + rnd()*14;
+    var root = document.documentElement.style;
+    root.setProperty("--ground", "hsl(" + h + " " + s.toFixed(0) + "% " + (14 + rnd()*6).toFixed(0) + "%)");
+    root.setProperty("--outer",  "hsl(" + ((h+357)%360) + " " + (s+8).toFixed(0) + "% " + (8 + rnd()*3).toFixed(0) + "%)");
+    root.setProperty("--inner",  "hsl(" + h + " 58% " + (4 + rnd()*3).toFixed(0) + "%)");
+
+    var inner = document.querySelector(".inner");
+    inner.style.transform = "translate(" + (rnd()*5-2.5).toFixed(1) + "%," + (rnd()*6-3).toFixed(1) + "%)";
+
+    document.getElementById("hang").addEventListener("click", function(){
+      var demo = document.getElementById("demo");
+      if (demo.firstChild){ demo.innerHTML = ""; this.textContent = "Hang it in a restaurant"; return; }
+      this.textContent = "Take it back down";
+      var cap = document.createElement("div");
+      cap.className = "cap";
+      cap.textContent = "Installed as wall décor — The Four Seasons, Park Avenue:";
+      var f = document.createElement("iframe");
+      f.title = "The same work, embedded as decoration";
+      // srcdoc is inline: no network request. The copy detects it is framed
+      // and withdraws itself, exactly as Rothko withdrew the murals.
+      f.setAttribute("srcdoc", ORIGINAL_SOURCE);
+      demo.appendChild(cap);
+      demo.appendChild(f);
+    });
+  }
+
+  if (isFramed()) renderWithdrawn();
+  else renderPainting();
+})();
+</script>
+</body>
+</html>
