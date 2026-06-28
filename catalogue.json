@@ -582,5 +582,13 @@
     "source": "Alvin Lucier, I Am Sitting in a Room (1969); net.art / generational loss (the re-uploaded, re-encoded file); JPEG / discrete cosine transform basis functions",
     "mechanism": "Recursive client-side canvas.toDataURL('image/jpeg') feedback loop (re-encode + slight zoom/rotate each generation) whose accumulating 8x8 DCT block artifacts are the medium's resonant modes.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-28-3-standard-stoppages-reference-pixel",
+    "title": "3 Standard Stoppages (Reference Pixel)",
+    "year": 2026,
+    "source": "Marcel Duchamp, 3 Standard Stoppages (1913-14); the CSS reference pixel (1in = 96px, CSS Values); Mel Bochner, Measurement series",
+    "mechanism": "Per-visit Math.random drops three threads of true arc-length 96px (the CSS reference inch); each crumpled chord is adopted as a unit and divides window.innerWidth live on resize, so one exact pixel width yields three quarrelling measurements.",
+    "status": "pending"
   }
 ]

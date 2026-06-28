@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3 Standard Stoppages (Reference Pixel)</title>
+<style>
+  :root { --ink:#1a1a1a; --paper:#f4f2ec; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; background:var(--paper); color:var(--ink);
+    font-family: Georgia, "Times New Roman", serif; }
+  body { min-height:100vh; padding:6vh 5vw 4vh;
+    display:flex; flex-direction:column; align-items:center; }
+  header { text-align:center; max-width:42rem; }
+  h1 { font-size:1.55rem; font-weight:normal; letter-spacing:.01em; margin:0 0 .4rem; }
+  .std { font-size:.82rem; color:#6a665c; font-style:italic; margin:0 0 1.8rem; }
+  .panels { display:flex; flex-wrap:wrap; gap:1.4rem; justify-content:center;
+    margin-bottom:1.6rem; }
+  .panel { width:min(28vw,220px); min-width:170px; background:#fbfaf6;
+    border:1px solid #c9c4b6; box-shadow:0 1px 0 #fff inset, 0 6px 18px rgba(0,0,0,.06);
+    padding:.7rem .7rem .55rem; }
+  .panel svg { display:block; width:100%; height:84px; }
+  .panel svg path { fill:none; stroke:var(--ink); stroke-width:1.1;
+    stroke-linecap:round; stroke-linejoin:round; }
+  .cap { font-size:.74rem; line-height:1.35; color:#3a372f; margin-top:.5rem; }
+  .cap b { font-weight:normal; font-variant:small-caps; letter-spacing:.04em; }
+  .reading { font-variant-numeric: tabular-nums; }
+  .reading em { font-style:normal; font-weight:bold; }
+  .verdict { max-width:40rem; text-align:center; font-size:.92rem;
+    line-height:1.5; color:#2a271f; margin:.2rem 0 1.4rem; }
+  button { font-family:inherit; font-size:.82rem; background:var(--ink); color:var(--paper);
+    border:none; padding:.5rem 1.1rem; cursor:pointer; letter-spacing:.03em; }
+  button:hover { background:#000; }
+  footer { margin-top:auto; padding-top:2.4rem; max-width:40rem; text-align:center;
+    font-size:.68rem; line-height:1.55; color:#807b6e; }
+  footer a { color:#807b6e; }
+  .label { border:1px solid #c9c4b6; background:#fbfaf6; padding:.8rem 1rem;
+    font-size:.7rem; line-height:1.5; color:#4a463c; max-width:30rem; margin:0 auto 1.4rem;
+    text-align:left; }
+  .label dt { float:left; clear:left; width:6.2rem; color:#8a8576; font-variant:small-caps; }
+  .label dd { margin:0 0 .15rem 6.4rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>3 Standard Stoppages (Reference Pixel)</h1>
+  <p class="std">The web's standard meter: 1&nbsp;in = 96&nbsp;px, by decree. Below, three of them are dropped.</p>
+</header>
+
+<div class="panels" id="panels"></div>
+
+<p class="verdict" id="verdict"></p>
+
+<button id="drop" type="button">drop the threads again</button>
+
+<dl class="label">
+  <dt>After</dt><dd>Marcel Duchamp, <i>3 Standard Stoppages</i> (1913–14)</dd>
+  <dt>Medium</dt><dd>chance, the CSS reference pixel, pixels on screen</dd>
+  <dt>Ruler</dt><dd>one crumpled inch, preserved</dd>
+  <dt>By</dt><dd>y-a-v-a — <i>yet another visual artist</i></dd>
+</dl>
+
+<footer>
+  Duchamp let a metre of thread fall from a metre's height, three times, and kept
+  whatever crooked length it became — a unit of measure fixed by gravity instead of
+  by Paris. The web has its own Paris: the reference pixel, <code>1in&nbsp;=&nbsp;96px</code>,
+  trusted by every layout on Earth. Here three 96-pixel threads fall once and are
+  adopted as the page's rulers. They are asked the width of this very window. They
+  disagree. The standard was never the thing; it was only the agreement.<br><br>
+  Chance fixes the canon on load; the canon never changes; only your window does —
+  resize it and watch the rulers re-measure. No cookies, no storage, no network: the
+  threads live in memory and die on reload.<br>
+  <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>
+  · y-a-v-a · after Marcel Duchamp, <i>3 Standard Stoppages</i> (1913–14).
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  // The web's standard meter, by international decree (CSS Values, 5.2):
+  // 1 inch = 96 reference pixels. We drop one inch of "thread", three times.
+  var REF_INCH = 96;
+  var ROMAN = ["I", "II", "III"];
+
+  // Build a polyline of true arc-length REF_INCH that crumples by chance as it
+  // "falls" rightward. Returns the points and the chord (end-to-end straight
+  // distance) — the ground a crumpled inch actually covers, i.e. the new unit.
+  function dropThread() {
+    var steps = 220, ds = REF_INCH / steps;
+    var x = 0, y = 0, ang = 0;
+    var pts = [[0, 0]];
+    for (var i = 0; i < steps; i++) {
+      ang += (Math.random() - 0.5) * (Math.PI / 2.6); // gravity wobble
+      ang *= 0.86;                                     // but it still falls onward
+      x += Math.cos(ang) * ds;
+      y += Math.sin(ang) * ds;
+      pts.push([x, y]);
+    }
+    var chord = Math.sqrt(x * x + y * y);
+    return { pts: pts, unit: Math.max(1, chord), span: x };
+  }
+
+  function pathFor(pts) {
+    var d = "M" + pts[0][0].toFixed(2) + " " + pts[0][1].toFixed(2);
+    for (var i = 1; i < pts.length; i++) d += " L" + pts[i][0].toFixed(2) + " " + pts[i][1].toFixed(2);
+    return d;
+  }
+
+  function bbox(pts) {
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (var i = 0; i < pts.length; i++) {
+      var p = pts[i];
+      if (p[0] < minX) minX = p[0]; if (p[0] > maxX) maxX = p[0];
+      if (p[1] < minY) minY = p[1]; if (p[1] > maxY) maxY = p[1];
+    }
+    return { minX: minX, minY: minY, w: maxX - minX, h: maxY - minY };
+  }
+
+  var stoppages = [];   // the canon, fixed once per drop
+  var panelsEl = document.getElementById("panels");
+  var verdictEl = document.getElementById("verdict");
+
+  function build() {
+    stoppages = [dropThread(), dropThread(), dropThread()];
+    panelsEl.textContent = "";
+    stoppages.forEach(function (s, i) {
+      var b = bbox(s.pts), pad = 5;
+      var vb = (b.minX - pad) + " " + (b.minY - pad) + " " +
+               (b.w + pad * 2) + " " + (b.h + pad * 2);
+      var panel = document.createElement("div");
+      panel.className = "panel";
+      panel.innerHTML =
+        '<svg viewBox="' + vb + '" preserveAspectRatio="xMidYMid meet" aria-hidden="true">' +
+        '<path d="' + pathFor(s.pts) + '"/></svg>' +
+        '<div class="cap"><b>Stoppage ' + ROMAN[i] + '</b><br>' +
+        '1 unit = ' + s.unit.toFixed(1) + ' px ' +
+        '<span style="color:#9a9486">(a 96&#8202;px inch, fallen)</span><br>' +
+        '<span class="reading" data-i="' + i + '"></span></div>';
+      panelsEl.appendChild(panel);
+    });
+    measure();
+  }
+
+  function measure() {
+    var w = window.innerWidth; // the thing to be measured: your own window
+    var reads = stoppages.map(function (s) { return w / s.unit; });
+    document.querySelectorAll(".reading").forEach(function (el) {
+      var i = +el.getAttribute("data-i");
+      el.innerHTML = "this window = <em>" + reads[i].toFixed(1) + "</em> units wide";
+    });
+    var min = Math.min.apply(null, reads), max = Math.max.apply(null, reads);
+    verdictEl.innerHTML =
+      "By the metre it is " + w + "&#8202;px, exactly, forever. By the three stoppages it is " +
+      reads[0].toFixed(1) + ", " + reads[1].toFixed(1) + " and " + reads[2].toFixed(1) +
+      " units &mdash; a disagreement of " + (max - min).toFixed(1) +
+      ". Each ruler is right. The standard was the only fiction.";
+  }
+
+  document.getElementById("drop").addEventListener("click", build);
+  window.addEventListener("resize", measure);
+  build();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-28-3-standard-stoppages-reference-pixel",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 5,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 45,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Duchamp, 3 Standard Stoppages (1913-14)",
+    "the CSS reference pixel (CSS Values 5.2)",
+    "Mel Bochner, Measurement series"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P8"
+  ],
+  "rationale": "Concept and execution are the same object: the crumpled SVG path IS the unit that measures the viewport, so the chance-crumpling is not decoration but measurement itself (P1). The found-object is fresh — the CSS reference pixel read as a Duchampian convention that gravity can dispute (P2) — and the chance↔order axis is enacted rather than illustrated, with the canon fixed per load and only the window varying on resize. The work explicitly inverts the premises of the catalogue's other measurement pieces (Brouwn's faithful reference-pixel distance, De Maria's faithful CSS kilometre, Bochner's honest arrows) by making the unit itself untrustworthy, which gives it a clear place in the twenty-year argument.",
+  "reservations": "The measurement-on-resize gesture has close thematic neighbours in Measurement: Viewport and this way browser, so the ontological novelty is high but the cluster is getting busy; the piece leans on the inversion rather than opening genuinely new territory. The Roman numerals and wall-label format are on-the-nose homages, which is fine but slightly reduces surprise.",
+  "revision_suggestion": "To deepen the hit against the prior measurement works, expose the disagreement more aggressively — e.g., let each stoppage also govern a small layout dimension (a margin, a font-size) so the three rulers literally redraw the page's typographic proportions against each other, turning 'they disagree about the width' into 'they disagree about what the page even is.'",
+  "jury_model": "minimax/minimax-m3"
+}
