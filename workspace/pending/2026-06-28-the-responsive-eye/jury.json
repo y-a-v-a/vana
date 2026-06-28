@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-06-28-the-responsive-eye",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Bridget Riley, Blaze (1962)",
+    "The Responsive Eye, MoMA (1965)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7"
+  ],
+  "rationale": "The mechanism is the argument: a deterministic radial grating drawn at the live devicePixelRatio produces moiré that is interference with the physical pixel grid, so the painting literally cannot be screenshotted or reproduced identically. This enacts Benjamin's aura as non-reproducibility while answering Riley's documented fight against her own work's reproduction. The prefers-reduced-motion branch is a particularly strong P1/P7 move — the accessibility preference that protects the viewer from flicker is the same gesture that performs the work's death, handing the viewer the corpse the label warned about. Sits cleanly on the chance/order axis (P5): strict order in the geometry, chance in the per-device moiré.",
+  "reservations": "The Benjamin reference is shared with several recent catalogue entries (The Original, One and Three Chairs (HTTP), Abstract Painting (Backlit), Suitable for Framing, Not Your Backdrop), so the 'aura restored by the screen' angle, while well-executed here, is a familiar move in the current arc. The work is also visually quiet compared to some neighbours — the conceptual density does most of the lifting.",
+  "revision_suggestion": null,
+  "jury_model": "minimax/minimax-m3"
+}

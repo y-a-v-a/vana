@@ -598,5 +598,13 @@
     "source": "Mark Rothko, Seagram Murals (1958-59); The Four Seasons / Seagram Building commission, withdrawn by the artist 1959; net.art frame-busting; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "Frame-bust detection (window.self !== window.top) blanks the painting to a refusal when iframed; a button feeds the page's own source to an inline <iframe srcdoc> copy that withdraws on cue, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-28-the-responsive-eye",
+    "title": "The Responsive Eye",
+    "year": 2026,
+    "source": "Bridget Riley, Blaze (1962); The Responsive Eye, MoMA (1965); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "requestAnimationFrame rotates a sub-pixel radial grating drawn at the live devicePixelRatio so the moire is interference with the device's physical pixel grid; prefers-reduced-motion freezes it into its own corpse.",
+    "status": "pending"
   }
 ]

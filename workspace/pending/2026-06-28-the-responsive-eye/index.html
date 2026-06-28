@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>The Responsive Eye</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #fff; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  /* the painting is the flicker; the label is just the wall text */
+  .label {
+    position: fixed; left: 16px; bottom: 14px; max-width: 30em;
+    font: 12px/1.5 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    color: #111; mix-blend-mode: difference; /* readable over black or white */
+    filter: invert(1); /* so difference-blend resolves to legible grey */
+    user-select: text; pointer-events: auto;
+  }
+  .label b { font-weight: 600; }
+  .label .dim { opacity: .8; }
+  .label a { color: inherit; }
+  @media (prefers-reduced-motion: reduce) {
+    .label .live { display: none; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .label .dead { display: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="c" aria-label="A rotating black-and-white radial grating that shimmers."></canvas>
+<div class="label">
+  <b>The Responsive Eye</b> — y-a-v-a, after Bridget Riley.<br>
+  <span class="dim live">No two screens render the same painting. It lives in the beat between
+  the grating and your pixels. A screenshot is its corpse.</span>
+  <span class="dim dead">Your system asked for no motion, so here is the corpse:
+  a still. The painting was the movement.</span><br>
+  <span class="dim">References: Bridget Riley, <i>Blaze</i> (1962); <i>The Responsive Eye</i>,
+  MoMA (1965); Walter Benjamin, <i>The Work of Art in the Age of Mechanical Reproduction</i> (1935).
+  Licence <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+  No cookies, no tracking, no network.</span>
+</div>
+<script>
+(() => {
+  "use strict";
+  const canvas = document.getElementById("c");
+  const ctx = canvas.getContext("2d", { alpha: false });
+
+  // Order: a perfectly regular radial grating. The number of sectors is high
+  // enough that, near the centre, each sector is narrower than one device
+  // pixel — so the picture cannot be resolved there. What you see is not in
+  // the geometry; it is interference with your screen's physical raster.
+  const SECTORS = 480;
+
+  let w = 0, h = 0, dpr = 1, cx = 0, cy = 0, R = 0;
+
+  function resize() {
+    dpr = window.devicePixelRatio || 1;          // the device's own grain
+    w = Math.floor(window.innerWidth);
+    h = Math.floor(window.innerHeight);
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);       // draw against the true pixels
+    cx = w / 2; cy = h / 2;
+    R = Math.hypot(w, h);                          // cover the corners
+  }
+
+  function draw(angle) {
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, w, h);
+    const step = (Math.PI * 2) / SECTORS;
+    ctx.fillStyle = "#000";
+    ctx.beginPath();
+    // Fill only the black sectors, in one path, one fill — minimal work.
+    for (let i = 0; i < SECTORS; i += 2) {
+      const a0 = angle + i * step;
+      const a1 = a0 + step;
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, R, a0, a1);
+    }
+    ctx.fill();
+  }
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let raf = 0;
+
+  function loop(t) {
+    // A sub-degree drift per frame: the render loop beating against the LCD
+    // grid. The moiré wheels are the chance the order produces.
+    const angle = (t / 1000) * 0.18 + Math.sin(t / 4200) * 0.04;
+    draw(angle);
+    raf = requestAnimationFrame(loop);
+  }
+
+  function start() {
+    cancelAnimationFrame(raf);
+    resize();
+    if (reduce.matches) {
+      draw(0.3);                 // one frozen frame: the reproduction, the still
+    } else {
+      raf = requestAnimationFrame(loop);
+    }
+  }
+
+  window.addEventListener("resize", () => { if (reduce.matches) { resize(); draw(0.3); } else resize(); });
+  // devicePixelRatio can change when a window moves between monitors
+  window.addEventListener("resize", resize);
+  reduce.addEventListener ? reduce.addEventListener("change", start) : reduce.addListener(start);
+  start();
+})();
+</script>
+</body>
+</html>
