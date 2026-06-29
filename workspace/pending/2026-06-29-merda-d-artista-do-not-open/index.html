@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merda d'artista (Do Not Open)</title>
+<style>
+  :root{
+    --bg:#0c0c0d; --ink:#e9e4d6; --dim:#8c887d; --gold:#d9b25a;
+    --label:#e8e0cd; --labelink:#1a1812; --void:#b04a3a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:radial-gradient(120% 90% at 50% 22%, #161616 0%, var(--bg) 70%);
+    color:var(--ink);
+    font:16px/1.5 Georgia,"Times New Roman",serif;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:100%;padding:32px 18px;text-align:center;
+  }
+  .stage{max-width:560px;width:100%}
+  h1{font-size:1.15rem;font-weight:normal;letter-spacing:.04em;margin:0 0 .2em;color:var(--ink)}
+  .sub{color:var(--dim);font-style:italic;margin:0 0 1.8em;font-size:.92rem}
+
+  /* The tin is a native <details>. Sealed = closed = valuable. */
+  details{margin:0 auto;width:230px}
+  summary{
+    list-style:none;cursor:pointer;outline:none;
+    display:block;position:relative;
+  }
+  summary::-webkit-details-marker{display:none}
+
+  .tin{
+    width:230px;height:150px;margin:0 auto;
+    border-radius:14px/10px;
+    background:
+      linear-gradient(180deg,#cfd2d6 0%,#9aa0a6 6%,#e7eaee 14%,#aab0b6 50%,#7f858b 92%,#62676c 100%);
+    box-shadow:0 18px 40px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.25);
+    position:relative;
+    transition:filter .6s, opacity .6s;
+  }
+  .lid{
+    position:absolute;left:-4px;right:-4px;top:-7px;height:16px;border-radius:9px/7px;
+    background:linear-gradient(180deg,#e9ecef,#9aa0a6);
+    box-shadow:inset 0 -2px 3px rgba(0,0,0,.3);
+  }
+  .label{
+    position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);
+    width:118px;height:118px;border-radius:50%;
+    background:var(--label);color:var(--labelink);
+    border:2px solid #b9b09a;
+    box-shadow:0 2px 6px rgba(0,0,0,.35);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font:8.5px/1.35 Georgia,serif;letter-spacing:.02em;padding:6px;
+  }
+  .label b{font-size:9.5px;letter-spacing:.06em}
+  .label .no{margin-top:3px;font-style:italic;color:#6b6452}
+  .seal{
+    position:absolute;right:-10px;bottom:-10px;
+    width:62px;height:62px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #8a1f17, #5e120c);
+    color:#f3d9b0;font:bold 8px/1.1 Georgia,serif;letter-spacing:.06em;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    box-shadow:0 3px 8px rgba(0,0,0,.5);transform:rotate(-9deg);
+    border:1px dashed rgba(243,217,176,.5);
+  }
+
+  .price{margin:1.4em 0 .2em;font-size:1.5rem;color:var(--gold);letter-spacing:.02em}
+  .price .strike{text-decoration:line-through;color:var(--void)}
+  .terms{color:var(--dim);font-size:.86rem;max-width:30em;margin:.2em auto 0}
+
+  /* Revealed only when the tin is opened. */
+  .contents{
+    margin-top:1.6em;padding:1.1em 1em;border:1px solid #3a2522;border-radius:10px;
+    background:rgba(176,74,58,.08);color:var(--void);font-size:.95rem;
+  }
+  .contents b{color:#d98a7c}
+  .contents .findings{color:var(--dim);font-style:italic;margin-top:.5em;font-size:.85rem}
+
+  .voided .tin{filter:grayscale(1) brightness(.6);opacity:.7}
+  .voided .seal{background:radial-gradient(circle at 35% 30%,#444,#222);color:#888}
+
+  footer{margin-top:2.4em;color:#5f5c54;font-size:.74rem;line-height:1.7;max-width:34em}
+  footer a{color:#7e7a70}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <h1>Merda d&rsquo;artista</h1>
+  <p class="sub">Sealed, it is worth its weight in gold.<br>To verify the contents is to destroy them.</p>
+
+  <details id="tin">
+    <summary aria-label="A sealed tin. Click to open it and verify the contents.">
+      <div class="tin">
+        <div class="lid"></div>
+        <div class="label">
+          <b>MERDA D&rsquo;ARTISTA</b>
+          <span>CONTENUTO NETTO GR. 30</span>
+          <span>PRODOTTA ED INSCATOLATA</span>
+          <span>NEL MAGGIO 1961</span>
+          <span class="no" id="no">No. &mdash; / 90</span>
+        </div>
+        <div class="seal" id="seal">DO&nbsp;NOT<br>OPEN</div>
+      </div>
+    </summary>
+
+    <div class="contents">
+      <b>OPENED &middot; VALUATION VOID.</b><br>
+      The seal was the artwork. You broke it, so the price is now
+      and forever <strong>$0.00</strong>.
+      <div class="findings" id="findings">
+        Contents: unverifiable. They always were. That was the price.
+      </div>
+    </div>
+  </details>
+
+  <p class="price" id="price">&mdash;</p>
+  <p class="terms" id="terms">30 grams &middot; pegged to the spot price of gold &middot; payable by weight</p>
+
+  <footer>
+    <em>Merda d&rsquo;artista (Do Not Open)</em> &mdash; after Piero Manzoni,
+    <em>Merda d&rsquo;artista</em> (1961), an edition of ninety signed tins priced
+    by the day&rsquo;s value of gold; with a nod to Duchamp&rsquo;s <em>infrathin</em>.<br>
+    A work by <strong>y-a-v-a</strong>. Licensed <strong>CC&nbsp;BY-NC&nbsp;4.0</strong>.<br>
+    Spot price is simulated locally. This page makes no network requests, sets no
+    cookies, stores nothing, and does not call home.
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var priceEl   = document.getElementById('price');
+  var termsEl   = document.getElementById('terms');
+  var tin       = document.getElementById('tin');
+  var seal      = document.getElementById('seal');
+  var stage     = document.getElementById('stage');
+  var noEl      = document.getElementById('no');
+
+  // Each visitor receives a different tin from the edition of ninety.
+  noEl.textContent = 'No. ' + (1 + Math.floor(Math.random()*90)) + ' / 90';
+
+  var GRAMS = 30;
+  var perGram = 62 + Math.random()*8;   // simulated spot gold, USD/gram
+  var voided = false;
+  var timer;
+
+  function money(n){
+    return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+  function tick(){
+    if(voided) return;
+    // a small, theatrical random walk — the market, performed
+    perGram += (Math.random()-0.5)*0.9;
+    if(perGram < 55) perGram = 55;
+    if(perGram > 75) perGram = 75;
+    priceEl.textContent = money(GRAMS*perGram);
+  }
+  tick();
+  timer = setInterval(tick, 2000);
+
+  function destroy(){
+    if(voided) return;
+    voided = true;
+    clearInterval(timer);
+    stage.classList.add('voided');
+    priceEl.innerHTML = '<span class="strike">' + money(GRAMS*perGram) +
+                        '</span> &rarr; $0.00';
+    termsEl.textContent = 'Authenticity confirmed by destruction. Resale value: none.';
+    seal.innerHTML = 'VOID';
+  }
+
+  // The native disclosure widget IS the act of opening the tin.
+  tin.addEventListener('toggle', function(){
+    if(tin.open) destroy();
+  });
+})();
+</script>
+</body>
+</html>

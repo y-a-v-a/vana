@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-06-29-merda-d-artista-do-not-open",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Piero Manzoni, Merda d'artista (1961)",
+    "Marcel Duchamp / the readymade",
+    "Marcel Duchamp, infrathin"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The <details>/<summary> widget as the tin is textbook P1 — the disclosure element's literal job (reveal hidden contents) is the same gesture as opening a sealed Manzoni tin, so curiosity itself performs the destruction of value. The Manzoni source is precisely cited and the digital-readymade-of-a-readymade logic is clean; the per-visit edition draw and simulated gold-pegged price ticker add exactly the right amount of theatrical liveliness without overbuilding. Double-coding is strong: surface gag is 'don't open the poop can,' literate reading is Manzoni's attack on the signature-as-value and Duchamp's infrathin between sealed and unsealed. Tonal control is exemplary — restrained, dry, elegant, never crass.",
+  "reservations": "The simulated (not live) gold price is disclosed honestly but slightly deflates the 'payable by weight' claim; the edition of 90 is treated as a UI flourish rather than a real scarcity mechanism, which is fine for the conceit but worth noting. The infrathin invocation is apt but gestured to rather than structurally enacted (e.g., the page does not literally measure the immeasurably thin difference).",
+  "revision_suggestion": "Optionally tighten the infrathin layer by, on toggle, briefly rendering then erasing a single 'opening' frame so the infrathin seam is performable as well as named; or add a console-only attestation of the sealed-vs-opened difference so the infrathin read is structural, not just footnoted.",
+  "jury_model": "minimax/minimax-m3"
+}
