@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-29-what-you-see-is-what-you-see",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 3
+  },
+  "weighted_total": 36,
+  "verdict": "borderline",
+  "references_named": [
+    "Frank Stella, Black Paintings (1958-60)",
+    "Frank Stella, \"What you see is what you see\" (1966 interview with Bruce Glaser)",
+    "net.art"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism genuinely enacts Stella's deductive position: bands are computed from the live viewport edge with no stored image, so the picture is literally its frame thinking out loud. Double-coding lands cleanly — surface gag (a hard-edge monochrome) and literate argument (Stella's anti-illusionism, the readymade of a position). It sits firmly on the order end of the chance/order axis and answers the catalogue's existing viewport-driven works (Measurement: Viewport, The Responsive Eye) from the opposite direction: device conscripted to abolish illusion rather than produce it. Craft is restrained and complete; license and ethics are stated on-page.",
+  "reservations": "Novelty is moderate: the viewport-as-stretcher move is already present in the catalogue (Measurement: Viewport, Hierarchy of Genres, Composition in Red, Yellow and Blue (32 × 32)), so the only-on-the-web claim is thinner than for stronger entries. The wit is dry but a touch flat — the joke that 'there is no image to be honest about' is the same joke the Stella quote already makes, and the work doesn't add a second layer of surprise (e.g., a console attestation, a refusal of some browser behavior, or a deliberate failure mode).",
+  "revision_suggestion": "Add a single web-native gesture that the Stella quote cannot say on its own — for example, a console.log of the deduced band count and viewport, or a deliberate refusal (no right-click save, no canvas.toDataURL, or a print stylesheet that erases the bands) — so the work does something only the browser can do, not just render what a Stella canvas already does.",
+  "jury_model": "minimax/minimax-m3"
+}

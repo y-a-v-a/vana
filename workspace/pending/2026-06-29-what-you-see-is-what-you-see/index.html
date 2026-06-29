@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What You See Is What You See</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #2b2723;            /* the raw, unprimed ground */
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+  }
+  figcaption {
+    position: fixed;
+    left: env(safe-area-inset-left, 0px);
+    bottom: env(safe-area-inset-bottom, 0px);
+    margin: 14px;
+    max-width: 22em;
+    font: 11px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color: #8c857c;
+    letter-spacing: .02em;
+    pointer-events: none;
+    text-shadow: 0 1px 2px #000;
+  }
+  figcaption b { color: #cfc7bc; font-weight: 600; }
+  figcaption .v { color: #cfc7bc; }
+</style>
+</head>
+<body>
+<figure style="margin:0">
+  <canvas id="c"></canvas>
+  <figcaption>
+    <b>What You See Is What You See</b><br>
+    after Frank Stella, <i>Black Paintings</i> (1958&ndash;60).<br>
+    The bands are deduced from nothing but the edge of your viewport:
+    <span class="v" id="r">&hellip;</span>.
+    Resize the window and the picture re-reasons itself.
+    Pixels on screen. No image is stored; there is nothing besides this.<br>
+    y-a-v-a &mdash; CC&nbsp;BY-SA&nbsp;4.0. No cookies, no tracking.
+  </figcaption>
+</figure>
+<script>
+(function () {
+  var canvas = document.getElementById("c");
+  var ctx = canvas.getContext("2d");
+  var readout = document.getElementById("r");
+
+  function paint() {
+    var dpr = window.devicePixelRatio || 1;
+    var w = window.innerWidth, h = window.innerHeight;
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // The whole support is the unprimed ground; the gaps will show it through.
+    ctx.fillStyle = "#2b2723";
+    ctx.fillRect(0, 0, w, h);
+
+    // Band and gap are a fixed fraction of the shorter side: the stretcher
+    // decides the stripe, the stripe decides nothing of its own.
+    var shorter = Math.min(w, h);
+    var band = Math.max(6, shorter / 26);
+    var gap = Math.max(1, band * 0.16);
+    var step = band + gap;
+
+    ctx.strokeStyle = "#0b0a09";   // deep, matte, near-black enamel
+    ctx.lineWidth = band;
+
+    var inset = 0, count = 0;
+    while (inset + band / 2 < shorter / 2) {
+      var x = inset + band / 2;
+      var y = inset + band / 2;
+      var rw = w - 2 * x;
+      var rh = h - 2 * y;
+      if (rw <= 0 || rh <= 0) break;
+      ctx.strokeRect(x, y, rw, rh);
+      inset += step;
+      count++;
+    }
+
+    readout.textContent = w + "×" + h + " → " + count +
+      (count === 1 ? " band" : " bands");
+  }
+
+  paint();
+  var queued = false;
+  window.addEventListener("resize", function () {
+    if (queued) return;
+    queued = true;
+    window.requestAnimationFrame(function () { queued = false; paint(); });
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

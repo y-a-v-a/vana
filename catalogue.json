@@ -630,5 +630,13 @@
     "source": "Hans Haacke, MoMA Poll (1970); Hans Haacke / institutional critique; Marcel Duchamp / the readymade; the EU GDPR / ePrivacy cookie-consent banner",
     "mechanism": "A real <dialog> showModal() consent banner whose buttons and toggles are dead no-ops, beside a live readout of document.cookie, localStorage/sessionStorage length and performance resource entries — all verified zero whatever you click.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-29-what-you-see-is-what-you-see",
+    "title": "What You See Is What You See",
+    "year": 2026,
+    "source": "Frank Stella, Black Paintings (1958-60); Frank Stella, \"What you see is what you see\" (1966 interview with Bruce Glaser); net.art",
+    "mechanism": "Canvas redraws concentric bands derived solely from window.innerWidth/innerHeight, re-deducing the composition on every resize; no image data, no network, no storage.",
+    "status": "pending"
   }
 ]
