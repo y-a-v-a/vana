@@ -622,5 +622,13 @@
     "source": "Barnett Newman; Vir Heroicus Sublimis (1950-51); Onement I (1948); Marcel Duchamp / the readymade; net.art (browser chrome as material)",
     "mechanism": "The native vertical scrollbar, present only because the document overflows the viewport (CSS overflow), is styled via ::-webkit-scrollbar and scrollbar-color to be the zip; an overlay-detection script repaints it where the OS hides it.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-29-we-value-your-privacy",
+    "title": "We Value Your Privacy",
+    "year": 2026,
+    "source": "Hans Haacke, MoMA Poll (1970); Hans Haacke / institutional critique; Marcel Duchamp / the readymade; the EU GDPR / ePrivacy cookie-consent banner",
+    "mechanism": "A real <dialog> showModal() consent banner whose buttons and toggles are dead no-ops, beside a live readout of document.cookie, localStorage/sessionStorage length and performance resource entries — all verified zero whatever you click.",
+    "status": "pending"
   }
 ]

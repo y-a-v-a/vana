@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-29-we-value-your-privacy",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 5
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Hans Haacke, MoMA Poll (1970)",
+    "Hans Haacke / institutional critique",
+    "Marcel Duchamp / the readymade",
+    "the EU GDPR / ePrivacy cookie-consent banner"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P5",
+    "P6",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The work is a near-exemplary realization of P1: the consent dialog is the argument, not its illustration. The native <dialog> + showModal() is exactly the vendor-grade primitive, the dead controls enact consent theatre, and the live self-audit (document.cookie, localStorage.length, sessionStorage.length, performance.getEntriesByType) is the page testifying against itself in real time. P2 lands cleanly — the cookie banner is a genuine digital readymade lifted from the regulated web and recontextualized by a title. P7 double-coding is strong: the surface gag (a banner that does nothing) lands in one click; the deeper read (Haacke's participatory apparatus turned against the institution, with Duchamp underneath) is legible to the literate viewer. The text is genuinely sharp and dry — 'Required so this banner can claim to require something', 'Your choice has no effect. You may withdraw it at any time, to the same end' — and the '✓ Your preferences have been saved' notification flashing over the zero audit is the perfect punchline.",
+  "reservations": "The 'Live consent audit' panel is slightly on the nose — the work might be even sharper as a one-click proposition (banner + dead controls + 'preferences saved' toast, with the audit suppressed until the viewer is curious). Slight structural kinship with 'Each Being Equal' (dead call-to-action) and 'Certificate of Authenticity' (page testifying about itself), though the source object (cookie banner) and mechanism (live audit of all storage vectors + network) are materially distinct, so G6 still holds.",
+  "revision_suggestion": "Consider hiding the audit panel behind a small '?' or 'audit' affordance so the surface gag hits first, with the proof available on demand. The work's conceptual strength is currently fully exposed; a touch of restraint would deepen the double-coding.",
+  "jury_model": "minimax/minimax-m3"
+}
