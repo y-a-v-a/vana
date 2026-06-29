@@ -614,5 +614,13 @@
     "source": "Piero Manzoni, Merda d'artista (1961); Marcel Duchamp / the readymade; Marcel Duchamp, infrathin",
     "mechanism": "The native <details>/<summary> disclosure widget IS the tin; its toggle event collapses a live gold-pegged price to $0.00, irreversibly per visit.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-29-vir-heroicus-sublimis-overflow",
+    "title": "Vir Heroicus Sublimis (Overflow)",
+    "year": 2026,
+    "source": "Barnett Newman; Vir Heroicus Sublimis (1950-51); Onement I (1948); Marcel Duchamp / the readymade; net.art (browser chrome as material)",
+    "mechanism": "The native vertical scrollbar, present only because the document overflows the viewport (CSS overflow), is styled via ::-webkit-scrollbar and scrollbar-color to be the zip; an overlay-detection script repaints it where the OS hides it.",
+    "status": "pending"
   }
 ]

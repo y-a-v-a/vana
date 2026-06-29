@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Vir Heroicus Sublimis (Overflow) — after Barnett Newman</title>
+<meta name="theme-color" content="#a51d12">
+<style>
+  /* ---- The field --------------------------------------------------------
+     A sublime red, larger than your screen. The scrollbar at the right is
+     not an accessory to the painting: it IS the painting's vertical zip,
+     and it exists only because this field overflows your viewport. ------- */
+  :root{
+    --field:#a51d12;        /* Newman cadmium red */
+    --zip:#f2ead6;          /* the luminous zip   */
+    --ink:rgba(0,0,0,.55);
+  }
+  html{
+    background:var(--field);
+    /* Firefox: paint the native scrollbar as the zip */
+    scrollbar-width:auto;
+    scrollbar-color:var(--zip) var(--field);
+  }
+  body{
+    margin:0;
+    min-height:260vh;                 /* force the overflow that makes the zip exist */
+    background:var(--field);
+    color:var(--ink);
+    font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* WebKit / Blink: a fat, unmistakable zip on the red field */
+  ::-webkit-scrollbar{ width:26px; background:var(--field); }
+  ::-webkit-scrollbar-track{ background:var(--field); }
+  ::-webkit-scrollbar-thumb{
+    background:var(--zip);
+    border-left:1px solid rgba(0,0,0,.25);
+    border-right:1px solid rgba(255,255,255,.35);
+  }
+  ::-webkit-scrollbar-thumb:active{ background:#fff7e6; }
+
+  /* The wall label — fixed, dry, in the artist's hand */
+  .label{
+    position:fixed; top:24px; left:24px; max-width:30rem;
+    color:rgba(0,0,0,.62); z-index:2;
+  }
+  .label h1{ font-size:15px; font-weight:600; letter-spacing:.02em; margin:0 0 .5rem; }
+  .label p{ margin:.4rem 0; }
+  .label .q{ font-style:italic; }
+  .depth{ font-variant-numeric:tabular-nums; }
+
+  /* The credit / certificate — reached by using the zip */
+  .credit{
+    position:absolute; left:24px; bottom:28px; max-width:30rem;
+    color:rgba(0,0,0,.5); font-size:12.5px;
+  }
+  .credit a{ color:inherit; }
+
+  /* Synthetic zip: shown ONLY where the system withholds its scrollbar
+     (overlay/touch). The zip the machine hides, given back. */
+  #zip{
+    position:fixed; top:0; right:0; width:26px; height:100%;
+    z-index:1; display:none; pointer-events:none;
+  }
+  #zip i{
+    position:absolute; right:0; width:26px; background:var(--zip);
+    border-left:1px solid rgba(0,0,0,.25);
+    box-shadow:-1px 0 0 rgba(255,255,255,.35) inset;
+  }
+</style>
+</head>
+<body>
+  <div class="label">
+    <h1>VIR HEROICUS SUBLIMIS (OVERFLOW)</h1>
+    <p>after Barnett Newman · oil on viewport · <span class="depth" id="d">0</span>% into the field</p>
+    <p>The zip at your right is the browser&rsquo;s scrollbar. It is here only
+       because this field is larger than your screen.</p>
+    <p class="q">&ldquo;There is a tendency to look at large pictures from a distance.
+       &hellip; intended to be seen from a short distance.&rdquo; — B.N.</p>
+    <p>Grab the zip and stand close.</p>
+  </div>
+
+  <div id="zip"><i></i></div>
+
+  <div class="credit">
+    <p><strong>Vir Heroicus Sublimis (Overflow)</strong> · y-a-v-a (Vincent Bruijn), 2026 ·
+       after Barnett Newman, <em>Vir Heroicus Sublimis</em> (1950&ndash;51) &amp;
+       <em>Onement&nbsp;I</em> (1948); the readymade after Marcel Duchamp.</p>
+    <p>Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC&nbsp;BY-SA&nbsp;4.0</a>.
+       No cookies, no trackers, no network. AI-generated, DNA-validated.</p>
+  </div>
+
+<script>
+  // Live "depth into the field" — the body relation Newman wanted, made literal.
+  var d = document.getElementById('d');
+  function max(){ return Math.max(1, document.documentElement.scrollHeight - innerHeight); }
+  function depth(){ d.textContent = Math.round(window.scrollY / max() * 100); }
+
+  // Detect an overlay/hidden scrollbar (Mac/touch). If the system withholds
+  // its zip, we paint the one it owes you — bound to the same scroll.
+  var zip = document.getElementById('zip'), thumb = zip.firstElementChild;
+  var t = document.createElement('div');
+  t.style.cssText = 'position:absolute;top:-9999px;width:80px;height:80px;overflow:scroll';
+  document.body.appendChild(t);
+  var overlay = (t.offsetWidth - t.clientWidth) === 0;   // 0 => no classic scrollbar
+  document.body.removeChild(t);
+
+  function paintZip(){
+    var h = Math.max(40, innerHeight * innerHeight / document.documentElement.scrollHeight);
+    thumb.style.height = h + 'px';
+    thumb.style.top = (window.scrollY / max()) * (innerHeight - h) + 'px';
+  }
+  if (overlay){ zip.style.display = 'block'; paintZip(); }
+
+  addEventListener('scroll', function(){ depth(); if (overlay) paintZip(); }, {passive:true});
+  addEventListener('resize', function(){ depth(); if (overlay) paintZip(); });
+  depth();
+</script>
+</body>
+</html>

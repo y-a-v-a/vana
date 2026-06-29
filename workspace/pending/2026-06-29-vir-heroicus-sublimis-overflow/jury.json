@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-06-29-vir-heroicus-sublimis-overflow",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 45,
+  "verdict": "strong",
+  "references_named": [
+    "Barnett Newman",
+    "Vir Heroicus Sublimis (1950-51)",
+    "Onement I (1948)",
+    "Marcel Duchamp / the readymade",
+    "net.art (browser chrome as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The scrollbar literally exists if and only if the document overflows the viewport — the same condition Newman gave the zip: a field too large to be taken in at once. The mechanism enacts the argument with unusual tightness (P1) and the dual reading is clean: a bold red page with a fat bar for the casual eye, Newman's standing-close instruction and the sublime-as-overflow for the literate one (P7). It fills a gap the motivation correctly identifies in this DNA's chrome-as-material line (favicon, fullscreen, print, color picker) by claiming the one widget they left. Restraint is exemplary — no images, no fonts, no network, one readout, a Mac/touch overlay fallback; the joke lands dry ('the most transcendent line in postwar painting turns out to have been a scroll affordance the whole time, and it still works').",
+  "reservations": "The scrollbar-as-art gesture has precedent outside this DNA; the specific Newman↔CSS-overflow match is what earns its novelty here, but a stronger anchor (e.g., showing Newman's standing-close instruction translates into the scroll gesture itself, rather than just stating it) would push novelty higher. The synthetic-zip fallback duplicates the native one rather than reinterpreting it — fine, but slightly utilitarian.",
+  "revision_suggestion": "Consider binding the overlay-fallback zip's drag-handle height more visibly to scroll velocity or dwell, so the 'stand close / grab the zip' instruction has a kinesthetic payoff on touch devices where the native scrollbar is hidden; and surface Newman's actual standing-close quote in the wall label more prominently to sharpen the double-coding.",
+  "jury_model": "minimax/minimax-m3"
+}
