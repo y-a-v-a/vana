@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-06-30-interaction-of-color",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 37,
+  "verdict": "borderline",
+  "references_named": [
+    "Josef Albers, Interaction of Color (1963)",
+    "Josef Albers, Homage to the Square (1950–1976)",
+    "simultaneous (lightness) contrast"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "A clean, well-executed Albers homage that uses genuinely web-native mechanisms — getComputedStyle as lie-detector and a CSS-transform converge onto a neutral judge — to stage simultaneous contrast. The browser is at once the performer of the illusion and the attester of identity, which is a strong P1 move. The work is clearly placed in the catalogue's perception thread and explicitly distinguishes itself from the existing Optical Mixture entry (one colour split into two, not many marks fused into one). Execution is minimal, handles resize and prefers-reduced-motion, and the wall text carries the cheerful-cynic voice without overplaying it.",
+  "reservations": "The underlying phenomenon (simultaneous contrast) is well-trodden in both art history and web demos; the novelty sits mostly in the framing and the proof animation rather than in a genuinely surprising mechanism. The work is solid and clearly in-DNA but does not push into territory as unexpected as some of the stronger catalogue entries — the 'identical → true' reveal is satisfying but predictable once you've read the wall text.",
+  "revision_suggestion": "Consider deepening the interrogation beyond the single binary reveal: e.g., a second pair of squares with a subtler relationship (same hue, different lightness) that complicates the 'identical' claim, or a slider that lets the viewer adjust the grounds live to find the point where the illusion collapses — turning the work from a demonstration into a small perceptual instrument.",
+  "jury_model": "minimax/minimax-m3"
+}

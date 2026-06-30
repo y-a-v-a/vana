@@ -646,5 +646,13 @@
     "source": "Salon des Refusés, Paris 1863; Edouard Manet, Le Dejeuner sur l'herbe (1863); Academie des Beaux-Arts / the Salon jury; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "A client-side jury reads live browser facts (document.contentType, devicePixelRatio, the costless Ctrl/Cmd+S copy) against the 1863 academic demands, fails every one, and CSS-flips the canvas to stamp a red R on its reverse — refusal honestly derived from the medium, no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-30-interaction-of-color",
+    "title": "Interaction of Color",
+    "year": 2026,
+    "source": "Josef Albers, Interaction of Color (1963); Josef Albers, Homage to the Square (1950–1976); simultaneous (lightness) contrast",
+    "mechanism": "getComputedStyle attests both chips share one RGB value while two per-visit HSL grounds force simultaneous contrast; a transform-driven converge onto a neutral field proves sameness — a motion impossible on paper.",
+    "status": "pending"
   }
 ]

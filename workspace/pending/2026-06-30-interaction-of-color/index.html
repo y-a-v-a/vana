@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interaction of Color — one colour, two colours</title>
+<meta name="author" content="y-a-v-a">
+<meta name="license" content="CC BY-SA 4.0">
+<style>
+  :root { color-scheme: light dark; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    background: #6e6e6e;            /* a neutral wall, so the room does not vote */
+    color: #ededed;
+    font: 14px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  header, footer { padding: 16px clamp(16px, 5vw, 64px); }
+  h1 { font-size: 15px; font-weight: 600; margin: 0 0 2px; letter-spacing: .02em; }
+  header p { margin: 0; color: #d2d2d2; max-width: 60ch; }
+
+  #stage {
+    position: relative;
+    flex: 1 1 auto;
+    display: flex;
+    min-height: 52vh;
+    gap: 0;
+  }
+  .panel {
+    position: relative;
+    flex: 1 1 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color .35s ease;
+  }
+  .chip {
+    width: clamp(80px, 24vmin, 220px);
+    aspect-ratio: 1 / 1;
+    position: relative;
+    z-index: 3;
+    transition: transform .9s cubic-bezier(.7,0,.2,1);
+    will-change: transform;
+  }
+  /* the neutral judge: a plain grey field the two chips meet on when proving */
+  #neutral {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    background: #808080;
+    z-index: 2;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .55s ease;
+  }
+  body.proving #neutral { opacity: 1; }
+
+  #controls { padding: 14px clamp(16px, 5vw, 64px) 0; }
+  button {
+    font: inherit;
+    color: #111;
+    background: #f0f0f0;
+    border: 0;
+    padding: 9px 16px;
+    cursor: pointer;
+    letter-spacing: .02em;
+  }
+  button:hover { background: #fff; }
+
+  #plate {
+    margin: 14px clamp(16px, 5vw, 64px) 0;
+    padding: 12px 14px;
+    background: rgba(0,0,0,.28);
+    white-space: pre;
+    font-size: 12.5px;
+    width: max-content;
+    max-width: calc(100% - 32px);
+    overflow-x: auto;
+  }
+  footer { color: #c9c9c9; font-size: 12px; margin-top: 4px; }
+  footer a { color: #f0f0f0; }
+  .quiet { color: #b8b8b8; }
+
+  @media (max-width: 620px) { #stage { flex-direction: column; } }
+  @media (prefers-reduced-motion: reduce) {
+    .chip { transition: none; }
+    #neutral { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Interaction of Color</h1>
+    <p>The two squares below are <em>the same colour</em>. Your eye will tell you otherwise.
+       The browser, asked under oath, sides with the squares.</p>
+  </header>
+
+  <div id="stage">
+    <section class="panel" id="pL"><div class="chip" id="cL"></div></section>
+    <section class="panel" id="pR"><div class="chip" id="cR"></div></section>
+    <div id="neutral"></div>
+  </div>
+
+  <div id="controls">
+    <button id="prove" aria-pressed="false">bring them together</button>
+  </div>
+
+  <pre id="plate">measuring…</pre>
+
+  <footer>
+    <p>A web readymade after <strong>Josef Albers</strong>, <em>Interaction of Color</em> (1963)
+       and <em>Homage to the Square</em> (1950–1976). One computed colour, two perceived colours;
+       simultaneous contrast does the lying, <code>getComputedStyle</code> does the confessing.
+       Grounds chosen fresh each visit — no fixed appearance.</p>
+    <p class="quiet">y-a-v-a · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+       · no cookies, no tracking, no storage, no network. The illusion is local to your eye.</p>
+  </footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var pL = document.getElementById("pL");
+  var pR = document.getElementById("pR");
+  var cL = document.getElementById("cL");
+  var cR = document.getElementById("cR");
+  var neutral = document.getElementById("neutral");
+  var stage = document.getElementById("stage");
+  var btn = document.getElementById("prove");
+  var plate = document.getElementById("plate");
+
+  // --- pick a fresh "interaction" each visit -----------------------------
+  // One mid chip colour, two grounds pushed apart in lightness (and twisted
+  // in hue) so the identical chip reads warm/dark on one, cool/light on the
+  // other. Order is the engine here: deterministic HSL, only the seed is chance.
+  var H  = Math.floor(Math.random() * 360);
+  var S  = 30 + Math.floor(Math.random() * 18);          // chip saturation
+  var chipColor   = "hsl(" + H + "," + S + "%,52%)";
+  var lightFirst  = Math.random() < 0.5;
+
+  var groundA = "hsl(" + ((H + 38) % 360) + ",28%,84%)"; // light, slightly shifted
+  var groundB = "hsl(" + ((H + 205) % 360) + ",34%,18%)";// dark,  opposite twist
+
+  pL.style.background = lightFirst ? groundA : groundB;
+  pR.style.background = lightFirst ? groundB : groundA;
+  cL.style.background = chipColor;
+  cR.style.background = chipColor;
+
+  // --- the confession: prove the two chips are byte-for-byte one colour --
+  function rgb(el) {
+    return getComputedStyle(el).backgroundColor;
+  }
+  function updatePlate(extra) {
+    var a = rgb(cL), b = rgb(cR);
+    var same = (a === b);
+    plate.textContent =
+      "left chip   → " + a + "\n" +
+      "right chip  → " + b + "\n" +
+      "identical   → " + same + "\n" +
+      "your eye    → " + (extra || (same ? "“no”" : "—"));
+  }
+
+  // --- live proof animation: slide both chips onto the neutral judge -----
+  var proving = false;
+
+  function sizeNeutral() {
+    var w = cL.getBoundingClientRect().width;
+    neutral.style.width  = (w * 2 + 2) + "px";  // room for two chips, abutting
+    neutral.style.height = (w + 28) + "px";
+  }
+
+  function converge() {
+    var sRect = stage.getBoundingClientRect();
+    var cx = sRect.width / 2, cy = sRect.height / 2;
+
+    function move(el, sign) {
+      var r = el.getBoundingClientRect();
+      var curX = r.left - sRect.left + r.width / 2;
+      var curY = r.top  - sRect.top  + r.height / 2;
+      var tgtX = cx + sign * (r.width / 2);  // abut at the centre line
+      var tgtY = cy;
+      el.style.transform = "translate(" + (tgtX - curX) + "px," + (tgtY - curY) + "px)";
+    }
+    sizeNeutral();
+    move(cL, -1);
+    move(cR, +1);
+  }
+
+  function disperse() {
+    cL.style.transform = "";
+    cR.style.transform = "";
+  }
+
+  btn.addEventListener("click", function () {
+    proving = !proving;
+    document.body.classList.toggle("proving", proving);
+    btn.setAttribute("aria-pressed", String(proving));
+    if (proving) {
+      btn.textContent = "send them back";
+      converge();
+      updatePlate("now believes the browser");
+    } else {
+      btn.textContent = "bring them together";
+      disperse();
+      updatePlate();
+    }
+  });
+
+  window.addEventListener("resize", function () {
+    if (proving) converge();
+  });
+
+  // first read after layout settles
+  requestAnimationFrame(function () { requestAnimationFrame(function () {
+    updatePlate();
+  }); });
+})();
+</script>
+</body>
+</html>
