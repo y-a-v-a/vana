@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salon des Refusés</title>
+<style>
+  :root{
+    --wall:#6f6a5c;
+    --wall2:#5d594d;
+    --gold:#b8923f;
+    --gold-hi:#e7cf86;
+    --ink:#9c1c14;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    min-height:100%;
+    background:
+      radial-gradient(120% 90% at 50% 8%, var(--wall) 0%, var(--wall2) 70%, #4a473d 100%);
+    color:#e9e3d4;
+    font-family:Georgia,"Times New Roman",serif;
+    display:flex;flex-direction:column;align-items:center;
+    padding:48px 18px 64px;
+    -webkit-font-smoothing:antialiased;
+  }
+  header{text-align:center;max-width:640px;margin-bottom:34px}
+  header h1{
+    font-size:clamp(22px,4.4vw,34px);
+    font-weight:400;letter-spacing:.04em;margin:0 0 6px;
+    color:#f2ecdc;font-variant:small-caps;
+  }
+  header p{margin:0;font-style:italic;color:#cfc7b3;font-size:14px}
+
+  /* ---- the canvas + its gilt frame ---- */
+  .stage{perspective:1600px;margin:6px 0 30px}
+  .canvas{
+    position:relative;width:min(74vw,340px);height:min(92vw,430px);
+    transform-style:preserve-3d;transition:transform 1.15s cubic-bezier(.6,.05,.25,1);
+    cursor:pointer;
+  }
+  .canvas.flipped{transform:rotateY(180deg)}
+  .face{
+    position:absolute;inset:0;backface-visibility:hidden;
+    border:14px solid transparent;
+    border-image:linear-gradient(135deg,var(--gold-hi),var(--gold) 40%,#7a5e22 70%,var(--gold-hi)) 1;
+    box-shadow:0 26px 50px rgba(0,0,0,.5),0 2px 0 rgba(255,255,255,.08) inset;
+  }
+  /* recto: an academic varnished ground */
+  .recto{
+    background:
+      radial-gradient(120% 100% at 50% 38%, #c9a86b 0%, #9a7434 46%, #5c4115 88%, #34230b 100%);
+  }
+  .recto::after{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(70% 60% at 50% 42%, rgba(255,244,214,.30), rgba(0,0,0,0) 60%),
+               radial-gradient(140% 120% at 50% 120%, rgba(0,0,0,.55), rgba(0,0,0,0) 55%);
+    mix-blend-mode:multiply;
+  }
+  /* verso: the back of the stretcher, where the jury made its mark */
+  .verso{
+    transform:rotateY(180deg);
+    background:#cbbf9e;
+    color:#4a3b22;
+    padding:18px 16px;overflow:auto;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(120,95,55,.10) 0 2px, rgba(0,0,0,0) 2px 7px),
+      linear-gradient(180deg,#d3c7a6,#bcad86);
+  }
+  .stamp{
+    position:absolute;right:8%;top:7%;width:104px;height:104px;
+    border:5px double var(--ink);border-radius:50%;
+    color:var(--ink);display:flex;align-items:center;justify-content:center;
+    font-size:74px;font-weight:700;line-height:1;
+    opacity:.82;filter:saturate(1.1);
+    box-shadow:0 0 0 1px rgba(156,28,20,.4) inset;
+  }
+  .verso h2{margin:2px 0 2px;font-size:13px;letter-spacing:.14em;
+    text-transform:uppercase;color:#7a3a1e}
+  .verso .sub{margin:0 0 12px;font-style:italic;font-size:12px;color:#6b5836}
+  .verso ol{margin:0;padding-left:18px}
+  .verso li{font-size:12px;line-height:1.5;margin-bottom:9px}
+  .verso li b{font-style:normal}
+  .verso .verdict{
+    margin-top:12px;padding-top:10px;border-top:1px solid rgba(122,58,30,.4);
+    font-size:12px;color:#7a3a1e;font-style:italic;
+  }
+
+  button{
+    font-family:inherit;font-size:13px;letter-spacing:.05em;
+    background:linear-gradient(180deg,#cdb05f,#9a7a2c);color:#2c2410;
+    border:1px solid #7a5e22;border-radius:3px;padding:9px 18px;cursor:pointer;
+    box-shadow:0 2px 0 rgba(0,0,0,.35);
+  }
+  button:active{transform:translateY(1px)}
+
+  /* ---- brass wall label ---- */
+  .label{
+    margin-top:26px;max-width:430px;width:min(86vw,430px);
+    background:linear-gradient(180deg,#d9c89a,#c2ad77);
+    color:#2e2614;border:1px solid #8a6f33;border-radius:2px;
+    padding:14px 16px;font-size:12.5px;line-height:1.55;
+    box-shadow:0 6px 18px rgba(0,0,0,.4);
+  }
+  .label b{font-variant:small-caps;letter-spacing:.03em}
+  .label .meta{margin-top:8px;font-style:italic;color:#5a4a26;font-size:11.5px}
+  footer{margin-top:30px;font-size:11px;color:#bcb39d;text-align:center;line-height:1.6}
+  footer a{color:#e7cf86}
+</style>
+</head>
+<body>
+  <header>
+    <h1>Salon des Refusés</h1>
+    <p>Refusé par le Jury de l'Académie des Beaux-Arts. Exposé pour cette raison.</p>
+  </header>
+
+  <div class="stage">
+    <div class="canvas" id="canvas" title="Retourner la toile" aria-label="Tableau, recto. Retourner pour voir le revers.">
+      <div class="face recto" aria-hidden="true"></div>
+      <div class="face verso">
+        <div class="stamp">R</div>
+        <h2>Procès-verbal du Jury</h2>
+        <p class="sub">Examen de l'œuvre, séance tenue dans votre navigateur.</p>
+        <ol id="verdict"></ol>
+        <p class="verdict" id="seal"></p>
+      </div>
+    </div>
+  </div>
+
+  <button id="submit">Soumettre au Jury de l'Académie</button>
+
+  <div class="label">
+    <b>Salon des Refusés</b> — d'après l'exposition des refusés du Salon, Paris, 1863.
+    Les toiles écartées par le Jury étaient marquées au revers d'un <b>R</b> rouge.
+    Celle-ci ne vous est montrée que parce qu'elle fut refusée : ici, le refus
+    <i>est</i> l'admission. Le Jury la réexaminera autant de fois qu'il vous plaira ;
+    sa décision ne changera pas.
+    <div class="meta">Cliquez la toile pour la retourner et lire le verdict au dos.</div>
+  </div>
+
+  <footer>
+    y-a-v-a (<i>yet another visual artist</i>) · d'après le <i>Salon des Refusés</i>, Paris 1863 ·
+    Édouard Manet, <i>Le Déjeuner sur l'herbe</i> y fut refusé puis montré.<br>
+    Licence <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> ·
+    aucun cookie, aucun traceur, aucune donnée collectée.
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+  var canvas = document.getElementById('canvas');
+  var verdictEl = document.getElementById('verdict');
+  var sealEl = document.getElementById('seal');
+  var stampEl = document.querySelector('.stamp');
+  var recto = document.querySelector('.recto');
+
+  // The academy's demands, judged against what the browser actually reports.
+  // Every criterion fails for the same reason: this is a web page, not an oil
+  // painting — and that is precisely why it belongs in the room of the refused.
+  function jury(){
+    var dpr = (window.devicePixelRatio || 1);
+    return [
+      { rule:'« Huile sur toile » exigée.',
+        found:'Support déclaré : ' + document.contentType + ' (' + document.characterSet + ').' },
+      { rule:'« Fini, facture invisible » exigés.',
+        found:'Rendu à ' + dpr + '× le pixel physique : la trame demeure visible.' },
+      { rule:'« Œuvre unique, de la main de l’artiste » exigée.',
+        found:'Reproductible à l’identique (Ctrl/⌘ + S) ; aucune main ne l’a touchée.' },
+      { rule:'« Sujet noble : histoire, mythologie » exigé.',
+        found:'Sujet relevé : une page web jugeant son propre refus.' }
+    ];
+  }
+
+  function render(){
+    var items = jury();
+    verdictEl.innerHTML = '';
+    items.forEach(function(it){
+      var li = document.createElement('li');
+      li.innerHTML = '<b>' + it.rule + '</b> ' + it.found + ' — <b>Refusé.</b>';
+      verdictEl.appendChild(li);
+    });
+    sealEl.textContent =
+      'Verdict du Jury : REFUSÉ à l’unanimité. Toile marquée d’un R rouge au revers, '
+      + 'selon l’usage. Eût-elle été reçue, il eût fallu la décrocher de cette salle.';
+    // chance: each examination places the red R afresh, as a stamp is never twice alike
+    var a = (Math.random()*16 - 8).toFixed(1);
+    var s = (Math.random()*0.14 + 0.92).toFixed(3);
+    stampEl.style.transform = 'rotate(' + a + 'deg) scale(' + s + ')';
+    stampEl.style.opacity = (0.72 + Math.random()*0.16).toFixed(2);
+  }
+
+  // a faint per-visit varnish, so no two viewings are the same original
+  recto.style.filter = 'hue-rotate(' + (Math.random()*10 - 5).toFixed(1) + 'deg)';
+
+  canvas.addEventListener('click', function(){
+    canvas.classList.toggle('flipped');
+  });
+
+  document.getElementById('submit').addEventListener('click', function(e){
+    e.stopPropagation();
+    render();
+    if(!canvas.classList.contains('flipped')) canvas.classList.add('flipped');
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-06-30-salon-des-refuses",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Salon des Refusés, Paris 1863",
+    "Édouard Manet, Le Déjeuner sur l'herbe (1863)",
+    "Académie des Beaux-Arts / Salon jury",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7"
+  ],
+  "rationale": "A web-native digital readymade of the 1863 Salon's institutional apparatus. The client-side jury reads live runtime facts (document.contentType, devicePixelRatio, Ctrl+S reproducibility, self-referential subject) and refuses on each count honestly derived from the medium — the mechanism enacts the idea (P1). The CSS flip to the verso with its red R stamp is the smallest build that completes the thought (P3). Double-coding lands: a casual viewer gets the gag of the refused painting hung anyway, while the literate viewer gets the inversion (refusal as the sole condition of entry), the Benjaminian reproducibility argument, and the sly meta-loop of an automated jury pipeline judging this file. Per-visit varnish and stamp rotation stage chance against the deterministic verdict (P5). Voice is dry, French-academic, cheerful-cynic; license and ethics stated.",
+  "reservations": "The recto is just a varnished gradient — deliberately anti-representational, which doubles the joke (the painting refuses to be a painting), but it leaves the literate viewer with less to chew on than, say, a recognizable Le Déjeuner echo. P10 is listed but the AI-as-subject link is mostly the meta-move of being juryed rather than a genuine model interrogation; this is more institutional critique (P6) than P10 proper.",
+  "revision_suggestion": "Consider an extremely subtle, deliberately-bad on-canvas rendering of Le Déjeuner sur l'herbe (or a single misplaced fig leaf / conic gradient that nods to the scandal) so the recto earns its keep alongside the verso's apparatus — the joke lands harder when there is something being refused, not only a refusal. Alternatively, sharpen the P10 claim by having the jury read navigator.languages or a prompt-cache signature so the meta-loop with this validator is technically enacted rather than only thematically gestured.",
+  "jury_model": "minimax/minimax-m3"
+}
