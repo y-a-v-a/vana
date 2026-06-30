@@ -654,5 +654,13 @@
     "source": "Josef Albers, Interaction of Color (1963); Josef Albers, Homage to the Square (1950–1976); simultaneous (lightness) contrast",
     "mechanism": "getComputedStyle attests both chips share one RGB value while two per-visit HSL grounds force simultaneous contrast; a transform-driven converge onto a neutral field proves sameness — a motion impossible on paper.",
     "status": "pending"
+  },
+  {
+    "id": "2026-06-30-sallie-gardner-at-a-gallop",
+    "title": "Sallie Gardner at a Gallop",
+    "year": 2026,
+    "source": "Eadweard Muybridge, Sallie Gardner at a Gallop / The Horse in Motion (1878); Eadweard Muybridge, zoopraxiscope; Martin Creed, Work No. 227 / y-a-v-a, The webpage going on and off (2023)",
+    "mechanism": "Native scroll position is read live and quantized to 12 frames driving a deterministic kinematic gait on canvas — no autoplay, no timer, no stored frames; motion exists only in the act of scrolling.",
+    "status": "pending"
   }
 ]

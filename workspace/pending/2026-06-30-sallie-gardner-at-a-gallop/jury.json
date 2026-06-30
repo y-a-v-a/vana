@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-06-30-sallie-gardner-at-a-gallop",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Eadweard Muybridge, Sallie Gardner at a Gallop / The Horse in Motion (1878)",
+    "Eadweard Muybridge, zoopraxiscope",
+    "Martin Creed, Work No. 227 / y-a-v-a, The webpage going on and off (2023)",
+    "Leland Stanford (the wager)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7"
+  ],
+  "rationale": "The scrollbar-as-crank is a clean mechanism-as-message: motion exists only in the act of viewing, exactly as Muybridge's plates only became a gallop in the viewer's eye. The twelve-plate quantization is a literal digital readymade of the camera battery, and the wager is staged honestly via a kinematic footfall model rather than asserted. The inversion of The webpage going on and off (autonomous motion vs. viewer-cranked motion) is a precise narrative move. Build is minimal: one canvas, IK solver, scroll handler, no images, no network, no storage. CC BY-SA stated, attribution to Muybridge and y-a-v-a present, no trackers.",
+  "reservations": "The Muybridge reference is well-trodden territory in net.art and the wager framing leans slightly on the Leland Stanford legend rather than a sharper art-historical target; the 'UNSUPPORTED TRANSIT' label is witty but the P6/value-authenticity invocation is the loosest of the principles — the work is really about motion ontology, not market critique. Chance leg offsets are fixed constants, so the chance/order axis is more rhetorical than enacted.",
+  "revision_suggestion": "Lean harder into the chance/order axis by deriving the four leg phase offsets from a per-visit seeded RNG (still deterministic, but visibly different gaits across reloads), and consider a second label that names the wager's actual provenance (Stanford vs. the still-contested historical record) to sharpen the art-historical literacy layer.",
+  "jury_model": "minimax/minimax-m3"
+}

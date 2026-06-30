@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sallie Gardner at a Gallop</title>
+<style>
+  :root { color-scheme: light; }
+  html, body { margin: 0; background: #d9d2c0; }
+  body {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    color: #2b2620;
+    /* tall track: this is the scroll the viewer cranks */
+    height: 640vh;
+  }
+  #stagewrap {
+    position: sticky; top: 0; height: 100vh; overflow: hidden;
+  }
+  #stage { display: block; width: 100%; height: 100%; }
+
+  #label {
+    position: fixed; left: 18px; bottom: 18px; max-width: 340px;
+    font-size: 12px; line-height: 1.5; letter-spacing: .01em;
+    background: rgba(232, 226, 212, .82);
+    border: 1px solid rgba(43, 38, 32, .35);
+    padding: 12px 14px; backdrop-filter: blur(1px);
+  }
+  #label h1 { font-size: 14px; margin: 0 0 2px; letter-spacing: .02em; }
+  #label .sub { font-style: italic; opacity: .8; margin: 0 0 8px; }
+  #label .hint { margin: 0 0 8px; }
+  #label dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; }
+  #label dt { opacity: .7; }
+  #label dd { margin: 0; text-align: right; }
+  #transit {
+    margin-top: 8px; padding: 4px 6px; text-align: center;
+    border: 1px solid rgba(43,38,32,.3); opacity: .35;
+    transition: opacity .08s, background .08s;
+  }
+  #transit.on { opacity: 1; background: #2b2620; color: #e8e2d4; border-color: #2b2620; }
+  #lic { margin-top: 8px; font-size: 10px; opacity: .6; }
+  #lic a { color: inherit; }
+  #scrollcue {
+    position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
+    font-size: 11px; opacity: .5; writing-mode: vertical-rl; letter-spacing: .3em;
+  }
+</style>
+</head>
+<body>
+  <div id="stagewrap"><canvas id="stage"></canvas></div>
+  <div id="scrollcue">SCROLL TO RUN ↓</div>
+
+  <figure id="label">
+    <h1>Sallie Gardner at a Gallop</h1>
+    <p class="sub">after Eadweard Muybridge — <i>The Horse in Motion</i>, Palo Alto, 1878</p>
+    <p class="hint">Twelve plates, one per camera. Scroll to trip the shutters in order; stop, and she is a photograph again.</p>
+    <dl>
+      <dt>Plate</dt><dd><span id="plate">1</span> / 12</dd>
+      <dt>Feet on the ground</dt><dd><span id="feet">4</span> / 4</dd>
+    </dl>
+    <div id="transit">UNSUPPORTED TRANSIT — ALL FOUR FEET OFF THE GROUND</div>
+    <p class="hint" style="margin:8px 0 0">The wager Leland Stanford is said to have placed: that at full gallop, for one instant, no hoof touches earth. The camera settled it. So does scrolling.</p>
+    <p id="lic">CC BY-SA 4.0 · y-a-v-a 2026 · medium: pixels on screen · after E. Muybridge (1830–1904). No cookies, no trackers, no requests.</p>
+  </figure>
+
+<script>
+(function () {
+  "use strict";
+  var cv = document.getElementById('stage');
+  var ctx = cv.getContext('2d');
+  var W, H, dpr, s, cx, cy;
+
+  var GY = 130;          // local ground line (y down)
+  var PLATES = 12;       // Muybridge's battery of cameras
+  var STRIDES = 6;       // gallop cycles across the full scroll track
+
+  // Four legs. Side view, facing right. far legs drawn behind, lighter.
+  // Transverse-gallop footfall order: LH, RH, LF, RF, then suspension.
+  var legs = [
+    { hx:-78, hy:10, off:0.12, bend:+1, a:66, b:66, far:true  }, // right hind
+    { hx: 66, hy: 6, off:0.42, bend:-1, a:60, b:66, far:true  }, // right fore
+    { hx:-78, hy:10, off:0.00, bend:+1, a:66, b:66, far:false }, // left hind
+    { hx: 70, hy: 6, off:0.30, bend:-1, a:60, b:66, far:false }  // left fore
+  ];
+  var STRIDE = 64, LIFT = 52, DUTY = 0.30;
+
+  function foot(phase, leg) {
+    var l = phase - leg.off; l -= Math.floor(l);
+    if (l < DUTY) {                       // stance: planted, sliding back
+      var t = l / DUTY;
+      return { x: leg.hx + STRIDE * (0.5 - t), y: GY, down: true };
+    }
+    var u = (l - DUTY) / (1 - DUTY);       // swing: lifted, swinging forward
+    return { x: leg.hx + STRIDE * (-0.5 + u), y: GY - LIFT * Math.sin(Math.PI * u), down: false };
+  }
+
+  function ik(hx, hy, fx, fy, a, b, bend) {
+    var dx = fx - hx, dy = fy - hy, d = Math.hypot(dx, dy);
+    d = Math.min(d, a + b - 0.01); d = Math.max(d, Math.abs(a - b) + 0.01);
+    var ang = Math.atan2(dy, dx);
+    var cosA = (a * a + d * d - b * b) / (2 * a * d);
+    cosA = Math.max(-1, Math.min(1, cosA));
+    var A = Math.acos(cosA), ka = ang + bend * A;
+    return { kx: hx + Math.cos(ka) * a, ky: hy + Math.sin(ka) * a,
+             fx: hx + Math.cos(ang) * d, fy: hy + Math.sin(ang) * d };
+  }
+
+  function X(lx) { return cx + lx * s; }
+  function Y(ly) { return cy + ly * s; }
+
+  // smooth closed path through local points
+  function blob(pts, oy) {
+    ctx.beginPath();
+    var n = pts.length, mx = (pts[n-1][0] + pts[0][0]) / 2, my = (pts[n-1][1] + pts[0][1]) / 2;
+    ctx.moveTo(X(mx), Y(my + oy));
+    for (var i = 0; i < n; i++) {
+      var c = pts[i], nx = pts[(i+1)%n];
+      ctx.quadraticCurveTo(X(c[0]), Y(c[1] + oy), X((c[0]+nx[0])/2), Y((c[1]+nx[1])/2 + oy));
+    }
+    ctx.closePath();
+  }
+
+  var BODY = [
+    [95,8],[98,-18],[70,-44],[10,-40],[-55,-33],[-92,-20],
+    [-112,-6],[-92,10],[-72,32],[-30,42],[42,42],[80,26]
+  ];
+  var NECK = [
+    [70,-44],[86,-72],[104,-92],[120,-90],[138,-74],[140,-60],
+    [128,-52],[108,-54],[96,-40],[92,-20],[98,-18]
+  ];
+
+  function drawLeg(leg, oy, near) {
+    var hx = leg.hx, hy = leg.hy + oy;
+    var f = foot(currentPhase, leg);
+    var r = ik(hx, hy, f.x, f.y, leg.a, leg.b, leg.bend);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.strokeStyle = near ? '#241f19' : '#6f6453';
+    ctx.lineWidth = (near ? 9 : 8) * s;
+    ctx.beginPath();
+    ctx.moveTo(X(hx), Y(hy)); ctx.lineTo(X(r.kx), Y(r.ky)); ctx.lineTo(X(r.fx), Y(r.fy));
+    ctx.stroke();
+    // hoof
+    ctx.lineWidth = (near ? 5 : 4) * s;
+    ctx.beginPath(); ctx.moveTo(X(r.fx - 6), Y(r.fy)); ctx.lineTo(X(r.fx + 6), Y(r.fy)); ctx.stroke();
+  }
+
+  function grid() {
+    ctx.fillStyle = '#d9d2c0'; ctx.fillRect(0, 0, W, H);
+    // floor band, lighter above, in the manner of Muybridge's backdrops
+    ctx.strokeStyle = 'rgba(80,66,44,.16)'; ctx.lineWidth = 1;
+    var step = 36;
+    for (var gx = (cx % step); gx < W; gx += step) {
+      ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+    }
+    for (var gy = (cy % step); gy < H; gy += step) {
+      ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+    }
+    // ground line
+    ctx.strokeStyle = 'rgba(43,38,32,.5)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, Y(GY)); ctx.lineTo(W, Y(GY)); ctx.stroke();
+  }
+
+  var currentPhase = 0;
+
+  function draw() {
+    if (!W) return;
+    // continuous → quantized to 12 plates (a flip-book of stills)
+    var range = document.documentElement.scrollHeight - window.innerHeight;
+    var p = range > 0 ? (window.pageYOffset || 0) / range : 0;
+    var cont = (p * STRIDES) % 1; if (cont < 0) cont += 1;
+    var plate = Math.floor(cont * PLATES) % PLATES;
+    currentPhase = plate / PLATES;
+
+    // count airborne feet for this plate; raise the body during suspension
+    var airborne = 0;
+    for (var i = 0; i < legs.length; i++) if (!foot(currentPhase, legs[i]).down) airborne++;
+    var oy = -14 * (airborne / 4);
+
+    grid();
+    // far legs first (behind body)
+    drawLeg(legs[0], oy, false); drawLeg(legs[1], oy, false);
+    // torso + neck/head
+    ctx.fillStyle = '#241f19';
+    blob(BODY, oy); ctx.fill();
+    blob(NECK, oy); ctx.fill();
+    // eye + ear
+    ctx.fillStyle = '#d9d2c0';
+    ctx.beginPath(); ctx.arc(X(118), Y(-74 + oy), 2.4 * s, 0, 7); ctx.fill();
+    ctx.fillStyle = '#241f19';
+    ctx.beginPath();
+    ctx.moveTo(X(100), Y(-90 + oy)); ctx.lineTo(X(108), Y(-104 + oy)); ctx.lineTo(X(112), Y(-88 + oy));
+    ctx.closePath(); ctx.fill();
+    // tail
+    ctx.strokeStyle = '#241f19'; ctx.lineWidth = 7 * s; ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(X(-110), Y(-4 + oy));
+    ctx.quadraticCurveTo(X(-138), Y(20 + oy), X(-130), Y(56 + oy));
+    ctx.stroke();
+    // near legs in front
+    drawLeg(legs[2], oy, true); drawLeg(legs[3], oy, true);
+
+    // live wall-label readout
+    document.getElementById('plate').textContent = plate + 1;
+    document.getElementById('feet').textContent = 4 - airborne;
+    document.getElementById('transit').className = (airborne === 4) ? 'on' : '';
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    s = Math.min(W, H) / 360; cx = W / 2; cy = H * 0.5;
+    draw();
+  }
+
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function () { draw(); ticking = false; });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', resize);
+  resize();
+})();
+</script>
+</body>
+</html>
