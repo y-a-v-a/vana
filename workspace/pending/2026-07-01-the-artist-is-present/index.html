@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Artist Is Present</title>
+<style>
+  :root{
+    --bg:#1a1714;
+    --floor:#0e0c0b;
+    --skin:#d8b48f;
+    --ink:#efe7dc;
+    --dim:#7d746a;
+    --warm:#e7c9a0;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background:
+      radial-gradient(120% 90% at 50% 8%, #211d19 0%, var(--bg) 45%, var(--floor) 100%);
+    color:var(--ink);
+    font:16px/1.5 Georgia, "Times New Roman", serif;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    min-height:100%;padding:24px;overflow:hidden;
+    -webkit-user-select:none;user-select:none;
+    touch-action:none;
+  }
+  .stage{position:relative;display:flex;flex-direction:column;align-items:center;gap:22px}
+  .aura{
+    position:absolute;top:50%;left:50%;width:520px;height:520px;
+    transform:translate(-50%,-58%);
+    border-radius:50%;
+    background:radial-gradient(circle, var(--warm) 0%, rgba(231,201,160,0) 62%);
+    opacity:0;pointer-events:none;transition:opacity .8s ease;filter:blur(6px);
+  }
+  svg{width:min(58vw,240px);height:auto;display:block;position:relative}
+  .readout{
+    text-align:center;position:relative;min-height:3.2em;
+  }
+  .count{
+    font-size:2.1rem;letter-spacing:.14em;font-variant-numeric:tabular-nums;
+    color:var(--warm);transition:color .6s;
+  }
+  .state{color:var(--dim);font-style:italic;font-size:.95rem;margin-top:.2em}
+  .absent .count{color:var(--dim)}
+  .instruct{
+    color:var(--dim);font-style:italic;text-align:center;max-width:30ch;
+    font-size:.95rem;margin-top:2px;
+  }
+  .label{
+    position:fixed;left:16px;bottom:14px;max-width:min(46ch,80vw);
+    font:italic 12px/1.5 Georgia, serif;color:var(--dim);text-align:left;
+  }
+  .label b{color:#a99f92;font-style:normal;font-weight:normal}
+  .label a{color:#a99f92}
+  @media (max-width:520px){ .label{font-size:11px} }
+</style>
+</head>
+<body class="absent">
+  <div class="stage">
+    <div class="aura" id="aura"></div>
+    <svg viewBox="0 0 240 260" aria-label="The artist, seated, looking back at you">
+      <!-- head -->
+      <ellipse cx="120" cy="118" rx="70" ry="86" fill="var(--skin)"/>
+      <!-- hair, plain center part -->
+      <path d="M50 92 C50 30 190 30 190 92 C186 60 150 44 120 44 C90 44 54 60 50 92 Z" fill="#3a2a1e"/>
+      <!-- eyes: whites -->
+      <ellipse cx="92"  cy="112" rx="18" ry="11" fill="#f3ede4"/>
+      <ellipse cx="148" cy="112" rx="18" ry="11" fill="#f3ede4"/>
+      <!-- irises / pupils looking straight ahead (at you) -->
+      <circle cx="92"  cy="112" r="7.5" fill="#3a2a1e"/>
+      <circle cx="148" cy="112" r="7.5" fill="#3a2a1e"/>
+      <circle cx="94.5" cy="109.5" r="2" fill="#fff" opacity=".8"/>
+      <circle cx="150.5" cy="109.5" r="2" fill="#fff" opacity=".8"/>
+      <!-- eyelids (animated: y-scale to blink / close) -->
+      <g id="lids">
+        <rect id="lidL" x="72"  y="90" width="40" height="0" fill="var(--skin)"/>
+        <rect id="lidR" x="128" y="90" width="40" height="0" fill="var(--skin)"/>
+      </g>
+      <!-- brows -->
+      <path d="M76 96 Q92 90 108 96" stroke="#3a2a1e" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M132 96 Q148 90 164 96" stroke="#3a2a1e" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <!-- nose -->
+      <path d="M120 118 L114 142 Q120 147 126 142" stroke="#b8946f" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- mouth, level and calm -->
+      <path d="M104 166 Q120 172 136 166" stroke="#a06f52" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    </svg>
+
+    <div class="readout" id="readout">
+      <div class="count" id="count">00:00</div>
+      <div class="state" id="state">The seat is empty.</div>
+    </div>
+    <p class="instruct">Sit. Be still. Stay.<br>Do not move. Do not look away.</p>
+  </div>
+
+  <div class="label">
+    <b>The Artist Is Present</b> — y-a-v-a, 2026. Medium: presence on screen.<br>
+    After Marina Abramović, <i>The Artist Is Present</i> (MoMA, 2010).<br>
+    Nothing is recorded, stored, or sent. Only this moment counts.<br>
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> · attribution: y-a-v-a
+  </div>
+
+<script>
+(() => {
+  const body = document.body;
+  const countEl = document.getElementById('count');
+  const stateEl = document.getElementById('state');
+  const aura = document.getElementById('aura');
+  const lidL = document.getElementById('lidL');
+  const lidR = document.getElementById('lidR');
+
+  let lastBreak = performance.now(); // when the current sitting began
+  let longest = 0;                   // in memory only; dies on reload
+  let nextBlink = 0;                  // scheduled blink time
+  let blinkUntil = 0;                 // blink close phase end
+
+  const present = () =>
+    document.visibilityState === 'visible' && document.hasFocus();
+
+  // A twitch: the encounter survives your leaving the room, but not your fidgeting.
+  const fidget = () => { if (present()) lastBreak = performance.now(); };
+
+  ['pointermove','pointerdown','wheel','keydown','touchmove','resize','scroll']
+    .forEach(ev => addEventListener(ev, fidget, {passive:true}));
+
+  // Leaving the room resets and empties the seat.
+  const leave = () => { lastBreak = performance.now(); };
+  addEventListener('blur', leave);
+  addEventListener('focus', leave);
+  document.addEventListener('visibilitychange', leave);
+
+  const fmt = s => {
+    const m = Math.floor(s/60), r = s % 60;
+    return String(m).padStart(2,'0') + ':' + String(r).padStart(2,'0');
+  };
+
+  function frame(now){
+    const here = present();
+    body.classList.toggle('absent', !here);
+
+    const secs = here ? Math.floor((now - lastBreak) / 1000) : 0;
+    if (secs > longest) longest = secs;
+
+    countEl.textContent = fmt(secs);
+
+    if (!here){
+      stateEl.textContent = 'The seat is empty.';
+      aura.style.opacity = 0;
+      // eyes closed while absent
+      setLid(11);
+    } else {
+      stateEl.textContent = secs > 0
+        ? 'Present.' + (longest > 0 ? '  Longest gaze this visit: ' + fmt(longest) + '.' : '')
+        : 'A gaze begins. The slightest motion ends it.';
+      // the stillness is rewarded with a slow warmth
+      aura.style.opacity = Math.min(secs / 90, 0.5);
+
+      // blinking: brief, human, only while present and still
+      if (now >= nextBlink){
+        blinkUntil = now + 130;
+        nextBlink = now + 3200 + Math.floor((secs % 7) * 500); // varied, no RNG needed
+      }
+      setLid(now < blinkUntil ? 11 : 0);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function setLid(h){ lidL.setAttribute('height', h); lidR.setAttribute('height', h); }
+
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-07-01-the-artist-is-present",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 3
+  },
+  "weighted_total": 36,
+  "verdict": "borderline",
+  "references_named": [
+    "Marina Abramović, The Artist Is Present (MoMA, 2010)",
+    "Vito Acconci, Following Piece (1969)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The work successfully inverts the web's engagement-extraction logic into a test of stillness, using the same event stream that ad-tech mines for engagement as a mechanism that enforces un-engagement. Concept and execution collapse cleanly (P1): fidget events literally end the encounter, blur/visibilitychange literally empties the seat. The Abramović reference is new to the catalogue and the explicit answer to Acconci's Following Piece (pursuit → stillness) gives it a clear narrative node. Restraint is appropriate — minimal build, no storage, no network. However, the visibility/focus detection pattern overlaps with existing catalogue works (1000 Hours of Staring, The Unkept), and the SVG portrait is functional but visually undistinctive.",
+  "reservations": "The visibility/focus + time-accumulation mechanism is already established in the catalogue (1000 Hours of Staring uses the same primitives for a related but different concept). The fidget-reset layer and Abramović framing distinguish it, but the novelty of mechanism is moderate. The static SVG portrait does not leverage the generative/per-visit possibilities of the medium — it is the same face every time, which slightly undercuts the P4 'live, not fixed' principle for the visual element.",
+  "revision_suggestion": "Consider a generative or procedural portrait that shifts subtly per visit (per-visit seed driving subtle facial variations, lighting, or expression) so the visual element also embodies P4's 'only change.' Alternatively, a more radical formal choice — e.g., the 'artist' being the viewer's own webcam feed mirrored back, or a generative face that ages with the stillness clock — would strengthen the concept-execution unity and push the novelty higher.",
+  "jury_model": "minimax/minimax-m3"
+}

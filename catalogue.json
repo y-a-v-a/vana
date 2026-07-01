@@ -662,5 +662,13 @@
     "source": "Eadweard Muybridge, Sallie Gardner at a Gallop / The Horse in Motion (1878); Eadweard Muybridge, zoopraxiscope; Martin Creed, Work No. 227 / y-a-v-a, The webpage going on and off (2023)",
     "mechanism": "Native scroll position is read live and quantized to 12 frames driving a deterministic kinematic gait on canvas — no autoplay, no timer, no stored frames; motion exists only in the act of scrolling.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-01-the-artist-is-present",
+    "title": "The Artist Is Present",
+    "year": 2026,
+    "source": "Marina Abramović, The Artist Is Present (MoMA, 2010); Vito Acconci, Following Piece (1969)",
+    "mechanism": "Interaction events (pointermove/wheel/keydown/touch) reset a stillness clock while blur/visibilitychange empty the seat; nothing is stored, logged, or sent.",
+    "status": "pending"
   }
 ]
