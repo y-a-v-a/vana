@@ -678,5 +678,13 @@
     "source": "Jackson Pollock, No. 5, 1948; Richard P. Taylor, R. Micolich & D. Jonas, fractal analysis of Pollock (Nature, 1999); K. Jones-Smith & H. Mathur, rebuttal (Nature, 2006); Marcel Duchamp / the readymade",
     "mechanism": "Canvas per-visit drip painting whose own ImageData is read back and box-counted client-side for fractal dimension D, self-issuing a certificate that always passes.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-01-a-humument-select-to-treat",
+    "title": "A Humument (Select to Treat)",
+    "year": 2026,
+    "source": "Tom Phillips, A Humument (1966– ); W. H. Mallock, A Human Document (1892); erasure / found poetry; Marcel Duchamp / the readymade; net.art (Selection API as material)",
+    "mechanism": "The Selection API (selectionchange + suppressed ::selection): selected words survive as ink, all others recede into a per-visit ground; nothing stored, no network.",
+    "status": "pending"
   }
 ]

@@ -1,0 +1,42 @@
+{
+  "work_id": "2026-07-01-a-humument-select-to-treat",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Tom Phillips, A Humument (1966– )",
+    "W. H. Mallock, A Human Document (1892)",
+    "erasure / found poetry",
+    "Marcel Duchamp / the readymade",
+    "net.art (Selection API as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism genuinely enacts the idea: suppressing the native highlight and repurposing selectionchange to invert the usual keep/drop logic is exactly the kind of medium-as-argument move the DNA prizes. The source passage is well-chosen — a connoisseur, a price as rumour, an expensive belief — landing squarely on the P6 value/authenticity axis while leaving the reader's carving as pure chance (P5). Restraint is exemplary: one span per word, one event handler, no libraries, per-visit ground hue, no storage, no network, CC BY-SA stated. The double-coding works at both depths (Phillips's treatment, the death of the author, the web's unsaved authorship).",
+  "reservations": "The reference to Phillips is precise and the mechanism is genuinely web-native, but the work sits in a crowded neighbourhood of selection-as-medium pieces in the broader net.art tradition; novelty is real but not radical. The 'death of the author' reading is gestured at rather than sharpened — a slightly more pointed source passage or a single line of wall text could deepen the P7 double-coding without breaking the surface gag.",
+  "revision_suggestion": "Consider tightening the source passage so the surviving-poem potential is more legible on first encounter (e.g., a passage with stronger latent aphorisms), and add a one-line console attestation of the per-visit ground hue so the 'never the same twice' claim is materially attested rather than only visible.",
+  "jury_model": "minimax/minimax-m3"
+}

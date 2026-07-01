@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Humument (Select to Treat)</title>
+<style>
+  :root {
+    /* ground hue is minted per visit in script; these are fallbacks */
+    --ground: #e9e2d0;
+    --ink: #1a1712;
+    --wash: #cfc7b2;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font: 400 1.05rem/1.9 Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(1.2rem, 5vw, 4rem);
+    min-height: 100%;
+  }
+  /* The native highlight is suppressed on purpose: selection here is not a
+     highlight, it is a treatment. What you keep stays; the rest is painted over. */
+  ::selection { background: transparent; color: inherit; }
+  ::-moz-selection { background: transparent; color: inherit; }
+
+  main {
+    max-width: 40rem;
+    width: 100%;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  #page {
+    user-select: text;
+    -webkit-user-select: text;
+    cursor: text;
+    text-align: justify;
+    text-indent: 2rem;
+  }
+  #page .w {
+    transition: opacity 900ms ease, color 900ms ease;
+  }
+  /* a word painted over by the treatment: it recedes into the ground */
+  #page.treating .w { opacity: 0.06; }
+  /* a word the reader chose to keep: it survives as ink */
+  #page.treating .w.keep { opacity: 1; color: var(--ink); }
+
+  .hint {
+    margin: 1.4rem 0 0;
+    font: italic 0.8rem/1.5 Georgia, serif;
+    opacity: 0.5;
+    text-indent: 0;
+    transition: opacity 600ms ease;
+  }
+  #page.treating ~ .hint { opacity: 0; }
+
+  footer {
+    flex: 0 0 auto;
+    max-width: 40rem;
+    width: 100%;
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0,0,0,0.18);
+    font: 400 0.68rem/1.7 -apple-system, system-ui, sans-serif;
+    opacity: 0.62;
+  }
+  footer b { font-weight: 700; }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <p id="page"></p>
+  <p class="hint">Select any words. Everything you do not keep is treated over. Nothing here is saved — release, and the page heals.</p>
+</main>
+
+<footer>
+  <div><b>A Humument (Select to Treat)</b> — y-a-v-a, 2026.</div>
+  <div>After Tom Phillips, <i>A Humument</i> (1966– ), a treatment of W.&nbsp;H.&nbsp;Mallock's <i>A Human Document</i> (1892). In the tradition of erasure / found poetry and Duchamp's readymade. Mechanism: the browser Selection API — the ordinary act of selecting text becomes the act of painting a page over.</div>
+  <div>Source text original, by y-a-v-a. The reader is the artist. No cookies, no tracking, no storage, no network. Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // The fixed page (order): a dense passage on value and belief, waiting to be
+  // carved. What survives is the reader's chance choosing (P5).
+  var TEXT =
+    "The connoisseur, who had come a long way to see the picture, confessed " +
+    "himself uncertain whether the thing before him possessed any value at all, " +
+    "or whether the value lay entirely in the certainty of other men; and yet he " +
+    "paid, as all of us pay, for the pleasure of being told what to admire. The " +
+    "dealer smiled. A price, he said, is only a rumour that has learned to hold " +
+    "still. Somewhere in the crowd a young man believed, quite sincerely, that he " +
+    "alone could see, and this belief was itself the most expensive object in the room.";
+
+  // Per-visit treatment: the ground the reader will paint over is a fresh warm
+  // hue every load — the treatment is never the same twice, and never kept.
+  var h = Math.floor(Math.random() * 360);
+  var ground = "hsl(" + h + ", 26%, 87%)";
+  var ink = "hsl(" + h + ", 30%, 10%)";
+  var root = document.documentElement.style;
+  root.setProperty("--ground", ground);
+  root.setProperty("--ink", ink);
+  document.querySelector('meta[name="theme-color"]') ||
+    (function () { var m = document.createElement("meta"); m.name = "theme-color"; m.content = ground; document.head.appendChild(m); })();
+
+  // Build one span per word so each can be kept or treated independently.
+  var page = document.getElementById("page");
+  var words = [];
+  TEXT.split(/(\s+)/).forEach(function (tok) {
+    if (/^\s+$/.test(tok)) { page.appendChild(document.createTextNode(tok)); return; }
+    var s = document.createElement("span");
+    s.className = "w";
+    s.textContent = tok;
+    page.appendChild(s);
+    words.push(s);
+  });
+
+  function repaint() {
+    var sel = window.getSelection();
+    var active = sel && sel.rangeCount > 0 && !sel.isCollapsed && String(sel).trim().length > 0;
+    if (!active) {
+      // released: the page heals. No trace kept.
+      page.classList.remove("treating");
+      for (var i = 0; i < words.length; i++) words[i].classList.remove("keep");
+      return;
+    }
+    page.classList.add("treating");
+    for (var j = 0; j < words.length; j++) {
+      var inSel = false;
+      try { inSel = sel.containsNode(words[j], true); } catch (e) { inSel = false; }
+      words[j].classList.toggle("keep", inSel);
+    }
+  }
+
+  document.addEventListener("selectionchange", repaint);
+})();
+</script>
+</body>
+</html>
