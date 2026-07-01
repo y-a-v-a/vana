@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No. 5 (Authenticated)</title>
+<style>
+  :root{
+    --ground:#efe9db; --ink:#1b1812; --line:#c8bfa8; --seal:#2f6f3a;
+  }
+  html,body{margin:0}
+  body{
+    background:var(--ground); color:var(--ink);
+    font:15px/1.5 Georgia,"Times New Roman",serif;
+    display:flex; flex-direction:column; align-items:center;
+    padding:28px 16px 40px; min-height:100vh; box-sizing:border-box;
+    -webkit-text-size-adjust:100%;
+  }
+  h1{font-size:22px; font-weight:normal; letter-spacing:.02em; margin:0 0 2px}
+  .sub{font-style:italic; color:#6a6252; margin:0 0 22px; font-size:13px}
+  .frame{
+    background:#fff; padding:14px; border:1px solid var(--line);
+    box-shadow:0 1px 0 #fff inset, 0 10px 30px rgba(40,35,25,.14);
+  }
+  canvas{display:block; width:min(86vw,540px); height:auto; background:var(--ground)}
+  .cert{
+    width:min(86vw,540px); margin:22px 0 0; padding:18px 20px;
+    border:1px solid var(--line); background:#fbf9f3; position:relative;
+    box-shadow:0 6px 18px rgba(40,35,25,.08);
+  }
+  .cert h2{
+    font-size:12px; letter-spacing:.22em; text-transform:uppercase;
+    margin:0 0 12px; color:#6a6252; font-weight:normal;
+  }
+  .row{display:flex; justify-content:space-between; gap:14px; margin:6px 0; font-size:14px}
+  .row b{font-weight:normal; color:#6a6252}
+  .val{font-variant-numeric:tabular-nums}
+  .verdict{font-size:20px; letter-spacing:.04em}
+  .ok{color:var(--seal)} .no{color:#8c2f22}
+  .note{font-size:12px; font-style:italic; color:#7a7263; margin:14px 0 0; line-height:1.55}
+  .seal{
+    position:absolute; top:14px; right:16px; width:78px; height:78px;
+    border:2px solid var(--seal); border-radius:50%; color:var(--seal);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    font-size:8.5px; letter-spacing:.14em; line-height:1.35; text-transform:uppercase;
+    transform:rotate(-11deg); opacity:.9; padding:6px; box-sizing:border-box;
+  }
+  .seal.no{border-color:#8c2f22; color:#8c2f22}
+  button{
+    font:13px Georgia,serif; color:var(--ink); background:#fff;
+    border:1px solid var(--line); padding:9px 18px; margin:20px 0 0;
+    cursor:pointer; letter-spacing:.03em;
+  }
+  button:hover{background:#f3efe4}
+  footer{
+    margin-top:26px; font-size:11px; color:#8a8271; text-align:center;
+    max-width:540px; line-height:1.7;
+  }
+  footer a{color:#6a6252}
+</style>
+</head>
+<body>
+  <h1>No.&nbsp;5 <span style="font-style:italic;font-size:16px;color:#6a6252">(Authenticated)</span></h1>
+  <p class="sub">drip painting, pixels on screen &middot; catalogue <span id="cat">No. —</span></p>
+
+  <div class="frame"><canvas id="c" width="720" height="720"></canvas></div>
+
+  <section class="cert">
+    <h2>Certificate of Authenticity</h2>
+    <div class="seal" id="seal">Authen&shy;ticated<br>&check;</div>
+    <div class="row"><b>Method</b><span class="val">Box-counting fractal analysis</span></div>
+    <div class="row"><b>Fractal dimension D</b><span class="val" id="dval">—</span></div>
+    <div class="row"><b>Authentic range (Taylor)</b><span class="val">1.10 – 1.90</span></div>
+    <div class="row"><b>Paint coverage</b><span class="val" id="cov">—</span></div>
+    <div class="row"><b>Verdict</b><span class="val verdict" id="verdict">—</span></div>
+    <div class="row"><b>Comparable</b><span class="val">No. 5, 1948 &middot; sold 2006 &middot; $140,000,000</span></div>
+    <p class="note">
+      The painting above was dripped by your browser from a random seed. No hand touched it.
+      The dimension D was then measured by the same code, on the same pixels, and the certificate
+      issued to itself. Taylor, Micolich &amp; Jonas proposed fractal analysis to separate real
+      Pollocks from fakes (<i>Nature</i>, 1999); Jones-Smith &amp; Mathur showed a child&rsquo;s doodle
+      passes just as well (<i>Nature</i>, 2006). The machine certifies what the machine made.
+    </p>
+  </section>
+
+  <button id="again">Paint another &nbsp;&rarr;</button>
+
+  <footer>
+    <span id="lic">y-a-v-a &middot; after Jackson Pollock, <i>No. 5, 1948</i> &middot; CC&nbsp;BY-SA&nbsp;4.0</span><br>
+    references: Richard&nbsp;P.&nbsp;Taylor, R.&nbsp;Micolich, D.&nbsp;Jonas (1999) &middot;
+    K.&nbsp;Jones-Smith &amp; H.&nbsp;Mathur (2006) &middot; Marcel&nbsp;Duchamp / the readymade<br>
+    no cookies, no trackers, nothing stored, nothing sent &middot; validated by Vincent&nbsp;Bruijn
+  </footer>
+
+<script>
+(function(){
+  const cv = document.getElementById('c');
+  const ctx = cv.getContext('2d', {willReadFrequently:true});
+  const W = cv.width, H = cv.height;
+  const GROUND = [0xef,0xe9,0xdb];
+  const PALETTE = [
+    ['#141210', 12], ['#f7f4ec', 8], ['#b0842a', 7],
+    ['#8c2f22', 6], ['#2e6a68', 5], ['#c7bfab', 6]
+  ];
+
+  // seeded PRNG (mulberry32) so a catalogue number names one exact painting
+  let rnd = Math.random;
+  function seedRandom(a){
+    let t = a >>> 0;
+    return function(){
+      t += 0x6D2B79F5;
+      let x = t;
+      x = Math.imul(x ^ (x >>> 15), x | 1);
+      x ^= x + Math.imul(x ^ (x >>> 7), x | 61);
+      return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function fillGround(){
+    ctx.fillStyle = 'rgb('+GROUND.join(',')+')';
+    ctx.fillRect(0,0,W,H);
+  }
+
+  function stroke(color, baseW){
+    ctx.strokeStyle = color;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.globalAlpha = 0.55 + rnd()*0.4;
+    ctx.lineWidth = baseW * (0.6 + rnd()*1.1);
+    let x = rnd()*W, y = rnd()*H, ang = rnd()*Math.PI*2;
+    const steps = 24 + (rnd()*44|0);
+    ctx.beginPath(); ctx.moveTo(x,y);
+    for(let i=0;i<steps;i++){
+      ang += (rnd()-0.5)*1.3;
+      const len = 8 + rnd()*46;
+      x += Math.cos(ang)*len; y += Math.sin(ang)*len;
+      ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  }
+
+  function splat(color, n){
+    ctx.fillStyle = color;
+    for(let i=0;i<n;i++){
+      ctx.globalAlpha = 0.4 + rnd()*0.55;
+      const r = 0.8 + rnd()*rnd()*7;
+      ctx.beginPath();
+      ctx.arc(rnd()*W, rnd()*H, r, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  function drip(){
+    fillGround();
+    for(const [color, count] of PALETTE){
+      for(let i=0;i<count;i++) stroke(color, 3);
+      splat(color, 40);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // honest box-counting fractal dimension of the painting's own pixels
+  function authenticate(){
+    const data = ctx.getImageData(0,0,W,H).data;
+    const paint = new Uint8Array(W*H);
+    let painted = 0;
+    for(let i=0,p=0;i<data.length;i+=4,p++){
+      const dr=data[i]-GROUND[0], dg=data[i+1]-GROUND[1], db=data[i+2]-GROUND[2];
+      if(dr*dr+dg*dg+db*db > 1500){ paint[p]=1; painted++; }
+    }
+    const scales = [4,8,12,16,24,32,48,64];
+    const xs=[], ys=[];
+    for(const s of scales){
+      const cols = Math.ceil(W/s);
+      const filled = new Uint8Array(cols*Math.ceil(H/s));
+      let count=0;
+      for(let y=0;y<H;y++){
+        const cy=(y/s)|0, base=cy*cols;
+        for(let x=0;x<W;x++){
+          if(paint[y*W+x]){
+            const idx=base+((x/s)|0);
+            if(!filled[idx]){ filled[idx]=1; count++; }
+          }
+        }
+      }
+      if(count>0){ xs.push(Math.log(1/s)); ys.push(Math.log(count)); }
+    }
+    // least-squares slope = fractal dimension D
+    const n=xs.length; let sx=0,sy=0,sxx=0,sxy=0;
+    for(let i=0;i<n;i++){ sx+=xs[i]; sy+=ys[i]; sxx+=xs[i]*xs[i]; sxy+=xs[i]*ys[i]; }
+    const D = (n*sxy - sx*sy) / (n*sxx - sx*sx);
+    return { D:D, coverage: painted/(W*H) };
+  }
+
+  function fmt(x){ return (x<0?'−':'') + Math.abs(x).toFixed(2); }
+
+  function verdict(D){
+    if(D >= 1.10 && D <= 1.90) return {text:'AUTHENTIC ✓', cls:'ok', seal:'Authen&shy;ticated<br>&check;', sealCls:''};
+    if(D < 1.10) return {text:'SUSPECT — too sparse', cls:'no', seal:'Rejec&shy;ted<br>&times;', sealCls:'no'};
+    return {text:'SUSPECT — too dense', cls:'no', seal:'Rejec&shy;ted<br>&times;', sealCls:'no'};
+  }
+
+  function run(){
+    const seed = (Math.random()*1e9)>>>0;
+    rnd = seedRandom(seed);
+    document.getElementById('cat').textContent = 'No. ' + seed.toLocaleString('en-US');
+    drip();
+    const { D, coverage } = authenticate();
+    const v = verdict(D);
+    document.getElementById('dval').textContent = fmt(D);
+    document.getElementById('cov').textContent = (coverage*100).toFixed(1) + '%';
+    const vd = document.getElementById('verdict');
+    vd.innerHTML = v.text; vd.className = 'val verdict ' + v.cls;
+    const seal = document.getElementById('seal');
+    seal.innerHTML = v.seal; seal.className = 'seal ' + v.sealCls;
+  }
+
+  document.getElementById('again').addEventListener('click', run);
+  run();
+})();
+</script>
+</body>
+</html>

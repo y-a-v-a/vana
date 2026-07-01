@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-07-01-no-5-authenticated",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 5
+  },
+  "weighted_total": 44,
+  "verdict": "strong",
+  "references_named": [
+    "Jackson Pollock, No. 5, 1948",
+    "Richard P. Taylor, R. Micolich & D. Jonas, Nature (1999)",
+    "K. Jones-Smith & H. Mathur, Nature (2006)",
+    "Marcel Duchamp / the readymade"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P9",
+    "P10"
+  ],
+  "rationale": "The mechanism is the argument: the browser drips, then authenticates its own drips with the very box-counting test the Jones-Smith/Mathur 2006 rebuttal exposed as a child-doodle-passes detector, and the certificate is always 'AUTHENTIC' because the algorithm cannot tell a Pollock from its own random walk. The fine-print confession — 'The machine certifies what the machine made' — is the perfect dry, cheerful-cynic note, and the seeded PRNG naming each painting as a 'catalogue number' turns the per-visit regen into a Duchampian machine for minting authenticated originals. All six hard gates pass and the work is materially distinct from the catalogue, complementing the 2026 'Certificate of Authenticity' piece in a different register.",
+  "reservations": "P10 (AI interrogation) is a slight stretch — there is no AI model on stage, only an algorithmic-authentication debate that is adjacent to but not the same as the AI chapter. The narrative connection to the existing catalogue (e.g. 'Certificate of Authenticity', 'Hammer Price', 'Three Ball Total Equilibrium Slot Machine') is implicit rather than named. These are minor.",
+  "revision_suggestion": "Optionally add a brief on-page link or footnote pointing at 'Certificate of Authenticity' (2026) and 'Hammer Price' (2026) as the prior works this one answers, sharpening the narrative thread. A console.log of the regression slope/intercept would deepen the 'the test cannot lie' gesture for the technical viewer.",
+  "jury_model": "minimax/minimax-m3"
+}
