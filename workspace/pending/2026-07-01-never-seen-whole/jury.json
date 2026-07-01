@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-07-01-never-seen-whole",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Wang Ximeng, A Thousand Li of Rivers and Mountains (千里江山圖), 1113",
+    "the Chinese handscroll (手卷) format",
+    "net.art (the scroll axis as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism-as-message principle is fully honored: the browser's viewport crop literally enacts the handscroll's arm's-length viewing, and the live meter turns the constraint into evidence rather than apologetic copy. The readymade here is a *format* rather than an image (P2), and the double-coding is clean — pleasant ink-wash on the surface, a sharp argument about museum display ideology underneath. The colophon's dry, slightly wounded 'and calls that respect' line is exactly the cheerful-cynic register. The work extends the catalogue's predominantly Western lineage into non-Western art history without diluting the core practice, and the chance/order axis is legible (rule-based six ranges, per-visit Math.random ridges, no persistence).",
+  "reservations": "The motivation does not explicitly name a prior y-a-v-a work this answers, though the kinship to la-trahison-des-images.be (the medium enacting the medium's argument) is obvious and worth stating. The 'wheel' translation hijacking is a small accessibility friction for trackpad users and could be reconsidered. The seal is a single fixed character (印) — a real handscroll accumulates *several* different collectors' seals across centuries, which would deepen the 'provenance as appended tail' idea.",
+  "revision_suggestion": "Name the prior work it answers (la-trahison-des-images.be is the closest cousin) explicitly in the colophon to strengthen the narrative placement. Consider accumulating two or three distinct pseudo-collector's seals rather than one, reinforcing the idea that provenance is an appended tail. Optionally add a subtle live ink-drying timer on first view to push the metaphor further.",
+  "jury_model": "minimax/minimax-m3"
+}

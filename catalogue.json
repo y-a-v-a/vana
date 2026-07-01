@@ -686,5 +686,13 @@
     "source": "Tom Phillips, A Humument (1966– ); W. H. Mallock, A Human Document (1892); erasure / found poetry; Marcel Duchamp / the readymade; net.art (Selection API as material)",
     "mechanism": "The Selection API (selectionchange + suppressed ::selection): selected words survive as ink, all others recede into a per-visit ground; nothing stored, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-01-never-seen-whole",
+    "title": "手卷 — Never Seen Whole",
+    "year": 2026,
+    "source": "Wang Ximeng, A Thousand Li of Rivers and Mountains (千里江山圖), 1113; the Chinese handscroll (手卷) format; net.art (the scroll axis as material)",
+    "mechanism": "A single horizontal overflow-x scroller far wider than the viewport, opened at its rightmost edge, with a per-visit canvas ink landscape; the browser crop enacts the handscroll's arm's-length viewing and a live meter proves you never see more than one length at once.",
+    "status": "pending"
   }
 ]

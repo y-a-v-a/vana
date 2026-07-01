@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>手卷 — Never Seen Whole</title>
+<style>
+  :root{ --paper:#efe6cf; --ink:#1c1a16; --seal:#b0271f; }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; overflow:hidden; background:var(--paper); color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif; }
+  #scroll{ height:100vh; overflow-x:auto; overflow-y:hidden; white-space:nowrap;
+    scrollbar-width:thin; -webkit-overflow-scrolling:touch; }
+  #row{ display:flex; height:100vh; align-items:stretch; }
+  .panel{ flex:0 0 auto; height:100vh; display:flex; flex-direction:column; justify-content:center;
+    padding:0 8vw; }
+  /* frontispiece (引首) — read first, on the right */
+  #front{ order:3; width:78vw; align-items:flex-end; text-align:right; border-left:1px solid #cbbf9f; }
+  #front .cjk{ font-family:"Songti SC","STSong","Song","SimSun",serif; font-size:clamp(64px,16vw,220px);
+    line-height:1; letter-spacing:.05em; }
+  #front .sub{ font-size:clamp(18px,3vw,34px); margin-top:.4em; font-style:italic; opacity:.8; }
+  #front .hint{ margin-top:2.2em; font-size:14px; letter-spacing:.25em; text-transform:uppercase; opacity:.55; }
+  /* the landscape (畫心) — the middle */
+  #artwrap{ order:2; width:6000px; height:100vh; position:relative; }
+  #art{ display:block; width:6000px; height:100vh; }
+  /* colophon (跋) + seals — read last, on the far left */
+  #colo{ order:1; width:86vw; align-items:flex-start; text-align:left; border-right:1px solid #cbbf9f; }
+  #colo .body{ max-width:640px; white-space:normal; font-size:clamp(15px,1.7vw,19px); line-height:1.55; }
+  #colo h1{ font-family:"Songti SC","STSong","Song","SimSun",serif; font-weight:normal;
+    font-size:clamp(30px,5vw,52px); margin:0 0 .5em; }
+  #colo p{ margin:.7em 0; }
+  #colo .dry{ font-style:italic; }
+  #colo .fine{ font-size:13px; opacity:.7; margin-top:1.6em; }
+  .seal{ display:inline-flex; align-items:center; justify-content:center; width:64px; height:64px;
+    border:3px solid var(--seal); color:var(--seal); font-family:"Songti SC","STSong",serif;
+    font-size:34px; border-radius:6px; margin-top:1.2em; }
+  #meter{ position:fixed; left:0; bottom:0; z-index:10; padding:8px 14px; font-size:12px; letter-spacing:.06em;
+    background:rgba(239,230,207,.82); border-top:1px solid #cbbf9f; border-right:1px solid #cbbf9f;
+    color:#403a2c; }
+  a{ color:var(--seal); }
+</style>
+</head>
+<body>
+<div id="scroll">
+  <div id="row">
+    <!-- far left: colophon, seals, license -->
+    <section class="panel" id="colo">
+      <div class="body">
+        <h1>手卷</h1>
+        <p>A handscroll is meant to be unrolled between two hands, one arm&rsquo;s length at a
+          time, and read from right to left &mdash; then rolled away. It was never hung on a wall.
+          It was never meant to be seen whole.</p>
+        <p class="dry">A museum lays the whole thing flat behind glass, lit end to end, and calls
+          that respect. Your browser refuses: it can only ever hold open one length at a time. You
+          have just done the one thing the vitrine forbids &mdash; you rolled it.</p>
+        <p>After Wang Ximeng, <em>A Thousand Li of Rivers and Mountains</em> (&#21315;&#37324;&#27743;&#23665;&#22294;), 1113
+          &mdash; a scroll so fragile that unrolling it is itself the reason it is almost never shown.</p>
+        <span class="seal" title="collector's seal">&#21360;</span>
+        <p class="fine">
+          y-a-v-a, 2026. The ink ranges are generated fresh on every visit and kept nowhere; reload
+          rolls the scroll back to blank silk.<br>
+          Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+          No cookies, no tracking, no network requests. Pixels on screen.
+        </p>
+      </div>
+    </section>
+
+    <!-- middle: the painting -->
+    <div id="artwrap"><canvas id="art"></canvas></div>
+
+    <!-- far right: frontispiece / title, seen first -->
+    <section class="panel" id="front">
+      <div class="cjk">&#25163;&#21367;</div>
+      <div class="sub">Never Seen Whole</div>
+      <div class="hint">&larr; scroll to unroll</div>
+    </section>
+  </div>
+</div>
+<div id="meter">rolled up &mdash; begin at the right</div>
+
+<script>
+(function(){
+  "use strict";
+  var scroller = document.getElementById('scroll');
+  var canvas   = document.getElementById('art');
+  var meter    = document.getElementById('meter');
+  var CW = 6000; // logical width of the painted silk
+  var ctx, H, DPR;
+
+  function r(){ return Math.random(); }
+
+  function draw(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    H = window.innerHeight;
+    canvas.width  = CW * DPR;
+    canvas.height = H  * DPR;
+    ctx = canvas.getContext('2d');
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    ctx.clearRect(0,0,CW,H); // silk shows through where no ink lands
+
+    // a faint, high moon somewhere in the sky (order: one focal void)
+    var mx = CW*(0.12 + 0.7*r()), my = H*(0.12+0.12*r()), mr = H*0.06;
+    ctx.fillStyle = 'rgba(60,55,45,0.06)';
+    ctx.beginPath(); ctx.arc(mx,my,mr,0,Math.PI*2); ctx.fill();
+
+    // layered mountain ranges: far & pale -> near & dark (rule = order; each ridge = chance)
+    var layers = 6;
+    for(var l=0; l<layers; l++){
+      var depth = l/(layers-1);
+      var base  = H*(0.34 + 0.52*depth);
+      var amp   = H*(0.09 + 0.24*depth);
+      var g     = Math.round(155 - 130*depth);
+      ctx.fillStyle = 'rgba('+g+','+g+','+(g+6)+',0.9)';
+      ctx.beginPath();
+      ctx.moveTo(0,H);
+      var phase = r()*Math.PI*2, jag = r()*0.5;
+      var seg = 26 + Math.floor(depth*22);
+      for(var i=0;i<=seg;i++){
+        var x = CW*i/seg, t = i/seg;
+        var y = base
+              - amp*(0.5+0.5*Math.sin(t*Math.PI*2*(2+l)+phase))
+              - amp*jag*(r()-0.3);
+        ctx.lineTo(x,y);
+      }
+      ctx.lineTo(CW,H); ctx.closePath(); ctx.fill();
+
+      // mist: erase a low band so the next range appears to float in vapour
+      if(l < layers-1){
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0,0,0,'+(0.55 - 0.06*l)+')';
+        var band = base + amp*0.15;
+        ctx.fillRect(0, band, CW, amp*(0.55+0.3*r()));
+        ctx.restore();
+      }
+    }
+  }
+
+  function report(){
+    var max = scroller.scrollWidth - scroller.clientWidth;
+    var p = max ? scroller.scrollLeft / max : 1;      // 1 = fully rolled (right), 0 = at the end (left)
+    var unrolled = Math.round((1-p)*100);
+    var atOnce = Math.round(100 * scroller.clientWidth / scroller.scrollWidth);
+    meter.textContent = 'unrolled ' + unrolled + ' / 100 · you see ' + atOnce + '% at once, never more';
+  }
+
+  // translate any wheel gesture into unrolling (down = keep reading = move left)
+  scroller.addEventListener('wheel', function(e){
+    if(Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // native horizontal is fine
+    scroller.scrollLeft -= e.deltaY;
+    e.preventDefault();
+  }, { passive:false });
+
+  scroller.addEventListener('scroll', report, { passive:true });
+
+  function layout(){
+    draw();
+    // open from the right, as a handscroll does
+    scroller.scrollLeft = scroller.scrollWidth - scroller.clientWidth;
+    report();
+  }
+
+  var t;
+  window.addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(layout, 150); });
+  layout();
+  requestAnimationFrame(layout); // settle after fonts/metrics
+})();
+</script>
+</body>
+</html>
