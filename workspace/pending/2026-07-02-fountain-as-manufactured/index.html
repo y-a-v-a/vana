@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fountain (As Manufactured)</title>
+<style>
+  :root { color-scheme: light; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: #e9e6df;
+    color: #1a1a1a;
+    font: 15px/1.5 Georgia, "Times New Roman", serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    padding: 6vh 5vw;
+    box-sizing: border-box;
+  }
+
+  /* The gallery */
+  .room {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 34px;
+    max-width: 640px;
+  }
+
+  /* The plinth. The plinth is styled. The artwork is not. */
+  .plinth {
+    background: #f6f4ef;
+    border: 1px solid #cfc9bd;
+    box-shadow: 0 24px 40px -28px rgba(0,0,0,.5);
+    padding: 46px 60px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  /* IMPORTANT: the readymade below is deliberately NOT styled.
+     Its entire appearance is supplied by your browser vendor.
+     The only thing done to it is Duchamp's gesture: a 90° turn. */
+  .readymade {
+    transform: rotate(90deg);
+    transform-origin: center;
+    margin: 26px 0 30px;
+    /* no color, no background, no ::thumb, no ::track — on purpose */
+  }
+
+  .signature {
+    font-style: italic;
+    font-size: 20px;
+    color: #111;
+    transform: rotate(-4deg);
+    letter-spacing: .5px;
+    margin-top: 2px;
+    user-select: none;
+  }
+  .signature small { font-size: 13px; }
+
+  /* The museum wall label */
+  .label {
+    background: #fbfbf9;
+    border: 1px solid #d7d2c6;
+    padding: 14px 18px;
+    max-width: 340px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .label b { font-size: 14px; }
+  .label .muted { color: #6a665d; }
+  .label hr { border: none; border-top: 1px solid #e2ddd1; margin: 9px 0; }
+
+  .provenance {
+    max-width: 420px;
+    text-align: center;
+    font-size: 13.5px;
+    color: #3a382f;
+  }
+  .provenance b { font-style: italic; }
+
+  footer {
+    margin-top: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #7c776b;
+    text-align: center;
+    line-height: 1.6;
+  }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+  <main class="room">
+
+    <div class="plinth">
+      <!-- The readymade: a mass-produced object none of us built.
+           Rendered entirely by the manufacturer (your browser). -->
+      <input class="readymade" type="range" min="0" max="100" value="50"
+             aria-label="Fountain, a native form control turned on its side">
+      <div class="signature">R. Mutt <small>1917</small></div>
+    </div>
+
+    <p class="provenance">
+      You are looking at one cast. This object was manufactured by
+      <b id="maker">a browser vendor</b>, not by the artist — its exact
+      form (the track, the thumb, the sheen) differs on every device.
+      Nothing here was drawn. It was <i>selected</i>.
+    </p>
+
+    <div class="label">
+      <b>Fountain</b> — R. Mutt (attrib.), 1917 / re-served 2026<br>
+      <span class="muted">Native <code>&lt;input type="range"&gt;</code>,
+      unstyled, rotated 90°. Manufacturer: your browser. Dimensions variable.</span>
+      <hr>
+      <span class="muted">Rejected by the Society of Independent Artists, New York,
+      whose rule was that any artist who paid the fee could exhibit anything.
+      The web kept that rule; it kept nothing else.</span>
+    </div>
+
+    <footer>
+      A work by <b>y-a-v-a</b>, after Marcel Duchamp, <i>Fountain</i> (1917),
+      signed “R. Mutt.”<br>
+      No cookies, no trackers, no data leaves your device.<br>
+      Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+    </footer>
+
+  </main>
+
+<script>
+  // Name the manufacturer of the readymade. Read locally from the UA string;
+  // nothing is sent anywhere. The point is only to make provenance literal:
+  // you did not make this, and neither did the artist.
+  (function () {
+    var ua = navigator.userAgent || "";
+    var maker = "an unknown manufacturer";
+    if (/Firefox\//.test(ua))            maker = "Mozilla (Gecko)";
+    else if (/Edg\//.test(ua))           maker = "Microsoft (Blink)";
+    else if (/OPR\//.test(ua))           maker = "Opera (Blink)";
+    else if (/Chrome\//.test(ua))        maker = "Google (Blink)";
+    else if (/Safari\//.test(ua))        maker = "Apple (WebKit)";
+    var el = document.getElementById("maker");
+    if (el) el.textContent = maker;
+  })();
+</script>
+</body>
+</html>

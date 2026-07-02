@@ -710,5 +710,13 @@
     "source": "Michael Craig-Martin, An Oak Tree (1973); Marcel Duchamp / the readymade; Arthur Danto, The Transfiguration of the Commonplace (1981); HTML alt attribute / the accessible name (WAI)",
     "mechanism": "An image's aria-label / accessible name (read live from the DOM) is flipped from 'A glass of water' to 'An oak tree' while the SVG stays byte-identical; no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-02-fountain-as-manufactured",
+    "title": "Fountain (As Manufactured)",
+    "year": 2026,
+    "source": "Marcel Duchamp, Fountain (1917); R. Mutt (Duchamp pseudonym); Society of Independent Artists, New York (1917); net.art / the browser default widget as material",
+    "mechanism": "A deliberately unstyled native <input type=range> rotated via CSS, whose entire appearance is supplied per-device by the browser vendor, with the manufacturer named locally from the UA string.",
+    "status": "pending"
   }
 ]

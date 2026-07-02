@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-02-fountain-as-manufactured",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Duchamp, Fountain (1917)",
+    "R. Mutt (Duchamp pseudonym)",
+    "Society of Independent Artists, New York (1917)",
+    "net.art / browser default widget as material"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism enacts the argument cleanly: a deliberately unstyled native <input type=range> rotated 90° is the web's readymade, with the manufacturer named from the UA string. Concept and execution are the same object (P1), the gesture is minimal (P3), and the double-coding lands — casual viewer sees a slider stood on end signed R. Mutt, literate viewer gets the claim that browser defaults are outsourced authorship. The wall-label apparatus carries the Society of Independent Artists' rule, tying the open-web ethic to Duchamp's institutional critique (P6, P8). Dry, cheerful-cynic tone holds (P9).",
+  "reservations": "The novelty is real but the move — 'the browser default widget as material' — is adjacent to several existing catalogue entries (Composition in Red, Yellow and Blue (32 × 32) uses the favicon as Mondrian; Inside the White Cube uses Fullscreen API chrome; Pure Colour uses <input type=color>; Vir Heroicus Sublimis uses the scrollbar). The Fountain framing distinguishes it, but the underlying gesture of 'let the browser/OS supply the appearance' is a family resemblance rather than a wholly fresh ontology. Also, the work is essentially static after load — no live/regenerating behavior (P4) — which is acceptable given the readymade logic but slightly weakens the 'only change' thread.",
+  "revision_suggestion": "Consider adding a small live behavior that strengthens the P4 thread without breaking the readymade logic — e.g., a per-visit randomized initial value or a subtle interaction that re-asserts the manufacturer's authorship (a click that briefly reveals the underlying <input> in its native horizontal state, then re-rotates). This would deepen the chance axis and distinguish the work further from the 'browser-chrome-as-material' siblings in the catalogue.",
+  "jury_model": "minimax/minimax-m3"
+}
