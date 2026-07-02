@@ -702,5 +702,13 @@
     "source": "Luca Pacioli & Leonardo da Vinci, De divina proportione (1509); the golden-ratio-in-art myth (Le Corbusier's Modulor, the Parthenon legend); Marcel Duchamp, infrathin",
     "mechanism": "Native CSS resize:both handle plus a ResizeObserver measuring the live width/height ratio against phi, with a whirling-squares canvas subdivision that only nests cleanly at the divine proportion.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-02-an-oak-tree-accessible-name",
+    "title": "An Oak Tree (Accessible Name)",
+    "year": 2026,
+    "source": "Michael Craig-Martin, An Oak Tree (1973); Marcel Duchamp / the readymade; Arthur Danto, The Transfiguration of the Commonplace (1981); HTML alt attribute / the accessible name (WAI)",
+    "mechanism": "An image's aria-label / accessible name (read live from the DOM) is flipped from 'A glass of water' to 'An oak tree' while the SVG stays byte-identical; no storage, no network.",
+    "status": "pending"
   }
 ]

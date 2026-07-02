@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-02-an-oak-tree-accessible-name",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 43,
+  "verdict": "strong",
+  "references_named": [
+    "Michael Craig-Martin, An Oak Tree (1973)",
+    "Marcel Duchamp / the readymade",
+    "Arthur Danto, The Transfiguration of the Commonplace (1981)",
+    "HTML aria-label / WAI accessible name computation",
+    "Joseph Kosuth, One and Three Chairs (1965) (implicit lineage, named via the catalogue it answers)",
+    "René Magritte, la-trahison-des-images (implicit, named in motivation as the prior work answered)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7"
+  ],
+  "rationale": "A near-perfect execution of P1: the HTML accessible-name field literally is Craig-Martin's declaration, so changing the aria-label and consecrating the object are the same act, not two. The byte-identical SVG snapshot in console.assert is a lovely proof-of-mechanism that prevents the work from collapsing into mere illustration. G6 holds: the accessible name as material is genuinely unexploited in the catalogue, and the Craig-Martin source is new. The piece's restraint (one button, one attribute, a museum-label frame) is exemplary P3/P7, and the tone is exactly right — the word 'Consecrate' carries transubstantiation and Craig-Martin's transformation at once, and 'It is an oak tree. It will remain one until you reload' lands the cheerful-cynic register.",
+  "reservations": "The Kosuth/declarative-language lineage (One and Three Chairs (HTTP), Each Being Equal) already does heavy lifting in the catalogue, so the broader conceptual gesture is well-trodden even if this specific mechanism is new. P4 is essentially absent — the work is a one-shot per-visit button press with no streaming/regenerating behavior, which the DNA lists as the default. The glass-of-water SVG is functional but visually thin, though over-rendering it would actually undermine the readymade gesture.",
+  "revision_suggestion": "If a stronger P4 reading is desired, the work could regenerate the accessible name from a per-visit seed (drawing on a small lexicon of declared transformations), turning the act of faith into a live oracle rather than a single irreversible click. Optional: a small console attestation that the computed accessible-name string equals what an actual screen reader would announce in this browser, to seal the claim that the readout is not a parallel fiction.",
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>An Oak Tree (Accessible Name)</title>
+<style>
+  :root { --ink:#1a1a1a; --wall:#f4f2ec; --line:#c9c4b6; --chrome:#9aa0a6; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; }
+  body {
+    background: var(--wall);
+    color: var(--ink);
+    font: 16px/1.55 ui-serif, Georgia, "Times New Roman", serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6vh 20px 40px;
+  }
+  main { width: 100%; max-width: 640px; }
+  figure { margin: 0 auto; text-align: center; }
+  .work { display: inline-block; line-height: 0; }
+  svg { width: min(58vw, 300px); height: auto; }
+
+  .label {
+    margin: 34px auto 0;
+    max-width: 560px;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+  }
+  .label h1 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: .01em;
+    margin: 0 0 2px;
+  }
+  .label .after { font-style: italic; color:#4a4a4a; margin: 0 0 14px; font-size: 15px; }
+  .meta { font-size: 13px; color:#6a655a; margin: 0 0 18px; }
+  .meta span { display:block; }
+
+  .readout {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px;
+    background: #fffdf8;
+    border: 1px solid var(--line);
+    padding: 12px 14px;
+    margin: 0 0 16px;
+  }
+  .readout b { font-weight: 600; }
+  .readout .name { color:#1a1a1a; }
+
+  button {
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+    background: var(--ink);
+    color: var(--wall);
+    border: none;
+    padding: 11px 18px;
+    letter-spacing: .01em;
+  }
+  button:disabled { background:#8f8a7d; cursor: default; }
+
+  .interview {
+    margin: 22px 0 0;
+    border-left: 2px solid var(--line);
+    padding-left: 16px;
+    font-size: 14px;
+    color:#333;
+  }
+  .interview[hidden] { display:none; }
+  .interview p { margin: 0 0 8px; }
+  .interview .q { color:#6a655a; }
+  .interview .src { font-size: 12px; color:#8a8578; margin-top: 12px; }
+
+  footer {
+    margin-top: 44px;
+    font-size: 12px;
+    line-height: 1.6;
+    color:#8a8578;
+    max-width: 560px;
+    text-align: center;
+  }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <figure>
+    <!-- The picture never changes. Only its declared identity does. -->
+    <div class="work" id="work" role="img" aria-label="A glass of water">
+      <svg viewBox="0 0 400 320" aria-hidden="true" focusable="false">
+        <!-- glass shelf -->
+        <rect x="96" y="250" width="208" height="7" fill="#e9e6dd" stroke="#c9c4b6" stroke-width="1"/>
+        <path d="M126 257 l6 20 h6 l-4 -20 z" fill="#9aa0a6"/>
+        <path d="M268 257 l-6 20 h-6 l4 -20 z" fill="#9aa0a6"/>
+        <!-- tumbler -->
+        <path d="M168 150 L232 150 L227 248 L173 248 Z" fill="#eef4f6" stroke="#b9c0c4" stroke-width="2"/>
+        <!-- water -->
+        <path d="M172 186 L228 186 L227 248 L173 248 Z" fill="#cfe5ec" stroke="none"/>
+        <!-- water surface -->
+        <ellipse cx="200" cy="186" rx="28" ry="4.5" fill="#bcd9e2"/>
+        <!-- rim -->
+        <ellipse cx="200" cy="150" rx="32" ry="5" fill="none" stroke="#b9c0c4" stroke-width="2"/>
+        <!-- highlight -->
+        <path d="M180 158 L176 240" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+      </svg>
+    </div>
+  </figure>
+
+  <section class="label">
+    <h1>An Oak Tree (Accessible Name)</h1>
+    <p class="after">"It is not a symbol. It is an oak tree." — after Michael Craig-Martin</p>
+    <p class="meta">
+      <span>Medium: pixels on screen; one HTML <code>aria-label</code></span>
+      <span>y-a-v-a, 2026</span>
+    </p>
+
+    <div class="readout" aria-live="polite">
+      <b>What a screen reader announces this image to be:</b><br>
+      «<span class="name" id="name">…</span>»<br>
+      <span id="pixels" style="color:#8a8578;"></span>
+    </div>
+
+    <button id="go">Consecrate — change it into an oak tree</button>
+
+    <div class="interview" id="interview" hidden>
+      <p><span class="q">Q. To begin with, could you describe this work?</span><br>
+        A. Yes. I have changed a glass of water into a full-grown oak tree without altering its appearance.</p>
+      <p><span class="q">Q. But surely this is a glass of water?</span><br>
+        A. It is not a symbol of an oak tree. I have changed the physical substance of the glass of water into that of an oak tree.</p>
+      <p><span class="q">Q. Isn't this simply a matter of the words you use?</span><br>
+        A. No. The oak tree is physically present — but in the form of a glass of water.</p>
+      <p class="src">Interview adapted from Michael Craig-Martin, <i>An Oak Tree</i> (1973). Not one pixel of the image was touched; only the caption was.</p>
+    </div>
+  </section>
+
+  <footer>
+    <strong>y-a-v-a</strong> (yet another visual artist), 2026.
+    After Michael Craig-Martin, <i>An Oak Tree</i> (1973); with Marcel Duchamp / the readymade and Arthur Danto, <i>The Transfiguration of the Commonplace</i> (1981).
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.<br>
+    No cookies, no tracking, no storage, no network requests. It all happens in your browser, on faith.
+  </footer>
+</main>
+
+<script>
+  (function () {
+    var work = document.getElementById('work');
+    var svg = work.querySelector('svg');
+    var nameOut = document.getElementById('name');
+    var pixelsOut = document.getElementById('pixels');
+    var go = document.getElementById('go');
+    var interview = document.getElementById('interview');
+
+    // The accessible name is read live from the DOM, not a parallel fiction:
+    // it is whatever the browser would actually announce.
+    function showName() { nameOut.textContent = work.getAttribute('aria-label'); }
+    showName();
+
+    var consecrated = false;
+    go.addEventListener('click', function () {
+      if (consecrated) return;
+      consecrated = true;
+
+      // Snapshot the picture. The only thing we are permitted to change is the declaration.
+      var before = svg.outerHTML;
+      work.setAttribute('aria-label', 'An oak tree');
+      var after = svg.outerHTML;
+
+      showName();
+      pixelsOut.textContent = 'Pixels of the picture changed by this act: ' + (before === after ? 0 : 'some');
+      console.assert(before === after, 'The image must remain byte-identical.');
+
+      interview.hidden = false;
+      go.textContent = 'It is an oak tree. It will remain one until you reload.';
+      go.disabled = true;
+    });
+  })();
+</script>
+</body>
+</html>
