@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-02-de-divina-proportione-drag-to-find-it",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Luca Pacioli & Leonardo da Vinci, De divina proportione (1509)",
+    "Le Corbusier's Modulor",
+    "the Parthenon legend",
+    "Marcel Duchamp, infrathin"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism enacts the argument cleanly: the native CSS resize handle is the readymade chisel, the ResizeObserver is the live ruler, and the whirling-squares subdivision only nests cleanly at phi, so the picture's own depth measures how badly the hand missed. The pixel-quantization point (phi is irrational, the grid is discrete) is a genuinely web-native insight that only the browser makes possible, and the 'reached by accident' verdict is excellent dry wit that carries the golden-ratio-myth critique without preaching. The build is the smallest that completes the thought, the license and ethics are stated, and the work is materially distinct from the catalogue (no prior work targets the phi-in-art folklore or uses the resize handle as material).",
+  "reservations": "The drag-to-hit-a-ratio mechanic is a familiar interactive genre; the web-native novelty leans heavily on the pixel-quantization argument, which is clever but less radical than the more surprising browser-mechanism-as-material moves elsewhere in the catalogue (e.g., The Unkept, Acid Action Painting). The infrathin connection is well-made but slightly stretched — the gap is practical (pixel rounding) as much as metaphysical.",
+  "revision_suggestion": "Lean harder into the pixel-grid argument as the visual punchline: e.g., show the exact integer pixel dimensions that would be needed and mark them as unreachable, or have the subdivision visibly snap to the nearest representable ratio so the viewer watches the construction degenerate in real time.",
+  "jury_model": "minimax/minimax-m3"
+}

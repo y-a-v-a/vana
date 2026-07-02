@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>De Divina Proportione (Drag to Find It)</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body {
+    margin: 0; height: 100%;
+    background: #0d0d0f;
+    color: #e8e4d8;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  body {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100vh; padding: 24px; box-sizing: border-box;
+    text-align: center;
+  }
+  h1 {
+    font-weight: normal; font-style: italic;
+    font-size: 1.15rem; letter-spacing: .02em;
+    margin: 0 0 2px;
+  }
+  .sub { font-size: .72rem; opacity: .5; margin: 0 0 22px; letter-spacing: .04em; }
+
+  #stage { position: relative; display: inline-block; }
+  #box {
+    resize: both; overflow: hidden;
+    min-width: 120px; min-height: 120px;
+    max-width: 92vw; max-height: 62vh;
+    border: 2px solid #888;
+    background: #0d0d0f;
+    box-shadow: 0 0 0 10px #17161a, 0 0 0 11px #2a2830, 0 24px 60px rgba(0,0,0,.6);
+  }
+  #cv { display: block; width: 100%; height: 100%; }
+
+  .grip {
+    position: absolute; right: -2px; bottom: -2px;
+    font-size: .62rem; opacity: .55; pointer-events: none;
+    padding: 1px 4px; letter-spacing: .03em;
+    font-family: system-ui, sans-serif;
+  }
+
+  #plate {
+    margin: 26px auto 0; max-width: 460px;
+    font-family: "Courier New", monospace;
+    font-size: .74rem; line-height: 1.7;
+    border-top: 1px solid #2a2830; padding-top: 12px;
+  }
+  #plate .row { display: flex; justify-content: space-between; gap: 20px; }
+  #plate .k { opacity: .5; }
+  #plate .v { text-align: right; }
+  #ver { margin-top: 10px; font-size: .82rem; letter-spacing: .06em; opacity: .6; }
+  #ver.hit { opacity: 1; color: #d9c46a; }
+
+  .coarse { display: none; font-size: .68rem; opacity: .45; margin-top: 14px; max-width: 380px; font-family: system-ui, sans-serif; line-height: 1.5; }
+  body.coarse .coarse { display: block; }
+
+  footer {
+    margin-top: 34px; max-width: 560px;
+    font-family: system-ui, sans-serif;
+    font-size: .62rem; line-height: 1.6; opacity: .42;
+  }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+  <h1>De Divina Proportione</h1>
+  <p class="sub">drag the corner to find it &mdash; 2026</p>
+
+  <div id="stage">
+    <div id="box"><canvas id="cv"></canvas></div>
+    <span class="grip">&#8600; grip</span>
+  </div>
+
+  <div id="plate">
+    <div class="row"><span class="k">rectangle</span><span class="v" id="dim">&mdash;</span></div>
+    <div class="row"><span class="k">your ratio (long : short)</span><span class="v" id="rat">&mdash;</span></div>
+    <div class="row"><span class="k">&phi; &nbsp; the divine proportion</span><span class="v">1.618034&hellip;</span></div>
+    <div class="row"><span class="k">distance from &phi;</span><span class="v" id="del">&mdash;</span></div>
+    <div id="ver">&mdash; not divine &mdash;</div>
+  </div>
+
+  <p class="coarse">The divine proportion is chased with a mouse. This device has no resize grip; the rectangle above holds whatever proportion it was dealt.</p>
+
+  <footer>
+    A page whose subdivision only nests cleanly at &phi;, a number your hand and the pixel grid forbid you to land.<br>
+    After Luca Pacioli &amp; Leonardo da Vinci, <em>De divina proportione</em> (1509); the golden-ratio-in-art myth
+    (Le Corbusier's Modulor, the Parthenon legend); and Marcel Duchamp's <em>infrathin</em>.<br>
+    <strong>y-a-v-a</strong> &middot; AI-generated, DNA-validated. Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+    No cookies, no trackers, no data leaves your browser.
+  </footer>
+
+<script>
+(function () {
+  "use strict";
+  var PHI = (1 + Math.sqrt(5)) / 2;
+  var hue = Math.floor(Math.random() * 360);
+
+  var box = document.getElementById("box");
+  var cv  = document.getElementById("cv");
+  var ctx = cv.getContext("2d");
+
+  document.querySelector("h1").style.color = "hsl(" + hue + " 45% 78%)";
+  box.style.borderColor = "hsl(" + hue + " 62% 58%)";
+
+  // whirling-squares subdivision: draws each golden cut, rotating
+  // 0 = square off left, 1 = off top, 2 = off right, 3 = off bottom
+  function sub(x, y, w, h, dir, depth) {
+    if (depth <= 0 || w < 3 || h < 3) return;
+    var s = Math.min(w, h);
+    ctx.beginPath();
+    if (dir === 0) { ctx.moveTo(x + s, y); ctx.lineTo(x + s, y + h); ctx.stroke(); sub(x + s, y, w - s, h, 1, depth - 1); }
+    else if (dir === 1) { ctx.moveTo(x, y + s); ctx.lineTo(x + w, y + s); ctx.stroke(); sub(x, y + s, w, h - s, 2, depth - 1); }
+    else if (dir === 2) { ctx.moveTo(x + w - s, y); ctx.lineTo(x + w - s, y + h); ctx.stroke(); sub(x, y, w - s, h, 3, depth - 1); }
+    else { ctx.moveTo(x, y + h - s); ctx.lineTo(x + w, y + h - s); ctx.stroke(); sub(x, y, w, h - s, 0, depth - 1); }
+  }
+
+  function draw() {
+    var cw = box.clientWidth, ch = box.clientHeight;
+    var dpr = window.devicePixelRatio || 1;
+    cv.width = Math.round(cw * dpr);
+    cv.height = Math.round(ch * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    ctx.fillStyle = "#0d0d0f";
+    ctx.fillRect(0, 0, cw, ch);
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(232,228,216,0.30)";
+    sub(0.5, 0.5, cw - 1, ch - 1, cw >= ch ? 0 : 1, 16);
+
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "hsl(" + hue + " 70% 60%)";
+    ctx.strokeRect(1, 1, cw - 2, ch - 2);
+
+    plate(cw, ch);
+  }
+
+  function plate(w, h) {
+    var lo = Math.min(w, h), hi = Math.max(w, h);
+    var r = hi / lo, d = Math.abs(r - PHI);
+    document.getElementById("dim").textContent = Math.round(w) + " × " + Math.round(h) + " px";
+    document.getElementById("rat").textContent = r.toFixed(6);
+    document.getElementById("del").textContent = d.toFixed(6);
+    var v = document.getElementById("ver");
+    if (d < 0.001) { v.textContent = "DIVINE PROPORTION — reached by accident"; v.className = "hit"; }
+    else { v.textContent = "— not divine —"; v.className = ""; }
+  }
+
+  if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) {
+    document.body.classList.add("coarse");
+  }
+
+  // per-visit starting rectangle: almost never divine
+  box.style.width  = (180 + Math.floor(Math.random() * 260)) + "px";
+  box.style.height = (180 + Math.floor(Math.random() * 260)) + "px";
+
+  if (window.ResizeObserver) {
+    new ResizeObserver(draw).observe(box);
+  } else {
+    window.addEventListener("resize", draw);
+    draw();
+  }
+})();
+</script>
+</body>
+</html>
