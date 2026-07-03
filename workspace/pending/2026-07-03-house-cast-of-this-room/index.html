@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>House</title>
+<style>
+  :root { color-scheme: light dark; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: #e8e5de;
+    color: #1a1815;
+    font: 16px/1.6 ui-serif, Georgia, "Times New Roman", serif;
+    transition: background .9s ease;
+  }
+  body.cast { background: #141210; }
+
+  #room {
+    position: relative;
+    z-index: 2;
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: 12vh 1.5rem 6rem;
+  }
+  #room h1 {
+    font-size: clamp(2.6rem, 9vw, 4.5rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.4rem;
+  }
+  #room p { margin: 0 0 1.1rem; }
+  #room .note { color: #6b665d; font-size: .92rem; font-style: italic; }
+
+  #cast {
+    margin-top: 1.6rem;
+    font: inherit;
+    font-size: .95rem;
+    background: #1a1815;
+    color: #e8e5de;
+    border: none;
+    padding: .7rem 1.2rem;
+    cursor: pointer;
+  }
+  #cast:hover { background: #000; }
+
+  #slab {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: none;
+    pointer-events: none;
+  }
+  #slab.shown { display: block; }
+
+  #label {
+    position: fixed;
+    z-index: 3;
+    right: 1rem;
+    bottom: 1rem;
+    max-width: 20rem;
+    font: 400 11px/1.5 ui-monospace, "SF Mono", Menlo, monospace;
+    color: #8a857b;
+    text-align: right;
+    text-shadow: 0 1px 2px rgba(0,0,0,.35);
+  }
+  #label b { font-weight: 600; color: #b8b4ac; }
+  #label .after { display: none; }
+  body.cast #label .after { display: block; margin-top: .5rem; }
+  a { color: inherit; }
+</style>
+</head>
+<body>
+
+  <canvas id="slab" aria-hidden="true"></canvas>
+
+  <main id="room">
+    <h1>House</h1>
+    <p>This is a room. It is built from the space <em>between</em> these words &mdash; the margins, the line gaps, the emptiness you were trained to read straight past.</p>
+    <p>Press the button. It fills that emptiness with concrete, then pulls the room away. What is left is the cast: the air made solid, the text made hole. The measurements are taken from wherever your browser happens to lay this out, so no two visitors are demolished the same way.</p>
+    <p class="note">Rachel Whiteread cast the inside of a Victorian terrace in 1993; then the terrace was demolished and only the cast stood in the street. This one demolishes on click and heals on reload. Nothing is kept.</p>
+    <button id="cast">Cast, then demolish</button>
+  </main>
+
+  <figure id="label">
+    <div><b>House</b> (Cast of This Room)</div>
+    <div>y-a-v-a, after Rachel Whiteread</div>
+    <div>medium: the negative space of this document, poured into canvas</div>
+    <div>refs: <i>Ghost</i> (1990), <i>House</i> (1993)</div>
+    <div>CC BY-SA 4.0 &middot; no cookies, no tracking, no network</div>
+    <div class="after">&mdash; the original was demolished. reload to rebuild what was destroyed.</div>
+  </figure>
+
+<script>
+(function () {
+  "use strict";
+
+  var room = document.getElementById("room");
+  var btn  = document.getElementById("cast");
+  var cv   = document.getElementById("slab");
+
+  // Per-visit material: concrete, occasionally warmed toward resin.
+  var tint = Math.random();
+  var base = {
+    r: 174 + Math.round(tint * 22),
+    g: 170 + Math.round(tint * 12),
+    b: 162 - Math.round(tint * 10)
+  };
+
+  function pour() {
+    var dpr = Math.max(1, window.devicePixelRatio || 1);
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+
+    // Measure the room BEFORE it is torn down: getBoundingClientRect
+    // is the caliper. Each block becomes a void in the cast.
+    var els = room.querySelectorAll("h1, p, button, em");
+    var rects = [];
+    for (var i = 0; i < els.length; i++) {
+      var r = els[i].getBoundingClientRect();
+      if (r.width && r.height) rects.push(r);
+    }
+
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    cv.style.width = w + "px";
+    cv.style.height = h + "px";
+    var ctx = cv.getContext("2d");
+    ctx.scale(dpr, dpr);
+
+    // Pour concrete over the entire volume.
+    ctx.fillStyle = "rgb(" + base.r + "," + base.g + "," + base.b + ")";
+    ctx.fillRect(0, 0, w, h);
+
+    // Aggregate grain, so the slab is matter and not a swatch.
+    var n = Math.min(26000, Math.floor((w * h) / 28));
+    for (var k = 0; k < n; k++) {
+      var x = Math.random() * w, y = Math.random() * h;
+      ctx.fillStyle = Math.random() < 0.5
+        ? "rgba(50,46,40,0.06)"
+        : "rgba(255,252,246,0.06)";
+      ctx.fillRect(x, y, 1, 1);
+    }
+
+    // Punch the voids: a recessed lip, then the hollow itself.
+    var lip = "rgb(" + (base.r - 74) + "," + (base.g - 74) + "," + (base.b - 66) + ")";
+    for (var j = 0; j < rects.length; j++) {
+      var b = rects[j];
+      var p = 5;
+      ctx.fillStyle = lip;
+      ctx.fillRect(b.left - p, b.top - p, b.width + 2 * p, b.height + 2 * p);
+      ctx.clearRect(b.left, b.top, b.width, b.height);
+    }
+
+    // The cast is now a frozen bitmap. Demolish the living room so it
+    // can no longer reflow: from here the concrete is rigid and the
+    // viewport is not — resize the window and the slab will not follow.
+    cv.classList.add("shown");
+    document.body.classList.add("cast");
+    room.parentNode.removeChild(room);
+  }
+
+  btn.addEventListener("click", pour, { once: true });
+})();
+</script>
+</body>
+</html>

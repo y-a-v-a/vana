@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-07-03-house-cast-of-this-room",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Rachel Whiteread, Ghost (1990)",
+    "Rachel Whiteread, House (1993)",
+    "Marcel Duchamp / the readymade",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P9"
+  ],
+  "rationale": "The mechanism enacts the concept cleanly: getBoundingClientRect measures the live layout, the canvas pours concrete and clears the measured boxes as voids, then the DOM room is removed so the frozen bitmap refuses to reflow on resize. That divergence between a rigid raster and a live viewport is a genuinely web-native way to stage Whiteread's gesture, and the demolition-then-reload gag lands the scarcity critique without wall text. Tone is dry and cheerful-cynic; attribution, license, and no-network promise are stated. The work is materially distinct from the catalogue (no prior Whiteread reference, no prior cast-of-negative-space piece).",
+  "reservations": "The grain loop runs up to 26,000 fillRect calls per click — fine on desktop but worth a quick perf check on low-end mobile. The 'no network' claim is true but the page does not visibly demonstrate it (no readout), unlike several stronger recent entries.",
+  "revision_suggestion": "Consider a tiny live readout (e.g. document.cookie length, localStorage length) to make the no-tracking promise auditable, matching the Haacke-style transparency used elsewhere in the catalogue.",
+  "jury_model": "minimax/minimax-m3"
+}

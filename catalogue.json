@@ -718,5 +718,13 @@
     "source": "Marcel Duchamp, Fountain (1917); R. Mutt (Duchamp pseudonym); Society of Independent Artists, New York (1917); net.art / the browser default widget as material",
     "mechanism": "A deliberately unstyled native <input type=range> rotated via CSS, whose entire appearance is supplied per-device by the browser vendor, with the manufacturer named locally from the UA string.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-03-house-cast-of-this-room",
+    "title": "House (Cast of This Room)",
+    "year": 2026,
+    "source": "Rachel Whiteread, Ghost (1990); Rachel Whiteread, House (1993); Marcel Duchamp / the readymade; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "getBoundingClientRect measures each text block live, a canvas fills the emptiness and clears those boxes as voids, then the DOM room is removed so the frozen bitmap no longer reflows on resize.",
+    "status": "pending"
   }
 ]
