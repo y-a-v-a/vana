@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Creative Act</title>
+<style>
+  :root{--ink:#111;--paper:#f4f2ec;}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--paper);color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .spacer{min-height:130vh;display:flex;align-items:center;justify-content:center;padding:2rem;text-align:center}
+  .spacer p{max-width:34ch;color:#555;font-style:italic;margin:0}
+  .stage{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem 2rem 5rem}
+  h1{font-weight:600;font-size:1.4rem;margin:0;letter-spacing:.02em}
+  .cred{margin:0;color:#666;font-size:.85rem;text-align:center}
+  .frame{position:relative;width:min(90vw,900px);height:64vh;border:2px solid var(--ink)}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .quote{max-width:52ch;margin:.5rem auto 0;color:#444;font-style:italic;text-align:center}
+  footer{padding:2rem 2rem 5rem;text-align:center;color:#666;font-size:.8rem;line-height:1.6}
+  footer a{color:#666}
+  .meter{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:var(--paper);
+    font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;padding:.55rem 1rem;
+    display:flex;justify-content:space-between;gap:1rem;z-index:5}
+  .meter b{font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="spacer"><p>Scroll down. The work below paints itself only while it is in your sight — and only as much of it as you can see. Look away and it un-happens.</p></div>
+
+<section class="stage">
+  <h1>The Creative Act</h1>
+  <p class="cred">after Marcel Duchamp, &ldquo;The Creative Act,&rdquo; Houston, 1957</p>
+  <div class="frame"><canvas id="c" aria-label="A composition that is completed only while it is observed, and only in proportion to how much of it is seen."></canvas></div>
+  <p class="quote">&ldquo;The spectator brings the work in contact with the external world &hellip; and thus adds his contribution to the creative act.&rdquo;</p>
+</section>
+
+<div class="spacer"><p>You looked away. What you did not see was never painted.</p></div>
+
+<footer>
+  <p><strong>The Creative Act</strong> &mdash; y-a-v-a, 2026. After Marcel Duchamp, &ldquo;The Creative Act&rdquo; (1957); with Umberto Eco, <em>The Open Work</em> (1962).</p>
+  <p>Licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. No cookies. No tracking. Nothing stored. Nothing sent.</p>
+</footer>
+
+<div class="meter"><span>The Creative Act</span><span id="pct"><b>Awaiting a spectator</b></span></div>
+
+<script>
+(function(){
+  var canvas=document.getElementById('c'), ctx=canvas.getContext('2d'), pct=document.getElementById('pct');
+  var ink='#111';
+  var accents=['#d21f1f','#1f4fd2','#e8b800','#1f8a3b'];
+  var accent=accents[Math.floor(Math.random()*accents.length)];
+
+  // Per-visit, rule-based composition in normalised coordinates.
+  var N=44, els=[];
+  for(var i=0;i<N;i++){
+    var t=Math.random();
+    var type = t<0.5 ? 'rect' : (t<0.75 ? 'circle' : (t<0.9 ? 'bar' : 'cross'));
+    els.push({
+      x:Math.random(), y:Math.random(),
+      s:0.05+Math.random()*0.22,
+      a:(Math.random()<0.28 ? accent : ink),
+      rot:(Math.random()-0.5)*Math.PI/6,
+      type:type,
+      thin:0.006+Math.random()*0.018
+    });
+  }
+
+  var ratio=0, W=0, Hc=0, dpr=Math.min(window.devicePixelRatio||1,2);
+
+  function resize(){
+    var r=canvas.getBoundingClientRect();
+    W=Math.round(r.width*dpr); Hc=Math.round(r.height*dpr);
+    canvas.width=W; canvas.height=Hc;
+    draw();
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,Hc);
+    var count=Math.round(ratio*els.length);
+    var m=Math.min(W,Hc);
+    for(var i=0;i<count;i++){
+      var e=els[i], cx=e.x*W, cy=e.y*Hc, sz=e.s*m, w=Math.max(1,e.thin*m);
+      ctx.save();
+      ctx.translate(cx,cy); ctx.rotate(e.rot);
+      ctx.fillStyle=e.a; ctx.strokeStyle=e.a; ctx.lineWidth=w;
+      if(e.type==='rect'){ ctx.fillRect(-sz/2,-sz/2,sz,sz); }
+      else if(e.type==='circle'){ ctx.beginPath(); ctx.arc(0,0,sz/2,0,Math.PI*2); ctx.fill(); }
+      else if(e.type==='bar'){ ctx.fillRect(-sz/2,-w*1.5,sz,w*3); }
+      else { ctx.beginPath(); ctx.moveTo(-sz/2,0); ctx.lineTo(sz/2,0); ctx.moveTo(0,-sz/2); ctx.lineTo(0,sz/2); ctx.stroke(); }
+      ctx.restore();
+    }
+  }
+
+  function setRatio(r){
+    ratio=r; draw();
+    if(r<=0.001){ pct.innerHTML='<b>Awaiting a spectator</b>'; }
+    else { pct.innerHTML='Completed by the spectator: <b>'+Math.round(r*100)+'%</b>'; }
+  }
+
+  var thresh=[]; for(var k=0;k<=100;k++){ thresh.push(k/100); }
+  var io=new IntersectionObserver(function(entries){
+    setRatio(entries[entries.length-1].intersectionRatio);
+  },{threshold:thresh});
+  io.observe(canvas);
+
+  window.addEventListener('resize',resize,{passive:true});
+  resize();
+})();
+</script>
+</body>
+</html>

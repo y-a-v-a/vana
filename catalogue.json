@@ -734,5 +734,13 @@
     "source": "On Kawara, I Went (1968-1979); On Kawara, I Read / I Met; CSS :visited history-sniffing mitigation (L. D. Baron / Mozilla, 2010)",
     "mechanism": "Same-page hash links become :visited on click (violet to the viewer) while getComputedStyle is forced by the browser's history-sniffing mitigation to always report them as unvisited, so a live detector reads zero.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-03-the-creative-act",
+    "title": "The Creative Act",
+    "year": 2026,
+    "source": "Marcel Duchamp, \"The Creative Act\" (1957); Umberto Eco, The Open Work / Opera aperta (1962); net.art (IntersectionObserver / ad-viewability tracking as material)",
+    "mechanism": "IntersectionObserver's intersectionRatio draws a per-visit generative composition in exact proportion to how much of the frame is in the spectator's view; scroll away and it un-paints — no storage, no network.",
+    "status": "pending"
   }
 ]

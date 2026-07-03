@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-07-03-the-creative-act",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Duchamp, \"The Creative Act\" (1957)",
+    "Umberto Eco, The Open Work / Opera aperta (1962)",
+    "net.art (IntersectionObserver / ad-viewability tracking as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7"
+  ],
+  "rationale": "The mechanism genuinely enacts the idea: IntersectionObserver's intersectionRatio, an API built to measure ad viewability, is repurposed as a literal quantification of Duchamp's claim that the spectator completes the creative act. The digital readymade (P2) is well-chosen, the per-visit rule-based composition keeps the work on the chance/order axis (P5), and the bottom meter ('Completed by the spectator: 44%' / 'Awaiting a spectator') carries the institutional-presentation tone that is house style. The closing spacer text ('You looked away. What you did not see was never painted') lands the gag without requiring a wall text.",
+  "reservations": "Conceptual territory is crowded in the current catalogue: 'The Unkept' (Page Visibility API killing a canvas render) and 'The Artist Is Present' (interaction events maintaining presence) both stage viewer-attention as constitutive of the work, so the novelty of 'art that exists only when seen' is somewhat pre-empted within the same corpus. The specific IntersectionObserver-as-percentage mapping and the Duchamp/Eco framing keep the work materially distinct, but the jury should be aware of the proximity.",
+  "revision_suggestion": "To sharpen the P1/P2 reading, lean harder on the ad-viewability provenance — e.g. surface the IntersectionObserver thresholds in the page chrome (a tiny 'viewability: 0.44' readout in the corner) so the surveillance-primitive-to-philosophy move is harder to miss, and consider a single explanatory aside in the footer naming the IntersectionObserver entry threshold (the advertising industry's MRC definition of a 'viewable impression') to make the readymade provenance explicit rather than implicit.",
+  "jury_model": "minimax/minimax-m3"
+}
