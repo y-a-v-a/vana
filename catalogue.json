@@ -742,5 +742,13 @@
     "source": "Marcel Duchamp, \"The Creative Act\" (1957); Umberto Eco, The Open Work / Opera aperta (1962); net.art (IntersectionObserver / ad-viewability tracking as material)",
     "mechanism": "IntersectionObserver's intersectionRatio draws a per-visit generative composition in exact proportion to how much of the frame is in the spectator's view; scroll away and it un-paints — no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-03-silencio",
+    "title": "Silencio",
+    "year": 2026,
+    "source": "Eugen Gomringer, silencio (1954); Concrete poetry / Konkrete Poesie; CSS white-space property; net.art (source-vs-render as material)",
+    "mechanism": "CSS white-space:normal collapses the source's authored whitespace grid (hole intact in view-source), a toggle to white-space:pre restores it — no network, no storage.",
+    "status": "pending"
   }
 ]

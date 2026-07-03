@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-07-03-silencio",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Eugen Gomringer, silencio (1954)",
+    "Concrete poetry / Konkrete Poesie",
+    "CSS white-space property",
+    "net.art (source-vs-render as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P7",
+    "P9"
+  ],
+  "rationale": "Silencio is a strong DNA match. The CSS `white-space` property is a near-perfect web-native mechanism that enacts Gomringer's argument: the browser's default rendering literally fills the void the poem was built around, and the toggle to `white-space: pre` is the smallest possible gesture that restores the source's authored silence. Concept and execution are fully unified (P1), the readymade is fresh and the build is minimal (P2/P3), and the button labels ('Restore the silence' / 'Serve it to the web') carry the cheerful-cynic tone with real argument underneath (P7/P9). The candidate correctly distinguishes itself from the catalogue's other language/CSS work, Un Coup de Dés, which used color:transparent and reflow rather than whitespace collapse.",
+  "reservations": "The per-visit HSL hue is a small live gesture but sits decoratively outside the argument; the underlying insight (web defaults talk over silence) is a real observation but not radically fresh as an internet-art trope, and the rendered grid uses a monospace approximation rather than a typography more precisely tied to Gomringer's actual layout.",
+  "revision_suggestion": "Either tie the per-visit accent colour to the void itself (e.g., the colour is nulled/greyed in the 'served' state and only blooms when the silence is restored), so even the live gesture participates in P1, or drop it and let the CSS property and the source/render gap carry the whole work. Consider shaping the inline poem more rigorously to Gomringer's exact 5x3 grid (e.g., fixed-width cells, no extra leading spaces) so the collapse is a single clean visual event.",
+  "jury_model": "minimax/minimax-m3"
+}

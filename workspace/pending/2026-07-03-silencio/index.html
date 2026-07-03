@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--
+  Silencio — after Eugen Gomringer, "silencio" (1954).
+  The full poem, hole and all, is right here in the source.
+  Your browser is about to fill the silence in.
+-->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Silencio</title>
+<style>
+  :root { --ink:#111; --paper:#f4f2ec; --accent:#888; }
+  html,body { margin:0; height:100%; }
+  body {
+    background:var(--paper); color:var(--ink);
+    font:16px/1.5 -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    min-height:100%; padding:6vh 5vw; box-sizing:border-box; text-align:center;
+  }
+  h1 { font-weight:600; font-size:1.1rem; letter-spacing:.04em; margin:0 0 .2rem; }
+  .sub { color:var(--accent); font-size:.82rem; margin:0 0 2.4rem; max-width:34rem; }
+
+  /* The poem. Same text node in both states — only white-space changes. */
+  #poem {
+    font-family: "SF Mono", "SFMono-Regular", ui-monospace, "Menlo", "Consolas", monospace;
+    font-size: clamp(11px, 2.6vw, 20px);
+    line-height: 1.9;
+    color: var(--ink);
+    margin: 0 auto;
+    max-width: 40rem;
+  }
+  /* Default: the web serves it. white-space:normal collapses every run of
+     spaces and newlines to a single space — the composed void is filled. */
+  #poem.served { white-space: normal; }
+  /* Restored: white-space:pre honours the source exactly — the hole returns. */
+  #poem.composed { white-space: pre; }
+
+  .accent { color: var(--seat); }
+
+  button {
+    margin-top: 2.6rem; padding:.55rem 1.1rem;
+    font:inherit; font-size:.85rem;
+    background:transparent; color:var(--ink);
+    border:1px solid var(--ink); border-radius:2px; cursor:pointer;
+  }
+  button:hover { background:var(--ink); color:var(--paper); }
+
+  .state { margin-top:1rem; color:var(--accent); font-size:.78rem; min-height:1.2em; }
+
+  footer {
+    position:fixed; left:0; right:0; bottom:0;
+    padding:.7rem 1rem; font-size:.66rem; line-height:1.5;
+    color:var(--accent); text-align:center;
+  }
+  footer a { color:inherit; }
+</style>
+</head>
+<body>
+
+  <h1>Silencio</h1>
+  <p class="sub">Eugen Gomringer, 1954. The poem is a word repeated fourteen times
+     around one empty cell — the silence. The complete poem, hole intact, is in the
+     source of this page. Watch what the browser does with it.</p>
+
+  <!-- The literal grid. In view-source the empty centre cell is here.
+       In white-space:normal it will be collapsed away. -->
+  <div id="poem" class="served">silencio silencio silencio silencio silencio
+silencio silencio          silencio silencio
+silencio silencio silencio silencio silencio</div>
+
+  <button id="toggle" aria-pressed="false">Restore the silence</button>
+  <p class="state" id="state">The web has filled the hole. This is the default.</p>
+
+  <footer>
+    <strong>Silencio</strong> — y-a-v-a, 2026, after Eugen Gomringer, <em>silencio</em> (1954).
+    Mechanism: the CSS <code>white-space</code> property.
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+    No cookies, no trackers, no network — the silence never leaves your device.
+  </footer>
+
+<script>
+  // Per-visit accent: a small "live" gesture, no persistence, no network.
+  document.documentElement.style.setProperty('--seat', 'hsl(' + Math.floor(Math.random()*360) + ' 40% 45%)');
+
+  var poem   = document.getElementById('poem');
+  var btn    = document.getElementById('toggle');
+  var state  = document.getElementById('state');
+  var composed = false;
+
+  btn.addEventListener('click', function () {
+    composed = !composed;
+    poem.className = composed ? 'composed' : 'served';
+    btn.textContent = composed ? 'Serve it to the web' : 'Restore the silence';
+    btn.setAttribute('aria-pressed', String(composed));
+    state.innerHTML = composed
+      ? 'You have overridden the engine. The silence is back — but only because you asked.'
+      : 'The web has filled the hole. This is the default.';
+  });
+</script>
+</body>
+</html>
