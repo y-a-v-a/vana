@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-07-03-i-went-visited",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "On Kawara, I Went (1968-1979)",
+    "On Kawara, I Read / I Met",
+    "CSS :visited history-sniffing mitigation (L. D. Baron / Mozilla, 2010)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The work is almost a textbook case of P1: the browser's deliberate history-sniffing mitigation is not a chosen visual device but the substrate that performs the entire argument, so the asymmetry between viewer's violet and page's permanent zero cannot be separated from the mechanism. The Kawara appropriation is precise — I Went, I Read, I Met are the right lineage for a private ledger of attention, and the inversion (the page is forbidden to copy what the eye keeps) is a genuine twist rather than reverent homage. Tonal control is restrained, the dry 'It will keep reading. It will keep saying zero' lands as a punchline that carries the idea, and the open-license / no-storage footer is enforced by the substrate, not just promised by it.",
+  "reservations": "The Kawara reference is name-checked more than dramatized — the work could lean harder into the specific methodology of the date paintings / daily maps to deepen the art-historical reading. The setInterval(scan, 1000) is a touch theatrical (the detector has no new information between clicks) and could be tightened to click/hashchange-driven only to better honour P3.",
+  "revision_suggestion": "Replace the continuous 1s polling with a purely event-driven scan (hashchange + a single post-click sweep) to make the detector visibly idle until the user acts, sharpening the 'the page wants to know but cannot' gag. Consider seeding the checklist with Kawara's actual I Went cities/dates as a subset, or showing the date each work was seen via a different web-native asymmetry (e.g. last-modified headers) to deepen the lineage.",
+  "jury_model": "minimax/minimax-m3"
+}

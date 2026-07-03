@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I Went (:visited)</title>
+<style>
+  :root{
+    --paper:#f4f1ea;
+    --ink:#14110f;
+    --violet:#6d28d9;      /* the web's ancient colour of memory */
+    --faint:#8b8578;
+    --rule:#d8d2c4;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:auto}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font:16px/1.5 Georgia,"Times New Roman",serif;
+    -webkit-text-size-adjust:100%;
+  }
+  main{max-width:760px;margin:0 auto;padding:44px 22px 24px}
+  h1{font-size:26px;margin:0 0 2px;letter-spacing:.2px}
+  h1 code{font:600 21px/1 ui-monospace,Menlo,Consolas,monospace;color:var(--violet)}
+  .sub{color:var(--faint);margin:0 0 26px;font-style:italic}
+  .lede{margin:0 0 22px}
+  ul.list{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+  ul.list li{
+    display:flex;align-items:baseline;gap:12px;
+    padding:9px 2px;border-bottom:1px solid var(--rule);
+  }
+  a.mark{
+    flex:1 1 auto;color:var(--ink);text-decoration:none;
+  }
+  a.mark::before{content:"\2610\00a0\00a0"}      /* ballot box */
+  a.mark:visited{color:var(--violet)}            /* only a browser may set this */
+  a.mark:hover{text-decoration:underline}
+  a.mark small{color:var(--faint);font-style:italic}
+  a.mark:visited small{color:var(--violet)}
+  .probe{
+    flex:0 0 auto;display:flex;align-items:center;gap:7px;
+    font:11px/1 ui-monospace,Menlo,Consolas,monospace;color:var(--faint);
+  }
+  .swatch{width:15px;height:15px;border:1px solid var(--rule);display:inline-block}
+  .cols{display:flex;justify-content:space-between;font:11px/1 ui-monospace,monospace;
+        color:var(--faint);padding:0 2px 6px;text-transform:uppercase;letter-spacing:.08em}
+  aside{
+    margin:30px 0 8px;padding:18px 20px;border:1px solid var(--rule);background:#fbf9f3;
+  }
+  aside .big{font:600 46px/1 Georgia,serif;color:var(--ink);margin:0}
+  aside p{margin:8px 0 0;color:var(--ink)}
+  aside .fine{color:var(--faint);font-size:13px}
+  footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--rule);
+         color:var(--faint);font-size:12.5px;line-height:1.7}
+  footer a{color:var(--faint)}
+  code.k{font:12px/1 ui-monospace,monospace;color:var(--violet)}
+</style>
+</head>
+<body>
+<main>
+  <h1>I&nbsp;Went&nbsp; <code>:visited</code></h1>
+  <p class="sub">A checklist of things you may or may not have seen. On Kawara kept the record. Here, so do you — and no one else can.</p>
+
+  <p class="lede">Tick the works you have seen <em>with your own eyes</em>. Each one you mark turns violet — the browser's oldest colour for <em>visited</em>, the colour of a link you have already been down. Meanwhile the page opposite tries, honestly, to read what you have marked.</p>
+
+  <div class="cols"><span>what you see</span><span>what the page is permitted to read</span></div>
+  <ul class="list" id="list">
+    <!-- each href points to the link's own id: clicking enters it into history,
+         so it becomes :visited without ever leaving this document -->
+    <li><a class="mark" id="s1"  href="#s1">Malevich, <small>Black Square, 1915</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s2"  href="#s2">Duchamp, <small>Fountain, 1917</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s3"  href="#s3">Leonardo, <small>Mona Lisa, c.1503</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s4"  href="#s4">Velázquez, <small>Las Meninas, 1656</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s5"  href="#s5">Rembrandt, <small>The Night Watch, 1642</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s6"  href="#s6">Picasso, <small>Guernica, 1937</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s7"  href="#s7">Hokusai, <small>The Great Wave, c.1831</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s8"  href="#s8">Vermeer, <small>Girl with a Pearl Earring, c.1665</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s9"  href="#s9">Van Gogh, <small>The Starry Night, 1889</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s10" href="#s10">Warhol, <small>Campbell's Soup Cans, 1962</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s11" href="#s11">González-Torres, <small>Untitled (Perfect Lovers), 1991</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s12" href="#s12">Cattelan, <small>Comedian, 2019</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s13" href="#s13">Craig-Martin, <small>An Oak Tree, 1973</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+    <li><a class="mark" id="s14" href="#s14">Kawara, <small>I Went, 1968–1979</small></a><span class="probe"><span class="swatch"></span><span class="rd">…</span></span></li>
+  </ul>
+
+  <aside>
+    <p class="big" id="count">0</p>
+    <p id="verdict">works you have marked, as far as this page is permitted to know — out of <span id="total">14</span>.</p>
+    <p class="fine">The counter runs a real detector: for every line it reads <code class="k">getComputedStyle(link).color</code> and checks whether it equals the violet of <code class="k">:visited</code>. It never does. Every browser deliberately reports <code class="k">:visited</code> links as if unvisited, so that a page cannot mine your history. You keep the diary. The institution is kept blind. That blindness is the work.</p>
+  </aside>
+
+  <footer>
+    <strong>I Went (:visited)</strong> — y-a-v-a, 2026. After On Kawara, <em>I Went</em> (1968–1979) and the <em>I Read / I Met</em> diaries; and after the CSS <code class="k">:visited</code> history-sniffing mitigation (L.&nbsp;D.&nbsp;Baron / Mozilla, 2010), now universal.<br>
+    No cookies, no storage, no trackers, no network requests — this page cannot phone home, and by design it cannot read your visited links either. It knows nothing about you. Neither will we.<br>
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>. Attribution: y-a-v-a (Vincent Bruijn); referenced work On Kawara, <em>I Went</em>.
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var links = Array.prototype.slice.call(document.querySelectorAll("a.mark"));
+  var VISITED = "rgb(109, 40, 217)";           // --violet, the tint reserved for memory
+  var countEl = document.getElementById("count");
+  var verdictEl = document.getElementById("verdict");
+
+  function scan(){
+    var detected = 0;
+    links.forEach(function(a){
+      // the honest attempt to learn what you have seen:
+      var seen = getComputedStyle(a).color;    // the browser will lie here, always
+      var probe = a.parentNode.querySelector(".probe");
+      probe.querySelector(".swatch").style.background = seen;
+      probe.querySelector(".rd").textContent = seen;
+      if (seen === VISITED) detected++;         // this branch is unreachable by design
+    });
+    countEl.textContent = detected;
+    if (detected === 0){
+      verdictEl.innerHTML = 'works you have marked, as far as this page is permitted to know — out of <span id="total">' + links.length + '</span>. It will keep reading. It will keep saying zero.';
+    }
+  }
+
+  // never call preventDefault: the hash navigation is what enters history,
+  // and history is what turns the link violet in your eyes.
+  window.addEventListener("hashchange", scan);
+  document.getElementById("list").addEventListener("click", function(){ setTimeout(scan, 0); });
+  setInterval(scan, 1000);
+  scan();
+})();
+</script>
+</body>
+</html>

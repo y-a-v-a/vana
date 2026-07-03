@@ -726,5 +726,13 @@
     "source": "Rachel Whiteread, Ghost (1990); Rachel Whiteread, House (1993); Marcel Duchamp / the readymade; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "getBoundingClientRect measures each text block live, a canvas fills the emptiness and clears those boxes as voids, then the DOM room is removed so the frozen bitmap no longer reflows on resize.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-03-i-went-visited",
+    "title": "I Went (:visited)",
+    "year": 2026,
+    "source": "On Kawara, I Went (1968-1979); On Kawara, I Read / I Met; CSS :visited history-sniffing mitigation (L. D. Baron / Mozilla, 2010)",
+    "mechanism": "Same-page hash links become :visited on click (violet to the viewer) while getComputedStyle is forced by the browser's history-sniffing mitigation to always report them as unvisited, so a live detector reads zero.",
+    "status": "pending"
   }
 ]
