@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-07-04-round-as-giotto-s-o",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 42,
+  "verdict": "strong",
+  "references_named": [
+    "Giotto di Bondone",
+    "Giorgio Vasari, Le Vite de' più eccellenti pittori (1550)",
+    "the proverb 'rounder than Giotto's O'"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The mechanism enacts the argument cleanly: the same client-side geometry that grades the user's wobbling hand is the geometry the machine uses to emit a flawless circle, and the machine's 100% is stamped 'not a drawing.' That inversion — perfection as proof of absence — is the readymade of Vasari's anecdote, staged on the chance/order axis with the user's gesture as chance and the Math.cos loop as order. Restraint is total: one canvas, one honest metric, two verdicts, no storage, no network. The literate reading (virtuosity as a builtin) lands without wall text, and the surface gag (a smug computer) carries it.",
+  "reservations": "The reference is art-historical rather than 20th-century-conceptual, which is a slight stretch from the DNA's usual patron saints, but Vasari's anecdote is precisely the kind of canonical art idea the DNA targets. The 'not a drawing' verdict is asserted rather than mechanically enforced — a stricter version could refuse to render the machine's path at all, but the current form is honest and lands.",
+  "revision_suggestion": "Consider letting the machine button emit the circle without stroking it (or stroking it in a visibly non-ink color) so the 'not a drawing' verdict is enacted by the medium rather than declared in text — a tighter P1 move.",
+  "jury_model": "minimax/minimax-m3"
+}

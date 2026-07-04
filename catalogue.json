@@ -766,5 +766,13 @@
     "source": "Lygia Clark, Bicho (1960); Neo-Concrete Manifesto / Ferreira Gullar (1959); Marcel Duchamp, The Creative Act (1957); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "A forward-kinematic linkage driven solely by pointer events (no rAF, no autoplay, no storage); motion exists only during manipulation, and each load re-mints a random, unrepeatable animal.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-04-round-as-giotto-s-o",
+    "title": "Round as Giotto's O",
+    "year": 2026,
+    "source": "Giotto di Bondone; Giorgio Vasari, Le Vite de' più eccellenti pittori (1550); the proverb 'rounder than Giotto's O'",
+    "mechanism": "Pointer-drawn path fitted to a circle client-side (centroid + radial standard deviation); the identical scorer emits and grades the machine's flawless circle, stamped 'not a drawing'. No storage, no network.",
+    "status": "pending"
   }
 ]
