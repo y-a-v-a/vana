@@ -774,5 +774,13 @@
     "source": "Giotto di Bondone; Giorgio Vasari, Le Vite de' più eccellenti pittori (1550); the proverb 'rounder than Giotto's O'",
     "mechanism": "Pointer-drawn path fitted to a circle client-side (centroid + radial standard deviation); the identical scorer emits and grades the machine's flawless circle, stamped 'not a drawing'. No storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-04-arranged-according-to-the-laws-of-chance",
+    "title": "Arranged According to the Laws of Chance",
+    "year": 2026,
+    "source": "Hans (Jean) Arp, Untitled (Collage with Squares Arranged According to the Laws of Chance), 1916-17; Dada chance operations; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Kenneth Martin, Chance and Order / y-a-v-a, A Chance of Order (2021)",
+    "mechanism": "crypto.getRandomValues() drives a per-throw canvas collage held only in RAM (no seed, no storage, no network), making the picture physically irreproducible.",
+    "status": "pending"
   }
 ]

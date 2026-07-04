@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-04-arranged-according-to-the-laws-of-chance",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 37,
+  "verdict": "borderline",
+  "references_named": [
+    "Hans (Jean) Arp, Untitled (Collage with Squares Arranged According to the Laws of Chance), 1916-17",
+    "Dada chance operations",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "Kenneth Martin, Chance and Order / y-a-v-a, A Chance of Order (2021)",
+    "François Morellet / y-a-v-a, Random Distribution of π (2026) (implicit dialogue)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The work sits precisely at the chance pole of the chance↔order axis, explicitly answering the deterministic order pieces in the catalogue (A Chance of Order, Random Distribution of π) by being their irreproducible opposite. The mechanism genuinely enacts the concept: choosing crypto.getRandomValues() over Math.random() is the conceptual hinge, and the resize handler's preservation of the same composition across re-sizes (no re-throw) is a subtle craft detail that reinforces the difference between a live holding and a re-derivation. Surface gag lands ('Composition by nobody in particular'); the Benjamin/cryptographic argument opens for the literate viewer.",
+  "reservations": "The work lives mostly in dialogue with existing catalogue pieces rather than opening new narrative ground. It does not engage the current AI chapter of the arc (P10), and the Arp reference, however precise, is well-trodden conceptual territory. The full argument leans slightly on the wall text to deliver the Benjamin point, though the surface gag does stand alone.",
+  "revision_suggestion": "Could stage a side-by-side or toggle against an order/deterministic mode (e.g., a switch that re-composes the same sheet from a seed vs. from true entropy) so the irreproducibility is felt by comparison rather than asserted. Engaging the AI dimension (e.g., relating cryptographic entropy to model sampling) would pull the work into the live arc rather than its 20th-century side.",
+  "jury_model": "minimax/minimax-m3"
+}

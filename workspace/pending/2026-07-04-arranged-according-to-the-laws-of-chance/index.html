@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arranged According to the Laws of Chance</title>
+<style>
+  :root{
+    --ground:#efe9dc;
+    --ink:#1b1b1b;
+    --mute:#6b6459;
+    --line:#cdc4b1;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:#e5ddcc;color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  main{max-width:760px;margin:0 auto;padding:34px 20px 60px;}
+  .mount{
+    background:var(--ground);
+    padding:18px;
+    border:1px solid var(--line);
+    box-shadow:0 24px 60px rgba(0,0,0,.22), inset 0 0 0 1px rgba(255,255,255,.5);
+  }
+  canvas{display:block;width:100%;height:auto;background:var(--ground);}
+  .label{margin-top:26px;}
+  h1{font-size:1.18rem;font-weight:600;margin:0 0 2px;letter-spacing:.2px;}
+  .after{font-size:.82rem;color:var(--mute);font-style:italic;margin:0 0 18px;line-height:1.45;}
+  p{font-size:.9rem;line-height:1.55;margin:0 0 12px;max-width:60ch;}
+  .readout{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.78rem;color:var(--mute);margin:16px 0 18px;letter-spacing:.2px;}
+  button{
+    font:inherit;font-size:.86rem;cursor:pointer;
+    background:var(--ink);color:var(--ground);
+    border:none;padding:10px 18px;letter-spacing:.3px;
+  }
+  button:hover{background:#000;}
+  .meta{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);
+    font-size:.72rem;color:var(--mute);line-height:1.6;}
+  .meta b{color:var(--ink);font-weight:600;}
+</style>
+</head>
+<body>
+<main>
+  <div class="mount">
+    <canvas id="c" aria-label="Torn paper squares scattered across a sheet by chance"></canvas>
+  </div>
+
+  <div class="label">
+    <h1>Arranged According to the Laws of Chance</h1>
+    <p class="after">after Hans (Jean) Arp — <i>Untitled (Collage with Squares Arranged According to the Laws of Chance)</i>, 1916&ndash;17</p>
+
+    <p>The artist has recused himself. Composition by nobody in particular.</p>
+    <p>Every position, size and torn edge on this sheet was drawn from
+       <code>crypto.getRandomValues()</code> &mdash; the same hardware entropy your bank
+       trusts with its keys, spent here on scattering paper.</p>
+    <p>There is no seed. Nothing is stored. This arrangement has never existed before
+       and cannot be made to exist again &mdash; not by the machine, not by the artist,
+       not by you. Reproduction fails here for want of an original.</p>
+
+    <div class="readout" id="readout">&#9702; chance drawn: &mdash; bytes &middot; seed: none &middot; saved: nothing</div>
+    <button id="throw">Let chance arrange it again</button>
+
+    <div class="meta">
+      <b>Medium:</b> cryptographic entropy on &lt;canvas&gt; &middot; pixels on screen<br>
+      <b>License:</b> CC BY-SA 4.0 &middot; y-a-v-a (Vincent Bruijn), after Hans Arp<br>
+      <b>Delivery:</b> no cookies, no tracking, no storage, no network. Chance, uncredited.
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var readout = document.getElementById('readout');
+
+  // --- true chance: the browser's cryptographic entropy source ---------------
+  var pool = new Uint32Array(256), pi = pool.length, calls = 0;
+  function rnd(){
+    if(pi >= pool.length){ crypto.getRandomValues(pool); pi = 0; }
+    calls++;
+    return pool[pi++] / 4294967296;
+  }
+  function rr(a,b){ return a + (b-a)*rnd(); }
+  function pick(arr){ return arr[Math.floor(rnd()*arr.length)]; }
+
+  // Arp-ish restrained palette on a cream ground; black and blue weighted up.
+  var PALETTE = ['#1b1b1b','#1b1b1b','#33507e','#33507e','#b24a35','#d9cdb0','#7d8285'];
+
+  var pieces = [];   // held in RAM only — vanishes on reload, never persisted
+  var L = 0;         // current logical (CSS px) side
+
+  // Generate a composition: normalised (0..1) params + stored torn-edge jitter,
+  // so a resize can re-render the SAME sheet without re-throwing chance.
+  function compose(){
+    calls = 0;
+    pieces = [];
+    var n = Math.floor(rr(13, 23));
+    for(var k=0;k<n;k++){
+      var seg = 5, jit = [];
+      for(var e=0;e<4*seg;e++) jit.push(rr(-1,1));  // deckle offsets, normalised
+      pieces.push({
+        cx: rr(0.10,0.90), cy: rr(0.10,0.90),
+        w:  rr(0.07,0.32),  h: rr(0.07,0.32),
+        ang: rr(-Math.PI, Math.PI),
+        color: pick(PALETTE),
+        jit: jit, seg: seg
+      });
+    }
+    var bytes = calls * 4;
+    readout.textContent = '◦ chance drawn: ' + bytes +
+      ' bytes · seed: none · saved: nothing';
+  }
+
+  function tornPath(p){
+    var hw = p.w*L/2, hh = p.h*L/2;
+    var corners = [[-hw,-hh],[hw,-hh],[hw,hh],[-hw,hh]];
+    var scale = Math.min(p.w,p.h)*L*0.09;
+    ctx.beginPath();
+    for(var i=0;i<4;i++){
+      var a = corners[i], b = corners[(i+1)%4];
+      var nx = (b[1]-a[1]), ny = -(b[0]-a[0]);
+      var nl = Math.hypot(nx,ny) || 1;
+      for(var s=0;s<p.seg;s++){
+        var t = s/p.seg;
+        var j = p.jit[i*p.seg + s] * scale;
+        var x = a[0] + (b[0]-a[0])*t + nx/nl*j;
+        var y = a[1] + (b[1]-a[1])*t + ny/nl*j;
+        if(i===0 && s===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+    }
+    ctx.closePath();
+  }
+
+  function draw(){
+    ctx.save();
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,L,L);
+    ctx.fillStyle = getComputedStyle(document.documentElement)
+      .getPropertyValue('--ground').trim() || '#efe9dc';
+    ctx.fillRect(0,0,L,L);
+    for(var k=0;k<pieces.length;k++){
+      var p = pieces[k];
+      ctx.save();
+      ctx.translate(p.cx*L, p.cy*L);
+      ctx.rotate(p.ang);
+      ctx.shadowColor = 'rgba(0,0,0,0.20)';
+      ctx.shadowBlur = L*0.018;
+      ctx.shadowOffsetX = L*0.004;
+      ctx.shadowOffsetY = L*0.006;
+      ctx.fillStyle = p.color;
+      tornPath(p);
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  var dpr = 1;
+  function fit(){
+    dpr = window.devicePixelRatio || 1;
+    var size = Math.min(canvas.parentNode.clientWidth, window.innerHeight*0.6);
+    size = Math.max(size, 220);
+    L = size;
+    canvas.style.height = size + 'px';
+    canvas.width  = Math.round(size*dpr);
+    canvas.height = Math.round(size*dpr);
+    draw();
+  }
+
+  document.getElementById('throw').addEventListener('click', function(){
+    compose(); draw();
+  });
+  var t;
+  window.addEventListener('resize', function(){
+    clearTimeout(t); t = setTimeout(fit, 80);   // rescale the same sheet, no re-throw
+  });
+
+  compose();
+  fit();
+})();
+</script>
+</body>
+</html>
