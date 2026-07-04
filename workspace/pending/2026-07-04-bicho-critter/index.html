@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Bicho (Critter)</title>
+<style>
+  :root { --paper:#f4f2ec; --ink:#141414; --label:#5b574e; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--paper); overflow:hidden;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  #stage { position:fixed; inset:0; width:100%; height:100%; display:block;
+    touch-action:none; cursor:grab; }
+  #stage.holding { cursor:grabbing; }
+
+  #label { position:fixed; left:20px; bottom:18px; max-width:min(360px, calc(100vw - 40px));
+    color:var(--label); font-size:12.5px; line-height:1.5; letter-spacing:.1px;
+    -webkit-user-select:none; user-select:none; }
+  #label h1 { margin:0 0 2px; font-size:14px; font-weight:600; color:var(--ink);
+    letter-spacing:.2px; }
+  #label .after { color:var(--ink); opacity:.75; font-style:italic; margin-bottom:6px; }
+  #label p { margin:6px 0 0; }
+  #label .meta { margin-top:8px; font-size:11px; opacity:.8; }
+  #label a { color:inherit; }
+
+  #hint { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+    color:var(--label); font-size:13px; letter-spacing:.3px; pointer-events:none;
+    -webkit-user-select:none; user-select:none; transition:opacity .6s ease; }
+</style>
+</head>
+<body>
+  <canvas id="stage"></canvas>
+  <div id="hint">fold it</div>
+
+  <div id="label">
+    <h1>Bicho <span style="font-weight:400;opacity:.7">(Critter)</span></h1>
+    <div class="after">after Lygia Clark, <em>Bicho</em>, 1960</div>
+    <p>It has no front, no back, no upright, no correct pose. It does nothing on its own; it moves only in your hands. Let go and it holds — inert, waiting. Reload and it is a different animal: there is no original to return to.</p>
+    <div class="meta">
+      pixels on screen · hinged planes · per visit, unrepeatable<br>
+      CC&nbsp;BY-SA&nbsp;4.0 · y-a-v-a · no cookies, no tracking, no storage
+    </div>
+  </div>
+
+<script>
+(() => {
+  "use strict";
+  const cv = document.getElementById("stage");
+  const hint = document.getElementById("hint");
+  const ctx = cv.getContext("2d");
+  const TAU = Math.PI * 2;
+
+  let W = 0, H = 0, dpr = 1, unit = 60;
+  const base = { x: 0, y: 0 };
+
+  // --- genesis: a new creature each load, no canonical state ---
+  let N, angle = [], len = [], wid = [];
+  function genesis() {
+    N = 5 + Math.floor(Math.random() * 3);        // 5..7 plates
+    angle = []; len = []; wid = [];
+    angle.push(Math.random() * TAU);              // arbitrary orientation, no upright
+    for (let i = 1; i < N; i++) angle.push((Math.random() * 2 - 1) * 2.1); // random folds
+    for (let i = 0; i < N; i++) {
+      len.push(0.75 + Math.random() * 0.7);
+      wid.push(0.36 + Math.random() * 0.16);
+    }
+  }
+
+  // --- forward kinematics: hinge positions of the linkage ---
+  function joints() {
+    let x = base.x, y = base.y, a = 0;
+    const pts = [{ x, y }];
+    for (let i = 0; i < N; i++) {
+      a += angle[i];
+      x += len[i] * unit * Math.cos(a);
+      y += len[i] * unit * Math.sin(a);
+      pts.push({ x, y });
+    }
+    return pts;
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    const p = joints();
+    let a = 0;
+
+    // plates
+    for (let i = 0; i < N; i++) {
+      a += angle[i];
+      const nx = Math.cos(a + Math.PI / 2), ny = Math.sin(a + Math.PI / 2);
+      const hw = wid[i] * unit / 2;
+      const A = p[i], B = p[i + 1];
+      const c1 = { x: A.x + nx * hw, y: A.y + ny * hw };
+      const c2 = { x: B.x + nx * hw, y: B.y + ny * hw };
+      const c3 = { x: B.x - nx * hw, y: B.y - ny * hw };
+      const c4 = { x: A.x - nx * hw, y: A.y - ny * hw };
+
+      // brushed-metal gradient across the plate's width
+      const g = ctx.createLinearGradient(c1.x, c1.y, c4.x, c4.y);
+      g.addColorStop(0,   "#3a3a3d");
+      g.addColorStop(0.5, "#101012");
+      g.addColorStop(1,   "#2b2b2e");
+      ctx.beginPath();
+      ctx.moveTo(c1.x, c1.y); ctx.lineTo(c2.x, c2.y);
+      ctx.lineTo(c3.x, c3.y); ctx.lineTo(c4.x, c4.y);
+      ctx.closePath();
+      ctx.fillStyle = g; ctx.fill();
+      ctx.lineWidth = 1; ctx.strokeStyle = "rgba(255,255,255,0.10)"; ctx.stroke();
+    }
+
+    // hinges
+    for (let i = 1; i < N; i++) {
+      ctx.beginPath();
+      ctx.arc(p[i].x, p[i].y, Math.max(3, unit * 0.07), 0, TAU);
+      ctx.fillStyle = "#0c0c0d"; ctx.fill();
+      ctx.lineWidth = 1.5; ctx.strokeStyle = "rgba(244,242,236,0.85)"; ctx.stroke();
+    }
+  }
+
+  // --- picking: nearest plate to the pointer ---
+  function distToSeg(px, py, a, b) {
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const l2 = dx * dx + dy * dy || 1e-6;
+    let t = ((px - a.x) * dx + (py - a.y) * dy) / l2;
+    t = Math.max(0, Math.min(1, t));
+    const cx = a.x + t * dx, cy = a.y + t * dy;
+    return Math.hypot(px - cx, py - cy);
+  }
+  function pick(px, py) {
+    const p = joints();
+    let best = -1, bd = Infinity;
+    for (let i = 0; i < N; i++) {
+      const d = distToSeg(px, py, p[i], p[i + 1]);
+      if (d < bd) { bd = d; best = i; }
+    }
+    return best; // grab the whole creature; every plate is reachable
+  }
+
+  // --- interaction: motion exists ONLY while you hold it ---
+  let grabbed = -1;
+  function pos(e) {
+    const r = cv.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+  function bend(px, py) {
+    const p = joints();
+    const hinge = p[grabbed];
+    const target = Math.atan2(py - hinge.y, px - hinge.x);
+    let prev = 0;
+    for (let k = 0; k < grabbed; k++) prev += angle[k];
+    angle[grabbed] = target - prev;   // aim this plate at the hand; children follow
+    draw();
+  }
+  cv.addEventListener("pointerdown", (e) => {
+    const q = pos(e);
+    grabbed = pick(q.x, q.y);
+    cv.classList.add("holding");
+    cv.setPointerCapture(e.pointerId);
+    if (hint) hint.style.opacity = "0";
+    bend(q.x, q.y);
+  });
+  cv.addEventListener("pointermove", (e) => {
+    if (grabbed < 0) return;
+    const q = pos(e);
+    bend(q.x, q.y);
+  });
+  function release() { grabbed = -1; cv.classList.remove("holding"); }
+  cv.addEventListener("pointerup", release);
+  cv.addEventListener("pointercancel", release);
+
+  // --- layout ---
+  function layout() {
+    W = cv.clientWidth; H = cv.clientHeight;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    unit = Math.min(W, H) / (N + 2.5);
+    base.x = W / 2; base.y = H / 2;   // it floats; there is no ground
+    draw();
+  }
+  window.addEventListener("resize", layout);
+
+  genesis();
+  layout();
+})();
+</script>
+</body>
+</html>

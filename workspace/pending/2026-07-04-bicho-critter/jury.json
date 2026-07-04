@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-07-04-bicho-critter",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Lygia Clark, Bicho (1960)",
+    "Ferreira Gullar, Neo-Concrete Manifesto (1959)",
+    "Marcel Duchamp, The Creative Act (1957)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument: a forward-kinematic linkage that is inert until pointerdown and dies on pointerup literally enacts the Neo-Concrete claim that the work is a quasi-corpus completed only in the participant's hands. The absence of rAF, idle animation, and persistence is not a technical choice but the philosophical point rendered in code. The random genesis (chance) folded through a rigid articulated linkage (order) sits cleanly on the P5 axis, and the deadpan label ('fold it', 'no front, no back, no upright') carries the double-coding without wall-text dependency. Lygia Clark is a fresh addition to the catalogue's lineage and materially distinct from existing pointer-driven works like Following Piece or The Artist Is Present.",
+  "reservations": "The work does not engage P6 (value/authenticity) or P10 (AI) directly, though this is acceptable given the DNA's 'pick at least one method' guidance. The brushed-metal rendering is competent but not particularly distinctive visually — the argument lives in the behavior, not the surface.",
+  "revision_suggestion": "Consider whether the per-visit random genesis could be seeded by something more pointed (e.g., a date, a locale, a browser fact) to deepen the web-native material engagement, or whether a subtle P6 gesture (a price tag that reads $0 because there is no object) would sharpen the Benjamin reference without breaking the restraint.",
+  "jury_model": "minimax/minimax-m3"
+}
