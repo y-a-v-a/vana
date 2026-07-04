@@ -750,5 +750,13 @@
     "source": "Eugen Gomringer, silencio (1954); Concrete poetry / Konkrete Poesie; CSS white-space property; net.art (source-vs-render as material)",
     "mechanism": "CSS white-space:normal collapses the source's authored whitespace grid (hole intact in view-source), a toggle to white-space:pre restores it — no network, no storage.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-04-artist-s-statement",
+    "title": "Artist's Statement",
+    "year": 2026,
+    "source": "Alix Rule & David Levine, \"International Art English\" (Triple Canopy, 2012); Marcel Duchamp, the readymade; y-a-v-a, Modernipsum (2012); Roland Barthes, The Death of the Author (1967)",
+    "mechanism": "A native <datalist> autocomplete presents a closed, finite lexicon of International Art English as un-restylable browser chrome; authorship becomes selection, with a live tally grading fluency, nothing stored or sent.",
+    "status": "pending"
   }
 ]

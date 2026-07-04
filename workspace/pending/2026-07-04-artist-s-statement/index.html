@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artist's Statement</title>
+<style>
+  :root{
+    --ink:#1a1a1a;
+    --paper:#f4f2ec;
+    --faint:#8a887f;
+    --rule:#d8d5cb;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font:16px/1.55 Georgia,"Times New Roman",serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6vh 6vw;
+  }
+  .cube{width:min(680px,100%)}
+  h1{
+    font-weight:normal;
+    font-size:clamp(22px,4.5vw,34px);
+    letter-spacing:.01em;
+    margin:0 0 .15em;
+  }
+  .sub{
+    color:var(--faint);
+    font-style:italic;
+    margin:0 0 1.8em;
+    font-size:15px;
+  }
+  label{
+    display:block;
+    font-variant:small-caps;
+    letter-spacing:.12em;
+    color:var(--faint);
+    font-size:12px;
+    margin-bottom:.5em;
+  }
+  input{
+    width:100%;
+    font:inherit;
+    font-size:clamp(17px,2.6vw,21px);
+    padding:.55em .1em;
+    background:transparent;
+    border:0;
+    border-bottom:1px solid var(--ink);
+    color:var(--ink);
+    outline:none;
+  }
+  input::placeholder{color:var(--faint);font-style:italic}
+  .tally{
+    margin-top:1em;
+    font-size:14px;
+    color:var(--faint);
+    min-height:1.4em;
+  }
+  .tally b{color:var(--ink);font-weight:normal}
+  .note{
+    margin-top:2.6em;
+    padding-top:1.2em;
+    border-top:1px solid var(--rule);
+    font-size:12.5px;
+    line-height:1.7;
+    color:var(--faint);
+  }
+  .note a{color:var(--faint)}
+  .count{font-size:12.5px;color:var(--faint);margin:.4em 0 0}
+</style>
+</head>
+<body>
+<main class="cube">
+  <h1>Artist&rsquo;s Statement</h1>
+  <p class="sub">You do not write it. You choose it.</p>
+
+  <label for="stmt">Compose your statement</label>
+  <input id="stmt" list="lexicon" autocomplete="off" spellcheck="false"
+         placeholder="click here, then let the vocabulary drop down&hellip;">
+  <datalist id="lexicon"></datalist>
+
+  <p class="count" id="count"></p>
+  <p class="tally" id="tally">&nbsp;</p>
+
+  <p class="note">
+    Every word the art world permits is already in the list below the cursor — the
+    browser&rsquo;s own dropdown, chrome you cannot restyle. Authorship here is not
+    invention but selection from a finite, sanctioned lexicon. Nothing you type is
+    saved, and nothing is sent; the field keeps no record and reaches no server.<br><br>
+    After <em>y-a-v-a</em>, <em>Modernipsum</em> (2012), which generated the discourse;
+    this one merely offers it back for approval. References: Alix Rule &amp; David Levine,
+    &ldquo;International Art English&rdquo; (<em>Triple Canopy</em>, 2012); Marcel
+    Duchamp, the readymade.<br><br>
+    <strong>Artist&rsquo;s Statement</strong> — y-a-v-a (Vincent Bruijn), 2026.
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+    No cookies. No trackers. No data collected.
+  </p>
+</main>
+
+<script>
+  // The closed set. Every "approved" term the statement may be assembled from.
+  var LEXICON = [
+    "spatiotemporal","liminal","praxis","dialectical","problematise","interrogate",
+    "materiality","the everyday","the Real","the Other","alterity","hegemony",
+    "discourse","rupture","rhizomatic","aporia","ontology","phenomenology",
+    "embodiment","corporeality","the gaze","agency","precarity","biopolitics",
+    "neoliberal","post-colonial","decentre","destabilise","subvert","transgress",
+    "negotiate","mediate","foreground","unpack","tease out","gesture","mark-making",
+    "the picture plane","the surface","gesamtkunstwerk","institutional critique",
+    "site-specific","relational","participatory","ephemeral","immaterial",
+    "dematerialisation","the readymade","appropriation","the simulacrum","hyperreal",
+    "the abject","the sublime","the uncanny","affect","temporality","spatiality",
+    "contingency","indexicality","iteration","seriality","the grid","the monochrome",
+    "gestural","painterly","the expanded field","the white cube","autonomy",
+    "authorship","the archive","memory","trauma","absence","presence","the void",
+    "negation","entropy","flux","becoming","assemblage","bricolage","palimpsest",
+    "the threshold","interstitial","porous","situated","contested","the vernacular",
+    "the quotidian","the banal","systemic","deconstruct","reconfigure",
+    "recontextualise","reify","valorise","complicates","resists","refuses",
+    "oscillates","inhabits","articulates","enacts","performs","stages","frames",
+    "the viewer","the spectator","the body","the trace","the fold","difference",
+    "repetition","self-reflexive","tautological","the apparatus","the dispositif",
+    "the signifier","the signified","semiotic","the lexicon","register"
+  ];
+
+  var list = document.getElementById("lexicon");
+  LEXICON.forEach(function(term){
+    var o = document.createElement("option");
+    o.value = term;
+    list.appendChild(o);
+  });
+
+  var SET = {};
+  LEXICON.forEach(function(t){ SET[t.toLowerCase()] = true; });
+
+  document.getElementById("count").textContent =
+    LEXICON.length + " approved terms available.";
+
+  var input = document.getElementById("stmt");
+  var tally = document.getElementById("tally");
+
+  input.addEventListener("input", function(){
+    var raw = input.value.trim();
+    if(!raw){ tally.innerHTML = "&nbsp;"; return; }
+    var words = raw.toLowerCase().split(/\s+/).filter(Boolean);
+    // Count words drawn from the sanctioned vocabulary — greedily, longest first,
+    // so multi-word terms ("the everyday") register too.
+    var text = " " + raw.toLowerCase() + " ";
+    var hits = 0;
+    LEXICON.slice().sort(function(a,b){return b.length-a.length;}).forEach(function(t){
+      var k = t.toLowerCase();
+      var i = text.indexOf(" " + k + " ");
+      while(i !== -1){ hits++; text = text.slice(0,i+1) + text.slice(i+1+k.length); i = text.indexOf(" " + k + " "); }
+    });
+    var n = words.length;
+    tally.innerHTML = "<b>" + hits + "</b> of <b>" + n + "</b> word" +
+      (n===1?"":"s") + " institutionally recognised" +
+      (hits===n && n>0 ? " &mdash; statement approved." : hits===0 ? " &mdash; not yet art." : ".");
+  });
+</script>
+</body>
+</html>

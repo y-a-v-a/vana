@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-04-artist-s-statement",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 37,
+  "verdict": "borderline",
+  "references_named": [
+    "Alix Rule & David Levine, \"International Art English\" (Triple Canopy, 2012)",
+    "Marcel Duchamp, the readymade",
+    "y-a-v-a, Modernipsum (2012)",
+    "Roland Barthes, The Death of the Author (1967)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The datalist-as-institutional-vocabulary is a strong web-native find: un-restylable OS chrome whose literal behavior (suggest-then-select from a closed set) enacts the thesis that authorship in art discourse is selection from a sanctioned lexicon. Concept and execution collapse cleanly (P1), the surface gag lands for the casual viewer and the argument about gatekeeping and the death of the author lands for the literate one (P7), and the build is the smallest that completes the thought (P3). The work is materially distinct from Modernipsum — that one generated the discourse, this one offers it back as a menu and grades fluency — and it sits squarely on the institutional-critique axis (P6) while inheriting the Modernipsum lineage.",
+  "reservations": "The conceptual territory (art-speak as closed vocabulary) was already covered by Modernipsum (2012), and the Rule & Levine diagnosis is a decade old; the novelty is in the mechanism rather than the found-object or ontology. The argument stays at the general 'institutions control language' level rather than making a more specific art-historical claim. The 'not yet art' verdict is dry but predictable.",
+  "revision_suggestion": "Sharpen the specific art-historical argument beyond the general IAE diagnosis — e.g., tie the lexicon to a particular artist or movement (Klein's immateriality, Weiner's language-as-material, Holzer's truisms) so the second depth is more pointed than 'institutional language is constrained.' Consider making the dropdown's refusal to include certain canonical terms (e.g., beauty, skill, craft) a visible structural feature rather than only an implied absence.",
+  "jury_model": "minimax/minimax-m3"
+}
