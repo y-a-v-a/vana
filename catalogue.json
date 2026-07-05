@@ -790,5 +790,13 @@
     "source": "Bernd & Hilla Becher, Typologies / Anonyme Skulpturen (Water Towers); The Dusseldorf School of photography; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "Client-side canvas procedurally draws twelve frontally-framed water-tower silhouettes in a fixed grid, held only in RAM (no storage, no seed, no network), so reload destroys the plate irreversibly.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-05-narrow-symbol",
+    "title": "Narrow Symbol",
+    "year": 2026,
+    "source": "Andy Warhol, Dollar Sign (1981); J.S.G. Boggs (hand-drawn currency); Alexander Brener / Malevich defacement (1997); y-a-v-a, Art is Money (2013)",
+    "mechanism": "Intl.NumberFormat currency formatting (narrowSymbol) denominates a constant integer in the viewer's locale-guessed currency, live and offline, so value becomes pure typography with no rate to reconcile it.",
+    "status": "pending"
   }
 ]

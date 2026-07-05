@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f4f2ec">
+<title>Narrow Symbol</title>
+<style>
+  :root{ --paper:#f4f2ec; --ink:#14110c; --faint:#8a8578; --line:#d8d3c6; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; }
+  body{
+    background:var(--paper); color:var(--ink);
+    font:16px/1.5 Georgia, "Times New Roman", serif;
+    display:flex; flex-direction:column; min-height:100%;
+    -webkit-text-size-adjust:100%;
+  }
+  main{ flex:1 0 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6vmin 5vw 2vmin; }
+
+  /* the painting: one giant currency symbol, in the browser's own hand */
+  .canvas{
+    width:min(78vmin,560px); aspect-ratio:1/1;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--paper);
+    border:1px solid var(--line);
+    box-shadow:0 1px 0 #fff inset, 0 18px 40px -28px rgba(0,0,0,.5);
+    overflow:hidden; user-select:none;
+  }
+  #glyph{
+    font-family:"Brush Script MT","Snell Roundhand","Segoe Script",cursive;
+    font-size:clamp(120px,44vmin,320px); line-height:1;
+    font-weight:700; letter-spacing:-.02em;
+    transform:rotate(-4deg);
+    transition:opacity .18s ease;
+  }
+
+  /* wall label / tombstone */
+  .label{
+    width:min(78vmin,560px); margin-top:3.2vmin;
+    font:13px/1.55 "Courier New", ui-monospace, monospace;
+    color:var(--ink); border-top:1px solid var(--line); padding-top:14px;
+  }
+  .label b{ font-weight:700; }
+  .label .price{ font-size:15px; }
+  .label .dim{ color:var(--faint); }
+
+  .plate{
+    width:min(78vmin,560px); margin-top:16px;
+    font:12px/1.6 "Courier New", ui-monospace, monospace; color:var(--faint);
+  }
+  .plate .k{ color:var(--ink); }
+
+  .controls{ width:min(78vmin,560px); margin-top:18px; display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; }
+  button{
+    font:12px/1 "Courier New", monospace; letter-spacing:.06em; text-transform:uppercase;
+    background:var(--ink); color:var(--paper); border:1px solid var(--ink);
+    padding:9px 14px; cursor:pointer;
+  }
+  button.ghost{ background:transparent; color:var(--ink); }
+  button:active{ transform:translateY(1px); }
+  .count{ font:12px "Courier New", monospace; color:var(--faint); }
+
+  footer{
+    flex-shrink:0; text-align:center; padding:18px 5vw 22px;
+    font:11px/1.6 "Courier New", monospace; color:var(--faint);
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="canvas" title="Dollar Sign, after Warhol — denominated by your browser">
+    <div id="glyph" aria-label="currency symbol">$</div>
+  </div>
+
+  <div class="label" aria-live="polite">
+    <div><b>Narrow Symbol</b></div>
+    <div>y-a-v-a, after Andy Warhol, <i>Dollar Sign</i> (1981)</div>
+    <div class="dim">browser internationalization data; pixels on screen &middot; variable (your viewport)</div>
+    <div class="price">Price: <b id="price">—</b></div>
+  </div>
+
+  <div class="plate">
+    <div>your browser speaks <span class="k" id="loc">—</span>, so it hands you <span class="k" id="ccy">—</span> <span id="assumed"></span></div>
+    <div>the magnitude is fixed at <span class="k">1,000,000</span>. only the symbol moves.</div>
+    <div>no exchange rate is present. this page makes no request, so none of these prices can be converted into another, or checked against a bank.</div>
+  </div>
+
+  <div class="controls">
+    <button id="revalue">Revalue</button>
+    <button id="home" class="ghost">Your currency</button>
+    <span class="count" id="count"></span>
+  </div>
+</main>
+
+<footer>
+  CC BY-SA 4.0 &mdash; y-a-v-a (yet another visual artist). After Andy Warhol, <i>Dollar Sign</i> (1981) and J.S.G. Boggs. In the lineage of <i>Art is Money</i> (2013). No cookies, no tracking, no network.
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var MAGNITUDE = 1000000;
+
+  // A curated tour of the world's money. The number never changes; the fortune does.
+  var WORLD = [
+    {loc:"en-US", ccy:"USD", place:"United States"},
+    {loc:"en-GB", ccy:"GBP", place:"United Kingdom"},
+    {loc:"de-DE", ccy:"EUR", place:"Germany"},
+    {loc:"ja-JP", ccy:"JPY", place:"Japan"},
+    {loc:"zh-CN", ccy:"CNY", place:"China"},
+    {loc:"en-IN", ccy:"INR", place:"India"},
+    {loc:"ru-RU", ccy:"RUB", place:"Russia"},        // where Brener drew a $ on a Malevich
+    {loc:"tr-TR", ccy:"TRY", place:"Turkey"},
+    {loc:"pt-BR", ccy:"BRL", place:"Brazil"},
+    {loc:"de-CH", ccy:"CHF", place:"Switzerland"},
+    {loc:"ko-KR", ccy:"KRW", place:"South Korea"},
+    {loc:"en-NG", ccy:"NGN", place:"Nigeria"}
+  ];
+
+  // Rough region -> currency, only to guess the viewer's own money from their language.
+  var REGION_CCY = {
+    US:"USD", GB:"GBP", IE:"EUR", DE:"EUR", FR:"EUR", NL:"EUR", BE:"EUR", ES:"EUR",
+    IT:"EUR", PT:"EUR", AT:"EUR", FI:"EUR", GR:"EUR", LU:"EUR", SK:"EUR", SI:"EUR",
+    EE:"EUR", LV:"EUR", LT:"EUR", CY:"EUR", MT:"EUR", HR:"EUR",
+    JP:"JPY", CN:"CNY", IN:"INR", RU:"RUB", TR:"TRY", BR:"BRL", CH:"CHF",
+    KR:"KRW", NG:"NGN", CA:"CAD", AU:"AUD", NZ:"NZD", MX:"MXN", SE:"SEK",
+    NO:"NOK", DK:"DKK", PL:"PLN", CZ:"CZK", HU:"HUF", ZA:"ZAR", SG:"SGD",
+    HK:"HKD", TW:"TWD", TH:"THB", ID:"IDR", PH:"PHP", VN:"VND", MY:"MYR",
+    AE:"AED", SA:"SAR", IL:"ILS", EG:"EGP", AR:"ARS", CL:"CLP", CO:"COP", UA:"UAH"
+  };
+
+  function currencyDisplayFmt(loc, ccy, opts){
+    // narrowSymbol where supported; degrade gracefully.
+    var base = {style:"currency", currency:ccy, maximumFractionDigits:0};
+    if(opts) for(var k in opts) base[k]=opts[k];
+    try{ base.currencyDisplay="narrowSymbol"; return new Intl.NumberFormat(loc, base); }
+    catch(e){ delete base.currencyDisplay; return new Intl.NumberFormat(loc, base); }
+  }
+
+  function priceString(loc, ccy){
+    try{ return currencyDisplayFmt(loc, ccy).format(MAGNITUDE); }
+    catch(e){ return ccy + " 1,000,000"; }
+  }
+
+  function symbolOf(loc, ccy){
+    try{
+      var parts = currencyDisplayFmt(loc, ccy).formatToParts(0);
+      for(var i=0;i<parts.length;i++){ if(parts[i].type==="currency") return parts[i].value; }
+    }catch(e){}
+    return ccy;
+  }
+
+  // Figure out the viewer's own money, honestly flagged as a guess.
+  function viewerEntry(){
+    var loc = (navigator.languages && navigator.languages[0]) || navigator.language || "en-US";
+    var region = "";
+    try{ region = new Intl.Locale(loc).maximize().region || ""; }catch(e){}
+    if(!region){ var m = /-([A-Za-z]{2})\b/.exec(loc); region = m ? m[1].toUpperCase() : ""; }
+    var ccy = REGION_CCY[region];
+    var assumed = false;
+    if(!ccy){ ccy = "USD"; assumed = true; }
+    return {loc:loc, ccy:ccy, place:"you", assumed:assumed, region:region};
+  }
+
+  var mine = viewerEntry();
+  // The tour always begins with the viewer's own currency.
+  var TOUR = [mine].concat(WORLD);
+  var idx = 0, revalues = 0;
+
+  var glyph = document.getElementById("glyph");
+  var priceEl = document.getElementById("price");
+  var locEl = document.getElementById("loc");
+  var ccyEl = document.getElementById("ccy");
+  var assumedEl = document.getElementById("assumed");
+  var countEl = document.getElementById("count");
+
+  function render(){
+    var e = TOUR[idx];
+    var sym = symbolOf(e.loc, e.ccy);
+    glyph.style.opacity = "0";
+    setTimeout(function(){
+      glyph.textContent = sym;
+      glyph.setAttribute("aria-label", e.ccy + " symbol");
+      glyph.style.opacity = "1";
+    }, 120);
+    priceEl.textContent = priceString(e.loc, e.ccy);
+    locEl.textContent = e.loc;
+    ccyEl.textContent = e.ccy + " (" + sym + ")";
+    assumedEl.textContent = (e === mine && mine.assumed) ? "— assumed; your language names no country" : "";
+    if(revalues === 0){
+      countEl.textContent = "";
+    }else{
+      countEl.textContent = "revalued " + revalues + "×. the number has not changed.";
+    }
+  }
+
+  document.getElementById("revalue").addEventListener("click", function(){
+    idx = (idx + 1) % TOUR.length;
+    revalues++;
+    render();
+  });
+  document.getElementById("home").addEventListener("click", function(){
+    idx = 0; render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-05-narrow-symbol",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Andy Warhol, Dollar Sign (1981)",
+    "J.S.G. Boggs",
+    "Alexander Brener / Malevich defacement (1997)",
+    "y-a-v-a, Art is Money (2013)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism (Intl.NumberFormat narrowSymbol) genuinely enacts the argument: the same magnitude becomes incommensurable fortunes across locales precisely because no exchange rate is present, and the page makes no network request to provide one. Concept and execution collapse cleanly (P1), the readymade of a plumbing API is well-chosen (P2), and the smallest build completes the thought (P3). The double-coding works: a casual viewer sees a currency symbol swap; a literate viewer sees Warhol's Dollar Sign re-nationalized per visitor and the soft fiction of locale-guessed money honestly flagged. Tone is dry and cheerful-cynic, not preachy. The work is materially distinct from Art is Money (which used a static dollar-sign defacement) and from the Warhol hamburger SVG (which benchmarked LLMs).",
+  "reservations": "The 'Revalue' button is a slightly theatrical flourish that risks reading as a gimmick rather than the mechanism itself; the work's strongest version is the per-visit auto-determination of the viewer's currency, with the tour as a quieter secondary mode. The Boggs reference is named but not deeply dramatized in the surface — it lives mostly in the rationale.",
+  "revision_suggestion": "Consider making the viewer's own currency the only default render and demoting the tour to a quieter affordance (e.g., a small 'tour' link rather than a primary button), so the per-visit re-nationalization reads as the work rather than as a feature. Optionally surface the Boggs argument more visibly in the plate text.",
+  "jury_model": "minimax/minimax-m3"
+}
