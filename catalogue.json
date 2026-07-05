@@ -782,5 +782,13 @@
     "source": "Hans (Jean) Arp, Untitled (Collage with Squares Arranged According to the Laws of Chance), 1916-17; Dada chance operations; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Kenneth Martin, Chance and Order / y-a-v-a, A Chance of Order (2021)",
     "mechanism": "crypto.getRandomValues() drives a per-throw canvas collage held only in RAM (no seed, no storage, no network), making the picture physically irreproducible.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-05-anonyme-skulpturen-o-o",
+    "title": "Anonyme Skulpturen (o. O.)",
+    "year": 2026,
+    "source": "Bernd & Hilla Becher, Typologies / Anonyme Skulpturen (Water Towers); The Dusseldorf School of photography; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "Client-side canvas procedurally draws twelve frontally-framed water-tower silhouettes in a fixed grid, held only in RAM (no storage, no seed, no network), so reload destroys the plate irreversibly.",
+    "status": "pending"
   }
 ]

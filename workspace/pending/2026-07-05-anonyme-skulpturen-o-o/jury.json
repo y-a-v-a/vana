@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-07-05-anonyme-skulpturen-o-o",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Bernd & Hilla Becher, Typologies / Anonyme Skulpturen (Water Towers)",
+    "Düsseldorf School of photography",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "A clean, well-targeted work that uses the Becher typological grid as a digital readymade and inverts the photographic archive into an anti-archive. The RAM-only, per-visit generation mechanism (P1) genuinely enacts the Walter Benjamin argument about reproduction and the Becher project's own race against demolition. The chance/order axis (P5) is unusually legible: fixed grid/horizon/frame as order, tank/roof/support morphology as chance. Double-coding works (P7): a tidy typological plate on the surface, a precise argument about photographic fixity underneath. Sits comfortably alongside 'Arranged According to the Laws of Chance' and 'A Chance of Order' without duplicating either, and the Becher/Düsseldorf reference is fresh in the catalogue.",
+  "reservations": "The canvas drawings are recognizable but stylistically modest compared to the conceptual ambition; a more rigorous procedural vocabulary for the towers (silhouette variety, period detail) would strengthen the read. The connection to the prior y-a-v-a catalogue could be made slightly more explicit — e.g. noting that this answers 'A Chance of Order' (2021) on the chance/order axis, or that it extends 'The Original' (2026) on the Benjamin thread. The 'reshoot' button is a charming touch but slightly undercuts the 'irreversible demolition' conceit, since within a session the work is mutable.",
+  "revision_suggestion": "Either remove the reshoot button so the page truly is a one-shot anti-archive (reload = total loss), or lean into it as a deliberate 'the photographer reshoots' gesture with a counter that records its own in-session mortality. Consider enriching the procedural drawing vocabulary — varied cupolas, latticework, tanks on gasholders — so the silhouettes feel less interchangeable and the typological reading is sharper.",
+  "jury_model": "minimax/minimax-m3"
+}

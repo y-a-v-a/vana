@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anonyme Skulpturen (o. O.)</title>
+<style>
+  :root{
+    --ink:#222;
+    --paper:#f3f2ee;
+    --frame:#fff;
+    --line:#cfcdc7;
+    --steel:#d9d9d9;
+    --muted:#6b6a66;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+    padding:clamp(18px,4vw,52px);
+  }
+  header{max-width:900px;margin:0 auto 26px}
+  h1{
+    font-size:clamp(20px,3.4vw,30px);
+    font-weight:600;
+    letter-spacing:.02em;
+    margin:0;
+  }
+  h1 .en{color:var(--muted);font-weight:400}
+  header p{
+    max-width:640px;
+    font-size:14px;
+    color:var(--muted);
+    margin:.7em 0 0;
+  }
+  .plate{
+    max-width:900px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:clamp(14px,2.4vw,30px);
+  }
+  @media(min-width:560px){.plate{grid-template-columns:repeat(3,1fr)}}
+  @media(min-width:760px){.plate{grid-template-columns:repeat(4,1fr)}}
+  figure{
+    margin:0;
+    background:var(--frame);
+    border:1px solid var(--line);
+    padding:10px 10px 8px;
+  }
+  figure canvas{display:block;width:100%;height:auto}
+  figcaption{
+    margin-top:7px;
+    font-size:11px;
+    letter-spacing:.06em;
+    color:var(--muted);
+    text-transform:uppercase;
+    text-align:center;
+  }
+  .controls{
+    max-width:900px;
+    margin:26px auto 0;
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  button{
+    font:inherit;
+    font-size:13px;
+    letter-spacing:.04em;
+    color:var(--ink);
+    background:var(--frame);
+    border:1px solid var(--ink);
+    padding:8px 16px;
+    cursor:pointer;
+  }
+  button:hover{background:var(--ink);color:var(--paper)}
+  .count{font-size:12px;color:var(--muted)}
+  footer{
+    max-width:640px;
+    margin:34px auto 0;
+    font-size:12px;
+    color:var(--muted);
+    border-top:1px solid var(--line);
+    padding-top:16px;
+  }
+  footer p{margin:.6em 0}
+  footer .rights{color:var(--ink)}
+</style>
+</head>
+<body>
+  <header>
+    <h1>Anonyme Skulpturen <span class="en">/ Anonymous Sculptures</span></h1>
+    <p>Wassertürme, o.&nbsp;O., o.&nbsp;J. — water towers, no location, no date. Photographed frontally, at a fixed distance, and gridded so the eye compares.</p>
+  </header>
+
+  <div class="plate" id="plate" aria-label="A twelve-part typology of water towers"></div>
+
+  <div class="controls">
+    <button id="reshoot" type="button">Neue Platte / New plate</button>
+    <span class="count" id="count"></span>
+  </div>
+
+  <footer>
+    <p>Bernd &amp; Hilla Becher travelled Europe for fifty years photographing water towers, gas holders and winding towers before they were demolished, presenting them in deadpan grids: an archive against forgetting.</p>
+    <p>This plate is drawn in your browser at the instant it loads and kept only in memory. It is never stored, never sent, never the same twice. <strong>Reload demolishes every tower here.</strong> None can be re-photographed.</p>
+    <p class="rights"><strong>Anonyme Skulpturen (o.&nbsp;O.)</strong> — y-a-v-a, 2026. After Bernd &amp; Hilla Becher, <em>Typologies / Anonyme Skulpturen</em> (Water Towers). Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>. No cookies, no storage, no network, no tracking.</p>
+  </footer>
+
+<script>
+(function(){
+  var CELLS = 12;
+  var W = 210, H = 280;
+  var GROUND = 252, CX = 105;
+
+  function rand(a,b){ return a + Math.random()*(b-a); }
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function interp(f,base,top,t){ return CX + f*(base + (top-base)*t); }
+
+  // ---- support structures ---------------------------------------------
+  function legFrame(x, baseHalf, topHalf, tankBottom){
+    var count = pick([3,4,5]);
+    var legs = [];
+    for (var i=0;i<count;i++){ legs.push(count===1?0:(-1 + 2*i/(count-1))); }
+    // legs
+    legs.forEach(function(f){
+      x.beginPath();
+      x.moveTo(CX + f*baseHalf, GROUND);
+      x.lineTo(CX + f*topHalf, tankBottom);
+      x.stroke();
+    });
+    // horizontal belts
+    var belts = pick([2,3,4]);
+    for (var j=1;j<=belts;j++){
+      var t = j/(belts+1);
+      var y = GROUND + (tankBottom-GROUND)*t;
+      var hb = baseHalf + (topHalf-baseHalf)*t;
+      x.beginPath(); x.moveTo(CX-hb, y); x.lineTo(CX+hb, y); x.stroke();
+    }
+    // one X-brace per bay
+    for (var k=0;k<legs.length-1;k++){
+      var fL = legs[k], fR = legs[k+1];
+      x.beginPath();
+      x.moveTo(CX+fL*baseHalf, GROUND); x.lineTo(CX+fR*topHalf, tankBottom);
+      x.moveTo(CX+fR*baseHalf, GROUND); x.lineTo(CX+fL*topHalf, tankBottom);
+      x.stroke();
+    }
+  }
+
+  function solidPier(x, baseHalf, topHalf, tankBottom){
+    x.beginPath();
+    x.moveTo(CX-baseHalf, GROUND);
+    x.lineTo(CX-topHalf, tankBottom);
+    x.lineTo(CX+topHalf, tankBottom);
+    x.lineTo(CX+baseHalf, GROUND);
+    x.closePath();
+    x.fill(); x.stroke();
+    // a couple of banding lines
+    var bands = pick([1,2,3]);
+    for (var j=1;j<=bands;j++){
+      var t = j/(bands+1);
+      var y = GROUND + (tankBottom-GROUND)*t;
+      var hb = baseHalf + (topHalf-baseHalf)*t;
+      x.beginPath(); x.moveTo(CX-hb, y); x.lineTo(CX+hb, y); x.stroke();
+    }
+  }
+
+  // ---- tanks -----------------------------------------------------------
+  function roof(x, topY, half){
+    var kind = pick(['flat','cone','dome']);
+    if (kind==='cone'){
+      x.beginPath();
+      x.moveTo(CX-half, topY);
+      x.lineTo(CX, topY - rand(14,30));
+      x.lineTo(CX+half, topY);
+      x.closePath(); x.fill(); x.stroke();
+    } else if (kind==='dome'){
+      x.beginPath();
+      x.ellipse(CX, topY, half, half*rand(0.5,0.8), 0, Math.PI, 0);
+      x.fill(); x.stroke();
+    }
+    if (Math.random() < 0.5){ // finial
+      x.beginPath();
+      x.moveTo(CX, topY - (kind==='cone'?30:6));
+      x.lineTo(CX, topY - (kind==='cone'?42:20));
+      x.stroke();
+    }
+  }
+
+  function tank(x, tankHalf, tankTop, tankBottom){
+    var shape = pick(['cylinder','bulb','cup']);
+    var midY = (tankTop+tankBottom)/2;
+
+    if (shape==='bulb'){
+      x.beginPath();
+      x.ellipse(CX, midY, tankHalf, (tankBottom-tankTop)/2, 0, 0, Math.PI*2);
+      x.fill(); x.stroke();
+      roof(x, tankTop + tankHalf*0.05, tankHalf*0.55);
+    } else if (shape==='cylinder'){
+      x.beginPath();
+      x.rect(CX-tankHalf, tankTop, tankHalf*2, tankBottom-tankTop);
+      x.fill();
+      x.beginPath();
+      x.moveTo(CX-tankHalf, tankTop); x.lineTo(CX-tankHalf, tankBottom);
+      x.moveTo(CX+tankHalf, tankTop); x.lineTo(CX+tankHalf, tankBottom);
+      x.stroke();
+      // rounded underside
+      x.beginPath();
+      x.ellipse(CX, tankBottom, tankHalf, tankHalf*0.26, 0, 0, Math.PI);
+      x.stroke();
+      // top rim
+      x.beginPath();
+      x.ellipse(CX, tankTop, tankHalf, tankHalf*0.22, 0, 0, Math.PI*2);
+      x.fill(); x.stroke();
+      roof(x, tankTop, tankHalf);
+    } else { // cup: wide rim, tapered bottom
+      var topHalf = tankHalf;
+      var botHalf = tankHalf*rand(0.42,0.66);
+      var rimY = tankTop + 8;
+      x.beginPath();
+      x.moveTo(CX-topHalf, rimY);
+      x.lineTo(CX-botHalf, tankBottom);
+      x.lineTo(CX+botHalf, tankBottom);
+      x.lineTo(CX+topHalf, rimY);
+      x.closePath(); x.fill(); x.stroke();
+      x.beginPath();
+      x.ellipse(CX, rimY, topHalf, topHalf*0.24, 0, 0, Math.PI*2);
+      x.fill(); x.stroke();
+      roof(x, rimY - topHalf*0.24, topHalf*0.6);
+    }
+
+    // catwalk line where tank meets support
+    x.beginPath();
+    x.moveTo(CX-tankHalf-4, tankBottom);
+    x.lineTo(CX+tankHalf+4, tankBottom);
+    x.stroke();
+  }
+
+  // ---- one anonymous sculpture ----------------------------------------
+  function drawTower(canvas){
+    var dpr = window.devicePixelRatio || 1;
+    canvas.width = W*dpr; canvas.height = H*dpr;
+    canvas.style.aspectRatio = W + ' / ' + H;
+    var x = canvas.getContext('2d');
+    x.scale(dpr,dpr);
+    x.clearRect(0,0,W,H);
+    x.lineJoin = 'round'; x.lineCap = 'round';
+    x.strokeStyle = '#222'; x.fillStyle = '#d9d9d9'; x.lineWidth = 1.2;
+
+    var tankHalf   = rand(34,58);
+    var tankBottom = rand(118,150);
+    var tankHeight = rand(52,92);
+    var tankTop    = tankBottom - tankHeight;
+
+    var support = pick(['legs','pier','shaft']);
+    if (support==='legs'){
+      legFrame(x, tankHalf*rand(1.15,1.7), tankHalf*rand(0.5,0.8), tankBottom);
+    } else if (support==='pier'){
+      solidPier(x, tankHalf*rand(0.7,1.0), tankHalf*rand(0.45,0.7), tankBottom);
+    } else {
+      solidPier(x, rand(13,20), rand(9,15), tankBottom);
+    }
+
+    tank(x, tankHalf, tankTop, tankBottom);
+
+    // ground line — the fixed frontal horizon shared by every plate
+    x.beginPath(); x.moveTo(18, GROUND); x.lineTo(192, GROUND); x.stroke();
+  }
+
+  // ---- plate assembly --------------------------------------------------
+  var plate = document.getElementById('plate');
+  var countEl = document.getElementById('count');
+  var reshoots = 0;
+
+  function buildPlate(){
+    plate.textContent = '';
+    for (var i=0;i<CELLS;i++){
+      var fig = document.createElement('figure');
+      var cv = document.createElement('canvas');
+      var cap = document.createElement('figcaption');
+      cap.textContent = 'Wasserturm · o. O.';
+      fig.appendChild(cv);
+      fig.appendChild(cap);
+      plate.appendChild(fig);
+      drawTower(cv);
+    }
+    countEl.textContent = reshoots === 0
+      ? '12 anonymous sculptures, held in memory only.'
+      : 'Plate re-shot ' + reshoots + '×. The previous towers no longer exist.';
+  }
+
+  document.getElementById('reshoot').addEventListener('click', function(){
+    reshoots++;
+    buildPlate();
+  });
+
+  buildPlate();
+})();
+</script>
+</body>
+</html>
