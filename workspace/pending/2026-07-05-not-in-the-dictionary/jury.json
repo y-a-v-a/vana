@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-05-not-in-the-dictionary",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Kurt Schwitters, Merz (1919)",
+    "Dada / Zaum / the manifesto neologism",
+    "Marcel Duchamp, infrathin",
+    "y-a-v-a, Modernipsum (2012)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "A strong DNA candidate. The browser's spellchecker is genuinely promoted to institution: the OS's red squiggle becomes the literal act of lexicographic gatekeeping against art's neologisms, and the 'Show me which words you flagged' button — returning zero because the squiggles are painted outside the DOM — is a precise web-mechanic fact weaponised as the argument. Mechanism and concept collapse cleanly (P1/G3), the build is the minimum that completes the thought (P3), the chance/order axis is legible as a fixed invisible rule set, and the conversation with Modernipsum (2012) and Schwitters' Merz gives it a real place in the twenty-year narrative. The self-deprecating sign-off ('It underlines that too') and the closing line ('the correction is applied to you, and the record is kept from you') land the cheerful-cynic voice.",
+  "reservations": "The 'infrathin' framing of DOM-external painting is the work's strongest move but requires the viewer's browser to actually fire spellcheck on contenteditable in a way that produces visible marks — effect may be inconsistent across browsers/OSes and is invisible in headless or print contexts. The surface gag is relatively thin compared to visually punchier catalogue entries, so the literate-viewer reading carries more weight than the casual-viewer reading.",
+  "revision_suggestion": "Consider a short, OS-portable fallback that names the 'outside the DOM' fact in the visible label itself (not only in the button response), so the argument survives even on browsers/print where squiggles don't render — making the platform observation load-bearing rather than contingent.",
+  "jury_model": "minimax/minimax-m3"
+}

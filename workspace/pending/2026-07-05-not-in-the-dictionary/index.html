@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Not in the Dictionary — y-a-v-a</title>
+<style>
+  :root{ --paper:#f6f4ef; --ink:#181613; --faint:#8b8578; --rule:#d9d4c7; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; background:var(--paper); color:var(--ink); }
+  body{
+    font:400 clamp(21px,3.4vw,30px)/1.5 Georgia,"Times New Roman",serif;
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:6vmin 6vw;
+    /* the only red on this page belongs to the machine, not to me */
+  }
+  main{ max-width:44rem; width:100%; }
+  /* the work: the browser is invited to correct it */
+  #manifesto{
+    outline:none; caret-color:var(--ink);
+    -webkit-user-modify:read-write; text-wrap:pretty;
+  }
+  #manifesto p{ margin:0 0 1.1em; }
+  #manifesto .sign{ font-style:italic; color:var(--faint); font-size:.7em; }
+  .label{
+    margin-top:2.4em; padding-top:1.2em; border-top:1px solid var(--rule);
+    font:400 13px/1.55 ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    color:var(--faint);
+  }
+  .label b{ color:var(--ink); font-weight:600; }
+  .label dl{ display:grid; grid-template-columns:auto 1fr; gap:.15em 1.1em; margin:.9em 0 0; }
+  .label dt{ color:var(--ink); }
+  .probe{ margin-top:1em; }
+  .probe button{
+    font:inherit; color:var(--ink); background:transparent;
+    border:1px solid var(--rule); border-radius:2px; padding:.4em .7em; cursor:pointer;
+  }
+  .probe button:hover{ border-color:var(--faint); }
+  .probe output{ display:block; margin-top:.7em; min-height:1.4em; }
+  a{ color:inherit; }
+</style>
+</head>
+<body>
+<main>
+  <!-- The manifesto is editable and spellchecked. Its neologisms are art's; the
+       red underline beneath them is the browser's, drawn in a colour I never set. -->
+  <article id="manifesto" contenteditable="true" spellcheck="true" lang="en"
+           aria-label="An editable manifesto the browser is spellchecking">
+    <p>Merz. Zaum. Rayonism. Neoplasticism. Tachisme. Merzbau. Infrathin.
+       Maleglitch. Modernipsum. These are words art added to the language.</p>
+    <p>Your browser was not told. Where it disagrees it draws a red line under the
+       word — quietly, in a colour I did not choose, from a dictionary you did not
+       pick and cannot open. This whole page is editable. The machine is checking
+       your spelling. Correct me.</p>
+    <p class="sign">— y-a-v-a. It underlines that too.</p>
+  </article>
+
+  <section class="label" contenteditable="false">
+    <b>Not in the Dictionary</b>, 2026 · y-a-v-a<br>
+    Medium: a <code>contenteditable</code> element, <code>spellcheck="true"</code>, and your operating system's dictionary. Pixels on screen.
+    <dl>
+      <dt>After</dt><dd>Kurt Schwitters, <i>Merz</i> (1919) — a nonsense fragment cut from “Commerzbank,” declared a movement.</dd>
+      <dt>With</dt><dd>Dada · Zaum · the manifesto neologism; Marcel Duchamp, <i>infrathin</i>.</dd>
+      <dt>Answers</dt><dd>y-a-v-a, <i>Modernipsum</i> (2012).</dd>
+      <dt>License</dt><dd>CC BY-SA 4.0. No cookies, no trackers, no data leaves your machine.</dd>
+    </dl>
+    <div class="probe">
+      <button id="ask" type="button">Show me which words you flagged</button>
+      <output id="answer" aria-live="polite"></output>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  // Put the caret in the text so the spellchecker starts marking. No network,
+  // no storage, no reading of what it condemns — there is no such API.
+  var m = document.getElementById('manifesto');
+  try{
+    m.focus();
+    var r = document.createRange(); r.selectNodeContents(m); r.collapse(true);
+    var s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  }catch(e){}
+
+  // The one live argument: the page cannot see its own corrections. The red
+  // squiggles are painted by the OS text layer, outside the DOM — no node, no
+  // attribute, no computed style records them. This search returns nothing.
+  document.getElementById('ask').addEventListener('click', function(){
+    var hits = document.querySelectorAll(
+      '[data-spellerror],[spellcheck-error],[aria-invalid="spelling"],mark,.misspelled,.spelling-error'
+    ).length;
+    document.getElementById('answer').textContent =
+      hits + ' nodes. The red lines are painted by your operating system, outside this document. ' +
+      'There is no way to read a single one. The correction is applied to you, and the record is kept from you.';
+  });
+})();
+</script>
+</body>
+</html>

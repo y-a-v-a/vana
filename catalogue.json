@@ -806,5 +806,13 @@
     "source": "Dutch vanitas still life; Harmen Steenwyck; Pieter Claesz; the Battery Status API and its removal for fingerprinting; Felix Gonzalez-Torres, \"Untitled\" (Perfect Lovers)",
     "mechanism": "navigator.getBattery() level/charging events drive a canvas candle flame; the anti-tracking removal of the API in Firefox/Safari leaves the vanitas unable to read your device's mortality.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-05-not-in-the-dictionary",
+    "title": "Not in the Dictionary",
+    "year": 2026,
+    "source": "Kurt Schwitters, Merz (1919); Dada / Zaum / the manifesto neologism; Marcel Duchamp, infrathin; y-a-v-a, Modernipsum (2012)",
+    "mechanism": "A live contenteditable element with spellcheck='true': the OS spellchecker paints red squiggles under art's neologisms — marks rendered outside the DOM that expose nothing to JavaScript, so a real DOM search for the flags returns zero.",
+    "status": "pending"
   }
 ]
