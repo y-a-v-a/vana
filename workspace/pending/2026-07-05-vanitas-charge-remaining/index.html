@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vanitas (Charge Remaining)</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #08070a; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    color: #b9ad96;
+    overflow: hidden;
+  }
+  #scene { display: block; width: 100vw; height: 100vh; }
+
+  .label {
+    position: fixed;
+    left: max(18px, env(safe-area-inset-left));
+    bottom: max(18px, env(safe-area-inset-bottom));
+    max-width: min(30rem, 78vw);
+    font-size: 0.86rem;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 3px #000;
+    pointer-events: none;
+  }
+  .label h1 {
+    margin: 0 0 0.35em;
+    font-size: 1.05rem;
+    font-weight: normal;
+    font-variant: small-caps;
+    letter-spacing: 0.14em;
+    color: #d8cbaf;
+  }
+  .label .quote { font-style: italic; color: #8f8571; }
+  .label .read {
+    color: #e9c98a;
+    font-variant-numeric: tabular-nums;
+  }
+  .label .dim { color: #6d6553; }
+
+  footer {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(14px, env(safe-area-inset-bottom));
+    max-width: min(22rem, 60vw);
+    text-align: right;
+    font-size: 0.66rem;
+    line-height: 1.5;
+    color: #58513f;
+    text-shadow: 0 1px 2px #000;
+    pointer-events: none;
+  }
+  footer a { color: #6f6650; pointer-events: auto; }
+</style>
+</head>
+<body>
+  <canvas id="scene" aria-label="A single candle in the dark. Its flame is the remaining charge of your device."></canvas>
+
+  <div class="label">
+    <h1>Vanitas</h1>
+    <div class="read" id="readout">reading your device&hellip;</div>
+    <div class="quote">Vanitas vanitatum, omnia vanitas. &mdash; Ecclesiastes 1:2</div>
+  </div>
+
+  <footer>
+    <span id="medium">medium: the charge remaining in your device</span><br>
+    y-a-v-a &middot; after the Dutch <em>vanitas</em> still life
+    (Harmen Steenwyck, Pieter Claesz)<br>
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+    &middot; no cookies &middot; no tracking &middot; nothing leaves this page
+  </footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var cv = document.getElementById("scene");
+  var ctx = cv.getContext("2d");
+  var readout = document.getElementById("readout");
+
+  var reduced = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // --- device life ---------------------------------------------------------
+  // life in [0,1] scales the flame; the Battery Status API supplies it live.
+  // Firefox and Safari removed this API to stop advertisers fingerprinting you,
+  // so on those browsers the vanitas is denied its own memento mori.
+  var life = 0.55;        // a borrowed, unmeasured middle when unsupported
+  var charging = false;
+  var supported = false;
+
+  function label() {
+    if (supported) {
+      readout.innerHTML =
+        "charge remaining: <b>" + Math.round(life * 100) + "%</b>" +
+        " &middot; " + (charging ? "on the mains (death deferred)"
+                                 : "running down");
+    } else {
+      readout.innerHTML =
+        "charge remaining: <span class='dim'>withheld by this browser " +
+        "(the Battery API was removed to prevent tracking)</span>";
+    }
+  }
+
+  if (navigator.getBattery) {
+    navigator.getBattery().then(function (b) {
+      supported = true;
+      function upd() {
+        life = b.level;
+        charging = b.charging;
+        label();
+        if (reduced) draw(0);
+      }
+      b.addEventListener("levelchange", upd);
+      b.addEventListener("chargingchange", upd);
+      upd();
+    }).catch(label);
+  } else {
+    label();
+  }
+
+  // --- geometry ------------------------------------------------------------
+  var W = 0, H = 0, dpr = 1;
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    cv.width = Math.floor(W * dpr);
+    cv.height = Math.floor(H * dpr);
+    cv.style.width = W + "px";
+    cv.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (reduced) draw(0);
+  }
+  window.addEventListener("resize", resize);
+
+  // --- rendering -----------------------------------------------------------
+  function drawFlame(cx, baseY, w, h, a) {
+    // ambient glow — the only light in the room
+    var gg = ctx.createRadialGradient(cx, baseY - h * 0.5, 0,
+                                      cx, baseY - h * 0.5, h * 3.2);
+    gg.addColorStop(0, "rgba(255,186,74," + (0.55 * a) + ")");
+    gg.addColorStop(0.35, "rgba(255,120,26," + (0.14 * a) + ")");
+    gg.addColorStop(1, "rgba(255,120,26,0)");
+    ctx.fillStyle = gg;
+    ctx.beginPath();
+    ctx.arc(cx, baseY - h * 0.5, h * 3.2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // outer flame (orange teardrop)
+    ctx.fillStyle = "rgba(255,138,30," + a + ")";
+    teardrop(cx, baseY, w, h);
+    // inner flame (yellow)
+    ctx.fillStyle = "rgba(255,214,120," + a + ")";
+    teardrop(cx, baseY - h * 0.06, w * 0.6, h * 0.72);
+    // core (near-white, blue-footed)
+    ctx.fillStyle = "rgba(120,150,255," + (0.9 * a) + ")";
+    teardrop(cx, baseY, w * 0.34, h * 0.30);
+    ctx.fillStyle = "rgba(255,250,235," + a + ")";
+    teardrop(cx, baseY - h * 0.10, w * 0.28, h * 0.42);
+  }
+
+  function teardrop(cx, baseY, w, h) {
+    ctx.beginPath();
+    ctx.moveTo(cx, baseY);
+    ctx.quadraticCurveTo(cx + w, baseY - h * 0.55, cx, baseY - h);
+    ctx.quadraticCurveTo(cx - w, baseY - h * 0.55, cx, baseY);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+
+    var unit = Math.min(W, H);
+    var cx = W * 0.5;
+    var tableY = H * 0.74;
+    var candleW = unit * 0.085;
+    var candleTop = H * 0.46;
+
+    // effective life; on the mains the flame steadies and reaches higher
+    var eff = life;
+    if (charging) eff = Math.min(1, life + 0.12);
+
+    // flicker: layered sines + a little chance; a low candle gutters
+    var gutter = (1 - eff) * (1 - eff);
+    var wob = Math.sin(t / 210) * 0.05 +
+              Math.sin(t / 83) * 0.03 +
+              (Math.random() - 0.5) * (0.05 + gutter * 0.35);
+    if (charging) wob *= 0.5;
+
+    var maxH = unit * 0.17;
+    var hFactor = 0.16 + 0.84 * eff;
+    var h = maxH * hFactor * (1 + wob);
+    if (h < maxH * 0.05) h = maxH * 0.05;
+    var w = candleW * (0.34 + 0.10 * eff);
+    var alpha = Math.max(0.15, Math.min(1, eff * 1.4 + 0.15));
+
+    var flameBaseY = candleTop - candleW * 0.16;
+    var sway = Math.sin(t / 170) * candleW * 0.06 * (0.4 + gutter);
+
+    // table pool of light
+    var pool = ctx.createRadialGradient(cx, tableY, 0, cx, tableY, unit * 0.5);
+    pool.addColorStop(0, "rgba(90,60,28," + (0.5 * alpha) + ")");
+    pool.addColorStop(1, "rgba(90,60,28,0)");
+    ctx.fillStyle = pool;
+    ctx.fillRect(0, tableY - unit * 0.5, W, unit);
+
+    // candle body
+    var body = ctx.createLinearGradient(cx - candleW / 2, 0, cx + candleW / 2, 0);
+    body.addColorStop(0, "#2c2519");
+    body.addColorStop(0.5, "#c9bfa4");
+    body.addColorStop(0.55, "#e7ddc4");
+    body.addColorStop(1, "#3a3121");
+    ctx.fillStyle = body;
+    roundRect(cx - candleW / 2, candleTop, candleW, tableY - candleTop, candleW * 0.14);
+    ctx.fill();
+
+    // molten top + drip
+    ctx.fillStyle = "#efe6cd";
+    ctx.beginPath();
+    ctx.ellipse(cx, candleTop, candleW / 2, candleW * 0.16, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "rgba(233,222,196,0.85)";
+    ctx.beginPath();
+    ctx.moveTo(cx - candleW * 0.42, candleTop);
+    ctx.quadraticCurveTo(cx - candleW * 0.52, candleTop + unit * 0.05,
+                         cx - candleW * 0.40, candleTop + unit * 0.075);
+    ctx.quadraticCurveTo(cx - candleW * 0.30, candleTop + unit * 0.04,
+                         cx - candleW * 0.32, candleTop);
+    ctx.fill();
+
+    // wick
+    ctx.strokeStyle = "#1a140c";
+    ctx.lineWidth = Math.max(1, candleW * 0.05);
+    ctx.beginPath();
+    ctx.moveTo(cx, candleTop);
+    ctx.lineTo(cx, flameBaseY);
+    ctx.stroke();
+
+    // smoke when the light is nearly gone
+    if (eff < 0.18) {
+      ctx.strokeStyle = "rgba(160,160,170," + (0.18 * (0.18 - eff) / 0.18) + ")";
+      ctx.lineWidth = candleW * 0.10;
+      ctx.beginPath();
+      ctx.moveTo(cx + sway, flameBaseY - h);
+      ctx.quadraticCurveTo(cx + sway + Math.sin(t / 300) * unit * 0.04,
+                           flameBaseY - h - unit * 0.06,
+                           cx + sway - Math.sin(t / 260) * unit * 0.03,
+                           flameBaseY - h - unit * 0.13);
+      ctx.stroke();
+    }
+
+    drawFlame(cx + sway, flameBaseY, w, h, alpha);
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  resize();
+  if (reduced) {
+    draw(0);
+  } else {
+    (function loop(t) { draw(t); requestAnimationFrame(loop); })(0);
+  }
+})();
+</script>
+</body>
+</html>

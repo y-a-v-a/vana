@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-07-05-vanitas-charge-remaining",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 44,
+  "verdict": "strong",
+  "references_named": [
+    "Dutch vanitas still life (Harmen Steenwyck, Pieter Claesz)",
+    "Battery Status API and its removal for fingerprinting",
+    "Felix Gonzalez-Torres, \"Untitled\" (Perfect Lovers)",
+    "Ecclesiastes 1:2 (Vanitas vanitatum)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "A textbook P1 piece: the flame literally is navigator.getBattery().level — the mechanism enacts the vanitas rather than illustrating it, and removing the API call removes the concept. Double-coding is unusually crisp: the surface gag (candle that mirrors your phone's charge) carries a sharper literate reading in which the privacy ethic the practice already lives by has, on Firefox/Safari, denied the vanitas its own memento mori — the one API honest enough to tell you you're dying was killed for being too good at watching you. Restraint is exemplary: the unsupported state is attested, not explained; the Ecclesiastes quote sets the register; the footer labels the medium as 'the charge remaining in your device.'",
+  "reservations": "The piece leans on a hardware API that Chromium is also reportedly deprecating in some contexts (the WebKit/Blink Battery API story has shifted over the years); a note attesting current support would harden the work. The reference to Perfect Lovers (Reset) is honestly handled but the two works will inevitably be read as a pair — the candidate may want to lean into that pairing more explicitly rather than only distinguishing itself.",
+  "revision_suggestion": "Consider a one-line note in the label or footer about the current cross-browser state of the Battery Status API (and any planned deprecation) so the 'withheld' branch remains legible as the web platform moves; this also lets the work remain itself if the API disappears entirely, by shifting the argument from 'denied by the privacy ethic' to 'lost to the platform.'",
+  "jury_model": "minimax/minimax-m3"
+}

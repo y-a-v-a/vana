@@ -798,5 +798,13 @@
     "source": "Andy Warhol, Dollar Sign (1981); J.S.G. Boggs (hand-drawn currency); Alexander Brener / Malevich defacement (1997); y-a-v-a, Art is Money (2013)",
     "mechanism": "Intl.NumberFormat currency formatting (narrowSymbol) denominates a constant integer in the viewer's locale-guessed currency, live and offline, so value becomes pure typography with no rate to reconcile it.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-05-vanitas-charge-remaining",
+    "title": "Vanitas (Charge Remaining)",
+    "year": 2026,
+    "source": "Dutch vanitas still life; Harmen Steenwyck; Pieter Claesz; the Battery Status API and its removal for fingerprinting; Felix Gonzalez-Torres, \"Untitled\" (Perfect Lovers)",
+    "mechanism": "navigator.getBattery() level/charging events drive a canvas candle flame; the anti-tracking removal of the API in Firefox/Safari leaves the vanitas unable to read your device's mortality.",
+    "status": "pending"
   }
 ]
