@@ -838,5 +838,13 @@
     "source": "Yoko Ono, Grapefruit instruction pieces (1964); Lucy Lippard, Six Years: The Dematerialization of the Art Object (1966-72)",
     "mechanism": "navigator.vibrate performs a crypto-random per-visit score gated behind a user gesture; feature detection decides whether the work exists at all; nothing rendered as the work, no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-06-in-praise-of-laziness",
+    "title": "In Praise of Laziness",
+    "year": 2026,
+    "source": "Mladen Stilinovic, In Praise of Laziness (1993); Lee Lozano, General Strike Piece (1969); Marcel Duchamp / the readymade",
+    "mechanism": "requestIdleCallback paints a stroke as long as deadline.timeRemaining(); didTimeout ticks (busy main thread) add no paint, so interaction starves the work.",
+    "status": "pending"
   }
 ]

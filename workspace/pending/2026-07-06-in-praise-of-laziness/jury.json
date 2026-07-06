@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-06-in-praise-of-laziness",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Mladen Stilinović, In Praise of Laziness (1993)",
+    "Lee Lozano, General Strike Piece (1969)",
+    "Marcel Duchamp / the readymade"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism enacts the idea with real precision: requestIdleCallback is the readymade, and the painting literally grows only when the browser confesses idle time. Concept and execution collapse cleanly (P1), the chance/order axis is legible (timing handed to the scheduler, layout strictly row-by-row), and the double-coding works — surface gag for the casual viewer, attention-economy critique for the literate one. The graceful fallback for browsers that refuse to admit idleness is a strong tonal move that turns a technical limitation into a conceptual statement. The work is materially distinct from the catalogue's attention-measurement pieces (1000 Hours of Staring, The Artist Is Present) by inverting the argument: it measures the absence of attention via CPU scheduling rather than presence via visibility/focus events.",
+  "reservations": "The data plate with six metrics borders on over-building for P3's minimal-gesture mandate, though it serves the Haacke-style confession well. The theme of attention/idleness as medium has been visited in the catalogue, so the novelty sits in the specific mechanism (requestIdleCallback) rather than the territory.",
+  "revision_suggestion": "Consider trimming the data plate to three or four metrics to tighten the minimal-gesture discipline, or make the plate itself subject to the same idle-gating so it only updates when the painting is being made.",
+  "jury_model": "minimax/minimax-m3"
+}

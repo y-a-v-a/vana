@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>In Praise of Laziness</title>
+<style>
+  :root{
+    --paper:#e9e6dd; --ink:#26251f; --faint:#8a877c; --line:#c9c5b8;
+    --hair: rgba(38,37,31,.12);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace}
+  body{min-height:100vh;display:flex;flex-direction:column;align-items:center;
+    padding:28px 18px 60px;gap:18px}
+  header{max-width:920px;width:100%;text-align:center}
+  h1{font-size:clamp(20px,4.4vw,34px);font-weight:600;margin:0 0 4px;letter-spacing:.01em}
+  .sub{color:var(--faint);font-size:13px;margin:0}
+  .stage{position:relative;width:100%;max-width:920px}
+  canvas{display:block;width:100%;height:auto;background:var(--paper);
+    border:1px solid var(--line);box-shadow:0 1px 0 #fff inset}
+  .plate{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:2px 18px;max-width:920px;width:100%;font-size:12.5px;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:10px 0}
+  .plate div{display:flex;justify-content:space-between;gap:10px;padding:2px 0}
+  .plate b{font-weight:600}
+  .k{color:var(--faint)}
+  .status{max-width:920px;width:100%;text-align:center;font-size:13px;min-height:1.2em}
+  .status.busy{color:#8a3b2e}
+  .status.idle{color:#3d5c3a}
+  label.wall{max-width:920px;width:100%;font-size:12px;color:var(--faint);
+    line-height:1.55;border-top:1px solid var(--line);padding-top:12px}
+  label.wall b{color:var(--ink);font-weight:600}
+  a{color:inherit}
+  .none{max-width:920px;color:#8a3b2e;font-size:14px;line-height:1.6}
+</style>
+</head>
+<body>
+  <header>
+    <h1>In Praise of Laziness</h1>
+    <p class="sub">A painting made only while you do nothing.</p>
+  </header>
+
+  <div class="stage">
+    <canvas id="c" width="1840" height="1160" aria-label="A field of graphite strokes, each one the length of a moment the browser had nothing to do."></canvas>
+  </div>
+
+  <div class="status" id="status">&nbsp;</div>
+
+  <div class="plate" id="plate">
+    <div><span class="k">idle offered, this moment</span><b id="tick">—</b></div>
+    <div><span class="k">idleness accumulated</span><b id="total">0.0 s</b></div>
+    <div><span class="k">field painted</span><b id="pct">0.0%</b></div>
+    <div><span class="k">moments of stillness</span><b id="ticks">0</b></div>
+    <div><span class="k">moments you kept it working</span><b id="busy">0</b></div>
+    <div><span class="k">state</span><b id="state">waiting</b></div>
+  </div>
+
+  <label class="wall">
+    <b>In Praise of Laziness</b> — y-a-v-a, 2026. Medium: pixels on screen, painted in
+    <code>requestIdleCallback</code>. After Mladen Stilinović, <i>In Praise of Laziness</i> (1993):
+    &ldquo;There is no art without laziness.&rdquo; With a nod to Lee Lozano, <i>General Strike Piece</i>
+    (1969), and to Marcel Duchamp, who preferred breathing to working. Each stroke is exactly as long as a
+    stretch of time your browser confessed it had nothing to do; the scheduler built to harvest your spare
+    cycles for productivity is left to make a picture out of unproductivity instead. Scroll, click or type
+    and the machine is put back to work — the painting starves. Leave it alone and it grows. Nothing is
+    stored, sent, or counted anywhere but here; reload wipes the field. No cookies, no trackers.
+    <b>Licence:</b> <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+  </label>
+
+<script>
+(function(){
+  "use strict";
+  var ric = window.requestIdleCallback;
+  var statusEl = document.getElementById("status");
+  var stateEl  = document.getElementById("state");
+
+  if (typeof ric !== "function"){
+    // Some browsers refuse to admit they are ever idle.
+    var stage = document.querySelector(".stage");
+    stage.innerHTML = '<p class="none">This browser grants no idle time — it will not confess to a single '+
+      'moment of doing nothing, so the painting cannot be made. Laziness, here, is unavailable. '+
+      'Try a browser that supports <code>requestIdleCallback</code>.</p>';
+    statusEl.textContent = "no idle time offered";
+    stateEl.textContent = "unavailable";
+    return;
+  }
+
+  var cv = document.getElementById("c");
+  var ctx = cv.getContext("2d");
+  var W = cv.width, H = cv.height;
+
+  // Layout: horizontal graphite strokes, filling the field row by row.
+  var ROW = 10;                 // px per row
+  var PAD = 16;                 // margin inside the field
+  var PXPERMS = 1.0;            // 1 ms of confessed idleness -> 1 px of ink
+  var x = PAD, y = PAD;
+  var rowRight = W - PAD;
+  var totalIdleMs = 0, idleTicks = 0, busyTicks = 0, done = false;
+  var totalInk = 0, capacity = (Math.floor((H - 2*PAD) / ROW)) * (W - 2*PAD);
+
+  function two(n){ return (Math.round(n*10)/10).toFixed(1); }
+
+  function paint(ms){
+    // Draw a graphite stroke of length proportional to the idle time offered.
+    var remaining = ms * PXPERMS;
+    while (remaining > 0 && !done){
+      var avail = rowRight - x;
+      var seg = Math.min(remaining, avail);
+      // slight tonal jitter — the only chance in an otherwise ordered field
+      var g = 28 + Math.floor(Math.random()*22);
+      ctx.fillStyle = "rgba("+g+","+(g-1)+","+(g-6)+",0.9)";
+      ctx.fillRect(x, y, seg, ROW - 3);
+      x += seg; remaining -= seg; totalInk += seg;
+      if (x >= rowRight - 0.5){
+        x = PAD; y += ROW;
+        if (y + ROW > H - PAD){ done = true; }
+      }
+    }
+  }
+
+  function update(offeredMs, busy){
+    document.getElementById("tick").textContent  = busy ? "0 ms (working)" : two(offeredMs)+" ms";
+    document.getElementById("total").textContent = two(totalIdleMs/1000)+" s";
+    document.getElementById("pct").textContent   = two(Math.min(100,100*totalInk/capacity))+"%";
+    document.getElementById("ticks").textContent = idleTicks.toLocaleString();
+    document.getElementById("busy").textContent  = busyTicks.toLocaleString();
+    if (done){
+      statusEl.className = "status idle";
+      statusEl.textContent = "Finished. It was painted entirely by your leaving it alone.";
+      stateEl.textContent = "finished";
+      return;
+    }
+    if (busy){
+      statusEl.className = "status busy";
+      statusEl.textContent = "You are keeping it working — no idle time, no paint.";
+      stateEl.textContent = "starved (busy)";
+    } else {
+      statusEl.className = "status idle";
+      statusEl.textContent = "Doing nothing. The painting is being made.";
+      stateEl.textContent = "painting (idle)";
+    }
+  }
+
+  function loop(deadline){
+    if (done){ update(0,false); return; }
+    if (deadline.didTimeout){
+      // Forced to run with no idle budget: the machine was made to work. No paint.
+      busyTicks++;
+      update(0, true);
+    } else {
+      var ms = deadline.timeRemaining();   // the idleness the browser is willing to give
+      if (ms > 0.05){
+        idleTicks++;
+        totalIdleMs += ms;
+        paint(ms);
+        update(ms, false);
+      } else {
+        busyTicks++;
+        update(0, true);
+      }
+    }
+    ric(loop, {timeout: 900});
+  }
+
+  ric(loop, {timeout: 900});
+})();
+</script>
+</body>
+</html>
