@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<title>Touch Piece (Do Not Look)</title>
+<style>
+  :root { --ink:#161514; --paper:#f4f2ec; --faint:#8a857c; }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#eceae4; --paper:#111110; --faint:#6f6b63; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100%; padding: 7vh 24px; text-align: center;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 34rem; width: 100%; }
+  h1 { font-size: 1.05rem; font-weight: 600; letter-spacing: .02em; margin: 0 0 .2rem; }
+  .sub { color: var(--faint); font-size: .82rem; margin: 0 0 2.4rem; }
+  .instruction {
+    font-size: 1.5rem; line-height: 1.35; font-weight: 300; margin: 0 0 2.2rem;
+    text-wrap: balance;
+  }
+  button {
+    font: inherit; font-size: 1rem; font-weight: 500; color: var(--paper);
+    background: var(--ink); border: none; border-radius: 999px;
+    padding: .85em 2.2em; cursor: pointer; letter-spacing: .01em;
+    transition: opacity .15s ease, transform .05s ease;
+  }
+  button:hover { opacity: .86; }
+  button:active { transform: translateY(1px); }
+  button:disabled { opacity: .35; cursor: not-allowed; }
+  .again { display: block; margin: 1rem auto 0; background: none; color: var(--faint);
+    border: 1px solid currentColor; padding: .5em 1.4em; font-size: .8rem; }
+  .again:hover { color: var(--ink); opacity: 1; }
+  #status { min-height: 1.6em; margin-top: 1.9rem; color: var(--faint); font-size: .86rem; }
+  #pulse { display: inline-block; letter-spacing: .5em; opacity: 0; transition: opacity .12s;
+    font-size: 1.1rem; color: var(--ink); }
+  #pulse.on { opacity: 1; }
+  .absent { color: var(--faint); font-size: 1.02rem; line-height: 1.5; }
+  .absent strong { color: var(--ink); font-weight: 600; }
+  footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    padding: 12px 18px; font-size: 11px; line-height: 1.5; color: var(--faint);
+    text-align: center;
+  }
+  footer a { color: inherit; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Touch Piece</h1>
+  <p class="sub">Do not look at the work.</p>
+
+  <!-- Shown when the device can perform the piece -->
+  <div id="present" class="hidden">
+    <p class="instruction">Hold the device in your hand.<br>Press once. Feel the work. It is only there while it lasts.</p>
+    <button id="feel" type="button">Feel it</button>
+    <button id="again" class="again hidden" type="button">Feel a new one</button>
+    <p id="status" aria-live="polite"><span id="pulse" aria-hidden="true">· · ·</span></p>
+  </div>
+
+  <!-- Shown when the device has no vibration motor / refuses (desktop, Safari, iPhone) -->
+  <div id="absent" class="hidden">
+    <p class="instruction absent">Your device has no hand to hold it,<br>and no way to tremble.</p>
+    <p class="absent"><strong>For you, this work does not exist.</strong><br>
+      It is not hidden on this page. There is nothing to reveal, download or keep.
+      It lives only in the vibration motor of a phone held in a hand — and only while pressed.</p>
+  </div>
+</main>
+
+<footer>
+  <em>Touch Piece (Do Not Look)</em>, 2026 — y-a-v-a.
+  After Yoko Ono, <em>Grapefruit</em> instruction pieces (1964), and Lucy Lippard,
+  <em>Six Years: The Dematerialization of the Art Object</em> (1966–72).
+  The work is the haptic pulse itself: <code>navigator.vibrate</code>, generated per visit, drawn nowhere.
+  No cookies · no tracking · no storage · no network.
+  Licensed <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="license">CC BY-NC 4.0</a>.
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var canVibrate = ("vibrate" in navigator) && typeof navigator.vibrate === "function";
+
+  var present = document.getElementById("present");
+  var absent  = document.getElementById("absent");
+
+  if (!canVibrate) {
+    // The medium's absence is the truthful state of the work for this viewer.
+    absent.classList.remove("hidden");
+    return;
+  }
+  present.classList.remove("hidden");
+
+  var feelBtn  = document.getElementById("feel");
+  var againBtn = document.getElementById("again");
+  var status   = document.getElementById("status");
+  var pulse    = document.getElementById("pulse");
+
+  // Per-visit chance score, held only in this closure. Never stored, never sent, never drawn.
+  // Reload mints a new, unrepeatable work; leave and it is gone.
+  function mintScore() {
+    var n = 9 + rnd(15);              // 9–23 alternating vibrate/pause segments
+    var out = [];
+    for (var i = 0; i < n; i++) {
+      // even index = vibration (on), odd index = silence (off)
+      out.push((i % 2 === 0) ? (30 + rnd(340)) : (40 + rnd(300)));
+    }
+    return out;
+  }
+
+  // Uniform-ish random in [0, max) from crypto entropy — no Math.random, no seed to recover.
+  function rnd(max) {
+    var a = new Uint32Array(1);
+    crypto.getRandomValues(a);
+    return Math.floor(a[0] / 4294967296 * max);
+  }
+
+  var score = mintScore();
+  var timers = [];
+
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+  function play() {
+    clearTimers();
+    var ok = false;
+    try { ok = navigator.vibrate(score); } catch (e) { ok = false; }
+
+    againBtn.classList.remove("hidden");
+
+    if (ok === false) {
+      // Some browsers report the API but perform nothing (no motor, or not held).
+      status.innerHTML = '';
+      status.appendChild(document.createTextNode(
+        "Your browser accepted the work but performed no tremor. " +
+        "Only a phone with a motor, in a hand, truly holds it."));
+      return;
+    }
+
+    // Attest the invisible event on screen without depicting the work itself.
+    var total = score.reduce(function (s, v) { return s + v; }, 0);
+    status.innerHTML = '';
+    status.appendChild(pulse);
+    pulse.classList.add("on");
+    // Blink the marks in loose sympathy with the pulse; then confirm it is over.
+    score.forEach(function (dur, i) {
+      var at = score.slice(0, i).reduce(function (s, v) { return s + v; }, 0);
+      timers.push(setTimeout(function () {
+        pulse.textContent = (i % 2 === 0) ? "●  ●  ●" : "·  ·  ·";
+      }, at));
+    });
+    timers.push(setTimeout(function () {
+      pulse.classList.remove("on");
+      status.appendChild(document.createTextNode(" It is over. Nothing was kept."));
+    }, total + 120));
+  }
+
+  feelBtn.addEventListener("click", play);
+
+  againBtn.addEventListener("click", function () {
+    score = mintScore();      // a wholly new, unrepeatable work
+    play();
+  });
+
+  // The work requires your presence. Look away and it stops.
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { try { navigator.vibrate(0); } catch (e) {} clearTimers(); }
+  });
+})();
+</script>
+</body>
+</html>

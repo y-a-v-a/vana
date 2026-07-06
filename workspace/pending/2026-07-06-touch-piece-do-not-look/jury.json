@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-07-06-touch-piece-do-not-look",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 5,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 44,
+  "verdict": "strong",
+  "references_named": [
+    "Yoko Ono, Grapefruit instruction pieces (1964)",
+    "Lucy Lippard, Six Years: The Dematerialization of the Art Object (1966-72)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The work is a textbook execution of P1: navigator.vibrate is the entire concept, the medium literally is the idea. The branching absence state ('for you, this work does not exist') turns a feature-detection limitation into the argument, which is properly P3-small and P2-readymade. The Ono + Lippard lineage is named cleanly and the crypto-random per-visit score holds the chance end of the axis (P5). The 'It is over. Nothing was kept.' line and the three-dot attestation land the wit (P9) and carry the P6/P7 market critique underneath (cannot be photographed, screenshotted, sold). G6 holds: distinct from Oral Communication (Web Speech), Unreachable (WeakRef), The Unkept (Page Visibility) — the haptic channel via navigator.vibrate is genuinely new material in the catalogue.",
+  "reservations": "The 'For you, this work does not exist' line is on the edge of over-explaining; Ono's original instruction pieces refused to explain themselves at all, and a touch more restraint in the absent state would sharpen the deadpan. Narrative link to a specific prior y-a-v-a work is implicit rather than explicit — the piece answers the broader Ono/Lippard argument but not a named y-a-v-a catalogue node. Could be strengthened by acknowledging the dematerialization lineage already present in the catalogue (e.g., positioning against The Unkept or Oral Communication as the same family).",
+  "revision_suggestion": "Consider trimming the absent-state prose to a single short line in Ono's imperative register (e.g. 'Your device cannot hold this work.') and adding a one-sentence footer note naming which y-a-v-a work this answers in the dematerialization arc. Optionally, surface the serial/segment count of the minted score as a faint live read so the chance engine is attested, not just felt.",
+  "jury_model": "minimax/minimax-m3"
+}
