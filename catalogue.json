@@ -814,5 +814,13 @@
     "source": "Kurt Schwitters, Merz (1919); Dada / Zaum / the manifesto neologism; Marcel Duchamp, infrathin; y-a-v-a, Modernipsum (2012)",
     "mechanism": "A live contenteditable element with spellcheck='true': the OS spellchecker paints red squiggles under art's neologisms — marks rendered outside the DOM that expose nothing to JavaScript, so a real DOM search for the flags returns zero.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-06-unreachable",
+    "title": "Unreachable",
+    "year": 2026,
+    "source": "Jean Tinguely, Homage to New York (1960); the vanitas / memento mori tradition; Marcel Duchamp, the infrathin; ECMAScript WeakRef / FinalizationRegistry (TC39, 2021)",
+    "mechanism": "WeakRef + FinalizationRegistry: dropping the last strong pointer makes the work unreachable, and non-deterministic JS garbage collection (detected via weak.deref() and the registry callback) enacts its death.",
+    "status": "pending"
   }
 ]

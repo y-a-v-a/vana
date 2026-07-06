@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-07-06-unreachable",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Jean Tinguely, Homage to New York (1960)",
+    "the vanitas / memento mori tradition",
+    "Marcel Duchamp, the infrathin",
+    "ECMAScript WeakRef / FinalizationRegistry (TC39, 2021)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism genuinely enacts the concept: dropping the last strong reference and watching the JS garbage collector reclaim the object is the artwork's argument about unschedulable mortality. The WeakRef/FinalizationRegistry readymade is a fresh found-object in the catalogue, and the infrathin framing of the unwitnessable instant is precise. Tone is dry and cheerful-cynic; ethics are stated; the work is materially distinct from prior catalogue entries (no other piece uses GC as medium). The Suprematist still-life payload is a small touch that ties it to the Malevich orbit without overplaying it.",
+  "reservations": "The 'coax' loop that allocates 40 Float64Arrays of 200k every 400ms is a bit theatrical and may feel like the artist is cheating the non-determinism they claim to honor; in practice the collector will almost always come quickly under that pressure, weakening the 'no schedule anyone can set' claim. The piece also leans heavily on prose explanation to land the infrathin argument, which slightly strains P7's 'no wall text' test for the deeper reading.",
+  "revision_suggestion": "Reduce or remove the memory-pressure coax loop so the non-determinism is more honestly preserved, and let the surface (the amber dot, the epitaph) carry more of the infrathin argument without leaning on the paragraph-length prose.",
+  "jury_model": "minimax/minimax-m3"
+}
