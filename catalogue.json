@@ -822,5 +822,13 @@
     "source": "Jean Tinguely, Homage to New York (1960); the vanitas / memento mori tradition; Marcel Duchamp, the infrathin; ECMAScript WeakRef / FinalizationRegistry (TC39, 2021)",
     "mechanism": "WeakRef + FinalizationRegistry: dropping the last strong pointer makes the work unreachable, and non-deterministic JS garbage collection (detected via weak.deref() and the registry callback) enacts its death.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-06-the-difference-after-sturtevant",
+    "title": "The Difference (after Sturtevant)",
+    "year": 2026,
+    "source": "Elaine Sturtevant, Warhol Flowers (1964-65); Andy Warhol, Flowers (1964); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "Canvas globalCompositeOperation='difference' subtracts a draggable copy from its identical original, with a live getImageData pixel count reporting fidelity vs. visible art.",
+    "status": "pending"
   }
 ]

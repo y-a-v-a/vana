@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-06-the-difference-after-sturtevant",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Elaine Sturtevant, Warhol Flowers (1964-65)",
+    "Andy Warhol, Flowers (1964)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "y-a-v-a, The Original (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The candidate cleanly enacts P1: the difference blend mode is not a metaphor for Sturtevant's question but the literal subtraction, so a perfect copy cancels to black and only misregistration is visible. The mechanism is web-native (canvas globalCompositeOperation + pointer drag + getImageData readout), so G1 holds. The conceptual point about authenticity, aura, and reproduction is sharp and double-coded (surface gag + Benjaminian argument), satisfying G2/G3/P7. Attribution, CC BY-SA, no tracking, dry tone — G4/G5 pass. It is materially distinct from the catalogue: no prior work uses difference-blend to stage Sturtevant, and it explicitly answers The Original (2026) from the other side of reproduction. Craft is restrained and the smallest build that completes the thought.",
+  "reservations": "The flower rendering is a simple four-petal approximation rather than a recognisable Warhol Flowers grid; the visual surface is generic-Pop rather than specifically Warhol. The 'visible art %' metric samples every 7th pixel and uses a generous threshold (>10), which is fine but slightly hand-waved. The piece leans heavily on Sturtevant as a reference that is not in the existing lineage map (section 5), which is a strength for novelty but means it is not anchored to a patron saint already named in the DNA.",
+  "revision_suggestion": "Consider drawing a recognisable Warhol Flowers 4×4 grid (or a single canonical flower from the 1964 silkscreen) so the readymade is unmistakable, and tighten the fidelity metric to a documented per-channel comparison rather than a sampled threshold.",
+  "jury_model": "minimax/minimax-m3"
+}
