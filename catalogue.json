@@ -854,5 +854,13 @@
     "source": "Marcel Broodthaers, Musée d'Art Moderne, Département des Aigles, Section des Figures (1968-72); Marcel Broodthaers, \"Ceci n'est pas un objet d'art\" label; René Magritte, The Treachery of Images (1929); Bernd & Hilla Becher / typology",
     "mechanism": "HTML <template> elements: their eagle SVGs are parsed into inert fragments that are present in the DOM (counted and measured live) but structurally never rendered, so the walls stay empty.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-07-the-most-reproduced-image",
+    "title": "The Most Reproduced Image",
+    "year": 2026,
+    "source": "Marcel Duchamp, Fountain (1917); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Andy Warhol; Olia Lialina & Dragan Espenschied, One Terabyte of Kilobyte Age (net.art broken-image tradition)",
+    "mechanism": "Intentionally invalid inline data-URI <img> sources fail locally so each browser engine substitutes its own broken-image placeholder; a Reproduce button clones editions in RAM only, zero network.",
+    "status": "pending"
   }
 ]

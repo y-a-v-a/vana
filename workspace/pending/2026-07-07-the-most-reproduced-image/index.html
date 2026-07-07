@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Most Reproduced Image</title>
+<style>
+  :root {
+    --wall: #ece9e2;
+    --ink: #1b1b1b;
+    --line: #cfc9bd;
+    --label: #6b6459;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--wall);
+    color: var(--ink);
+    font: 15px/1.5 Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 3.5rem 1.25rem 2.5rem;
+  }
+  header, .colophon { max-width: 46rem; margin: 0 auto; }
+  h1 {
+    font-size: 1.55rem;
+    font-weight: normal;
+    letter-spacing: 0.01em;
+    margin: 0 0 0.4rem;
+  }
+  .lede {
+    color: var(--label);
+    font-style: italic;
+    margin: 0 0 1.4rem;
+    max-width: 40rem;
+  }
+  .edition {
+    font: 12px/1.4 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    color: var(--label);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 0.6rem 0;
+    margin: 0 0 2rem;
+  }
+  .edition b { color: var(--ink); font-weight: 600; }
+
+  .grid {
+    max-width: 46rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: 1.75rem 1.5rem;
+  }
+  figure {
+    margin: 0;
+    text-align: center;
+  }
+  .frame {
+    background: #fff;
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+    aspect-ratio: 4 / 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem;
+  }
+  /* The picture is a deliberately invalid inline data URI: it always fails.
+     Whatever renders inside is drawn by your browser, not by the artist. */
+  .frame img {
+    max-width: 100%;
+    max-height: 100%;
+    /* the browser sizes the broken placeholder itself; we only reserve room */
+    min-width: 3rem;
+    min-height: 3rem;
+  }
+  figcaption {
+    margin-top: 0.55rem;
+    color: var(--label);
+    font-size: 0.82rem;
+    font-style: italic;
+  }
+  figcaption b { font-style: normal; color: var(--ink); }
+
+  .controls { max-width: 46rem; margin: 2.25rem auto 0; text-align: center; }
+  button {
+    font: inherit;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    padding: 0.5rem 1.1rem;
+    cursor: pointer;
+  }
+  button:hover { background: var(--ink); color: var(--wall); }
+  .made {
+    display: block;
+    margin-top: 0.6rem;
+    font: 12px/1.4 ui-monospace, Menlo, monospace;
+    color: var(--label);
+  }
+
+  .colophon {
+    margin-top: 3rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.8rem;
+    color: var(--label);
+  }
+  .colophon p { margin: 0.4rem 0; }
+  .colophon a { color: var(--label); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>The Most Reproduced Image</h1>
+  <p class="lede">The picture below is the same in every frame. It is not stored here,
+  it was not drawn by the artist, and no two visitors are looking at the same thing.
+  It is the icon your browser paints when an image refuses to load.</p>
+  <p class="edition">
+    You are viewing the <b id="engine">unknown</b> edition &nbsp;·&nbsp;
+    every image on this page is broken on purpose &nbsp;·&nbsp;
+    nothing is fetched, nothing is kept
+  </p>
+</header>
+
+<main class="grid" id="grid" aria-label="A grid of identical broken images">
+  <!-- Each src is an empty/invalid inline data URI. It reaches no server.
+       The browser gives up and substitutes its own placeholder glyph. -->
+  <figure>
+    <div class="frame"><img src="data:image/png;base64," alt="Untitled"></div>
+    <figcaption><b>Untitled</b> — edition 1 / &infin;</figcaption>
+  </figure>
+  <figure>
+    <div class="frame"><img src="data:image/gif;base64,R0lGODlh" alt="Untitled"></div>
+    <figcaption><b>Untitled</b> — edition 2 / &infin;</figcaption>
+  </figure>
+  <figure>
+    <div class="frame"><img src="data:image/jpeg;base64,//" alt="Untitled"></div>
+    <figcaption><b>Untitled</b> — edition 3 / &infin;</figcaption>
+  </figure>
+  <figure>
+    <div class="frame"><img src="data:," alt="Untitled"></div>
+    <figcaption><b>Untitled</b> — edition 4 / &infin;</figcaption>
+  </figure>
+</main>
+
+<div class="controls">
+  <button id="reproduce" type="button">Reproduce</button>
+  <span class="made" id="made">0 copies made this visit (held in memory only)</span>
+</div>
+
+<div class="colophon">
+  <p>The broken-image placeholder may be the most frequently rendered image in the
+  history of art. It is a manufacturer's readymade — authored by Google, Apple or
+  Mozilla, never by a painter — and it has no original: Blink, WebKit and Gecko each
+  draw a different one, and yours will change with the next update. An image that is
+  everywhere, identical, free to copy, and canonical nowhere.</p>
+  <p><b>The Most Reproduced Image</b> (2026) — <b>y-a-v-a</b> (Vincent Bruijn).
+  After Marcel Duchamp, <i>Fountain</i> (1917, the manufacturer as author);
+  Walter Benjamin, <i>The Work of Art in the Age of Mechanical Reproduction</i> (1935);
+  Andy Warhol; and the net.art broken-image tradition (Olia Lialina &amp; Dragan
+  Espenschied, <i>One Terabyte of Kilobyte Age</i>).</p>
+  <p>Licensed <b>CC BY-SA 4.0</b>. No cookies, no trackers, no personal data, no
+  network requests — every image here fails locally.</p>
+</div>
+
+<script>
+  // Name the manufacturer of the picture you are seeing. Read-only, sent nowhere.
+  (function () {
+    var ua = navigator.userAgent, engine = "an unknown", win = window;
+    if (/Firefox\//.test(ua)) engine = "Gecko (Firefox)";
+    else if (/Edg\//.test(ua)) engine = "Blink (Edge)";
+    else if (win.chrome || /Chrome\//.test(ua)) engine = "Blink (Chrome)";
+    else if (/Safari\//.test(ua)) engine = "WebKit (Safari)";
+    document.getElementById("engine").textContent = engine;
+  })();
+
+  // Reproduction is instantaneous, identical, and costs nothing.
+  (function () {
+    var grid = document.getElementById("grid"),
+        made = document.getElementById("made"),
+        srcs = ["data:image/png;base64,", "data:image/gif;base64,R0lGODlh",
+                "data:image/jpeg;base64,//", "data:,"],
+        n = grid.children.length, copies = 0;
+    document.getElementById("reproduce").addEventListener("click", function () {
+      n++; copies++;
+      var fig = document.createElement("figure");
+      var frame = document.createElement("div"); frame.className = "frame";
+      var img = document.createElement("img");
+      img.src = srcs[copies % srcs.length]; img.alt = "Untitled";
+      var cap = document.createElement("figcaption");
+      cap.innerHTML = "<b>Untitled</b> — edition " + n + " / &infin;";
+      frame.appendChild(img); fig.appendChild(frame); fig.appendChild(cap);
+      grid.appendChild(fig);
+      made.textContent = copies + (copies === 1 ? " copy" : " copies") +
+        " made this visit (held in memory only)";
+    });
+  })();
+</script>
+</body>
+</html>

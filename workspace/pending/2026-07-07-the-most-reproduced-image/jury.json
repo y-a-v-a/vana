@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-07-07-the-most-reproduced-image",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 37,
+  "verdict": "borderline",
+  "references_named": [
+    "Marcel Duchamp (Fountain, 1917)",
+    "Walter Benjamin (The Work of Art in the Age of Mechanical Reproduction, 1935)",
+    "Andy Warhol",
+    "Olia Lialina & Dragan Espenschied (One Terabyte of Kilobyte Age)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The mechanism is the argument: invalid data URIs force the browser vendor to author the picture, and the gallery of broken placeholders becomes a deadpan readymade. Concept and execution collapse cleanly (P1/G3), the double-coding works (P7), the chance/order axis is legible (vendor/version as the chance element over an ordered grid), and the Benjamin inversion — aura dissolved because there was never an original — is a real argument. Delivery honors P8 (no network, no storage, license stated, attribution complete). The territory of 'browser default as material' is already touched in the catalogue (notably Fountain (As Manufactured)), which caps novelty despite the specific broken-image insight being its own move.",
+  "reservations": "Core argument (browser manufacturer as author of the default-styled artifact) has real overlap with Fountain (As Manufactured) (2026), even though the mechanism (invalid data URI vs. unstyled range) and the specific claim (most-reproduced-image / aura-inversion) are distinct. The deeper Benjamin reading leans on the colophon text — the surface gag lands but the precise inversion argument needs the prose to fully cohere, edging toward wall-text dependence on P7.",
+  "revision_suggestion": "To sharpen novelty against the existing catalogue, push further on the per-vendor-per-version mutability claim — e.g., make the engine/version detection produce a *visible* difference in how the work is labeled or framed (not just an 'unknown / Gecko / Blink' badge), so the 'no two visitors see the same work' thesis is enforced by the piece itself rather than asserted in the colophon. Trim the prose so the Benjamin inversion reads from the gallery, not just from the wall text.",
+  "jury_model": "minimax/minimax-m3"
+}
