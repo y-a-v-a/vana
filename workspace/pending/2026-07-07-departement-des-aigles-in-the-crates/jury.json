@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-07-departement-des-aigles-in-the-crates",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Broodthaers, Musée d'Art Moderne, Département des Aigles, Section des Figures (1968-72)",
+    "Marcel Broodthaers, 'Ceci n'est pas un objet d'art' label",
+    "René Magritte, The Treachery of Images (1929)",
+    "Bernd & Hilla Becher / typology"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The HTML <template> element is a genuinely apt vault: parsed, present, structurally non-rendered — the mechanism literally enacts the Broodthaers argument that a museum's collection exceeds its exhibition. The count is honestly derived from DOM queries (held=12, on view=0), and the 'open the crates' button adds a registrar's gesture that confirms presence without changing the tally, a nice second-order move. Double-coding is solid: the casual viewer reads an empty museum with denial labels; the literate viewer reads Broodthaers, Magritte's 'ceci n'est pas,' and the HTML spec clause. The Becher-typology restraint (twelve near-identical eagles varying only by rotation and tone) keeps the build minimal and the tone dry-museum-registrar.",
+  "reservations": "The Broodthaers/Magritte territory is well-trodden in conceptual art, so the conceptual novelty leans heavily on the specific mechanism choice rather than fresh found-object territory. The 'open the crates' button, while clever, is a one-shot gesture — the work has no second state or evolving behavior beyond it, which slightly limits the 'live, not fixed' (P4) dimension compared to stronger catalogue entries.",
+  "revision_suggestion": "Consider giving the crates a per-visit or time-based behavior — e.g., the 'on view' count could flicker between 0 and a phantom 1 driven by a browser race condition or a microtask that briefly mounts then unmounts an SVG, dramatizing the gap between catalogued and exhibited rather than asserting it once. This would deepen the P4/live dimension without breaking the vault conceit.",
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Musée d'Art Moderne — Département des Aigles</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --wall:#f3f1ec; --frame:#cfc9bd; --dim:#8a8478;
+    --accent:#7a1f1f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--wall); color:var(--ink);
+    font:15px/1.5 Georgia,"Times New Roman",serif;
+    -webkit-font-smoothing:antialiased;
+    padding:48px 20px 80px;
+  }
+  main{max-width:860px;margin:0 auto}
+  header{border-bottom:1px solid var(--ink);padding-bottom:14px;margin-bottom:6px}
+  h1{font-size:19px;font-weight:normal;letter-spacing:.06em;margin:0}
+  .sub{font-size:12px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-top:6px}
+  .intro{font-size:13px;color:#4a463d;max-width:60ch;margin:18px 0 30px}
+
+  /* The walls. Twelve frames, all empty: nothing here is on view. */
+  .walls{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:22px;margin:0 0 34px;
+  }
+  .frame{
+    background:#faf9f6;
+    border:1px solid var(--frame);
+    box-shadow:0 1px 0 #fff inset, 0 2px 6px rgba(0,0,0,.05);
+    aspect-ratio:3/4;
+    display:flex;flex-direction:column;justify-content:flex-end;
+    padding:12px;position:relative;
+  }
+  .frame .hang{
+    position:absolute;inset:12px 12px 52px;
+    border:1px dashed #ded8cb;
+    display:flex;align-items:center;justify-content:center;
+    color:#cbc5b8;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .frame .fig{font-size:12px;letter-spacing:.08em}
+  .frame .denial{font-size:10.5px;font-style:italic;color:var(--dim);margin-top:3px}
+
+  .ledger{
+    border:1px solid var(--ink);background:#faf9f6;
+    padding:18px 20px;font-size:13px;
+  }
+  .ledger h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 12px;font-weight:normal}
+  .count{font-size:26px;letter-spacing:.02em;margin:0 0 4px}
+  .count b{font-weight:normal}
+  .note{color:var(--dim);font-size:12px;margin:0 0 16px}
+  button{
+    font:inherit;font-size:12px;letter-spacing:.08em;
+    background:var(--ink);color:var(--wall);border:0;
+    padding:9px 16px;cursor:pointer;
+  }
+  button:disabled{background:#b8b2a6;cursor:default}
+  #manifest{margin:16px 0 0;padding:0;list-style:none;font-size:12px;color:#4a463d;
+    max-height:0;overflow:hidden;transition:max-height .4s ease}
+  #manifest.open{max-height:520px;overflow:auto}
+  #manifest li{padding:5px 0;border-top:1px dotted #d8d2c5;display:flex;justify-content:space-between;gap:12px}
+  #manifest li span:last-child{color:var(--dim);white-space:nowrap}
+  footer{max-width:860px;margin:44px auto 0;font-size:11px;color:var(--dim);line-height:1.7;
+    border-top:1px solid var(--frame);padding-top:14px}
+  footer a{color:var(--accent)}
+
+  /* ── LES CAISSES / THE CRATES ─────────────────────────────────
+     Each aigle below lives inside a <template>. Per the HTML spec,
+     the contents of a <template> are parsed into an inert document
+     fragment and are NEVER rendered by the browser. The works are
+     in the document. They are not on the wall. This is the vault. */
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Musée d'Art Moderne</h1>
+    <div class="sub">Département des Aigles · Section des Figures</div>
+  </header>
+
+  <p class="intro">
+    The collection comprises twelve eagles. None is on view. They have been
+    catalogued, crated, and kept — as museums keep the great majority of
+    everything they own. The crates are below you and cannot be opened onto
+    the wall. <em>Ceci n'est pas un objet d'art.</em>
+  </p>
+
+  <section class="walls" id="walls" aria-label="Exhibition walls">
+    <!-- Twelve empty frames. The walls hold nothing. -->
+  </section>
+
+  <section class="ledger">
+    <h2>Registre / Register</h2>
+    <p class="count"><b id="held">12</b> catalogued · <b id="onview">0</b> on view</p>
+    <p class="note" id="status">The works are in the crates. The browser will not hang them.</p>
+    <button id="open">Ouvrir les caisses — open the crates</button>
+    <ul id="manifest"></ul>
+  </section>
+
+  <footer>
+    <strong>Département des Aigles (In the Crates)</strong>, 2026 — y-a-v-a
+    (<em>yet another visual artist</em>), after Marcel Broodthaers,
+    <em>Musée d'Art Moderne, Département des Aigles, Section des Figures</em>
+    (1968–72), and its label <em>“Ceci n'est pas un objet d'art”</em> (after
+    René Magritte). The medium is the HTML <code>&lt;template&gt;</code> element:
+    parsed, present in the DOM, never rendered. No cookies, no trackers, no
+    network, no data collected. Licensed <a
+    href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+  </footer>
+</main>
+
+<!-- ═══ LES CAISSES ═══ Twelve sealed crates. Each contains one eagle.
+     Nothing inside a <template> is drawn to the screen. -->
+<template class="aigle" data-fig="1"><svg viewBox="0 0 100 100"><path fill="#2b2b2b" d="M50 8 L22 42 L41 40 L14 64 L44 58 L28 86 L50 70 L72 86 L56 58 L86 64 L59 40 L78 42 Z"/></svg></template>
+<template class="aigle" data-fig="2"><svg viewBox="0 0 100 100"><path fill="#1e1e1e" transform="rotate(4 50 50)" d="M50 8 L22 42 L41 40 L14 64 L44 58 L28 86 L50 70 L72 86 L56 58 L86 64 L59 40 L78 42 Z"/></svg></template>
+<template class="aigle" data-fig="3"><svg viewBox="0 0 100 100"><path fill="#3a3a3a" transform="scale(.92) translate(4 4)" d="M50 8 L22 42 L41 40 L14 64 L44 58 L28 86 L50 70 L72 86 L56 58 L86 64 L59 40 L78 42 Z"/></svg></template>
+<template class="aigle" data-fig="4"><svg viewBox="0 0 100 100"><path fill="#242424" transform="rotate(-3 50 50)" d="M50 8 L22 42 L41 40 L14 64 L44 58 L28 86 L50 70 L72 86 L56 58 L86 64 L59 40 L78 42 Z"/></svg></template>
+<template class="aigle" data-fig="5"><svg viewBox="0 0 100 100"><path fill="#333" d="M50 12 L28 44 L44 42 L20 62 L46 57 L32 82 L50 68 L68 82 L54 57 L80 62 L56 42 L72 44 Z"/></svg></template>
+<template class="aigle" data-fig="6"><svg viewBox="0 0 100 100"><path fill="#222" transform="rotate(2 50 50) scale(.96)" d="M50 8 L22 42 L41 40 L14 64 L44 58 L28 86 L50 70 L72 86 L56 58 L86 64 L59 40 L78 42 Z"/></svg></template>
+<template class="aigle" data-fig="7"><svg viewBox="0 0 100 100"><path fill="#2e2e2e" transform="rotate(-5 50 50)" d="M50 8 L22 42 L41 40 L14 64 L44 58 L28 86 L50 70 L72 86 L56 58 L86 64 L59 40 L78 42 Z"/></svg></template>
+<template class="aigle" data-fig="8"><svg viewBox="0 0 100 100"><path fill="#1a1a1a" transform="scale(.88) translate(6 6)" d="M50 8 L22 42 L41 40 L14 64 L44 58 L28 86 L50 70 L72 86 L56 58 L86 64 L59 40 L78 42 Z"/></svg></template>
+<template class="aigle" data-fig="9"><svg viewBox="0 0 100 100"><path fill="#383838" transform="rotate(6 50 50)" d="M50 10 L26 44 L43 41 L17 63 L45 57 L30 84 L50 69 L70 84 L55 57 L83 63 L57 41 L74 44 Z"/></svg></template>
+<template class="aigle" data-fig="10"><svg viewBox="0 0 100 100"><path fill="#262626" d="M50 8 L22 42 L41 40 L14 64 L44 58 L28 86 L50 70 L72 86 L56 58 L86 64 L59 40 L78 42 Z"/></svg></template>
+<template class="aigle" data-fig="11"><svg viewBox="0 0 100 100"><path fill="#2b2b2b" transform="rotate(-2 50 50) scale(.94)" d="M50 8 L22 42 L41 40 L14 64 L44 58 L28 86 L50 70 L72 86 L56 58 L86 64 L59 40 L78 42 Z"/></svg></template>
+<template class="aigle" data-fig="12"><svg viewBox="0 0 100 100"><path fill="#303030" transform="rotate(3 50 50)" d="M50 12 L28 44 L44 42 L20 62 L46 57 L32 82 L50 68 L68 82 L54 57 L80 62 L56 42 L72 44 Z"/></svg></template>
+
+<script>
+(function(){
+  "use strict";
+  var crates = Array.prototype.slice.call(document.querySelectorAll("template.aigle"));
+  var walls  = document.getElementById("walls");
+
+  // Build the walls: one empty frame per catalogued work. The frame names
+  // the Fig. and denies it is art. The eagle itself stays in its crate.
+  crates.forEach(function(t){
+    var fig = t.getAttribute("data-fig");
+    var f = document.createElement("div");
+    f.className = "frame";
+    f.innerHTML =
+      '<div class="hang">not on view</div>' +
+      '<div class="fig">Fig. ' + fig + '</div>' +
+      '<div class="denial">Ceci n\'est pas un objet d\'art</div>';
+    walls.appendChild(f);
+  });
+
+  // The count is honest and derived, not asserted:
+  // "held" = works present in the crates; "on view" = rendered <svg> on the walls.
+  document.getElementById("held").textContent = crates.length;
+  document.getElementById("onview").textContent =
+    walls.querySelectorAll("svg").length; // structurally 0 — templates render nothing
+
+  var opened = false;
+  document.getElementById("open").addEventListener("click", function(){
+    if (opened) return;
+    opened = true;
+    var man = document.getElementById("manifest");
+    var status = document.getElementById("status");
+
+    // Open the crates: read each template's inert fragment. The eagles are
+    // real DOM nodes — we can measure them, count them, read their markup —
+    // but the browser will not let them onto the wall from here. Presence
+    // without exhibition. We attest; we do not hang.
+    crates.forEach(function(t){
+      var svg = t.content.querySelector("svg");
+      var nodes = t.content.querySelectorAll("*").length;
+      var li = document.createElement("li");
+      li.innerHTML =
+        "<span>Fig. " + t.getAttribute("data-fig") +
+        " — l'aigle — présent, non exposé</span>" +
+        "<span>" + nodes + " nodes · in crate</span>";
+      man.appendChild(li);
+    });
+    man.classList.add("open");
+
+    // The tally is unchanged. Opening a crate is not the same as hanging a work.
+    document.getElementById("onview").textContent =
+      walls.querySelectorAll("svg").length; // still 0
+    status.textContent =
+      "The crates are open. Twelve eagles verified present in the document. " +
+      "Zero on the wall. A <template> is a room the browser refuses to enter.";
+    this.disabled = true;
+    this.textContent = "les caisses sont ouvertes — the crates are open";
+  });
+})();
+</script>
+</body>
+</html>
