@@ -862,5 +862,13 @@
     "source": "Marcel Duchamp, Fountain (1917); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Andy Warhol; Olia Lialina & Dragan Espenschied, One Terabyte of Kilobyte Age (net.art broken-image tradition)",
     "mechanism": "Intentionally invalid inline data-URI <img> sources fail locally so each browser engine substitutes its own broken-image placeholder; a Reproduce button clones editions in RAM only, zero network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-08-with-my-back-to-the-world-graphite-on-pixels",
+    "title": "With My Back to the World (Graphite on Pixels)",
+    "year": 2026,
+    "source": "Agnes Martin; Agnes Martin, With My Back to the World (1997); the raster pixel grid / devicePixelRatio; net.art",
+    "mechanism": "Canvas draws a per-visit sub-pixel graphite tremor that devicePixelRatio quantizes into grey squares; a native nearest-neighbour magnifier reads the backing store to expose the loss.",
+    "status": "pending"
   }
 ]

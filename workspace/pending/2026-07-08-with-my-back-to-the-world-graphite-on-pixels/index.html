@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>With My Back to the World (Graphite on Pixels)</title>
+<style>
+  :root { color-scheme: light; }
+  html, body { margin: 0; height: 100%; background: #efece4; overflow: hidden;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; color: #5b564d; }
+  #field { display: block; position: fixed; inset: 0; touch-action: none; cursor: none; }
+  #lens { position: fixed; width: 180px; height: 180px; border-radius: 50%;
+    border: 1px solid #b9b2a4; box-shadow: 0 2px 14px rgba(60,55,45,.28);
+    pointer-events: none; display: none; z-index: 3; overflow: hidden; background: #efece4; }
+  #lens canvas { display: block; image-rendering: pixelated; }
+  .label { position: fixed; z-index: 2; font-size: 11px; line-height: 1.55;
+    letter-spacing: .01em; max-width: 340px; }
+  #wall { left: 22px; bottom: 20px; }
+  #wall h1 { margin: 0 0 4px; font-size: 12px; font-weight: 600; letter-spacing: .02em; }
+  #wall .sub { color: #837c70; }
+  #wall .lic { margin-top: 8px; color: #9a9284; font-size: 10px; }
+  #read { right: 22px; bottom: 20px; text-align: right; color: #837c70; max-width: 320px; }
+  #read b { color: #5b564d; font-weight: 600; }
+  #hint { position: fixed; top: 18px; left: 0; right: 0; text-align: center; z-index: 2;
+    font-size: 10.5px; color: #a49c8e; letter-spacing: .08em; text-transform: uppercase; }
+  @media (max-width: 620px) { .label { max-width: 46vw; } #hint { font-size: 9px; } }
+</style>
+</head>
+<body>
+  <canvas id="field"></canvas>
+  <div id="lens"><canvas id="lensc" width="180" height="180"></canvas></div>
+
+  <div id="hint">hold the lens to a line</div>
+
+  <div id="wall" class="label">
+    <h1>With My Back to the World <span class="sub">(Graphite on Pixels)</span></h1>
+    <div class="sub">after Agnes Martin — the hand-drawn grid</div>
+    <div class="sub">medium: pixels on screen · minted this visit, kept nowhere</div>
+    <div class="lic">CC BY-SA 4.0 · y-a-v-a (2026) · references Agnes Martin,
+      "With My Back to the World" (1997). No cookies, no tracking, no network.</div>
+  </div>
+
+  <div id="read" class="label">
+    <div>your device pixel ratio: <b id="dpr">–</b></div>
+    <div>finest step it can draw: <b id="step">–</b> px</div>
+    <div>tremor the hand asked for: <b id="amp">–</b> px</div>
+    <div style="margin-top:7px">smaller than one pixel, so the tremble is
+      not drawn as <b>movement</b> — it is smeared into shades of <b>grey</b>.
+      the machine cannot draw between its pixels.</div>
+  </div>
+
+<script>
+(() => {
+  "use strict";
+  const c = document.getElementById('field');
+  const ctx = c.getContext('2d');
+  const lens = document.getElementById('lens');
+  const lc = document.getElementById('lensc');
+  const lctx = lc.getContext('2d');
+  lctx.imageSmoothingEnabled = false;
+
+  const LENS = 180;          // lens diameter, CSS px
+  const SAMPLE = 9;          // CSS px sampled under the cursor (small -> big square pixels)
+  let dpr = 1, cssW = 0, cssH = 0, lines = [];
+
+  // per-visit chance: the tremulous parameters of a hand that will never
+  // repeat, and that this raster display will refuse to honour.
+  const rnd = () => Math.random();
+  const AMP = 0.55 + rnd() * 0.25;   // tremor amplitude, in CSS px — deliberately sub-pixel
+
+  function buildLines() {
+    lines = [];
+    const gap = 34 + Math.round(rnd() * 8);   // Martin's fine cell
+    const mk = (pos, vertical) => ({
+      pos, vertical,
+      freq: 0.008 + rnd() * 0.014,
+      phase: rnd() * Math.PI * 2,
+      drift: (rnd() - 0.5) * 0.4,             // slow low-frequency wander
+      dfreq: 0.0016 + rnd() * 0.0016,
+      skip: 0.12 + rnd() * 0.1                // where the graphite lifts
+    });
+    for (let y = gap; y < cssH - 4; y += gap) lines.push(mk(y, false));
+    for (let x = gap; x < cssW - 4; x += gap) lines.push(mk(x, true));
+  }
+
+  function wobble(l, t) {
+    // the hand's tremble: amplitude AMP (< 1px). the canvas can only answer
+    // in whole device pixels + anti-aliased greys — never in true position.
+    return l.pos
+      + AMP * Math.sin(t * l.freq + l.phase)
+      + l.drift * Math.sin(t * l.dfreq);
+  }
+
+  function draw() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    // gessoed ground
+    ctx.fillStyle = '#efece4';
+    ctx.fillRect(0, 0, cssW, cssH);
+    // faint graphite
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(96,90,80,0.34)';
+    for (const l of lines) {
+      const span = l.vertical ? cssH : cssW;
+      ctx.beginPath();
+      let down = false;
+      for (let t = 0; t <= span; t += 1) {
+        const v = wobble(l, t);
+        const x = l.vertical ? v : t;
+        const y = l.vertical ? t : v;
+        // pencil skips: the graphite lifts intermittently
+        const lift = Math.sin(t * 0.05 + l.phase * 3) > (1 - l.skip * 2);
+        if (lift) { down = false; continue; }
+        if (!down) { ctx.moveTo(x, y); down = true; }
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+  }
+
+  function resize() {
+    dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 3));
+    cssW = window.innerWidth; cssH = window.innerHeight;
+    c.width = Math.round(cssW * dpr);
+    c.height = Math.round(cssH * dpr);
+    c.style.width = cssW + 'px'; c.style.height = cssH + 'px';
+    buildLines();
+    draw();
+    const real = window.devicePixelRatio || 1;
+    document.getElementById('dpr').textContent = real.toFixed(2);
+    document.getElementById('step').textContent = (1 / real).toFixed(3);
+    document.getElementById('amp').textContent = AMP.toFixed(2);
+  }
+
+  // The lens: a nearest-neighbour magnifier that reads the display's own
+  // device pixels back off the backing store. Held to a line, it shows the
+  // hand's tremble resolved into square grey pixels — Agnes Martin's grid
+  // eaten by the screen's grid.
+  function moveLens(px, py) {
+    lens.style.display = 'block';
+    lens.style.left = (px - LENS / 2) + 'px';
+    lens.style.top = (py - LENS / 2) + 'px';
+    const half = SAMPLE / 2;
+    const sx = Math.round((px - half) * dpr);
+    const sy = Math.round((py - half) * dpr);
+    const sw = Math.round(SAMPLE * dpr);
+    const sh = Math.round(SAMPLE * dpr);
+    lctx.imageSmoothingEnabled = false;
+    lctx.fillStyle = '#efece4';
+    lctx.fillRect(0, 0, LENS, LENS);
+    try { lctx.drawImage(c, sx, sy, sw, sh, 0, 0, LENS, LENS); } catch (e) {}
+  }
+  function hideLens() { lens.style.display = 'none'; }
+
+  window.addEventListener('resize', resize, { passive: true });
+  window.addEventListener('pointermove', e => moveLens(e.clientX, e.clientY), { passive: true });
+  window.addEventListener('pointerdown', e => moveLens(e.clientX, e.clientY), { passive: true });
+  window.addEventListener('pointerleave', hideLens);
+  window.addEventListener('blur', hideLens);
+
+  resize();
+})();
+</script>
+</body>
+</html>

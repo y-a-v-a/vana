@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-07-08-with-my-back-to-the-world-graphite-on-pixels",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 2
+  },
+  "weighted_total": 36,
+  "verdict": "borderline",
+  "references_named": [
+    "Agnes Martin",
+    "Agnes Martin, With My Back to the World (1997)",
+    "the raster pixel grid / devicePixelRatio",
+    "net.art"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "A clean, well-built piece that does what the DNA prizes most: identifies a web-native antagonist (devicePixelRatio quantization) that no print could supply, and stages a real art-historical argument through it. The sub-pixel tremor / nearest-neighbour magnifier mechanism genuinely enacts the concept (P1) — the raster does to Martin's hand what the responsive layout did to Magritte's pipe. Double-coding is solid: a delicate grid for the casual viewer, an indictment of the device's grain for the literate one. The work earns its place on the chance/order axis (P5) with the hand-as-chance / display-as-order mapping made explicit in the live readout. Attribution, license, and privacy stance are all correct.",
+  "reservations": "The work is more elegiac than witty, which is appropriate to its subject but means the humor-as-carrier-wave register of P9 is largely absent. Narrative connection to the broader twenty-year argument is present (chance/order, the web enacting a canonical 20th-century gesture) but is asserted in the motivation more than enacted in the page — there is no explicit dialogue with a prior y-a-v-a work. The 'value/authenticity' thread (P6) that runs through much of the catalogue is not engaged here.",
+  "revision_suggestion": "To strengthen narrative and wit, consider adding a wall-label gesture that stages the art-market apparatus (P6) — a price, a 'sold' dot, a medium line reading 'graphite on pixels' the way the Koons piece reads 'pixels on screen' — so the work sits on chance/order *and* on the value axis. A subtle one-line reply to a prior work (e.g., echoing 'A Chance of Order's' Kenneth Martin lineage) would deepen the twenty-year argument without diluting the Martin's quiet.",
+  "jury_model": "minimax/minimax-m3"
+}
