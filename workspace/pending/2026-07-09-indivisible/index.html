@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indivisible</title>
+<style>
+  :root{
+    --ground:#f3f1ea;
+    --ink:#141210;
+    --faint:#8f887a;
+    --rule:#d8d3c6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--ground);color:var(--ink)}
+  body{
+    font-family:Georgia,"Times New Roman",serif;
+    line-height:1.5;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    padding:clamp(1rem,4vw,3rem);
+  }
+  header{max-width:46ch}
+  h1{
+    font-weight:normal;
+    font-style:italic;
+    font-size:clamp(1.6rem,4vw,2.4rem);
+    margin:0 0 .2em;
+  }
+  .lede{color:var(--faint);margin:0 0 2rem;font-size:1rem;max-width:44ch}
+
+  main{
+    flex:1;
+    display:flex;
+    flex-wrap:wrap;
+    gap:clamp(1rem,5vw,4rem);
+    align-items:flex-start;
+    padding:1rem 0 2rem;
+  }
+  /* each hero word lives in a column narrower than itself,
+     so the layout engine MUST decide where to break it. */
+  .word{
+    width:6.5ch;
+    font-size:clamp(2.2rem,8vw,4.5rem);
+    line-height:1.02;
+    letter-spacing:.005em;
+    hyphens:auto;
+    -webkit-hyphens:auto;
+    -ms-hyphens:auto;
+    overflow-wrap:normal;
+    word-break:normal;
+  }
+
+  .switch{
+    display:flex;flex-wrap:wrap;gap:.4rem;
+    margin:0 0 1.5rem;
+  }
+  .switch button{
+    font-family:inherit;font-size:.9rem;
+    background:transparent;color:var(--ink);
+    border:1px solid var(--rule);
+    padding:.35em .8em;border-radius:0;
+    cursor:pointer;
+  }
+  .switch button[aria-pressed="true"]{
+    background:var(--ink);color:var(--ground);border-color:var(--ink);
+  }
+  .switch button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+  .readback{
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    font-size:.82rem;line-height:1.7;color:var(--faint);
+    border-top:1px solid var(--rule);
+    padding-top:1rem;max-width:66ch;
+    white-space:pre-wrap;word-break:break-word;
+  }
+  .readback b{color:var(--ink);font-weight:600}
+
+  footer{
+    border-top:1px solid var(--rule);
+    margin-top:2rem;padding-top:1rem;
+    font-size:.8rem;color:var(--faint);max-width:66ch;
+  }
+  footer .label{color:var(--ink)}
+  a{color:inherit}
+</style>
+</head>
+<body>
+  <header>
+    <h1>Indivisible</h1>
+    <p class="lede">Three words that mean <em>not to be broken</em>. Each sits in a column
+      too narrow to hold it, so the browser breaks it — at a point it alone chooses,
+      with a hyphen that is not in the text.</p>
+  </header>
+
+  <div class="switch" id="switch" role="group" aria-label="Declared language">
+    <button data-lang="en" aria-pressed="true">English</button>
+    <button data-lang="de" aria-pressed="false">Deutsch</button>
+    <button data-lang="nl" aria-pressed="false">Nederlands</button>
+    <button data-lang="fr" aria-pressed="false">Français</button>
+  </div>
+
+  <main id="stage">
+    <div class="word">indivisible</div>
+    <div class="word">unbreakable</div>
+    <div class="word">continuous</div>
+  </main>
+
+  <p class="readback" id="readback"></p>
+
+  <footer>
+    <div class="label"><em>Indivisible</em> — pixels on screen; the layout engine's own
+      hyphenation dictionary. Per visit, per width, per declared language.</div>
+    <div>After Augusto de Campos &amp; the Noigandres group, <em>concrete poetry</em>
+      (the word as an object controlled in space, 1950s); Marcel Duchamp,
+      <em>infrathin</em> (the whole word and the broken word).</div>
+    <div>y-a-v-a (Vincent Bruijn). Licensed <span class="label">CC BY-SA 4.0</span>.
+      No cookies, no tracking, no requests. This page is entirely self-contained.</div>
+  </footer>
+
+<script>
+(function(){
+  var html = document.documentElement;
+  var stage = document.getElementById('stage');
+  var readback = document.getElementById('readback');
+  var buttons = Array.prototype.slice.call(
+    document.querySelectorAll('#switch button'));
+
+  function sourceText(){
+    // the actual characters the author wrote — no hyphens live here
+    return Array.prototype.map.call(stage.querySelectorAll('.word'),
+      function(w){ return w.textContent; }).join('  ');
+  }
+  function count(str, ch){
+    var n = 0, i = -1;
+    while((i = str.indexOf(ch, i + 1)) !== -1) n++;
+    return n;
+  }
+
+  var resizes = 0;
+
+  function render(){
+    var src = sourceText();
+    var soft = count(src, '­');   // SOFT HYPHEN
+    var hard = count(src, '‐');   // HYPHEN
+    var minus = count(src, '-');  // HYPHEN-MINUS
+    readback.innerHTML =
+      'in the source, declared lang="' + html.lang + '":\n' +
+      '  text          → "' + src.replace(/"/g,'\\"') + '"\n' +
+      '  characters    → ' + src.length + '\n' +
+      '  soft hyphens  → <b>' + soft + '</b>   (U+00AD)\n' +
+      '  hyphens       → <b>' + hard + '</b>   (U+2010)\n' +
+      '  hyphen-minus  → <b>' + minus + '</b>   (U+002D)\n' +
+      '\n' +
+      'on the glass right now: the break-hyphens you can see.\n' +
+      'they are drawn by the engine, chosen from a dictionary you\n' +
+      'cannot read, and belong to none of the counts above. select a\n' +
+      'word and copy it: the hyphen will not come with you.\n' +
+      '\n' +
+      'reflows since load: <b>' + resizes + '</b>  (resize the window — the breaks move)';
+  }
+
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){
+      html.lang = b.getAttribute('data-lang');
+      buttons.forEach(function(x){
+        x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+      });
+      render();
+    });
+  });
+
+  var t;
+  window.addEventListener('resize', function(){
+    resizes++;
+    clearTimeout(t);
+    t = setTimeout(render, 120);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

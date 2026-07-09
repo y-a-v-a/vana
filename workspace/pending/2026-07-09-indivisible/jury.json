@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-07-09-indivisible",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 38,
+  "verdict": "strong",
+  "references_named": [
+    "Augusto de Campos / Noigandres group / Brazilian concrete poetry (1950s)",
+    "Marcel Duchamp, infrathin"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism is genuinely web-native and only-the-web: CSS hyphens:auto forces the layout engine's dictionary to insert render-only break-hyphens that exist nowhere in the DOM, and the readback panel proves it by counting zero hyphens in textContent while the screen shows them. Concept and execution collapse cleanly (P1): the word that says it cannot be broken is broken, live, by the engine. The lang switch and resize re-break the same words differently, staging the chance/order axis (P5) and giving the work a double reading (P7) — surface gag plus a concrete-poetry argument about authorship surrendered to the typesetter. Restraint is exemplary (P3): one CSS property, three words, a readback. Tone is dry and intelligent, not edgy. G6 holds: the catalogue has no prior work that interrogates browser hyphenation as material; closest neighbours (Modernipsum, Silencio, Un Coup de Dés) operate on different mechanisms.",
+  "reservations": "Narrative placement is decent but not pinpointed to a specific prior y-a-v-a work it answers — the concrete-poetry lineage is invoked rather than a catalogue entry. The novelty is real but the underlying CSS behaviour is well-known to web practitioners, so the 'aha' lands more on the art-historical argument than on a new web mechanism per se.",
+  "revision_suggestion": "Consider naming a specific prior y-a-v-a work this answers (e.g., Modernipsum as the language-toy precedent, or Silencio as the source-vs-render precedent) to tighten the twenty-year-argument placement.",
+  "jury_model": "minimax/minimax-m3"
+}

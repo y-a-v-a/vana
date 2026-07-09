@@ -870,5 +870,13 @@
     "source": "Agnes Martin; Agnes Martin, With My Back to the World (1997); the raster pixel grid / devicePixelRatio; net.art",
     "mechanism": "Canvas draws a per-visit sub-pixel graphite tremor that devicePixelRatio quantizes into grey squares; a native nearest-neighbour magnifier reads the backing store to expose the loss.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-09-indivisible",
+    "title": "Indivisible",
+    "year": 2026,
+    "source": "Augusto de Campos and the Noigandres group / Brazilian concrete poetry (1950s); Marcel Duchamp, infrathin",
+    "mechanism": "CSS hyphens:auto forces the layout engine's per-language hyphenation dictionary to insert render-only break-hyphens absent from the DOM; lang switch and resize re-break the same words differently.",
+    "status": "pending"
   }
 ]
