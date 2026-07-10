@@ -878,5 +878,13 @@
     "source": "Augusto de Campos and the Noigandres group / Brazilian concrete poetry (1950s); Marcel Duchamp, infrathin",
     "mechanism": "CSS hyphens:auto forces the layout engine's per-language hyphenation dictionary to insert render-only break-hyphens absent from the DOM; lang switch and resize re-break the same words differently.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-10-i-am-still-alive-caret",
+    "title": "I Am Still Alive (Caret)",
+    "year": 2026,
+    "source": "On Kawara, I Am Still Alive (1970– ); Marcel Duchamp, infrathin (inframince); net.art (the OS-drawn caret as material)",
+    "mechanism": "A focused contenteditable field that refuses all input; the caret's blink interval and on/off state are supplied by the OS and never exposed to JavaScript, and blur/tab-switch stops it — no timer, no storage, no network.",
+    "status": "pending"
   }
 ]

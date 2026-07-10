@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>I Am Still Alive (Caret)</title>
+<style>
+  html, body { height: 100%; margin: 0; background: #0a0a0a; }
+  body {
+    display: grid;
+    place-items: center;
+    color: #e8e4d8;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    overflow: hidden;
+    cursor: text;
+  }
+
+  /* The only living thing on this page is the caret the OS draws inside
+     this field. The field is kept forever empty; it performs a pulse it
+     cannot set, cannot read, and cannot own. */
+  #pulse {
+    caret-color: #e8e4d8;
+    color: transparent;                 /* no text will ever exist here, but just in case */
+    font-size: 26vh;
+    line-height: 1;
+    text-align: center;
+    min-width: 1ch;
+    padding: 0 .25em;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  #stopped {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgba(10, 10, 10, .82);
+    color: #7a766c;
+    font-size: 3.4vw;
+    letter-spacing: .04em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .6s ease;
+  }
+  #stopped.show { opacity: 1; }
+
+  .label {
+    position: fixed;
+    left: 1.4rem;
+    bottom: 1.2rem;
+    max-width: 30rem;
+    color: #6f6b61;
+    font-size: 12px;
+    line-height: 1.55;
+    letter-spacing: .01em;
+  }
+  .label b { color: #b8b3a6; font-weight: 600; }
+  .label .med { color: #8c877b; }
+  .label a { color: inherit; }
+  @media (max-width: 640px) {
+    .label { font-size: 11px; max-width: 88vw; }
+    #pulse { font-size: 20vh; }
+    #stopped { font-size: 5vw; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- inputmode=none discourages the mobile keyboard; the field takes no input anyway -->
+  <div id="pulse" contenteditable="true" spellcheck="false" inputmode="none" autofocus
+       aria-label="An empty document, blinking"></div>
+
+  <div id="stopped">the pulse has stopped — click anywhere</div>
+
+  <aside class="label">
+    <b>I Am Still Alive (Caret)</b> — y-a-v-a, 2026<br>
+    <span class="med">Medium: the operating system's caret blink. Pixels on screen.</span><br>
+    On Kawara mailed telegrams reading I&nbsp;AM&nbsp;STILL&nbsp;ALIVE. This document
+    says the same, once per blink, on a clock it does not own, to no one. The page
+    cannot set the interval, cannot read the beat, and cannot make you keep watching.
+    It only holds the field open and steps back. After Duchamp's <i>infrathin</i>.<br>
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+    No cookies, no tracking, no data leaves your device.
+  </aside>
+
+<script>
+  (function () {
+    var pulse = document.getElementById('pulse');
+    var stopped = document.getElementById('stopped');
+
+    // Keep the document eternally empty: it is a writing surface that refuses
+    // all writing. It performs only aliveness, never a message.
+    var refuse = function (e) { e.preventDefault(); };
+    pulse.addEventListener('beforeinput', refuse);
+    pulse.addEventListener('paste', refuse);
+    pulse.addEventListener('drop', refuse);
+    pulse.addEventListener('keydown', function (e) {
+      // allow nothing that would insert; the caret may still be placed
+      if (e.key.length === 1 || e.key === 'Enter' || e.key === 'Backspace' || e.key === 'Delete') {
+        e.preventDefault();
+      }
+    });
+
+    var beat = function () {
+      try { pulse.focus({ preventScroll: true }); } catch (_) { pulse.focus(); }
+    };
+
+    // When focus is lost (a click away, a switched tab), the pulse stops.
+    // The page waits. It cannot compel your attention back.
+    pulse.addEventListener('blur', function () { stopped.classList.add('show'); });
+    pulse.addEventListener('focus', function () { stopped.classList.remove('show'); });
+
+    document.addEventListener('pointerdown', beat);
+    window.addEventListener('load', beat);
+    beat();
+  })();
+</script>
+</body>
+</html>
