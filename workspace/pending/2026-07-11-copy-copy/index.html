@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COPY / COPY</title>
+<meta name="theme-color" content="#0d0d0d">
+<style>
+  :root { --ink:#f2efe9; --bg:#0d0d0d; --dim:#6f6a62; --line:#26241f; --acc:#b98a3a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; }
+  body {
+    background:var(--bg); color:var(--ink);
+    font:16px/1.55 Georgia, "Times New Roman", serif;
+    display:flex; flex-direction:column; align-items:center;
+    padding:6vmin 5vw; min-height:100%;
+  }
+  main { width:100%; max-width:720px; }
+  .kicker { color:var(--dim); font-size:.8rem; letter-spacing:.22em; text-transform:uppercase; margin:0 0 4vmin; }
+  .stage {
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:8vmin 0; display:flex; flex-direction:column; gap:5vmin; align-items:center;
+  }
+  .word {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size:clamp(3.5rem, 18vmin, 9rem);
+    line-height:1; letter-spacing:.05em; font-weight:400;
+    -webkit-user-select:none; user-select:none;
+  }
+  .word .lat { color:var(--ink); }
+  .word .cyr { color:var(--ink); }
+  body.revealed .word.two .cyr { color:var(--acc); }
+  .tag { color:var(--dim); font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; margin-top:1.4vmin; text-align:center; opacity:0; transition:opacity .4s; }
+  body.revealed .tag { opacity:1; }
+  .caption { color:var(--dim); text-align:center; font-style:italic; margin:5vmin 0 0; }
+  button {
+    display:block; margin:5vmin auto 0; background:none; color:var(--ink);
+    border:1px solid var(--line); padding:.7em 1.4em; font:inherit; font-size:.85rem;
+    letter-spacing:.05em; cursor:pointer; border-radius:2px; transition:border-color .3s;
+  }
+  button:hover { border-color:var(--acc); }
+  .ledger {
+    margin-top:5vmin; font:12.5px/1.7 "SFMono-Regular", Menlo, Consolas, monospace;
+    color:var(--dim); border-top:1px solid var(--line); padding-top:4vmin;
+  }
+  .ledger b { color:var(--ink); font-weight:400; }
+  .ledger .yes { color:var(--acc); }
+  .ledger .row { display:flex; justify-content:space-between; gap:2em; padding:.15em 0; flex-wrap:wrap; }
+  .ledger .dump { white-space:pre-wrap; word-break:break-all; margin:.4em 0 1.2em; color:#8a857c; }
+  footer { color:var(--dim); font-size:.72rem; line-height:1.7; margin-top:8vmin; max-width:720px; width:100%; }
+  footer a { color:var(--dim); }
+  .infra { font-style:italic; color:#8a857c; margin-bottom:1.6em; }
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">Inframince — the same to the eye</p>
+
+  <section class="stage" aria-label="Two words that look identical">
+    <div>
+      <div class="word one" id="w1"></div>
+      <div class="tag">original — the English word</div>
+    </div>
+    <div>
+      <div class="word two" id="w2"></div>
+      <div class="tag">copy — a picture of the word</div>
+    </div>
+  </section>
+
+  <p class="caption">Two words. One is not the other. You will never see which.</p>
+
+  <button id="reveal" aria-pressed="false">Reveal the difference</button>
+
+  <div class="ledger" id="ledger" aria-live="polite"></div>
+
+  <footer>
+    <p class="infra">"The difference between two objects from the same mould… is an inframince."<br>— Marcel Duchamp, notes on the <i>infrathin</i> (c. 1935)</p>
+    <p><b style="color:var(--ink)">COPY / COPY</b> — y-a-v-a, 2026. After Marcel Duchamp (<i>inframince</i>), Walter Benjamin (<i>The Work of Art in the Age of Mechanical Reproduction</i>, 1935) and Sherrie Levine (<i>After Walker Evans</i>, 1981); built on the Unicode confusables / IDN homograph problem.</p>
+    <p>Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. No cookies, no trackers, no requests, nothing stored. The only difference lives in memory.</p>
+  </footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  // The English word, in the Latin alphabet.
+  var LATIN = "COPY";              // C  O  P  Y
+  // The same picture, drawn with Cyrillic letters that share the glyphs.
+  var CYRIL = "СОРУ";              // Es Oo Er U  — reads "COPY", is not "COPY"
+
+  var NAMES = {
+    "0043":"LATIN CAPITAL LETTER C", "004F":"LATIN CAPITAL LETTER O",
+    "0050":"LATIN CAPITAL LETTER P", "0059":"LATIN CAPITAL LETTER Y",
+    "0421":"CYRILLIC CAPITAL LETTER ES", "041E":"CYRILLIC CAPITAL LETTER O",
+    "0420":"CYRILLIC CAPITAL LETTER ER", "0423":"CYRILLIC CAPITAL LETTER U"
+  };
+
+  function hex(ch){ return ch.codePointAt(0).toString(16).toUpperCase().padStart(4,"0"); }
+  function scriptOf(ch){ return /[Ѐ-ӿ]/.test(ch) ? "cyr" : "lat"; }
+
+  // Render each word character by character so a reveal can tint by script.
+  function paint(el, word){
+    el.textContent = "";
+    for (var i = 0; i < word.length; i++){
+      var s = document.createElement("span");
+      s.className = scriptOf(word[i]);
+      s.textContent = word[i];
+      el.appendChild(s);
+    }
+  }
+  paint(document.getElementById("w1"), LATIN);
+  paint(document.getElementById("w2"), CYRIL);
+
+  function dump(word){
+    return Array.prototype.map.call(word, function(ch){
+      return "U+" + hex(ch) + "  " + NAMES["" + hex(ch)];
+    }).join("\n");
+  }
+
+  var same       = (LATIN === CYRIL);
+  var sameNFC    = (LATIN.normalize("NFC") === CYRIL.normalize("NFC"));
+  var sameNFKC   = (LATIN.normalize("NFKC") === CYRIL.normalize("NFKC"));
+
+  document.getElementById("ledger").innerHTML =
+    '<div class="row"><span>rendered, glyph for glyph</span><b>identical</b></div>' +
+    '<div class="row"><span>word_1 === word_2</span><b>' + same + '</b></div>' +
+    '<div class="row"><span>after Unicode normalize (NFC)</span><b>' + sameNFC + '</b></div>' +
+    '<div class="row"><span>after compatibility fold (NFKC)</span><b>' + sameNFKC + '</b></div>' +
+    '<div class="row"><span>where the difference exists</span><b class="yes">nowhere you can look</b></div>' +
+    '<div class="dump">word_1\n' + dump(LATIN) + '\n\nword_2\n' + dump(CYRIL) + '</div>' +
+    '<div class="row"><span>the machine can tell them apart.</span><span>your eye cannot. neither can paper.</span></div>';
+
+  var btn = document.getElementById("reveal");
+  btn.addEventListener("click", function(){
+    var on = document.body.classList.toggle("revealed");
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.textContent = on ? "Hide the difference" : "Reveal the difference";
+  });
+})();
+</script>
+</body>
+</html>

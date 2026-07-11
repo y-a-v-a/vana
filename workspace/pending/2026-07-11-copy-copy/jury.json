@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-07-11-copy-copy",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Duchamp, inframince / infrathin (c. 1935)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "Sherrie Levine, After Walker Evans (1981)",
+    "Unicode confusables / IDN homograph attack"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism genuinely enacts the concept: the browser's glyph rasterizer is the mould that stamps two distinct codepoint sequences into one identical image, and the JS comparison + normalize() ledger exposes the inframince the eye cannot see. Double-coding is clean — a typographic puzzle for the casual viewer, a precise Duchamp/Benjamin/Levine argument for the literate one. The found-object (Unicode confusables / IDN homograph) is fresh and web-native in a specific way, and the work explicitly answers The Original, The Difference (after Sturtevant), and The Most Reproduced Image in the catalogue's running thread about copies and authenticity. Restraint is exemplary: two words, one comparison, no libraries, no requests.",
+  "reservations": "The core insight (two strings that render identically but compare unequal) is a property of Unicode rather than something only the browser-as-medium makes possible; the work leans on this being a web fact, which it is, but the conceptual payload is lighter than the catalogue's denser mechanism-driven pieces. The reveal button is a small concession to legibility that slightly weakens the inframince argument (it gives the eye what the work says it cannot have).",
+  "revision_suggestion": "Consider letting the reveal be non-visual (e.g., the ledger alone, or a console-only attestation) so the work more strictly refuses to show what it claims is unshowable; or stage a second pair where even the script-detection tint fails, pushing the inframince one degree deeper.",
+  "jury_model": "minimax/minimax-m3"
+}
