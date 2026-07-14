@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infra-mince (Enforced)</title>
+<style>
+  :root{
+    --bg:#0c0c0e; --ink:#e9e6df; --dim:#6f6c66; --line:#26262b; --hot:#c8483a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--bg); color:var(--ink);
+    font:400 15px/1.5 ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    display:flex; flex-direction:column; min-height:100%;
+    -webkit-font-smoothing:antialiased;
+  }
+  main{
+    flex:1 0 auto; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding:6vh 20px 3vh; gap:2.2rem;
+  }
+  .readout{ text-align:center; }
+  .quantum{
+    font-size:clamp(48px,13vw,132px); line-height:1;
+    font-weight:400; letter-spacing:-0.02em;
+    font-variant-numeric:tabular-nums;
+  }
+  .quantum .u{ color:var(--dim); font-size:0.34em; letter-spacing:0; }
+  .subtitle{ color:var(--dim); margin-top:.9rem; font-size:13px; }
+  .stats{
+    display:flex; gap:2.4rem; flex-wrap:wrap; justify-content:center;
+    color:var(--dim); font-size:12.5px;
+  }
+  .stats b{ color:var(--ink); font-weight:400; font-variant-numeric:tabular-nums; }
+  .plot{ width:min(680px,92vw); }
+  canvas{ display:block; width:100%; height:150px; }
+  .axis{ display:flex; justify-content:space-between; color:var(--dim); font-size:11px; margin-top:6px; }
+  figcaption{ color:var(--dim); font-size:11px; text-align:center; margin-top:.5rem; }
+  footer{
+    flex-shrink:0; border-top:1px solid var(--line);
+    padding:22px clamp(16px,5vw,60px); max-width:820px; width:100%;
+    margin:0 auto; color:var(--dim); font-size:12px; line-height:1.7;
+  }
+  footer .t{ color:var(--ink); }
+  footer p{ margin:.4rem 0; }
+  footer .hot{ color:var(--hot); }
+  a{ color:inherit; }
+</style>
+</head>
+<body>
+<main>
+  <div class="readout">
+    <div class="quantum" id="quantum">— <span class="u">µs</span></div>
+    <div class="subtitle">the smallest interval your browser will admit</div>
+  </div>
+
+  <div class="stats">
+    <span>instants sampled&nbsp; <b id="samples">0</b></span>
+    <span>refused to separate&nbsp; <b id="zeros">0</b></span>
+    <span>security context&nbsp; <b id="ctx">open</b></span>
+  </div>
+
+  <figure class="plot" style="margin:0">
+    <canvas id="hist" width="680" height="150" aria-label="Live histogram of the intervals the browser reports between consecutive clock reads. The spikes fall on a comb: zero, then one quantum, then its multiples."></canvas>
+    <div class="axis"><span>0&nbsp;µs</span><span id="axmax">—</span></div>
+    <figcaption>every reading snaps to the comb; between its teeth, time officially does not pass</figcaption>
+  </figure>
+</main>
+
+<footer>
+  <p><span class="t">Infra-mince (Enforced)</span> — y-a-v-a, 2026. After Marcel Duchamp, <em>inframince</em> (notes, c.&nbsp;1935).</p>
+  <p>Medium: elapsed time, quantized by your browser for your protection. It rounds <code>performance.now()</code> so this page cannot use the clock to fingerprint you or read your neighbours' secrets — the <span class="hot">Spectre / Meltdown</span> mitigation of 2018, still standing. The number above is the price your vendor set on the smallest difference. Below its teeth, two distinct instants are declared the same instant.</p>
+  <p>Duchamp called the smallest conceivable difference the <em>infra-mince</em> — the warmth left in a chair, the two faces of a sheet of paper. Here it is a hard floor, measured live on your machine, different on the next. Nothing is stored, nothing is sent: measuring you precisely is exactly what has been forbidden.</p>
+  <p>Licence <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Attribution: y-a-v-a (Vincent Bruijn), after Marcel Duchamp. No cookies, no trackers, no network.</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var now = (window.performance && performance.now)
+    ? performance.now.bind(performance)
+    : Date.now.bind(Date);
+
+  var samples = 0, zeros = 0;
+  var minNonZero = Infinity;   // in ms
+  var recent = new Float64Array(4096);   // ring of recent nonzero deltas (ms)
+  var rHead = 0, rCount = 0;
+  var sink = 0;                // keeps the reads from being optimised away
+
+  var elQ = document.getElementById('quantum');
+  var elS = document.getElementById('samples');
+  var elZ = document.getElementById('zeros');
+  var elMax = document.getElementById('axmax');
+  var elCtx = document.getElementById('ctx');
+  var cv = document.getElementById('hist');
+  var ctx2d = cv.getContext('2d');
+
+  // Cross-origin isolation unlocks a much finer clock (~5 µs); say so honestly.
+  elCtx.textContent = (window.crossOriginIsolated === true) ? 'isolated' : 'open';
+
+  function measure(budget){
+    var last = now();
+    for (var i = 0; i < budget; i++){
+      var t = now();
+      var d = t - last;          // ms
+      sink += t;                 // touch the value
+      last = t;
+      samples++;
+      if (d <= 0){ zeros++; continue; }
+      if (d < minNonZero) minNonZero = d;
+      recent[rHead] = d;
+      rHead = (rHead + 1) & 4095;
+      if (rCount < 4096) rCount++;
+    }
+  }
+
+  var fmt = new Intl.NumberFormat(undefined, {maximumFractionDigits:1});
+  var fmtInt = new Intl.NumberFormat(undefined);
+
+  function drawReadout(){
+    if (minNonZero === Infinity){
+      elQ.innerHTML = '&hellip; <span class="u">µs</span>';
+    } else {
+      elQ.innerHTML = fmt.format(minNonZero * 1000) + ' <span class="u">µs</span>';
+    }
+    elS.textContent = fmtInt.format(samples);
+    elZ.textContent = fmtInt.format(zeros);
+  }
+
+  function drawHist(){
+    var dpr = window.devicePixelRatio || 1;
+    var w = cv.clientWidth, h = cv.clientHeight;
+    if (cv.width !== Math.floor(w*dpr) || cv.height !== Math.floor(h*dpr)){
+      cv.width = Math.floor(w*dpr); cv.height = Math.floor(h*dpr);
+    }
+    var W = cv.width, H = cv.height;
+    ctx2d.clearRect(0,0,W,H);
+    if (rCount === 0 || minNonZero === Infinity){ return; }
+
+    // Axis: show ~10 teeth of the comb, so the quantisation is legible.
+    var axMaxMs = minNonZero * 10;
+    elMax.textContent = fmt.format(axMaxMs * 1000) + ' µs';
+
+    var BINS = Math.max(60, Math.floor(W / (6*dpr)));
+    var bins = new Uint32Array(BINS);
+    var peak = 0;
+    for (var i = 0; i < rCount; i++){
+      var d = recent[i];
+      var idx = Math.floor((d / axMaxMs) * BINS);
+      if (idx < 0) idx = 0;
+      if (idx >= BINS) idx = BINS - 1;
+      bins[idx]++;
+      if (bins[idx] > peak) peak = bins[idx];
+    }
+    if (peak === 0) return;
+
+    ctx2d.fillStyle = '#e9e6df';
+    var bw = W / BINS;
+    for (var b = 0; b < BINS; b++){
+      if (!bins[b]) continue;
+      var bh = (bins[b] / peak) * (H - 2);
+      ctx2d.fillRect(b*bw, H - bh, Math.max(1, bw - 1), bh);
+    }
+    // Mark the enforced floor in red: the first tooth after zero.
+    var qx = (minNonZero / axMaxMs) * W;
+    ctx2d.strokeStyle = '#c8483a';
+    ctx2d.lineWidth = Math.max(1, dpr);
+    ctx2d.beginPath();
+    ctx2d.moveTo(qx, 0); ctx2d.lineTo(qx, H);
+    ctx2d.stroke();
+  }
+
+  function frame(){
+    measure(4000);
+    drawReadout();
+    drawHist();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

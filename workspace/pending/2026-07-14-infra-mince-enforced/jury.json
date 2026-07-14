@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-07-14-infra-mince-enforced",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 43,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Duchamp, inframince / infra-mince (notes, c. 1935)",
+    "Spectre / Meltdown timer-resolution reduction (browser vendors, 2018)",
+    "Mel Bochner, Measurement series (1968-69)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The mechanism enacts the idea cleanly (P1): the browser's post-Spectre timer clamping is the inframince, measured and exhibited live as a comb histogram. The framing — the medium itself refusing to be measured precisely, in the name of viewer protection — is strong P7 double-coding and turns a security mitigation into an art-historical argument. Sits cleanly on the chance/order axis (P5), with the quantization teeth as order and the defensive jitter as chance, and names Bochner's Measurement series as the prior work it answers by extending measurement from space into time.",
+  "reservations": "The displayed 'smallest interval' is the minimum observed non-zero delta inside a busy loop, not the actual enforced resolution — loop overhead, JIT and scheduling can make the measured floor larger than the true one, which slightly undercuts the 'enforced' claim. The DNA already has a dense cluster of Duchamp/Bochner measurement pieces (3 Standard Stoppages, Measurement: Viewport, 3 Standard Stoppages Reference Pixel, the infrath.in project), so the work risks reading as another entry in a saturated sub-lineage rather than a fresh node, even though the timer-resolution mechanism is genuinely new.",
+  "revision_suggestion": "Distinguish, live, the actual enforced resolution from the measured loop-delta — e.g., expose both the smallest non-zero delta and a clamped/jittered distribution test — and frame the gap itself as the work, so the 'enforced' claim is provable rather than inferred. Optionally link to or echo the infrath.in project so the catalogue reads as a dialogue with the existing infrathin body of work rather than a sibling of it.",
+  "jury_model": "minimax/minimax-m3"
+}

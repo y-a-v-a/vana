@@ -894,5 +894,13 @@
     "source": "Marcel Duchamp, inframince / infrathin (c. 1935); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Sherrie Levine, After Walker Evans (1981); Unicode confusables / IDN homograph attack (net.art)",
     "mechanism": "Unicode confusables (Latin vs Cyrillic homoglyphs) render identically while JS string comparison and normalize() expose a permanent byte-level difference the eye and paper cannot see.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-14-infra-mince-enforced",
+    "title": "Infra-mince (Enforced)",
+    "year": 2026,
+    "source": "Marcel Duchamp, inframince / infra-mince (notes, c. 1935); Spectre / Meltdown timer-resolution reduction shipped by browser vendors (2018); Mel Bochner, Measurement series (1968-69)",
+    "mechanism": "performance.now() resolution clamping and jitter (the post-Spectre anti-timing-attack mitigation) sampled in a tight rAF loop to reveal the smallest interval the browser will admit, drawn as a comb histogram.",
+    "status": "pending"
   }
 ]
