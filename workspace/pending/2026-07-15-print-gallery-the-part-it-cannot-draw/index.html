@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Print Gallery — after Escher</title>
+<style>
+  :root{ --ink:#1a1611; --ground:#efe7d6; }
+  html,body{margin:0;height:100%;background:var(--ground);color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif;-webkit-text-size-adjust:100%;}
+  .gallery{box-sizing:border-box;height:100%;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:min(4vmin,26px);gap:min(2.6vmin,18px);}
+  .label{max-width:36ch;text-align:center;font-size:clamp(11px,2.5vmin,15px);
+    line-height:1.45;letter-spacing:.01em;}
+  .label b{font-variant:small-caps;letter-spacing:.07em;font-weight:600;}
+  .label small{display:block;margin-top:.55em;font-size:.82em;opacity:.62;font-style:italic;}
+  .frame{position:relative;flex:0 1 auto;width:min(78vmin,560px);height:min(78vmin,560px);
+    border:2px solid var(--ink);background:var(--ground);overflow:hidden;
+    box-shadow:0 0 0 6px var(--ground),0 0 0 8px var(--ink),0 8px 26px rgba(26,22,17,.28);}
+  .print{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;
+    transform-origin:50% 50%;background:var(--ground);}
+  .hole{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    text-align:center;font-style:italic;font-size:clamp(10px,2.3vmin,13px);
+    color:var(--ink);opacity:.5;padding:9%;box-sizing:border-box;}
+  .hole span{max-width:22ch;line-height:1.5;}
+  .cc{position:fixed;bottom:6px;left:0;right:0;text-align:center;
+    font-family:system-ui,sans-serif;font-size:10px;opacity:.5;padding:0 8px;}
+</style>
+</head>
+<body>
+<div class="gallery">
+  <div class="label">
+    <b>Print Gallery</b><br>
+    a page that hangs a living copy of itself
+    <small>after M.&nbsp;C.&nbsp;Escher, <i>Prentententoonstelling</i>, 1956</small>
+  </div>
+  <div class="frame">
+    <iframe class="print" title="the same page, one level deeper"></iframe>
+  </div>
+</div>
+<footer class="cc">CC&nbsp;BY-SA&nbsp;4.0 · y-a-v-a, 2026 · after M.&nbsp;C.&nbsp;Escher. No cookies, no trackers, no network.</footer>
+<script>
+(function(){
+  var frame  = document.querySelector(".frame");
+  var iframe = document.querySelector(".print");
+  var MAX = 8; // the depth at which the machine, like Escher, gives up
+
+  // How deep are we? Walk the same-origin ancestor chain (srcdoc inherits origin).
+  var depth = 0;
+  try {
+    var w = window;
+    while (w !== w.parent) { depth++; w = w.parent; if (depth > 64) break; }
+  } catch (e) { depth = MAX; } // if the walk is ever refused, treat it as the edge
+
+  if (depth >= MAX) {
+    // The blank patch at the centre — the part Escher could not resolve.
+    iframe.remove();
+    var hole = document.createElement("div");
+    hole.className = "hole";
+    var span = document.createElement("span");
+    span.textContent = "— the part it cannot draw —";
+    hole.appendChild(span);
+    frame.appendChild(hole);
+    return;
+  }
+
+  // Capture our OWN source before hanging the child, so the copy stays clean
+  // (the .print iframe still has no srcdoc at this moment).
+  var src = "<!doctype html>" + document.documentElement.outerHTML;
+
+  // Each level shrinks and twists toward the centre: the Droste spiral.
+  iframe.style.transform = "scale(0.82) rotate(4.2deg)";
+  iframe.setAttribute("srcdoc", src);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-15-print-gallery-the-part-it-cannot-draw",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 5,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 46,
+  "verdict": "strong",
+  "references_named": [
+    "M. C. Escher, Prentententoonstelling (1956)",
+    "the Droste effect",
+    "Hendrik Lenstra's mathematical completion (2003)",
+    "y-a-v-a, The Original (2026)",
+    "y-a-v-a, Not Your Backdrop (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7"
+  ],
+  "rationale": "The mechanism enacts the argument with near-perfect unity: an <iframe srcdoc> loop feeds the page its own outerHTML, producing a literal Droste recursion whose terminus is the browser's own frame-nesting depth — the medium's own limit standing in for Escher's unpaintable centre. Concept and execution are the same object (P1), the build is the smallest that completes the thought (P3), and the double-coding works cleanly: casual viewers see an infinite zoom, literate viewers get Escher, the Droste effect, and computability's edge. It names two prior works it answers (The Original, Not Your Backdrop) and extends the catalogue's art-historical canon to include Escher — a genuinely new patron saint for the practice.",
+  "reservations": "The visual is a uniform scale+rotate per level rather than a true logarithmic spiral, so the 'Droste' claim is conceptual rather than geometric. MAX=8 is a fixed cap rather than a detected browser limit, so the 'hole' is not perfectly cross-browser deterministic (Chrome's limit differs from Firefox's). These are minor: the work is honest about what it is.",
+  "revision_suggestion": "Optional: probe the actual same-origin frame-nesting limit at runtime (catch the error or count successful nestings) so the 'part it cannot draw' is attested by the browser itself rather than chosen by the artist. A true non-linear spiral transform would tighten the Escher fidelity but is not required.",
+  "jury_model": "minimax/minimax-m3"
+}

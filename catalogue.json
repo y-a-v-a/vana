@@ -902,5 +902,13 @@
     "source": "Marcel Duchamp, inframince / infra-mince (notes, c. 1935); Spectre / Meltdown timer-resolution reduction shipped by browser vendors (2018); Mel Bochner, Measurement series (1968-69)",
     "mechanism": "performance.now() resolution clamping and jitter (the post-Spectre anti-timing-attack mitigation) sampled in a tight rAF loop to reveal the smallest interval the browser will admit, drawn as a comb histogram.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-15-print-gallery-the-part-it-cannot-draw",
+    "title": "Print Gallery (The Part It Cannot Draw)",
+    "year": 2026,
+    "source": "M. C. Escher, Prentententoonstelling (Print Gallery), 1956; the Droste effect; Hendrik Lenstra, mathematical completion of Escher's Print Gallery (2003); net.art (the page as its own material)",
+    "mechanism": "An <iframe srcdoc> fed the document's own outerHTML nests the page inside itself in a Droste spiral; the browser's finite same-origin frame-nesting depth is the unresolvable hole.",
+    "status": "pending"
   }
 ]
