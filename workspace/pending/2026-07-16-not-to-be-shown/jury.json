@@ -1,0 +1,42 @@
+{
+  "work_id": "2026-07-16-not-to-be-shown",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 37,
+  "verdict": "borderline",
+  "references_named": [
+    "Hilma af Klint",
+    "Hilma af Klint, The Ten Largest / Paintings for the Temple (1907)",
+    "Hilma af Klint's instruction to withhold her work for 20 years after death",
+    "Marcel Duchamp, infrathin (inframince)",
+    "On Kawara, Today series",
+    "y-a-v-a, Today (2026)",
+    "y-a-v-a, Time Clock Piece (You Will Miss the Next One) (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism is genuinely the argument: a one-integer Date gate enforces a century-long embargo that mirrors af Klint's actual instruction, and the work openly admits the lock is defeatable by changing the system clock. This collapses concept and execution cleanly (P1) and stages a sharp infrathin observation about institutional gatekeeping of 'hidden' art (P7). The composition sits honestly on the chance/order axis (P5) — concentric ovoids as order, randomized spokes and private glyphs as chance. The work explicitly answers Today and Time Clock Piece in the catalogue by inverting their direction: those mark the present as it passes, this one refuses the present until a future it will almost certainly outlive. Voice is on-tone: dry, intelligent, cheerfully cynical — 'the seal is one integer' is the perfect punchline.",
+  "reservations": "Novelty is moderate rather than high: the time-gated reveal is a well-known pattern (advent calendars, embargoes), and while the af Klint framing gives it a fresh specific weight, the underlying ontology is still 'a page that renders or doesn't' rather than a truly new location. The af Klint reference is also slightly outside the standard DNA lineage (she is not in the patron-saints map), which is a strength for freshness but raises a small question about whether the source-art reference is precise enough for the 'precise art-historical argument' side of P7 — the candidate does the reading, but the casual viewer may not. The per-visit composition is functional but visually modest, which is appropriate to P3 but caps the impact on the literate viewer.",
+  "revision_suggestion": "Strengthen the double-coding by letting the seal itself carry the art-historical argument more visibly — e.g., a faint Duchampian infrathin caption or a dated provenance line that names the waiting period as a constructed category, so the literate read lands without requiring the motivation.md. Consider letting the countdown speak in af Klint's own terms (a private glyph, a letter from the alphabet) rather than plain digits, which would tighten the homage and deepen the surface gag at the same time.",
+  "jury_model": "minimax/minimax-m3"
+}

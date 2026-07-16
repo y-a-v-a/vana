@@ -910,5 +910,13 @@
     "source": "M. C. Escher, Prentententoonstelling (Print Gallery), 1956; the Droste effect; Hendrik Lenstra, mathematical completion of Escher's Print Gallery (2003); net.art (the page as its own material)",
     "mechanism": "An <iframe srcdoc> fed the document's own outerHTML nests the page inside itself in a Droste spiral; the browser's finite same-origin frame-nesting depth is the unresolvable hole.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-16-not-to-be-shown",
+    "title": "Not to Be Shown",
+    "year": 2026,
+    "source": "Hilma af Klint; Hilma af Klint, The Ten Largest / Paintings for the Temple (1907); Hilma af Klint's instruction to withhold her work for 20 years after death; Marcel Duchamp, infrathin (inframince); On Kawara, Today series",
+    "mechanism": "A live new Date() comparison against a fixed release date (checked on load, on visibilitychange, and every second) gates whether the canvas composition draws at all; before release only a seal and countdown show, and the page states the lock is defeated by advancing the system clock.",
+    "status": "pending"
   }
 ]

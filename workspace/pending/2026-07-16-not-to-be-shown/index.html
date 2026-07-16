@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not to Be Shown</title>
+<style>
+  :root { color-scheme: light; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: #efe7dd;
+    color: #2a2622;
+    font: 15px/1.55 Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* --- sealed state --- */
+  #sealed {
+    min-height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8vh 24px;
+    gap: 22px;
+  }
+  #seal {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 38% 34%, #b7472f, #7c2a19 70%);
+    box-shadow: inset 0 0 0 6px rgba(255,255,255,.10), 0 6px 18px rgba(0,0,0,.25);
+    display: grid; place-items: center;
+    color: #f3ddcf;
+    font: italic 22px/1 Georgia, serif;
+    letter-spacing: .04em;
+    user-select: none;
+  }
+  #sealed h1 {
+    font-weight: normal;
+    font-size: clamp(22px, 5vw, 34px);
+    margin: 0;
+    letter-spacing: .01em;
+  }
+  #sealed p { max-width: 46ch; margin: 0; }
+  #countdown {
+    font: 13px/1.5 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    letter-spacing: .06em;
+    color: #6a5f52;
+  }
+  .muted { color: #857a6c; font-size: 12.5px; }
+
+  /* --- shown state --- */
+  #shown { display: none; position: fixed; inset: 0; }
+  #shown.on { display: block; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #label {
+    position: fixed; left: 18px; bottom: 16px;
+    max-width: 42ch;
+    background: rgba(239,231,221,.86);
+    backdrop-filter: blur(2px);
+    padding: 10px 13px;
+    font-size: 12.5px; line-height: 1.5;
+    color: #33302b;
+  }
+  #label b { font-weight: normal; font-style: italic; }
+
+  footer {
+    position: fixed; right: 12px; bottom: 10px;
+    font: 11px/1.4 ui-monospace, Menlo, monospace;
+    color: #9c9082; text-align: right;
+  }
+  a { color: inherit; }
+</style>
+</head>
+<body>
+
+<section id="sealed" aria-live="polite">
+  <div id="seal" title="Sealed by the artist">H·aK</div>
+  <h1>Not to Be Shown</h1>
+  <p>A painting is held in this page. Following the artist's own instruction,
+     it is sealed and may not be exhibited until the centenary of her death:
+     <b>5 October 2044</b>.</p>
+  <p id="countdown">calculating the wait…</p>
+  <p class="muted">The seal is one integer in your device's clock.
+     Set the date past 5 October 2044 and the work will show itself.</p>
+</section>
+
+<section id="shown" aria-hidden="true">
+  <canvas id="c"></canvas>
+  <div id="label">
+    <b>Not to Be Shown</b> — after Hilma af Klint, whose abstract paintings were
+    withheld by her instruction for twenty years after her death (d. 1944).
+    Released to you because your clock says the embargo has passed. Composed
+    fresh for this visit; nothing is kept.
+  </div>
+</section>
+
+<footer>
+  y-a-v-a · after Hilma af Klint · CC BY-SA 4.0<br>
+  no cookies · no tracking · no network
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // The embargo: the centenary of the artist's death (5 October 1944).
+  var RELEASE = new Date(2044, 9, 5, 0, 0, 0); // month is 0-based: 9 = October
+
+  var sealed = document.getElementById("sealed");
+  var shown  = document.getElementById("shown");
+  var cd     = document.getElementById("countdown");
+  var canvas = document.getElementById("c");
+  var painted = false;
+
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+  function updateCountdown(ms) {
+    var s = Math.floor(ms / 1000);
+    var days = Math.floor(s / 86400); s -= days * 86400;
+    var h = Math.floor(s / 3600);    s -= h * 3600;
+    var m = Math.floor(s / 60);      s -= m * 60;
+    var years = Math.floor(days / 365); var rem = days - years * 365;
+    cd.textContent = "sealed for " + years + " y, " + rem + " d, " +
+                     pad(h) + ":" + pad(m) + ":" + pad(s);
+  }
+
+  function gate() {
+    var now = new Date();
+    var diff = RELEASE.getTime() - now.getTime();
+    if (diff > 0) {
+      // still sealed
+      if (shown.classList.contains("on")) {
+        shown.classList.remove("on");
+        shown.setAttribute("aria-hidden", "true");
+        sealed.style.display = "";
+        painted = false;
+      }
+      updateCountdown(diff);
+    } else {
+      // released
+      sealed.style.display = "none";
+      if (!shown.classList.contains("on")) {
+        shown.classList.add("on");
+        shown.setAttribute("aria-hidden", "false");
+      }
+      if (!painted) { paint(); painted = true; }
+    }
+  }
+
+  // ---- the withheld painting: a per-visit composition after af Klint ----
+  var ctx;
+  function paint() {
+    ctx = canvas.getContext("2d");
+    resize();
+  }
+
+  function resize() {
+    if (!painted && !shown.classList.contains("on")) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = window.innerWidth, h = window.innerHeight;
+    canvas.width = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    draw(w, h);
+  }
+
+  var PALETTE = ["#d9b24a", "#c9d2e0", "#3a5a8c", "#c86b6b",
+                 "#b6c99a", "#e6c9d6", "#8c6bb1", "#e2d3a8"];
+  function pick() { return PALETTE[(Math.random() * PALETTE.length) | 0]; }
+
+  function draw(w, h) {
+    // pale mediumistic ground
+    ctx.fillStyle = "#f1ece2";
+    ctx.fillRect(0, 0, w, h);
+
+    var cx = w / 2, cy = h / 2;
+    var R = Math.min(w, h) * 0.42;
+
+    // the great concentric ovoid (after "The Ten Largest")
+    var rings = 7 + ((Math.random() * 5) | 0);
+    for (var i = rings; i >= 1; i--) {
+      var t = i / rings;
+      ctx.beginPath();
+      ctx.arc(cx, cy, R * t, 0, Math.PI * 2);
+      ctx.fillStyle = pick();
+      ctx.globalAlpha = 0.28 + 0.12 * (1 - t);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // dual circles above — swan / duality
+    var sep = R * (0.5 + Math.random() * 0.2);
+    dualCircle(cx - sep / 2, cy - R * 0.15, R * 0.22, pick());
+    dualCircle(cx + sep / 2, cy - R * 0.15, R * 0.22, pick());
+
+    // radiating botanical petals / spiral spokes
+    var spokes = 12 + ((Math.random() * 12) | 0);
+    var spiral = Math.random() * 0.5 - 0.25;
+    ctx.strokeStyle = "#3a352c";
+    for (var k = 0; k < spokes; k++) {
+      var a = (k / spokes) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      var rr = R * (0.6 + Math.random() * 0.55);
+      var ex = cx + Math.cos(a + spiral) * rr;
+      var ey = cy + Math.sin(a + spiral) * rr;
+      var mx = cx + Math.cos(a) * rr * 0.55;
+      var my = cy + Math.sin(a) * rr * 0.55;
+      ctx.globalAlpha = 0.5;
+      ctx.lineWidth = 1;
+      ctx.quadraticCurveTo(mx, my, ex, ey);
+      ctx.stroke();
+      // petal node
+      ctx.beginPath();
+      ctx.arc(ex, ey, R * (0.03 + Math.random() * 0.05), 0, Math.PI * 2);
+      ctx.fillStyle = pick();
+      ctx.globalAlpha = 0.85;
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // small floating letterforms (af Klint's private alphabet: w, u, o)
+    var glyphs = "wuoåx";
+    var n = 5 + ((Math.random() * 6) | 0);
+    ctx.fillStyle = "#5a5346";
+    for (var g = 0; g < n; g++) {
+      var gr = R * (0.7 + Math.random() * 0.45);
+      var ga = Math.random() * Math.PI * 2;
+      var gx = cx + Math.cos(ga) * gr, gy = cy + Math.sin(ga) * gr;
+      var size = R * (0.05 + Math.random() * 0.05);
+      ctx.font = "italic " + size + "px Georgia, serif";
+      ctx.globalAlpha = 0.55;
+      ctx.fillText(glyphs[(Math.random() * glyphs.length) | 0], gx, gy);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function dualCircle(x, y, r, col) {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = col;
+    ctx.globalAlpha = 0.7;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = "#3a352c";
+    ctx.stroke();
+  }
+
+  window.addEventListener("resize", resize);
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) gate();
+  });
+  window.setInterval(gate, 1000);
+  gate();
+})();
+</script>
+</body>
+</html>
