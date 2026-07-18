@@ -861,7 +861,7 @@
     "year": 2026,
     "source": "Marcel Duchamp, Fountain (1917); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Andy Warhol; Olia Lialina & Dragan Espenschied, One Terabyte of Kilobyte Age (net.art broken-image tradition)",
     "mechanism": "Intentionally invalid inline data-URI <img> sources fail locally so each browser engine substitutes its own broken-image placeholder; a Reproduce button clones editions in RAM only, zero network.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-07-08-with-my-back-to-the-world-graphite-on-pixels",
