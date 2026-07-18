@@ -885,7 +885,7 @@
     "year": 2026,
     "source": "On Kawara, I Am Still Alive (1970– ); Marcel Duchamp, infrathin (inframince); net.art (the OS-drawn caret as material)",
     "mechanism": "A focused contenteditable field that refuses all input; the caret's blink interval and on/off state are supplied by the OS and never exposed to JavaScript, and blur/tab-switch stops it — no timer, no storage, no network.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-07-11-copy-copy",
