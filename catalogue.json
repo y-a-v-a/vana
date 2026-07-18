@@ -285,7 +285,7 @@
     "year": 2026,
     "source": "Yves Klein, Zones of Immaterial Pictorial Sensibility (1959-1962); Yves Klein, the receipt-burning ritual on the Seine (1962)",
     "mechanism": "A per-visit JS-minted receipt with a unique serial held only in closure; 'burn' irreversibly nulls it and the page persists nothing (no storage, cookies, server, or token), so reload shows no transaction ever existed.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-18-perfect-lovers-reset",
