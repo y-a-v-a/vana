@@ -12,10 +12,10 @@
     "novelty": 4,
     "nuance": 4,
     "narrative": 4,
-    "craft": 4,
+    "craft": 5,
     "wit": 4
   },
-  "weighted_total": 40,
+  "weighted_total": 41,
   "verdict": "strong",
   "references_named": [
     "Wang Ximeng, A Thousand Li of Rivers and Mountains (千里江山圖), 1113",
@@ -30,8 +30,8 @@
     "P7",
     "P9"
   ],
-  "rationale": "The mechanism-as-message principle is fully honored: the browser's viewport crop literally enacts the handscroll's arm's-length viewing, and the live meter turns the constraint into evidence rather than apologetic copy. The readymade here is a *format* rather than an image (P2), and the double-coding is clean — pleasant ink-wash on the surface, a sharp argument about museum display ideology underneath. The colophon's dry, slightly wounded 'and calls that respect' line is exactly the cheerful-cynic register. The work extends the catalogue's predominantly Western lineage into non-Western art history without diluting the core practice, and the chance/order axis is legible (rule-based six ranges, per-visit Math.random ridges, no persistence).",
-  "reservations": "The motivation does not explicitly name a prior y-a-v-a work this answers, though the kinship to la-trahison-des-images.be (the medium enacting the medium's argument) is obvious and worth stating. The 'wheel' translation hijacking is a small accessibility friction for trackpad users and could be reconsidered. The seal is a single fixed character (印) — a real handscroll accumulates *several* different collectors' seals across centuries, which would deepen the 'provenance as appended tail' idea.",
-  "revision_suggestion": "Name the prior work it answers (la-trahison-des-images.be is the closest cousin) explicitly in the colophon to strengthen the narrative placement. Consider accumulating two or three distinct pseudo-collector's seals rather than one, reinforcing the idea that provenance is an appended tail. Optionally add a subtle live ink-drying timer on first view to push the metaphor further.",
+  "rationale": "The browser's hard crop is genuinely the argument: a handscroll's arm's-length viewing is enacted by overflow-x, not merely illustrated. The per-visit cut length and ridgeline jitter sit cleanly on the chance/order axis, the frontispiece/colophon structure is faithful to the format, and the colophon's dry line about museums laying the scroll flat 'and calling that respect' carries the cheerful-cynic voice without overplaying it. The build is the smallest that completes the thought: one scroller, one canvas, monochrome ink. The piece is materially distinct from the existing catalogue — no prior work in the list treats the handscroll format or the horizontal scroll axis as the medium — and the readout ('you see N% at once, never more') turns the constraint into legible form. Minor dings: the mist via destination-out is effective but a touch pat; the moont is barely visible and arguably ornamental; and the 4000–13000px length variation is conceptually right but could risk an unscrollably long landscape on large monitors (mitigated by the meter but worth noting).",
+  "reservations": "The mist technique works but the per-visit 'fresh length of silk' is a one-time random draw rather than a sustained chance process; the order side of the axis is more audible than the chance side during a single visit. The meter text is functional but the %-at-once reading would be sharper if it also named the arm's-length unit (e.g. '1 of ~N lengths').",
+  "revision_suggestion": "Strengthen the chance leg by reminting at least one ridgeline (or a drifting boat / figure) on each scroll event with a small probability, so the 'per visit' chance claim is felt during the unrolling rather than only on reload. Consider expressing the meter in handscroll-length units (an arm's length being the canonical measure) to make the format-critique land more precisely for the literate viewer.",
   "jury_model": "minimax/minimax-m3"
 }

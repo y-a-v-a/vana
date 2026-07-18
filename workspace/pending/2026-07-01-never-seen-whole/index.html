@@ -20,9 +20,9 @@
     line-height:1; letter-spacing:.05em; }
   #front .sub{ font-size:clamp(18px,3vw,34px); margin-top:.4em; font-style:italic; opacity:.8; }
   #front .hint{ margin-top:2.2em; font-size:14px; letter-spacing:.25em; text-transform:uppercase; opacity:.55; }
-  /* the landscape (畫心) — the middle */
-  #artwrap{ order:2; width:6000px; height:100vh; position:relative; }
-  #art{ display:block; width:6000px; height:100vh; }
+  /* the landscape (畫心) — the middle; width is minted per visit in script */
+  #artwrap{ order:2; height:100vh; position:relative; }
+  #art{ display:block; height:100vh; }
   /* colophon (跋) + seals — read last, on the far left */
   #colo{ order:1; width:86vw; align-items:flex-start; text-align:left; border-right:1px solid #cbbf9f; }
   #colo .body{ max-width:640px; white-space:normal; font-size:clamp(15px,1.7vw,19px); line-height:1.55; }
@@ -57,8 +57,9 @@
           &mdash; a scroll so fragile that unrolling it is itself the reason it is almost never shown.</p>
         <span class="seal" title="collector's seal">&#21360;</span>
         <p class="fine">
-          y-a-v-a, 2026. The ink ranges are generated fresh on every visit and kept nowhere; reload
-          rolls the scroll back to blank silk.<br>
+          y-a-v-a, 2026. Every visit cuts a fresh length of silk &mdash; no two scrolls run the same
+          distance &mdash; and paints new ranges into its mist. Nothing is kept; reload rolls it all
+          back to blank.<br>
           Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
           No cookies, no tracking, no network requests. Pixels on screen.
         </p>
@@ -82,16 +83,24 @@
 (function(){
   "use strict";
   var scroller = document.getElementById('scroll');
+  var artwrap  = document.getElementById('artwrap');
   var canvas   = document.getElementById('art');
   var meter    = document.getElementById('meter');
-  var CW = 6000; // logical width of the painted silk
   var ctx, H, DPR;
 
   function r(){ return Math.random(); }
 
+  // No two scrolls are the same length. The silk is cut fresh on every visit —
+  // sometimes a modest 4000px, sometimes a li of mountains that runs past 12000.
+  var CW     = Math.round(4000 + Math.pow(r(),0.7)*9000);
+  // ...and each cutting decides how many ranges recede into the mist.
+  var layers = 5 + Math.floor(r()*4); // 5..8
+
   function draw(){
     DPR = Math.min(window.devicePixelRatio || 1, 2);
     H = window.innerHeight;
+    artwrap.style.width  = CW + 'px';
+    canvas.style.width   = CW + 'px';
     canvas.width  = CW * DPR;
     canvas.height = H  * DPR;
     ctx = canvas.getContext('2d');
@@ -104,7 +113,6 @@
     ctx.beginPath(); ctx.arc(mx,my,mr,0,Math.PI*2); ctx.fill();
 
     // layered mountain ranges: far & pale -> near & dark (rule = order; each ridge = chance)
-    var layers = 6;
     for(var l=0; l<layers; l++){
       var depth = l/(layers-1);
       var base  = H*(0.34 + 0.52*depth);
