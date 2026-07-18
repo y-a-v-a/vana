@@ -605,7 +605,7 @@
     "year": 2026,
     "source": "Bridget Riley, Blaze (1962); The Responsive Eye, MoMA (1965); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "requestAnimationFrame rotates a sub-pixel radial grating drawn at the live devicePixelRatio so the moire is interference with the device's physical pixel grid; prefers-reduced-motion freezes it into its own corpse.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-29-merda-d-artista-do-not-open",
