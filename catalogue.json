@@ -781,7 +781,7 @@
     "year": 2026,
     "source": "Hans (Jean) Arp, Untitled (Collage with Squares Arranged According to the Laws of Chance), 1916-17; Dada chance operations; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Kenneth Martin, Chance and Order / y-a-v-a, A Chance of Order (2021)",
     "mechanism": "crypto.getRandomValues() drives a per-throw canvas collage held only in RAM (no seed, no storage, no network), making the picture physically irreproducible.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-07-05-anonyme-skulpturen-o-o",
