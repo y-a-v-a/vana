@@ -918,5 +918,13 @@
     "source": "Hilma af Klint; Hilma af Klint, The Ten Largest / Paintings for the Temple (1907); Hilma af Klint's instruction to withhold her work for 20 years after death; Marcel Duchamp, infrathin (inframince); On Kawara, Today series",
     "mechanism": "A live new Date() comparison against a fixed release date (checked on load, on visibilitychange, and every second) gates whether the canvas composition draws at all; before release only a seal and countdown show, and the page states the lock is defeated by advancing the system clock.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-21-provenance",
+    "title": "Provenance",
+    "year": 2026,
+    "source": "Hans Haacke, Manet-PROJEKT '74 (1974); Hans Haacke, Seurat's 'Les Poseuses' (small version) 1888-1975 (1975); Marcel Duchamp, the readymade; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "history.length and document.referrer read as the chain of custody, extended live by history.pushState; every owner rendered as a blacked-out ledger line because the privacy web discloses none.",
+    "status": "pending"
   }
 ]

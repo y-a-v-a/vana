@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Provenance</title>
+<style>
+  :root{
+    --wall:#f3f1ea; --ink:#1a1712; --hair:#c9c3b4; --redact:#141210;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--wall);color:var(--ink)}
+  body{
+    font:16px/1.6 Georgia,"Times New Roman",serif;
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    padding:6vh 20px;
+  }
+  main{max-width:560px;width:100%}
+  .plate{
+    border:1px solid var(--ink);
+    padding:26px 26px 22px;
+    background:#fbfaf5;
+    box-shadow:0 1px 0 var(--hair), 0 24px 60px -40px rgba(0,0,0,.4);
+  }
+  h1{
+    font-size:15px;font-weight:normal;letter-spacing:.32em;
+    text-transform:uppercase;margin:0 0 2px;
+  }
+  .sub{font-style:italic;color:#5a5346;font-size:13.5px;margin:0 0 20px}
+  dl{margin:0 0 20px;display:grid;grid-template-columns:auto 1fr;gap:2px 14px;font-size:13.5px}
+  dt{color:#5a5346}
+  dd{margin:0}
+  h2{
+    font-size:12px;font-weight:normal;letter-spacing:.28em;text-transform:uppercase;
+    border-top:1px solid var(--hair);padding-top:14px;margin:0 0 10px;color:#3d382e;
+  }
+  #ledger{list-style:none;margin:0 0 4px;padding:0;font-size:13px}
+  #ledger li{display:flex;align-items:baseline;gap:10px;padding:3px 0}
+  #ledger .n{color:#8c8676;width:1.8em;text-align:right;flex:none;font-variant-numeric:tabular-nums}
+  .bar{background:var(--redact);height:.95em;border-radius:1px;display:inline-block;vertical-align:middle}
+  .bar.date{flex:none}
+  .bar.name{flex:1}
+  .count{font-size:13px;color:#5a5346;margin:0 0 20px}
+  .count b{color:var(--ink);font-weight:normal;font-variant-numeric:tabular-nums}
+  button{
+    font:inherit;font-size:13px;background:var(--ink);color:var(--wall);
+    border:0;padding:9px 16px;cursor:pointer;letter-spacing:.04em;
+  }
+  button:hover{background:#000}
+  .hint{font-size:12px;color:#8c8676;margin:9px 0 0;font-style:italic}
+  .text{font-size:13.5px;color:#39342b;margin:24px 0 0;border-top:1px solid var(--hair);padding-top:16px}
+  footer{font-size:11px;color:#8c8676;letter-spacing:.02em;margin-top:20px;line-height:1.7}
+  footer a{color:#6a6456}
+</style>
+</head>
+<body>
+<main>
+  <div class="plate">
+    <h1>Provenance</h1>
+    <p class="sub">of this document</p>
+
+    <dl>
+      <dt>Medium</dt><dd>HTML document, served — pixels on screen</dd>
+      <dt>Attribution</dt><dd>authentic; artist known</dd>
+      <dt>Immediate prior owner</dt><dd id="ref">—</dd>
+    </dl>
+
+    <h2>Chain of custody</h2>
+    <ol id="ledger"></ol>
+    <p class="count"><b id="num">0</b> transfer(s) recorded this session · <b id="named">0</b> owner(s) named</p>
+
+    <button id="sell">Transfer to a new owner</button>
+    <p class="hint">Every transfer is counted. Every name is withheld for your privacy. Reload begins a new, unprovenanced object.</p>
+
+    <p class="text">
+      A painting is worth what its owners were worth; erase the names and you erase the price.
+      This document has changed hands the number of times shown above — the browser counted each
+      transfer and, being decent about privacy, redacted every owner. So the work is perfectly
+      authentic and completely unprovenanced, which the market has always held to be the same thing
+      as a forgery.
+    </p>
+
+    <footer>
+      y-a-v-a (Vincent Bruijn), after Hans Haacke, <i>Manet-PROJEKT ’74</i> (1974) &amp;
+      <i>Seurat’s “Les Poseuses”…</i> (1975); Marcel Duchamp, the readymade;
+      Walter Benjamin on aura-as-history (1935). No cookies, no trackers, no requests, no data kept.<br>
+      Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+    </footer>
+  </div>
+</main>
+
+<script>
+(function(){
+  var ledger = document.getElementById('ledger');
+  var num = document.getElementById('num');
+  var named = document.getElementById('named');
+  var ref = document.getElementById('ref');
+
+  // The immediate prior owner: whatever the referrer discloses — almost always nothing,
+  // because the privacy web strips it. That absence is the artwork.
+  var r = document.referrer;
+  var priorNamed = 0;
+  if (r) {
+    try { ref.textContent = new URL(r).origin; priorNamed = 1; }
+    catch (e) { ref.textContent = '— unreadable —'; }
+  } else {
+    ref.textContent = '— withheld by the browser —';
+  }
+
+  function bar(w, cls){
+    var s = document.createElement('span');
+    s.className = 'bar ' + cls;
+    s.style.width = w + 'px';
+    return s;
+  }
+
+  function render(){
+    // history.length = the length of this session's chain of custody.
+    var n = history.length;
+    num.textContent = n;
+    named.textContent = priorNamed; // we can count owners; we cannot name them.
+    ledger.innerHTML = '';
+    for (var i = n; i >= 1; i--){
+      var li = document.createElement('li');
+      var idx = document.createElement('span');
+      idx.className = 'n';
+      idx.textContent = i + '.';
+      li.appendChild(idx);
+      // a redacted date and a redacted owner-name: the museum line, blacked out.
+      li.appendChild(bar(30 + Math.floor(Math.random()*22), 'date'));
+      li.appendChild(bar(120 + Math.floor(Math.random()*180), 'name'));
+      ledger.appendChild(li);
+    }
+  }
+
+  // "Selling" pushes a new history entry — the work changes hands without leaving the page,
+  // without a single network request, and without recording who now holds it.
+  document.getElementById('sell').addEventListener('click', function(){
+    history.pushState(null, '', location.href);
+    render();
+  });
+
+  window.addEventListener('popstate', render);
+  window.addEventListener('hashchange', render);
+  render();
+})();
+</script>
+</body>
+</html>

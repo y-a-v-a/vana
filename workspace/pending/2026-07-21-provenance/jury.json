@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-07-21-provenance",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Hans Haacke, Manet-PROJEKT '74 (1974)",
+    "Hans Haacke, Seurat's 'Les Poseuses' (small version) 1888-1975 (1975)",
+    "Marcel Duchamp, the readymade",
+    "Walter Benjamin, 'The Work of Art in the Age of Mechanical Reproduction' (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "Provenance turns the browser's history.length and document.referrer into a museum-style chain-of-custody panel that the privacy web makes structurally unreadable — the redaction bars are not a graphic effect but the honest shape of what the browser will disclose, and the 'Transfer to a new owner' button uses history.pushState to extend the ledger without navigation or network. Concept and execution collapse (P1): the mechanism of redacted chain-of-custody IS the provenance argument, and the witty surface (a comically empty museum plate) carries a precise art-historical point about Haacke's owner-by-owner demystification and Benjamin's aura-as-history, punctured by the privacy stance that proves the critic's point for them (P6/P7/P8). Voice is dry, intelligent, cheerful-cynic; restraint is strong; the build is the minimum necessary.",
+  "reservations": "The leverage of privacy-engineering blackouts is the work's load-bearing claim and works only because referrer/referrer-policy has become aggressive by default; older browsers or Referrer-Policy: unsafe-url origins would leak the prior owner and collapse the artwork's premise into legible text. Conceptually rigorous but mechanically conditional in a way the page itself does not flag.",
+  "revision_suggestion": "Add a one-line note or visual that attests the conditional privacy posture (e.g., when the referrer IS disclosed, the prior-owner's origin is rendered as text rather than a redaction bar), so the work's claim — 'the privacy web redacts everything' — stays legible regardless of browser, and turns the conditional into part of the piece rather than a quiet failure mode.",
+  "jury_model": "minimax/minimax-m3"
+}
