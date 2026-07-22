@@ -926,5 +926,13 @@
     "source": "Hans Haacke, Manet-PROJEKT '74 (1974); Hans Haacke, Seurat's 'Les Poseuses' (small version) 1888-1975 (1975); Marcel Duchamp, the readymade; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "history.length and document.referrer read as the chain of custody, extended live by history.pushState; every owner rendered as a blacked-out ledger line because the privacy web discloses none.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-22-ganzfeld-esc-to-leave",
+    "title": "Ganzfeld (Esc to Leave)",
+    "year": 2026,
+    "source": "James Turrell, Ganzfeld series (Ganzfeld: APANI, 2011); James Turrell, Perceptual Cells; Robert Irwin, 'seeing yourself see'; Yves Klein, Le Vide (The Void), 1958; Pointer Lock API (W3C) as net.art material",
+    "mechanism": "Pointer Lock API: requestPointerLock hides the cursor and delivers only movementX/movementY (never an absolute coordinate) over a per-visit uniform HSL field; the browser's mandatory Esc release ends the void, nothing rendered ever moves.",
+    "status": "pending"
   }
 ]

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ganzfeld (Esc to Leave)</title>
+<style>
+  :root{
+    /* a per-visit luminous field — set from JS, with a static fallback */
+    --field: hsl(28, 34%, 63%);
+    --ink: rgba(20,16,10,.82);
+    --ink-soft: rgba(20,16,10,.42);
+  }
+  html,body{height:100%;margin:0;}
+  body{
+    background:var(--field);
+    color:var(--ink);
+    font:16px/1.5 ui-serif, Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  /* THE FIELD: edgeless, uniform, absolutely static. Nothing here moves. */
+  #field{position:fixed;inset:0;background:var(--field);}
+
+  /* wall label + entry, shown when you are NOT in the field */
+  #label{
+    position:fixed;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;text-align:center;
+    padding:6vmin;box-sizing:border-box;gap:1.1rem;
+    transition:opacity .8s ease;
+  }
+  body.locked #label{opacity:0;pointer-events:none;}
+  h1{font-size:clamp(1.6rem,5vw,2.7rem);margin:0;font-weight:600;letter-spacing:.01em;}
+  h1 small{display:block;font-size:.42em;font-weight:400;color:var(--ink-soft);margin-top:.5em;letter-spacing:.04em;}
+  p{max-width:34rem;margin:0;color:var(--ink);}
+  .plate{font-size:.86rem;color:var(--ink-soft);max-width:34rem;}
+  button{
+    font:inherit;font-size:1rem;color:var(--ink);
+    background:transparent;border:1px solid var(--ink);
+    padding:.7em 1.4em;border-radius:2px;cursor:pointer;letter-spacing:.03em;
+    transition:background .2s,color .2s;
+  }
+  button:hover{background:var(--ink);color:var(--field);}
+  .note{font-size:.8rem;color:var(--ink-soft);max-width:30rem;}
+
+  /* the only thing that ever changes: a faint readout, shown in the field */
+  #hud{
+    position:fixed;left:0;bottom:0;padding:1.1rem 1.3rem;
+    font:12px/1.7 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color:var(--ink-soft);opacity:0;transition:opacity .8s ease;
+    pointer-events:none;white-space:pre;
+  }
+  body.locked #hud{opacity:1;}
+
+  footer{
+    position:fixed;right:0;bottom:0;padding:1.1rem 1.3rem;
+    font-size:11px;color:var(--ink-soft);text-align:right;
+  }
+  footer a{color:inherit;}
+</style>
+</head>
+<body>
+  <div id="field" aria-hidden="true"></div>
+
+  <main id="label">
+    <h1>Ganzfeld<small>James Turrell, restaged as a browser security feature</small></h1>
+    <p id="lede">A single, edgeless field of light. Step in and the browser takes your cursor,
+    reports only how far you move — never where you are — and refuses to draw an edge.
+    You can travel forever and arrive nowhere.</p>
+    <button id="enter">Enter the field</button>
+    <p class="note" id="fallback" hidden></p>
+    <p class="plate">Any drift or shimmer you notice happens in your visual cortex, not in the pixels — it is deprived of edges and invents them. The exit is not yours to choose: the browser keeps <b>Esc</b> for itself.</p>
+  </main>
+
+  <div id="hud" aria-hidden="true"></div>
+
+  <footer>
+    <div><b>Ganzfeld (Esc to Leave)</b> · y-a-v-a, 2026</div>
+    <div>after James Turrell · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div>
+    <div>medium: pixels on screen, the Pointer Lock API, your visual cortex</div>
+    <div>no cookies · no tracking · no data leaves your device</div>
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---- per-visit field: a soft, luminous, low-saturation colour (P5, chance) ----
+  var hue = Math.floor(Math.random()*360);
+  var field = "hsl(" + hue + ", " + (28 + Math.floor(Math.random()*18)) + "%, " + (60 + Math.floor(Math.random()*8)) + "%)";
+  document.documentElement.style.setProperty("--field", field);
+  // ink adapts to stay legible against any hue
+  document.documentElement.style.setProperty("--ink", "hsla(" + hue + ",30%,14%,.82)");
+  document.documentElement.style.setProperty("--ink-soft", "hsla(" + hue + ",22%,20%,.45)");
+
+  var body = document.body;
+  var enter = document.getElementById("enter");
+  var hud = document.getElementById("hud");
+  var lede = document.getElementById("lede");
+  var fallback = document.getElementById("fallback");
+
+  var el = document.getElementById("field");
+  el.requestPointerLock = el.requestPointerLock || el.mozRequestPointerLock || el.webkitRequestPointerLock;
+
+  // no pointer to capture, or the API is unavailable: be honest about the medium
+  var pointerFine = window.matchMedia && window.matchMedia("(pointer: fine)").matches;
+  if (!el.requestPointerLock || !pointerFine){
+    enter.hidden = true;
+    fallback.hidden = false;
+    fallback.textContent = !el.requestPointerLock
+      ? "This browser will not surrender its cursor, so the field cannot close over you. The Ganzfeld needs a pointing device and the Pointer Lock API — the piece is honest about depending on both."
+      : "There is no fine pointer here to take away. The field needs a mouse or trackpad: without a cursor to remove, there is nothing to remove.";
+    return;
+  }
+
+  var distance = 0;   // total relative travel, in CSS pixels
+  var samples = 0;    // number of movement events
+
+  function fmt(n){ return Math.round(n).toLocaleString(); }
+
+  function paintHud(){
+    hud.textContent =
+      "distance travelled : " + fmt(distance) + " px\n" +
+      "your position      : —\n" +   // never known: movement is relative
+      "edges              : 0\n" +
+      "surface            : none";
+  }
+
+  function onMove(e){
+    var dx = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+    var dy = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+    distance += Math.hypot(dx, dy);
+    samples++;
+    // throttle DOM writes to whole-pixel changes; the screen still shows nothing move
+    if (samples % 3 === 0) paintHud();
+  }
+
+  function locked(){
+    return document.pointerLockElement === el ||
+           document.mozPointerLockElement === el ||
+           document.webkitPointerLockElement === el;
+  }
+
+  function onLockChange(){
+    if (locked()){
+      body.classList.add("locked");
+      paintHud();
+      document.addEventListener("mousemove", onMove, false);
+    } else {
+      // the browser has reclaimed the pointer — the void will not be kept
+      document.removeEventListener("mousemove", onMove, false);
+      body.classList.remove("locked");
+      lede.innerHTML = "You travelled <b>" + fmt(distance) + " px</b> and arrived nowhere; " +
+        "the browser reclaimed the cursor, as it always does. There is no view to save, " +
+        "and nothing was recorded. Enter again — it is the same field.";
+      enter.textContent = "Enter again";
+      distance = 0; samples = 0;
+    }
+  }
+
+  document.addEventListener("pointerlockchange", onLockChange, false);
+  document.addEventListener("mozpointerlockchange", onLockChange, false);
+  document.addEventListener("webkitpointerlockchange", onLockChange, false);
+  document.addEventListener("pointerlockerror", function(){
+    fallback.hidden = false;
+    fallback.textContent = "The browser declined to take the cursor. The field stays open; you keep your position. That, too, is a kind of refusal.";
+  }, false);
+
+  enter.addEventListener("click", function(){
+    var p = el.requestPointerLock();          // must run from this user gesture
+    if (p && typeof p.catch === "function"){ p.catch(function(){}); }
+  }, false);
+})();
+</script>
+</body>
+</html>

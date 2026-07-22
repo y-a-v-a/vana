@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-07-22-ganzfeld-esc-to-leave",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "James Turrell, Ganzfeld series (Ganzfeld: APANI, 2011)",
+    "James Turrell, Perceptual Cells",
+    "Robert Irwin, 'seeing yourself see'",
+    "Yves Klein, Le Vide (The Void), 1958",
+    "Pointer Lock API (W3C) as net.art material"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The Pointer Lock API is a perfect web-native stand-in for the Ganzfeld: it literally withholds the absolute coordinate and reports only movement, so the mechanism enacts the concept (P1) without illustration. Per-visit HSL hue places the work squarely on the order↔chance axis (P5), the surface is genuinely live and regenerating (P4), the build is the minimum needed (P3), and the Esc key as the only exit is a dry, cheerful-cynic punchline (P9). Ethics are honored: CC BY-SA declared in footer, no cookies, no network, attribution to Turrell and Klein is on the page. Execution is clean: a single file, honest fallback when Pointer Lock is unavailable, HUD that reads '—' for position as the conceptual point made visible.",
+  "reservations": "Novelty is real but sits in a busy neighborhood of security-API-as-art works in the recent catalogue (e.g. the Battery Status API, the Visibility API, matchMedia); the connection to Turrell is the lift that keeps it fresh, and that connection is well drawn. The work could push the perceptual conceit further — the field is uniform but does not dynamically respond to drift the way a real Ganzfeld invites, so a viewer expecting neural shimmer may find it quieter than promised.",
+  "revision_suggestion": "Consider a slow, time-based modulation of the field (sub-percent luminance breathing, well under the flicker fusion threshold) so the 'drift the cortex invents' is both named in the plate and gently elicited, while still keeping the field honestly 'nothing rendered ever moves' in the static sense. Optionally, a faint vignette that appears only after long dwell, so the work deepens the longer you stay before Esc reclaims you.",
+  "jury_model": "minimax/minimax-m3"
+}
