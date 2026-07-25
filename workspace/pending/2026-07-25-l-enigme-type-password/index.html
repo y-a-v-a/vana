@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>L'Énigme (type=password)</title>
+<style>
+  :root {
+    --ink: #14110e;
+    --paper: #d9d4c8;
+    --dot: #14110e;
+    --hair: #b3ac9c;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 15px/1.55 ui-serif, Georgia, "Times New Roman", serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.2rem;
+    padding: 6vh 6vw;
+  }
+
+  /* the wrapped object */
+  .bundle {
+    width: min(680px, 100%);
+    text-align: center;
+  }
+  #enigma {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--hair);
+    color: var(--dot);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: clamp(20px, 5vw, 34px);
+    letter-spacing: 0.18em;
+    text-align: center;
+    padding: 0.3em 0 0.35em;
+    outline: none;
+    -webkit-text-security: disc; /* belt-and-braces: keep it wrapped even where type is coerced */
+  }
+  #enigma[type="text"] { -webkit-text-security: none; letter-spacing: 0.01em; }
+  #enigma::selection { background: rgba(20,17,14,.15); }
+
+  .cut {
+    margin-top: 1.4rem;
+    background: none;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    font: inherit;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    padding: 0.45em 1.1em;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  .cut:hover { background: var(--ink); color: var(--paper); }
+  .count {
+    margin-top: 0.9rem;
+    font-size: 12px;
+    color: #6d675a;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* wall label */
+  .label {
+    width: min(680px, 100%);
+    border-top: 1px solid var(--hair);
+    padding-top: 1.1rem;
+    font-size: 12.5px;
+    color: #4a463c;
+  }
+  .label h1 { font-size: 15px; margin: 0 0 .15rem; font-weight: 600; }
+  .label p { margin: .35rem 0; }
+  .label .medium { font-style: italic; }
+  .label .lic { color: #6d675a; font-size: 11.5px; margin-top: .9rem; }
+  a { color: inherit; }
+</style>
+</head>
+<body>
+
+  <div class="bundle">
+    <input id="enigma" type="password" readonly spellcheck="false"
+           aria-label="A sentence wrapped by the browser in bullets"
+           value="beau comme la rencontre fortuite sur une table de dissection d'une machine à coudre et d'un parapluie">
+    <div>
+      <button class="cut" id="cut" aria-pressed="false">cut the rope</button>
+    </div>
+    <div class="count" id="count"></div>
+  </div>
+
+  <div class="label">
+    <h1>L'Énigme (type=password)</h1>
+    <p>y-a-v-a, 2026 — after Man Ray, <em>L'Énigme d'Isidore Ducasse</em> (1920)</p>
+    <p class="medium">Medium: one HTML <code>&lt;input type="password"&gt;</code>; pixels on screen.</p>
+    <p>The sentence is present, whole and readable, in this document's source. Your
+       browser is the one that wraps it in bullets — a bundle whose length you can
+       count but whose contents you cannot read. Man Ray tied a sewing machine in a
+       blanket and rope and never untied it; the object stayed an enigma. This rope
+       cuts with one click. Reproduction unwraps everything.</p>
+    <p>Concealed text: Comte de Lautréamont (Isidore Ducasse), <em>Les Chants de
+       Maldoror</em> (1869) — “beautiful as the chance meeting, on a dissecting-table,
+       of a sewing machine and an umbrella.”</p>
+    <p class="lic">Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+       No cookies, no trackers, no data leaves your device. Attribution: y-a-v-a
+       (Vincent Bruijn), after Man Ray &amp; Lautréamont.</p>
+  </div>
+
+<script>
+  (function () {
+    var input = document.getElementById('enigma');
+    var cut = document.getElementById('cut');
+    var count = document.getElementById('count');
+    var wrapped = true;
+
+    // count the glyphs the browser is withholding — the shape shows, the content doesn't
+    var n = Array.from(input.value).length;
+    count.textContent = '• × ' + n + ' — ' + n + ' glyphs withheld';
+
+    cut.addEventListener('click', function () {
+      wrapped = !wrapped;
+      input.type = wrapped ? 'password' : 'text';
+      input.style.webkitTextSecurity = wrapped ? 'disc' : 'none';
+      cut.textContent = wrapped ? 'cut the rope' : 'tie it back';
+      cut.setAttribute('aria-pressed', String(!wrapped));
+      count.textContent = wrapped
+        ? '• × ' + n + ' — ' + n + ' glyphs withheld'
+        : n + ' glyphs shown — the enigma is gone';
+    });
+  })();
+</script>
+</body>
+</html>

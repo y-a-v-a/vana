@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-07-25-l-enigme-type-password",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 35,
+  "verdict": "borderline",
+  "references_named": [
+    "Man Ray, L'Énigme d'Isidore Ducasse (1920)",
+    "Comte de Lautréamont (Isidore Ducasse), Les Chants de Maldoror (1869)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The browser's native password masking is the rope — a genuinely web-native mechanism that enacts the Man Ray/Lautréamont enigma rather than illustrating it. The source-level legibility is the precise inversion of Man Ray's permanent wrap, and the one-click cut turns Benjamin's aura into a toggle, which is a sharp, double-coded reading. Tone is contained and dry. Execution is appropriately minimal. Main reservation: the underlying gesture (a concealed text revealed by a button) is conceptually adjacent to several existing catalogue pieces that stage dematerialization via native form controls (Merda d'artista, Damaged (No Undo), Concetto Spaziale Attese, the password-tin overlap), and the P5 chance/order invocation is a stretch — the chance is textual reference, not formal engine.",
+  "reservations": "The P5 claim is the weakest link: chance/order is invoked thematically (Lautréamont's 'chance encounter') rather than as a generative engine, which is the DNA's actual axis. Technically the password widget already appears in the catalogue via 'Merda d'artista (Do Not Open)' (tin toggle) and the work shares territory with several other native-widget/readymade pieces; the distinctiveness comes from the cited reference rather than from a new mechanism. The Benjamin invocation is decorative rather than load-bearing — the page does not strongly enact mechanical reproduction itself.",
+  "revision_suggestion": "Strengthen the chance/order dimension by making the underlying sentence (or its masking glyph count) drive a per-visit generative element — e.g., the wrap length or a chance-shuffled reordering of the sentence whose order is then masked — so the axis is operational, not just thematic. Alternatively, lean harder into the reproduction critique: ship the page so view-source is the unwrapped work and the rendering is the copy, making Benjamin's distinction load-bearing rather than text-only.",
+  "jury_model": "minimax/minimax-m3"
+}
