@@ -934,5 +934,13 @@
     "source": "James Turrell, Ganzfeld series (Ganzfeld: APANI, 2011); James Turrell, Perceptual Cells; Robert Irwin, 'seeing yourself see'; Yves Klein, Le Vide (The Void), 1958; Pointer Lock API (W3C) as net.art material",
     "mechanism": "Pointer Lock API: requestPointerLock hides the cursor and delivers only movementX/movementY (never an absolute coordinate) over a per-visit uniform HSL field; the browser's mandatory Esc release ends the void, nothing rendered ever moves.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-25-untitled-copy",
+    "title": "Untitled (Copy)",
+    "year": 2026,
+    "source": "Richard Prince, Untitled (Cowboy) (1980-89); Sherrie Levine, After Walker Evans (1981); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Marcel Duchamp / the readymade",
+    "mechanism": "The clipboard `copy` event is intercepted (clipboardData.setData + preventDefault) so every copy is re-authored to the copier; RAM-only ledger, no storage, no network.",
+    "status": "rejected"
   }
 ]

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Untitled (Copy)</title>
+<style>
+  :root{
+    --wall:#f2efe8;
+    --ink:#1a1a18;
+    --faint:#8a8578;
+    --line:#d8d3c6;
+    --red:#c0322b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--wall);
+    color:var(--ink);
+    font:16px/1.6 Georgia,"Times New Roman",serif;
+    display:flex;flex-direction:column;align-items:center;
+    min-height:100vh;padding:6vh 20px 40px;
+  }
+  main{max-width:640px;width:100%}
+
+  /* the work: a framed statement. copying it is the whole point. */
+  .work{
+    background:#fbfaf6;
+    border:1px solid var(--line);
+    box-shadow:0 1px 0 #fff inset, 0 18px 40px -28px rgba(0,0,0,.5);
+    padding:44px 40px 34px;
+    text-align:center;
+    position:relative;
+  }
+  .work h1{
+    font-size:15px;letter-spacing:.42em;text-transform:uppercase;
+    margin:0 0 26px;font-weight:normal;color:var(--ink);
+  }
+  .statement{
+    font-size:21px;line-height:1.5;margin:0 auto 26px;max-width:44ch;
+  }
+  .sig{
+    font-style:italic;color:var(--faint);font-size:15px;letter-spacing:.02em;
+  }
+  .sig b{font-style:normal;color:var(--ink);font-weight:normal;border-bottom:1px solid var(--line);}
+
+  .cta{
+    margin:26px auto 0;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+  }
+  button{
+    font:inherit;font-size:14px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink);background:transparent;border:1px solid var(--ink);
+    padding:9px 18px;cursor:pointer;transition:background .15s,color .15s;
+  }
+  button:hover{background:var(--ink);color:var(--wall)}
+
+  .hint{color:var(--faint);font-size:13px;font-style:italic;margin:16px auto 0}
+
+  /* live ledger of the theft */
+  .ledger{
+    margin:30px auto 0;width:100%;max-width:640px;
+    border-top:1px solid var(--line);padding-top:20px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12.5px;color:var(--faint);
+  }
+  .ledger .row{display:flex;justify-content:space-between;gap:16px}
+  .ledger .count{color:var(--ink)}
+  .last{
+    margin-top:12px;white-space:pre-wrap;word-break:break-word;
+    background:#fbfaf6;border:1px dashed var(--line);padding:12px 14px;color:var(--ink);
+    min-height:2.4em;
+  }
+  .last.empty{color:var(--faint);font-style:italic}
+
+  /* gallery label */
+  .label{
+    margin:38px auto 0;max-width:640px;width:100%;
+    border-top:1px solid var(--line);padding-top:18px;
+    font-size:12.5px;line-height:1.7;color:var(--faint);
+  }
+  .label b{color:var(--ink);font-weight:normal}
+  .label .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--red);vertical-align:baseline;margin-left:4px}
+  .label a{color:var(--faint)}
+  ::selection{background:#e7e1d0;color:var(--ink)}
+</style>
+</head>
+<body>
+<main>
+  <article class="work" id="work">
+    <h1>Untitled (Copy)</h1>
+    <p class="statement" id="statement">This is a work of art.<br>The only original thing about it is the name at the bottom.</p>
+    <p class="sig">— <b id="signature">y-a-v-a</b>, 2026</p>
+
+    <div class="cta">
+      <button id="copyBtn" type="button">Take it</button>
+    </div>
+    <p class="hint">Select the work and copy it (⌘/Ctrl-C), or press <em>Take it</em>. Then paste it anywhere.</p>
+  </article>
+
+  <section class="ledger" aria-live="polite">
+    <div class="row"><span>Copies made this visit</span><span class="count" id="count">0</span></div>
+    <div class="row"><span>Originals lost</span><span class="count">0</span></div>
+    <div class="last empty" id="last">Nothing has been appropriated yet.</div>
+  </section>
+
+  <footer class="label">
+    <b>Untitled (Copy)</b>, y-a-v-a, 2026 <span class="dot" title="every copy is signed the moment it is sold"></span><br>
+    Medium: the browser clipboard, re-authored on copy. Pixels on screen.<br>
+    After Richard Prince, <i>Untitled (Cowboy)</i> (1980–89), and Sherrie Levine, <i>After Walker Evans</i> (1981). See Walter Benjamin, <i>The Work of Art in the Age of Mechanical Reproduction</i> (1935); Marcel Duchamp / the readymade.<br>
+    No cookies, no trackers, no storage, no network. Your clipboard is written only during your own copy gesture, and never read.<br>
+    Licence: <b>CC BY-SA 4.0</b> — share-alike, so your appropriation stays as copyable as this one.
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  var STATEMENT =
+    "This is a work of art.\n" +
+    "The only original thing about it is the name at the bottom.";
+
+  var copies = 0;
+  var countEl = document.getElementById("count");
+  var lastEl  = document.getElementById("last");
+
+  // The clipboard is the web's readymade-maker: Ctrl+C, Ctrl+V, and it is yours.
+  // Richard Prince rephotographed. Here the act of copying re-signs the work to
+  // whoever copied it — byte-for-byte identical except the one line that matters.
+  function mint(){
+    copies++;
+    return STATEMENT +
+      "\n\n— you, 2026 (copy №" + copies + ")\n" +
+      "This copy is identical to the original in every particular.\n" +
+      "Only the name changed. That was always the whole of the value.\n" +
+      "CC BY-SA 4.0, after y-a-v-a.";
+  }
+
+  function record(text){
+    countEl.textContent = String(copies);
+    lastEl.textContent = text;
+    lastEl.classList.remove("empty");
+  }
+
+  // Intercept the native copy: whatever you selected, the clipboard receives
+  // the re-authored edition instead. Concept and execution are one object.
+  document.addEventListener("copy", function(e){
+    var text = mint();
+    if (e.clipboardData){
+      e.clipboardData.setData("text/plain", text);
+      e.preventDefault();
+    }
+    record(text);
+  });
+
+  // A button for the same theft, for touch and for the impatient.
+  document.getElementById("copyBtn").addEventListener("click", function(){
+    var text = mint();
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text)["catch"](function(){});
+    }
+    record(text);
+  });
+})();
+</script>
+</body>
+</html>

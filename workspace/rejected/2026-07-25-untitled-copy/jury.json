@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-07-25-untitled-copy",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": false
+  },
+  "scores": {
+    "novelty": 2,
+    "nuance": 3,
+    "narrative": 3,
+    "craft": 3,
+    "wit": 3
+  },
+  "weighted_total": 27,
+  "verdict": "reject",
+  "references_named": [
+    "Richard Prince, Untitled (Cowboy) (1980-89)",
+    "Sherrie Levine, After Walker Evans (1981)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "Marcel Duchamp / the readymade"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The concept/execution unity is strong: intercepting the copy event to re-sign the work literalizes Benjamin's reproduction argument and Prince/Levine's appropriation logic. Tone is on-voice (dry, cheerful-cynic, restrained) and the ethics are clean (CC BY-SA, no storage, no network, no clipboard reading). However, the work fails G6: COPY / COPY (2026) in the catalogue already stages a byte-level readymade through Unicode confusables, and The Original (2026) already enacts the aura-as-fiction argument through client-side Blob download. The clipboard-re-sign gesture itself is materially distinct from both, but the source-question (where does value live when copying is lossless?) and the Prince/Levine/Benjamin reference set are essentially the same argument as COPY / COPY, just relocated to a different browser API. The surface joke (copy it and it credits you) is legible without wall text, which is good, but the double-coding depth is shallow compared to peer works — there is no second-order mechanical surprise beyond the signature swap.",
+  "reservations": "G6 failure: substantively overlaps with COPY / COPY (2026) and The Original (2026). Both already litigate the same Benjamin/Prince/Levine territory through web-native mechanisms; this candidate re-states the argument via clipboardData.setData without adding a new ontological location or found object. The 're-sign on copy' gag is closer to a clever UI trick than a mechanism that could only exist on the web (clipboard interception is well-trodden web folklore).",
+  "revision_suggestion": "To pass G6, relocate the argument to a place the catalogue has not yet occupied. Candidates: (1) the print-stylesheet path — the work only signs the copier when reproduced onto paper (enacting Benjamin literally through @media print); (2) a drag/drop re-signature where the drop target's hostname becomes the new author, tying Prince's re-photography to URL provenance; or (3) a version where the signature is rewritten not on copy but on screenshot (navigator.mediaDevices.getDisplayMedia or the Clipboard API for images), forcing the Benjamin argument through the visual reproduction that Prince actually performed. Any of these would stake out a new mechanism-on-the-web that the existing Prince/Levine/Benjamin entries have not already claimed.",
+  "jury_model": "minimax/minimax-m3"
+}
