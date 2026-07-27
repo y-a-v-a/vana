@@ -31,6 +31,8 @@ const ConfigSchema = z.object({
     pending: z.string(),
     published: z.string(),
     rejected: z.string(),
+    // Works the generator finished but that never reached a verdict (see orphans.ts).
+    orphaned: z.string().default("workspace/orphaned"),
   }),
   dashboard: z.object({
     port: z.number().int().positive(),
@@ -50,6 +52,7 @@ export type Config = z.infer<typeof ConfigSchema> & {
     pending: string;
     published: string;
     rejected: string;
+    orphaned: string;
   };
 };
 
@@ -83,6 +86,7 @@ export function loadConfig(): Config {
       pending: resolve(ROOT, parsed.paths.pending),
       published: resolve(ROOT, parsed.paths.published),
       rejected: resolve(ROOT, parsed.paths.rejected),
+      orphaned: resolve(ROOT, parsed.paths.orphaned),
     },
   };
   return cached;

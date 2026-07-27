@@ -6,10 +6,13 @@ import { loadConfig } from "./config.ts";
  * - `historical` — Vincent's existing corpus (seeded from DNA.md §7), used by the
  *   jury's G6 (not-a-duplicate) gate and by the generator to avoid re-treading.
  * - `pending` | `published` | `rejected` — works produced by this harness.
+ * - `orphaned` — generated, but stranded before a verdict (see orphans.ts). Listed
+ *   so the catalogue always mirrors the filesystem, and so the generator's digest
+ *   knows the idea is already spent.
  *
  * Both the generator and the jury read it. The seed is the DNA §7 table verbatim.
  */
-export type CatalogueStatus = "historical" | "pending" | "published" | "rejected";
+export type CatalogueStatus = "historical" | "pending" | "published" | "rejected" | "orphaned";
 
 export interface CatalogueEntry {
   id: string;

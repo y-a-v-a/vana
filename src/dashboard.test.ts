@@ -7,8 +7,10 @@ import {
   renderCandidate,
   renderResolved,
   renderNotFound,
+  renderOrphan,
   type PendingItem,
 } from "./dashboard.ts";
+import type { OrphanItem } from "./orphans.ts";
 import { statusFor } from "./promote.ts";
 import type { GeneratedMeta } from "./generator.ts";
 import type { JuryVerdict } from "./jury.ts";
@@ -115,4 +117,60 @@ test("renderNotFound links back to the landing page", () => {
 test("statusFor maps approve→published / reject→rejected", () => {
   assert.deepEqual(statusFor("approve"), { status: "published", verb: "publish" });
   assert.deepEqual(statusFor("reject"), { status: "rejected", verb: "reject" });
+});
+
+// ── orphans ──────────────────────────────────────────────────────────────────
+
+const orphan: OrphanItem = {
+  id: "2026-07-27-stranded",
+  meta,
+  orphan: {
+    id: "2026-07-27-stranded",
+    at: "2026-07-27T12:00:00.000Z",
+    error: "OpenRouter returned no content",
+    violations: [],
+    costUsd: 1.234,
+  },
+};
+
+test("renderIndex omits the orphan section when there are none", () => {
+  assert.doesNotMatch(renderIndex([]), /Orphaned/);
+});
+
+test("renderIndex lists orphans with their stranding error, below pending", () => {
+  const html = renderIndex([{ id: "2026-06-16-x", meta, verdict }], [orphan]);
+  assert.match(html, /Pending \(1\)/);
+  assert.match(html, /Orphaned \(1\)/);
+  assert.match(html, /OpenRouter returned no content/);
+  assert.match(html, /href="\/orphan\/2026-07-27-stranded"/);
+  assert.match(html, /The &lt;Original&gt;/); // still escaped
+});
+
+test("renderIndex shows orphans even when nothing is pending", () => {
+  const html = renderIndex([], [orphan]);
+  assert.match(html, /No candidates awaiting confirmation/);
+  assert.match(html, /Orphaned \(1\)/);
+});
+
+test("renderOrphan shows the work, the failure, and a re-jury form — no approve/reject", () => {
+  const html = renderOrphan(orphan.id, meta, orphan.orphan, "motivation body");
+  assert.match(html, /\/orphan\/2026-07-27-stranded\/work/);
+  assert.match(html, /action="\/orphan\/2026-07-27-stranded\/rejury"/);
+  assert.match(html, /OpenRouter returned no content/);
+  assert.match(html, /\$1\.23/); // generation cost already spent
+  assert.match(html, /motivation body/);
+  assert.doesNotMatch(html, /\/approve"/);
+  assert.doesNotMatch(html, /name="feedback"/);
+});
+
+test("renderOrphan surfaces self-containment violations when present", () => {
+  const html = renderOrphan(orphan.id, meta, { ...orphan.orphan!, violations: ["external src: https://x"] }, "");
+  assert.match(html, /self-containment violations/);
+  assert.match(html, /external src: https:\/\/x/);
+});
+
+test("renderOrphan tolerates a missing orphan record", () => {
+  const html = renderOrphan(orphan.id, meta, null, "");
+  assert.match(html, /stranded \(no record\)/);
+  assert.match(html, /action="\/orphan\/2026-07-27-stranded\/rejury"/);
 });

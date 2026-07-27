@@ -13,7 +13,8 @@
     "guidance": "identity/guidance.md",
     "pending": "workspace/pending",
     "published": "workspace/published",
-    "rejected": "workspace/rejected"
+    "rejected": "workspace/rejected",
+    "orphaned": "workspace/orphaned"
   },
   "dashboard": { "port": 4737, "tailnetHost": "the-machine.taile14d0c.ts.net" },
   "email": { "to": "vebruijn@gmail.com" },

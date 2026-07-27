@@ -2,11 +2,12 @@ import { existsSync, mkdirSync, mkdtempSync, renameSync, rmSync, writeFileSync }
 import { join } from "node:path";
 import { loadConfig } from "./config.ts";
 import { isoDate, makeId } from "./ids.ts";
-import { generateCandidate, type GeneratedMeta } from "./generator.ts";
+import { generateCandidate, type GeneratedMeta, type GenerationResult } from "./generator.ts";
 import { juryCandidate, type Verdict, type JuryVerdict } from "./jury.ts";
 import { CostMeter, getOpenRouterPricing, usageCostUsd } from "./cost.ts";
 import { upsertEntry, type CatalogueEntry } from "./catalogue.ts";
 import { commitAndPush } from "./git.ts";
+import { parkOrphan } from "./orphans.ts";
 
 // ── Pure decision helpers (testable) ─────────────────────────────────────────
 
@@ -54,12 +55,13 @@ function lifecycleExists(cfg: ReturnType<typeof loadConfig>, id: string): boolea
   return (
     existsSync(join(cfg.abs.pending, id)) ||
     existsSync(join(cfg.abs.published, id)) ||
-    existsSync(join(cfg.abs.rejected, id))
+    existsSync(join(cfg.abs.rejected, id)) ||
+    existsSync(join(cfg.abs.orphaned, id))
   );
 }
 
 function ensureDirs(cfg: ReturnType<typeof loadConfig>): string {
-  for (const d of [cfg.abs.pending, cfg.abs.published, cfg.abs.rejected]) {
+  for (const d of [cfg.abs.pending, cfg.abs.published, cfg.abs.rejected, cfg.abs.orphaned]) {
     mkdirSync(d, { recursive: true });
   }
   const work = join(cfg.abs.root, "workspace", ".work");
@@ -89,13 +91,17 @@ export async function runWake(opts: RunWakeOptions = {}): Promise<WakeResult> {
     attempts++;
 
     const stage = mkdtempSync(join(workRoot, "cand-"));
+    // Hoisted so the catch can tell "the generator failed" (nothing worth keeping)
+    // from "a finished work was stranded" (keep it — see the orphan branch below).
+    let gen: GenerationResult | undefined;
+    let id: string | undefined;
     try {
       // 1. Generate
-      const gen = await generateCandidate(stage);
+      gen = await generateCandidate(stage);
       meter.add(gen.costUsd);
 
       // 2. Identify + jury
-      const id = uniqueId(makeId(gen.files.meta.title, new Date()), (x) => lifecycleExists(cfg, x));
+      id = uniqueId(makeId(gen.files.meta.title, new Date()), (x) => lifecycleExists(cfg, x));
       const { verdict, usage } = await juryCandidate(id, gen.files);
       meter.add(usageCostUsd(juryPricing, usage));
       writeFileSync(join(stage, "jury.json"), JSON.stringify(verdict, null, 2) + "\n", "utf8");
@@ -129,9 +135,41 @@ export async function runWake(opts: RunWakeOptions = {}): Promise<WakeResult> {
       }
       // rejected → loop-until-pass continues
     } catch (err) {
-      // Clean up a half-written stage dir, then rethrow with attempt context.
+      const message = (err as Error).message;
+      // A complete work stranded before its verdict (the jury provider is the
+      // usual culprit) is never destroyed: park it in orphaned/ so it reaches
+      // git and can be re-juried by hand. `stage` still existing means step 3's
+      // rename hasn't run — after that the work is already in a lifecycle dir
+      // and the next commit sweeps it up.
+      if (gen && id && existsSync(stage)) {
+        parkOrphan(cfg.abs.orphaned, id, stage, {
+          id,
+          at: new Date().toISOString(),
+          error: message,
+          violations: gen.violations,
+          costUsd: gen.costUsd,
+        });
+        upsertEntry({
+          id,
+          title: gen.files.meta.title,
+          year: Number(today.slice(0, 4)),
+          source: gen.files.meta.references.join("; "),
+          mechanism: gen.files.meta.mechanism,
+          status: "orphaned",
+        });
+        // Best-effort: if this commit also fails, the work is still on disk and
+        // any later commit stages it (`git add -- workspace`).
+        await commitAndPush(`orphan: ${id} (stranded before verdict)`, {
+          cwd: cfg.abs.root,
+          remote: cfg.git.remote,
+          branch: cfg.git.branch,
+          push,
+        }).catch((e) => console.error(`[loop] orphan commit failed for ${id}: ${(e as Error).message}`));
+        throw new Error(`Wake attempt ${attempts} failed: ${message} (work kept as orphan ${id})`);
+      }
+      // Nothing salvageable — clean up a half-written stage dir and rethrow.
       if (existsSync(stage)) rmSync(stage, { recursive: true, force: true });
-      throw new Error(`Wake attempt ${attempts} failed: ${(err as Error).message}`);
+      throw new Error(`Wake attempt ${attempts} failed: ${message}`);
     }
   }
 }

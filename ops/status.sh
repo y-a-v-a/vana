@@ -33,3 +33,12 @@ if [ -f .vana-state.json ]; then cat .vana-state.json; else echo "  nothing spen
 echo "── pending awaiting your approval ───────"
 ls -1 workspace/pending 2>/dev/null | grep -v '^\.gitkeep$' | sed 's/^/  /' || true
 [ -z "$(ls -1 workspace/pending 2>/dev/null | grep -v '^\.gitkeep$')" ] && echo "  (none)"
+
+echo "── orphaned (finished, never juried) ────"
+orphans=$(ls -1 workspace/orphaned 2>/dev/null | grep -v '^\.gitkeep$')
+if [ -n "$orphans" ]; then
+  echo "$orphans" | sed 's/^/  /'
+  echo "  re-jury with: npm run orphans -- rejury <id>"
+else
+  echo "  (none)"
+fi

@@ -7,11 +7,18 @@ import type { JuryVerdict } from "./jury.ts";
 import { isValidId } from "./ids.ts";
 import { decide, type Decision } from "./promote.ts";
 import { runRefine, isRefining, markRefining } from "./refine.ts";
+import { listOrphans, readOrphanRecord, rejuryOrphan, type OrphanItem } from "./orphans.ts";
 
 // The refiner is injectable so tests can stub it (a real refine drives Opus).
 let refiner: (id: string, feedback: string) => Promise<void> = runRefine;
 export function setRefiner(fn: (id: string, feedback: string) => Promise<void>): void {
   refiner = fn;
+}
+
+// Likewise the re-jury (a real one calls the jury provider and spends money).
+let rejurier: (id: string) => Promise<unknown> = rejuryOrphan;
+export function setRejurier(fn: (id: string) => Promise<unknown>): void {
+  rejurier = fn;
 }
 
 // The decider (approve/reject) is injectable too, for hermetic route tests.
@@ -76,6 +83,10 @@ const STYLE = `
   label{display:block;font:600 14px/1.4 Georgia,serif;margin-bottom:.35rem}
   textarea{width:100%;font:14px/1.5 Georgia,serif;padding:.6rem;border:1px solid var(--line);border-radius:.3rem;margin-bottom:.6rem;resize:vertical}
   .refinebtn{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .orphan{background:#4a4a4a}
+  .rejurybtn{background:#4a4a4a;color:#fff;border-color:#4a4a4a}
+  .err{font:13px/1.5 monospace;color:#a02020;word-break:break-word}
+  h2.section{margin-top:2.5rem;border-top:1px solid var(--line);padding-top:1.5rem}
 `;
 
 function shell(title: string, body: string): string {
@@ -85,10 +96,25 @@ function shell(title: string, body: string): string {
 <body><header><a href="/">vana</a> · approval gateway</header><main>${body}</main></body></html>`;
 }
 
-export function renderIndex(items: PendingItem[]): string {
-  if (items.length === 0) {
-    return shell("vana · pending", `<p class="muted">No candidates awaiting confirmation.</p>`);
-  }
+/** The orphan section of the landing page — omitted entirely when there are none. */
+function orphanSection(orphans: OrphanItem[]): string {
+  if (orphans.length === 0) return "";
+  const rows = orphans
+    .map(
+      (it) => `<div class="card">
+  <a href="/orphan/${encodeURIComponent(it.id)}"><strong>${escapeHtml(it.meta.title)}</strong></a>
+  <span class="badge orphan">no verdict</span>
+  <div class="muted">${escapeHtml(it.meta.summary)}</div>
+  <p class="err">${escapeHtml(it.orphan?.error ?? "stranded (no record)")}</p>
+</div>`,
+    )
+    .join("\n");
+  return `<h2 class="section">Orphaned (${orphans.length})</h2>
+<p class="muted">Finished works the jury never graded. Re-jury one to send it back through the gate.</p>
+${rows}`;
+}
+
+export function renderIndex(items: PendingItem[], orphans: OrphanItem[] = []): string {
   const rows = items
     .map(
       (it) => `<div class="card">
@@ -98,7 +124,43 @@ export function renderIndex(items: PendingItem[]): string {
 </div>`,
     )
     .join("\n");
-  return shell("vana · pending", `<h1>Pending (${items.length})</h1>${rows}`);
+  const pending =
+    items.length === 0
+      ? `<p class="muted">No candidates awaiting confirmation.</p>`
+      : `<h1>Pending (${items.length})</h1>${rows}`;
+  return shell("vana · pending", `${pending}${orphanSection(orphans)}`);
+}
+
+/** A stranded work: the work itself, why it never got a verdict, and a re-jury button. */
+export function renderOrphan(
+  id: string,
+  meta: GeneratedMeta,
+  orphan: OrphanItem["orphan"],
+  motivation: string,
+): string {
+  const enc = encodeURIComponent(id);
+  const body = `
+  <h1>${escapeHtml(meta.title)} <span class="badge orphan">no verdict</span></h1>
+  <p>${escapeHtml(meta.summary)}</p>
+  <div class="card">
+    <strong>This work was never graded.</strong>
+    <p class="err">${escapeHtml(orphan?.error ?? "stranded (no record)")}</p>
+    <p class="muted">Stranded ${escapeHtml(orphan?.at ?? "at an unknown time")} · generation cost $${orphan?.costUsd?.toFixed(2) ?? "?"}${
+      orphan?.violations?.length
+        ? ` · <strong>self-containment violations:</strong> ${escapeHtml(orphan.violations.join("; "))}`
+        : ""
+    }</p>
+  </div>
+  <iframe src="/orphan/${enc}/work" title="work" sandbox="allow-scripts allow-downloads" referrerpolicy="no-referrer"></iframe>
+  <div class="card">
+    <form method="POST" action="/orphan/${enc}/rejury">
+      <label>Re-jury — grade it now and send it to pending for your decision</label>
+      <button class="rejurybtn" type="submit">Re-jury →</button>
+    </form>
+  </div>
+  <h2>Motivation</h2>
+  <pre>${escapeHtml(motivation)}</pre>`;
+  return shell(`vana · ${meta.title}`, body);
 }
 
 /** The work iframe + jury card, shared by the pending and resolved views. */
@@ -243,7 +305,37 @@ export async function handle(req: IncomingMessage, res: ServerResponse, cfg: Con
   const parts = url.pathname.split("/").filter(Boolean); // e.g. ["candidate","<id>","work"]
 
   if (req.method === "GET" && parts.length === 0) {
-    return send(res, 200, "text/html; charset=utf-8", renderIndex(listPending(cfg)));
+    return send(res, 200, "text/html; charset=utf-8", renderIndex(listPending(cfg), listOrphans(cfg)));
+  }
+
+  if (parts[0] === "orphan" && parts[1]) {
+    const id = decodeURIComponent(parts[1]);
+    if (!isValidId(id)) return send(res, 404, "text/html; charset=utf-8", renderNotFound());
+    const dir = join(cfg.abs.orphaned, id);
+    if (!existsSync(dir)) return send(res, 404, "text/html; charset=utf-8", renderNotFound());
+
+    if (req.method === "GET" && parts.length === 2) {
+      const meta = JSON.parse(readFileSync(join(dir, "meta.json"), "utf8")) as GeneratedMeta;
+      const motivation = readFileSync(join(dir, "motivation.md"), "utf8");
+      const html = renderOrphan(id, meta, readOrphanRecord(dir), motivation);
+      return send(res, 200, "text/html; charset=utf-8", html);
+    }
+
+    if (req.method === "GET" && parts[2] === "work") {
+      const work = join(dir, "index.html");
+      if (!existsSync(work)) return send(res, 404, "text/html; charset=utf-8", renderNotFound());
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8", "Content-Security-Policy": WORK_CSP });
+      res.end(readFileSync(work, "utf8"));
+      return;
+    }
+
+    if (req.method === "POST" && parts[2] === "rejury") {
+      // Fire and forget, like refine: the jury call takes seconds and the lock
+      // serializes it against a running wake. Landing page shows the result.
+      void rejurier(id).catch((err) => console.error(`[rejury] ${id}: ${(err as Error).message}`));
+      res.writeHead(303, { Location: "/" });
+      return void res.end();
+    }
   }
 
   if (parts[0] === "candidate" && parts[1]) {
