@@ -950,5 +950,13 @@
     "source": "Man Ray, L'Énigme d'Isidore Ducasse (1920); Comte de Lautréamont (Isidore Ducasse), Les Chants de Maldoror (1869); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "An <input type=\"password\"> (with -webkit-text-security fallback) delegates concealment to the browser, showing a bundle's length but not its content until a toggle flips it to type=text.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-27-smoke-test-orphan",
+    "title": "Smoke Test Orphan",
+    "year": 2026,
+    "source": "R",
+    "mechanism": "m",
+    "status": "pending"
   }
 ]
