@@ -6,23 +6,22 @@
     "G3": true,
     "G4": true,
     "G5": true,
-    "G6": true
+    "G6": false
   },
   "scores": {
-    "novelty": 4,
-    "nuance": 5,
-    "narrative": 5,
-    "craft": 5,
-    "wit": 4
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 3,
+    "wit": 3
   },
-  "weighted_total": 46,
-  "verdict": "strong",
+  "weighted_total": 33,
+  "verdict": "reject",
   "references_named": [
     "M. C. Escher, Prentententoonstelling (1956)",
     "the Droste effect",
-    "Hendrik Lenstra's mathematical completion (2003)",
-    "y-a-v-a, The Original (2026)",
-    "y-a-v-a, Not Your Backdrop (2026)"
+    "Hendrik Lenstra, mathematical completion of Escher's Print Gallery (2003)",
+    "net.art (the page as its own material)"
   ],
   "principles_invoked": [
     "P1",
@@ -32,8 +31,8 @@
     "P5",
     "P7"
   ],
-  "rationale": "The mechanism enacts the argument with near-perfect unity: an <iframe srcdoc> loop feeds the page its own outerHTML, producing a literal Droste recursion whose terminus is the browser's own frame-nesting depth — the medium's own limit standing in for Escher's unpaintable centre. Concept and execution are the same object (P1), the build is the smallest that completes the thought (P3), and the double-coding works cleanly: casual viewers see an infinite zoom, literate viewers get Escher, the Droste effect, and computability's edge. It names two prior works it answers (The Original, Not Your Backdrop) and extends the catalogue's art-historical canon to include Escher — a genuinely new patron saint for the practice.",
-  "reservations": "The visual is a uniform scale+rotate per level rather than a true logarithmic spiral, so the 'Droste' claim is conceptual rather than geometric. MAX=8 is a fixed cap rather than a detected browser limit, so the 'hole' is not perfectly cross-browser deterministic (Chrome's limit differs from Firefox's). These are minor: the work is honest about what it is.",
-  "revision_suggestion": "Optional: probe the actual same-origin frame-nesting limit at runtime (catch the error or count successful nestings) so the 'part it cannot draw' is attested by the browser itself rather than chosen by the artist. A true non-linear spiral transform would tighten the Escher fidelity but is not required.",
+  "rationale": "The mechanism — srcdoc-ing the page's own outerHTML into a nesting iframe — is genuinely web-native and elegantly enacts the Escher recursion. However, the candidate is materially the same work as 'Print Gallery (The Part It Cannot Draw)' already listed in the candidate catalogue (2026) under the same title, same references (Escher, Droste, Lenstra), same mechanism (iframe srcdoc feeding outerHTML, browser frame-nesting limit as the hole). G6 fails on duplicate. Conceptually the piece is strong: P1 holds well — the nesting limit IS the blank centre, not depicted but enacted. Restraint is good. But novelty over the existing entry is zero, so the scored novelty reflects mechanism-quality rather than new-found-object/origin.",
+  "reservations": "G6 fails: candidate is a duplicate of the already-catalogued 'Print Gallery (The Part It Cannot Draw) (2026)'. No new ontology, no new found-object versus the existing entry. The depth limit (MAX=8) and transform values may differ cosmetically from the archived version, but source, mechanism, and argument are identical.",
+  "revision_suggestion": "To clear G6, either (a) submit genuinely different recursion mechanics — e.g., nest via CSS conic-gradient or a custom-element tree rather than srcdoc iframes, or (b) reframe the source from 'Escher's blank hole' to a distinct self-referential lineage (e.g., Quine / fixed-point combinators, or Hofstadter's strange-loop reading), or (c) merge into the existing Print Gallery entry and remove as a separate work.",
   "jury_model": "minimax/minimax-m3"
 }
