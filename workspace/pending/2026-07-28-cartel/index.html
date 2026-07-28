@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cartel</title>
+<style>
+  :root { color-scheme: light; }
+  html, body {
+    margin: 0; height: 100%;
+    background: #efece4;            /* the gallery wall */
+    color: #2a2723;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  body {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100vh; padding: 6vmin; box-sizing: border-box;
+    text-align: center;
+  }
+  .frame {
+    padding: 2.2vmin;
+    background: #fbfaf7;
+    box-shadow:
+      0 0 0 1px #d8d2c6,
+      0 1.4vmin 3.2vmin rgba(0,0,0,.22),
+      inset 0 0 0 1.2vmin #f4f1ea;
+    cursor: help;                    /* the OS says: there is more, if you wait */
+  }
+  .painting {
+    width: min(58vmin, 74vw);
+    height: min(58vmin, 74vw);
+    background: #b8362e;             /* replaced per visit */
+    display: block;
+  }
+  .plate {
+    margin-top: 3.2vmin;
+    width: min(40vmin, 60vw);
+    height: 5.4vmin;
+    background: linear-gradient(#e7e2d6, #cfc8b8);
+    box-shadow: inset 0 0 0 1px #b6ae9c, 0 .3vmin .6vmin rgba(0,0,0,.15);
+    cursor: help;
+    /* deliberately blank: the tombstone that says nothing on the wall */
+  }
+  .hint {
+    margin-top: 2.6vmin;
+    font-size: 2.1vmin; font-style: italic; color: #6f695d;
+    max-width: 60vmin;
+  }
+  footer {
+    margin-top: 5vmin;
+    font-family: -apple-system, system-ui, sans-serif;
+    font-size: 1.55vmin; line-height: 1.6; color: #8a8479;
+    max-width: 72vmin;
+  }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+
+  <div class="frame" id="frame">
+    <div class="painting" id="painting"></div>
+  </div>
+
+  <div class="plate" id="plate"></div>
+
+  <p class="hint" id="hint">
+    The label is not on the wall. Rest on the painting and wait —
+    the museum will decide when to speak, and in whose font.
+  </p>
+
+  <footer>
+    <strong>Cartel</strong> — y-a-v-a (Vincent Bruijn), 2026.
+    After the museum <em>cartel</em> / wall label (the “tombstone”), and
+    Joseph Kosuth, <em>Titled (Art as Idea as Idea)</em> (1967) &amp;
+    Marcel Broodthaers, <em>“Ceci n’est pas un objet d’art”</em> (1968–72).
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+    No cookies, no tracking, no data leaves your browser.
+  </footer>
+
+<script>
+(function () {
+  // Per-visit monochrome. Chance, resolved client-side, kept only in this closure.
+  var h = Math.floor(Math.random() * 360);
+  var s = 40 + Math.floor(Math.random() * 40);
+  var l = 34 + Math.floor(Math.random() * 22);
+  var painting = document.getElementById('painting');
+  var plate = document.getElementById('plate');
+  painting.style.background = 'hsl(' + h + ',' + s + '%,' + l + '%)';
+
+  // The entire wall label lives here — never in the render tree,
+  // never on the canvas, drawn and timed only by the operating system.
+  function cartel() {
+    return [
+      'y-a-v-a (Vincent Bruijn)',
+      'Cartel, 2026',
+      'hsl(' + h + ', ' + s + '%, ' + l + '%)',
+      'title attribute on pixels',
+      window.innerWidth + ' × ' + window.innerHeight + ' px (this viewport)',
+      'Edition of ∞, unsigned',
+      'Price on request'
+    ].join('\n');
+  }
+  function label() {
+    var t = cartel();
+    frame.title = t;
+    plate.title = t;
+    painting.title = t;
+  }
+  var frame = document.getElementById('frame');
+  label();
+  window.addEventListener('resize', label);
+
+  // On a touch device there is no hover: the label simply does not exist.
+  if (window.matchMedia && window.matchMedia('(hover: none)').matches) {
+    document.getElementById('hint').textContent =
+      'Your device cannot hover. Here, the painting has no label at all.';
+  }
+})();
+</script>
+</body>
+</html>

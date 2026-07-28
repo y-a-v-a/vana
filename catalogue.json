@@ -950,5 +950,13 @@
     "source": "Man Ray, L'Énigme d'Isidore Ducasse (1920); Comte de Lautréamont (Isidore Ducasse), Les Chants de Maldoror (1869); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "An <input type=\"password\"> (with -webkit-text-security fallback) delegates concealment to the browser, showing a bundle's length but not its content until a toggle flips it to type=text.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-28-cartel",
+    "title": "Cartel",
+    "year": 2026,
+    "source": "Museum cartel / wall label (the \"tombstone\"); Joseph Kosuth, Titled (Art as Idea as Idea) (1967); Marcel Broodthaers, \"Ceci n'est pas un objet d'art\" / Musee d'Art Moderne, Departement des Aigles (1968-72); Institutional critique / net.art (the title attribute as material)",
+    "mechanism": "The native title-attribute tooltip — OS-drawn, OS-timed, absent from the render tree and unavailable on touch (hover:none) — carries the whole wall label (title, medium, live viewport dimensions, price); per-visit hsl hue via Math.random held in a closure, no storage, no network.",
+    "status": "pending"
   }
 ]

@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-07-28-cartel",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 35,
+  "verdict": "borderline",
+  "references_named": [
+    "Museum cartel / wall label (the tombstone)",
+    "Joseph Kosuth, Titled (Art as Idea as Idea) (1967)",
+    "Marcel Broodthaers, 'Ceci n'est pas un objet d'art' / Musee d'Art Moderne, Departement des Aigles (1968-72)",
+    "Institutional critique / net.art (title attribute as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism is genuinely the argument: a museum tombstone whose caption lives exclusively in the OS-drawn title-attribute tooltip, with timing, typography, and existence (hover:none on touch) outside the artist's control — a clean P1 instantiation that doubles as institutional critique (P2/P6) and lands a bilingual pun (cartel = wall label + price-fixing body) without wall text. Touch-device absence is a nice structural punch that earns the touch:none fork. Novelty is moderate rather than high — title-attribute-as-material and Kosuth-adjacent framing are well-trodden net.art territory, and Several previous DNA works (Inside the White Cube, Silencio, Pure Colour, Afterimage) already mine native browser chrome as readymade. Craft is tight and restraint is exemplary; the smallest build completes the thought.",
+  "reservations": "The Kosuth/Broodthaers reference and the label-as-subject move echo Inside the White Cube (2026) and Département des Aigles (2026) in spirit; the work earns its place through the specific touch/time deferral, but its argumentative center is adjacent to those. Touch-aware fork is delightful but means the work is genuinely invisible on a meaningful share of devices — is that a feature or an access problem the DNA wants to argue against?",
+  "revision_suggestion": "Strengthen the distance from Kosuth/Broodthaers and from Inside the White Cube by leaning harder on the timing deferral as the argument (e.g., let the tooltip's reveal duration or the hover-delay drive a behavior the viewer can act on), or push the price/value pun (cartel/price-fixing) into the live mechanism rather than only the tooltip string.",
+  "jury_model": "minimax/minimax-m3"
+}
