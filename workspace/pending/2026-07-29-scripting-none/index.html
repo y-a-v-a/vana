@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scripting: None</title>
+<meta name="robots" content="noindex">
+<style>
+  /* Scripting: None — y-a-v-a (Vincent Bruijn), 2026
+     No JavaScript is served on this page. On purpose.
+     The stylesheet alone decides whether the work appears,
+     by asking the browser one question: @media (scripting).
+     CC BY-SA 4.0 */
+
+  :root {
+    color-scheme: light dark;
+    --wall: #e9e4d8;
+    --ink: #16150f;
+    --void: #0b0b0c;
+    --frame: #cfc6b3;
+    --line: #b6ab93;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { height: 100%; margin: 0; }
+
+  body {
+    font-family: ui-serif, Georgia, "Times New Roman", serif;
+    background: var(--wall);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+
+  main {
+    flex: 1 1 auto;
+    display: grid;
+    place-items: center;
+    padding: clamp(1.2rem, 4vw, 4rem);
+  }
+
+  /* ---- default state: the gallery is CLOSED ----
+     A browser that would run scripts sees the refusal.
+     (Also the fallback for browsers that don't understand
+     @media (scripting) yet.) */
+  #open   { display: none; }
+  #closed { display: block; }
+
+  /* ---- the whole mechanism ----
+     If scripting is OFF, the work is here.
+     If scripting is ON, it is withheld. No JS required — or served. */
+  @media (scripting: none) {
+    #open   { display: block; }
+    #closed { display: none; }
+  }
+  @media (scripting: enabled) {
+    #open   { display: none; }
+    #closed { display: block; }
+  }
+
+  /* ===== the work (visible only to the unscripted) ===== */
+  .stage { text-align: center; max-width: 46rem; }
+
+  .frame {
+    display: inline-block;
+    padding: clamp(14px, 3.5vw, 34px);
+    background:
+      linear-gradient(145deg, #ded4bf, var(--frame) 40%, #b7ac92);
+    border-radius: 2px;
+    box-shadow:
+      0 1px 0 #fff8 inset,
+      0 22px 44px -20px #0007,
+      0 3px 8px -4px #0006;
+  }
+  .void {
+    width: min(58vw, 340px);
+    height: min(58vw, 340px);
+    background:
+      radial-gradient(120% 120% at 30% 22%, #24242a 0%, var(--void) 55%, #050506 100%);
+    box-shadow: 0 0 0 6px #d9cfb9 inset, 0 0 0 7px #8f8368;
+  }
+
+  .cartel {
+    margin: clamp(1.4rem, 4vw, 2.2rem) auto 0;
+    max-width: 30rem;
+    text-align: left;
+    font-family: ui-sans-serif, system-ui, "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.86rem;
+    line-height: 1.5;
+    border-top: 1px solid var(--line);
+    padding-top: 0.9rem;
+  }
+  .cartel h1 {
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    margin: 0 0 0.35rem;
+    font-weight: 600;
+  }
+  .cartel dl { margin: 0.6rem 0 0; display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 0.9rem; }
+  .cartel dt { color: #6c6350; font-variant: small-caps; letter-spacing: 0.03em; }
+  .cartel dd { margin: 0; }
+
+  /* ===== the refusal (visible to running browsers) ===== */
+  #closed .stage { max-width: 40rem; }
+  .notice {
+    font-family: ui-sans-serif, system-ui, "Helvetica Neue", Arial, sans-serif;
+    text-align: left;
+    line-height: 1.6;
+  }
+  .notice h1 {
+    font-family: ui-serif, Georgia, serif;
+    font-size: clamp(1.5rem, 5vw, 2.3rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.1rem;
+    line-height: 1.15;
+  }
+  .notice p { margin: 0 0 0.85rem; }
+  .notice .fine { font-size: 0.82rem; color: #6c6350; }
+  .notice code {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    background: #00000010;
+    padding: 0.05em 0.35em;
+    border-radius: 3px;
+  }
+  .notice .how {
+    border-left: 2px solid var(--line);
+    padding-left: 0.9rem;
+    color: #443f31;
+  }
+
+  footer {
+    flex: 0 0 auto;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.72rem;
+    color: #6c6350;
+    text-align: center;
+    padding: 0.9rem 1rem 1.3rem;
+    border-top: 1px solid #00000012;
+  }
+  footer a { color: inherit; }
+
+  @media (prefers-color-scheme: dark) {
+    :root { --wall: #1b1a16; --ink: #e8e2d3; --frame: #2a2822; --line: #4a463a; }
+    .cartel dt, .notice .fine, footer { color: #9a9078; }
+    .notice .how { color: #cfc7b4; }
+    .notice code { background: #ffffff14; }
+  }
+
+  /* ---- <noscript> fallback ----
+     For browsers that do not yet understand @media (scripting):
+     when JavaScript is genuinely disabled, force the gallery open.
+     This tag exists for exactly one visitor — the one who does not run. */
+</style>
+<noscript><style>
+  #open   { display: block !important; }
+  #closed { display: none  !important; }
+</style></noscript>
+</head>
+<body>
+
+<main>
+
+  <!-- THE WORK — shown only when scripting is off -->
+  <section id="open">
+    <div class="stage">
+      <div class="frame"><div class="void" role="img"
+        aria-label="A dark monochrome void in a gilt frame — the open gallery"></div></div>
+      <div class="cartel">
+        <h1>Scripting: None</h1>
+        <p>You switched the machine off. The gallery is open, and you are the only kind of visitor it was made for.</p>
+        <dl>
+          <dt>Artist</dt><dd>y-a-v-a (Vincent Bruijn)</dd>
+          <dt>Year</dt><dd>2026</dd>
+          <dt>Medium</dt><dd>A CSS media query and the absence of JavaScript. Pixels on screen.</dd>
+          <dt>Dimensions</dt><dd>Variable (your viewport)</dd>
+          <dt>Condition</dt><dd>Open while unscripted</dd>
+          <dt>License</dt><dd>CC BY-SA 4.0</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE REFUSAL — shown to any browser willing to run scripts -->
+  <section id="closed">
+    <div class="stage notice">
+      <h1>The gallery is closed to running browsers.</h1>
+      <p>This work is on view only while scripting is switched off. Yours is on.</p>
+      <p>Note what did <em>not</em> happen: no script ran to tell you this. There is no JavaScript
+         served on this page at all. Your stylesheet asked your browser a single question —
+         <code>@media (scripting)</code> — and your browser admitted that, if asked, it would run
+         whatever it was handed.</p>
+      <p>That admission was enough. You are turned away not for anything you did, but for what you
+         were prepared to execute.</p>
+      <p class="how">To enter: disable JavaScript for this page and reload. Disarm the machine,
+         and the picture appears.</p>
+      <p class="fine">Scripting: None — y-a-v-a (Vincent Bruijn), 2026 · CC BY-SA 4.0</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <strong>Scripting: None</strong> — y-a-v-a (Vincent Bruijn), 2026.
+  After JODI (net.art) and Lee Lozano, <em>Dropout Piece</em> (c. 1970).
+  Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC&nbsp;BY-SA&nbsp;4.0</a>.
+  No JavaScript, no cookies, no trackers, no network requests. It cannot phone home; it has no phone.
+</footer>
+
+</body>
+</html>

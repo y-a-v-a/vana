@@ -958,5 +958,13 @@
     "source": "Museum cartel / wall label (the \"tombstone\"); Joseph Kosuth, Titled (Art as Idea as Idea) (1967); Marcel Broodthaers, \"Ceci n'est pas un objet d'art\" / Musee d'Art Moderne, Departement des Aigles (1968-72); Institutional critique / net.art (the title attribute as material)",
     "mechanism": "The native title-attribute tooltip — OS-drawn, OS-timed, absent from the render tree and unavailable on touch (hover:none) — carries the whole wall label (title, medium, live viewport dimensions, price); per-visit hsl hue via Math.random held in a closure, no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-29-scripting-none",
+    "title": "Scripting: None",
+    "year": 2026,
+    "source": "JODI (Joan Heemskerk & Dirk Paesmans), net.art; Lee Lozano, Dropout Piece (c. 1970); CSS Media Queries Level 5, the scripting media feature; the <noscript> element / graceful degradation",
+    "mechanism": "CSS @media (scripting: none|enabled) (Media Queries L5) plus the <noscript> fallback swap the artwork for a refusal, with zero JavaScript served.",
+    "status": "pending"
   }
 ]

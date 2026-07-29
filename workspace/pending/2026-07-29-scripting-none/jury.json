@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-07-29-scripting-none",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 5
+  },
+  "weighted_total": 39,
+  "verdict": "strong",
+  "references_named": [
+    "JODI (Joan Heemskerk & Dirk Paesmans), net.art",
+    "Lee Lozano, Dropout Piece (c. 1970)",
+    "CSS Media Queries Level 5, the scripting media feature",
+    "the <noscript> element / graceful degradation"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "G1 passes: the work is genuinely web-native — its existence is conditioned on a CSS capability query that only makes sense in a browser. G2/G3 pass strongly: the conceptual point (refusal as performed by the cascade, not illustrated by code) is the mechanism itself, in the strict P1 sense. The page serves no script, so the stylesheet's @media (scripting) is doing the curating; that is concept-equals-execution cleanly achieved. G4 passes: CC BY-SA stated, no JS, no cookies, attribution to JODI/Lozano and self. G5 passes: dry, intelligent, cheerful-cynic throughout. G6 passes: distinct from the catalogue — During the Connection toggles on connectivity via JS; An Artist Who Cannot Speak English reads navigator.languages; nothing else conditions its own visibility on scripting being disabled using a zero-JS mechanism. The scripting media feature is barely supported today, so the <noscript> fallback is doing real work, and the motivation handles that honestly. Novelty is high: a fresh found-object (the @media scripting query as readymade). Nuance is strong: double-coding lands (gag about disabling JS; argument about complicity on the scripted web) and the void-as-painting is restrained. Narrative is solid but slightly weaker — the Lozano/JODI lineage is named and sits at the order pole of P5, though the chance/order axis is less foregrounded than in some sibling works. Craft is clean: smallest build (no JS, ~70 lines of meaningful CSS), valid HTML, accessible labels, dark-mode aware. Wit is the strongest point — the dev-tools punchline is exactly the kind of carrier-wave humor P9 calls for.",
+  "reservations": "Browser support for scripting media feature is effectively zero as of 2026, so the intended mechanism will, for almost every viewer right now, fall through to either the default (#closed, because the query never matches) or the <noscript> fallback (#open, if JS is disabled). The motivation acknowledges this implicitly but the candidate could be sharper about whether this is a bug or a feature: today the work is mostly a refusal to almost everyone, which may or may not be the intended reading. Also, the lineage references are conceptually tight but thin — Lozano's Dropout Piece is invoked without naming her General Strike Piece or the broader withdrawal-art canon that would deepen the argument.",
+  "revision_suggestion": "Consider adding one inline status line that attests to which media query actually matched (e.g. a ::before with a CSS counter driven by a custom property toggled in each media block) so the literate visitor can verify which branch they are in — a small, no-JS honesty device in the spirit of One and Three Chairs (HTTP). Optionally add a second reference in the footer (e.g. Lozano's General Strike Piece or Mladen Stilinović's In Praise of Laziness, which is already in the catalogue) to thicken the dropout-tradition argument without bloating the build.",
+  "jury_model": "minimax/minimax-m3"
+}
