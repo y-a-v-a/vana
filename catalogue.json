@@ -966,5 +966,13 @@
     "source": "JODI (Joan Heemskerk & Dirk Paesmans), net.art; Lee Lozano, Dropout Piece (c. 1970); CSS Media Queries Level 5, the scripting media feature; the <noscript> element / graceful degradation",
     "mechanism": "CSS @media (scripting: none|enabled) (Media Queries L5) plus the <noscript> fallback swap the artwork for a refusal, with zero JavaScript served.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-30-magnet-tv-bring-your-own-field",
+    "title": "Magnet TV (Bring Your Own Field)",
+    "year": 2026,
+    "source": "Nam June Paik, Magnet TV (1965); the broadcast test pattern / SMPTE colour bars (readymade)",
+    "mechanism": "Pointer-captured, per-frame canvas raster warp (radial magnification plus swirl) over an offscreen test pattern; the field exists only while the pointer is down and is never stored or transmitted.",
+    "status": "pending"
   }
 ]

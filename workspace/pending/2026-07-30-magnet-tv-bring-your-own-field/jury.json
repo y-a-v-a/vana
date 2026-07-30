@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-07-30-magnet-tv-bring-your-own-field",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 3
+  },
+  "weighted_total": 36,
+  "verdict": "borderline",
+  "references_named": [
+    "Nam June Paik, Magnet TV (1965)",
+    "SMPTE colour bars / broadcast test pattern"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism enacts the concept cleanly: the pointer literally is the magnet, the warp exists only while held, and broadcast order snaps back on release — Paik's gesture ported to the browser's only screen. The SMPTE test pattern is a well-chosen readymade (the honest image of an empty channel) and the chance/order axis is legible (ordered signal deformed by held chance). Craft is solid: single canvas, no libraries, per-frame warp with a subtle pulse for liveness, proper pointer capture, no storage, no network. CC BY-SA stated, attribution to Paik and y-a-v-a present.",
+  "reservations": "Novelty is moderate — pointer-driven canvas warps are a well-trodden net.art gesture (and the catalogue already has several pointer-driven works like 'this way browser', 'Bicho', 'Subway Drawing'). The Paik reference is precise but the conceptual move (pointer warps an image, release restores it) is not as ontologically fresh as the strongest entries. The 'NO SIGNAL' / 'Y-A-V-A' callsign is a nice touch but the surface gag is fairly thin — a casual viewer sees a warpy TV, and the Paik argument requires the wall label to land fully.",
+  "revision_suggestion": "Lean harder into the medium-as-message: e.g., make the warp strength depend on a live browser fact (battery level, time-of-day, devicePixelRatio) so the 'field' the viewer brings is genuinely theirs and not just their pointer position; or have the test pattern itself be assembled per-visit from the viewer's locale/time so the 'broadcast' is unmistakably the web's own empty channel rather than a generic SMPTE plate.",
+  "jury_model": "minimax/minimax-m3"
+}

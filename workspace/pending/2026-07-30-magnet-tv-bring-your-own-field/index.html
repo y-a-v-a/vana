@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Magnet TV (Bring Your Own Field)</title>
+<style>
+  :root { --ink:#e8e8e8; --dim:#8a8a8a; --bg:#0a0a0a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; }
+  body {
+    background:var(--bg); color:var(--ink);
+    font:14px/1.55 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:18px; padding:24px; min-height:100%;
+    -webkit-user-select:none; user-select:none;
+  }
+  h1 { font-size:15px; font-weight:600; letter-spacing:.03em; margin:0; }
+  #set {
+    position:relative; width:min(88vw, 640px);
+    aspect-ratio:4/3;
+    border:14px solid #171717;
+    border-radius:22px/26px;
+    box-shadow:0 0 0 2px #000, inset 0 0 60px rgba(0,0,0,.7), 0 24px 60px rgba(0,0,0,.6);
+    background:#000; overflow:hidden; touch-action:none; cursor:crosshair;
+  }
+  #set::after {
+    /* the phosphor scanlines: browser-drawn CRT grille */
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.18) 2px 3px);
+    mix-blend-mode:multiply;
+  }
+  canvas { display:block; width:100%; height:100%; }
+  .hint {
+    position:absolute; left:0; right:0; bottom:10px; text-align:center;
+    font-size:12px; color:rgba(255,255,255,.72); letter-spacing:.04em;
+    text-shadow:0 1px 3px #000; pointer-events:none; transition:opacity .5s;
+  }
+  #label {
+    width:min(88vw, 640px); border-top:1px solid #222; padding-top:12px;
+    font-size:12px; color:var(--dim); line-height:1.7;
+  }
+  #label b { color:var(--ink); font-weight:600; }
+  #label .cc { display:inline-block; margin-top:6px; }
+  a { color:inherit; }
+</style>
+</head>
+<body>
+  <h1>MAGNET&nbsp;TV</h1>
+
+  <div id="set" aria-label="A broadcast test pattern; drag across it to hold a magnetic field against the signal.">
+    <canvas id="view" width="640" height="480"></canvas>
+    <div class="hint" id="hint">put your finger on the tube &mdash; the field is yours to hold</div>
+  </div>
+
+  <div id="label">
+    <b>Magnet TV (Bring Your Own Field)</b> &mdash; pixels on screen, live, no signal recorded.<br>
+    The set broadcasts nothing but its own test pattern &mdash; perfect order, the picture shown
+    when there is nothing to show. Press and drag: your pointer <b>is</b> the magnet. The raster bends
+    around the field you hold; lift your hand and broadcast order returns, unbruised. Nothing here is
+    stored, so no distortion you make will ever exist again.<br>
+    <span class="cc">After Nam June Paik, <i>Magnet TV</i> (1965). y-a-v-a &middot; CC&nbsp;BY-SA&nbsp;4.0 &middot; no cookies, no trackers, no network.</span>
+  </div>
+
+<script>
+(() => {
+  "use strict";
+  const view = document.getElementById("view");
+  const ctx  = view.getContext("2d", { willReadFrequently:true });
+  const W = view.width, H = view.height;
+  const hint = document.getElementById("hint");
+
+  // --- draw the broadcast test pattern once, into an offscreen buffer ---
+  const src = document.createElement("canvas");
+  src.width = W; src.height = H;
+  const sctx = src.getContext("2d");
+
+  function paintPattern() {
+    // SMPTE-ish colour bars: seven top bars, a mid strip, a base band.
+    const bars = ["#c0c0c0","#c0c000","#00c0c0","#00c000","#c000c0","#c00000","#0000c0"];
+    const topH = Math.round(H * 0.62);
+    const bw = W / bars.length;
+    for (let i = 0; i < bars.length; i++) {
+      sctx.fillStyle = bars[i];
+      sctx.fillRect(Math.round(i*bw), 0, Math.ceil(bw)+1, topH);
+    }
+    // mid strip: reversed, dimmer
+    const midH = Math.round(H * 0.10);
+    for (let i = 0; i < bars.length; i++) {
+      const c = bars[bars.length-1-i];
+      sctx.fillStyle = c; sctx.globalAlpha = 0.55;
+      sctx.fillRect(Math.round(i*bw), topH, Math.ceil(bw)+1, midH);
+    }
+    sctx.globalAlpha = 1;
+    // base band: black to white sweep + centre callsign
+    const baseY = topH + midH, baseH = H - baseY;
+    const g = sctx.createLinearGradient(0, 0, W, 0);
+    g.addColorStop(0, "#000"); g.addColorStop(1, "#fff");
+    sctx.fillStyle = g; sctx.fillRect(0, baseY, W, baseH);
+    // a plain black block in the middle of the base, for the callsign
+    sctx.fillStyle = "#000";
+    sctx.fillRect(W*0.30, baseY, W*0.40, baseH);
+    sctx.fillStyle = "#d8d8d8";
+    sctx.font = "bold 22px ui-monospace, Menlo, monospace";
+    sctx.textAlign = "center"; sctx.textBaseline = "middle";
+    sctx.fillText("Y-A-V-A", W/2, baseY + baseH/2 - 9);
+    sctx.font = "11px ui-monospace, Menlo, monospace";
+    sctx.fillStyle = "#9a9a9a";
+    sctx.fillText("NO  SIGNAL", W/2, baseY + baseH/2 + 12);
+  }
+  paintPattern();
+
+  const srcData = sctx.getImageData(0, 0, W, H).data;
+  const out = ctx.createImageData(W, H);
+  const outData = out.data;
+
+  // --- magnet state ---
+  let active = false, mx = 0, my = 0, raf = 0;
+  const R = Math.round(Math.min(W, H) * 0.42);   // reach of the field
+  const R2 = R * R;
+
+  function clean() { ctx.drawImage(src, 0, 0); }
+  clean();
+
+  function warp(t) {
+    // liveness: the held field breathes slightly, like a real magnet near a coil
+    const pulse = 1 + 0.06 * Math.sin(t * 0.006);
+    const bulge = 0.55 * pulse;     // radial magnification toward the magnet
+    const swirl = 1.15 * pulse;     // rotational drag of the raster
+    for (let y = 0; y < H; y++) {
+      const dy = y - my;
+      const rowOff = y * W * 4;
+      for (let x = 0; x < W; x++) {
+        const dx = x - mx;
+        const d2 = dx*dx + dy*dy;
+        let sx = x, sy = y;
+        if (d2 < R2) {
+          const d = Math.sqrt(d2) || 0.0001;
+          const k = 1 - d / R;              // 1 at centre, 0 at edge
+          const kk = k * k;
+          const pull = 1 - bulge * kk;      // sample nearer centre -> magnify
+          const a = swirl * kk;             // swirl angle, strongest at centre
+          const ca = Math.cos(a), sa = Math.sin(a);
+          const rx = dx * pull, ry = dy * pull;
+          sx = mx + (rx * ca - ry * sa);
+          sy = my + (rx * sa + ry * ca);
+        }
+        let ix = sx | 0, iy = sy | 0;
+        if (ix < 0) ix = 0; else if (ix >= W) ix = W - 1;
+        if (iy < 0) iy = 0; else if (iy >= H) iy = H - 1;
+        const s = (iy * W + ix) * 4;
+        const o = rowOff + x * 4;
+        outData[o]   = srcData[s];
+        outData[o+1] = srcData[s+1];
+        outData[o+2] = srcData[s+2];
+        outData[o+3] = 255;
+      }
+    }
+    ctx.putImageData(out, 0, 0);
+  }
+
+  function frame(t) {
+    if (!active) return;
+    warp(t);
+    raf = requestAnimationFrame(frame);
+  }
+
+  function pos(e) {
+    const r = view.getBoundingClientRect();
+    mx = (e.clientX - r.left) / r.width  * W;
+    my = (e.clientY - r.top)  / r.height * H;
+  }
+  function start(e) {
+    active = true; pos(e); hint.style.opacity = "0";
+    cancelAnimationFrame(raf); raf = requestAnimationFrame(frame);
+  }
+  function move(e) { if (active) pos(e); }
+  function end() {
+    active = false; cancelAnimationFrame(raf);
+    clean();                    // magnet removed -> broadcast order returns
+    hint.style.opacity = "";
+  }
+
+  view.addEventListener("pointerdown", e => { view.setPointerCapture?.(e.pointerId); start(e); });
+  view.addEventListener("pointermove", move);
+  view.addEventListener("pointerup", end);
+  view.addEventListener("pointercancel", end);
+  view.addEventListener("pointerleave", () => { if (active) end(); });
+})();
+</script>
+</body>
+</html>
