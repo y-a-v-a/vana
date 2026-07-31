@@ -974,5 +974,13 @@
     "source": "Nam June Paik, Magnet TV (1965); the broadcast test pattern / SMPTE colour bars (readymade)",
     "mechanism": "Pointer-captured, per-frame canvas raster warp (radial magnification plus swirl) over an offscreen test pattern; the field exists only while the pointer is down and is never stored or transmitted.",
     "status": "pending"
+  },
+  {
+    "id": "2026-07-31-book-from-the-sky-no-font-installed",
+    "title": "Book from the Sky (□ No Font Installed)",
+    "year": 2026,
+    "source": "Xu Bing, Book from the Sky (天書), 1987-1991; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); the Unicode .notdef glyph / 'tofu' / Google Noto ('no more tofu')",
+    "mechanism": "Canvas glyph-support detection: each rare script's codepoint is rasterised and its bitmap compared against a guaranteed-notdef codepoint (U+10FFFF), yielding a live per-device readout of which fonts the browser owns.",
+    "status": "pending"
   }
 ]

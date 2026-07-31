@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-07-31-book-from-the-sky-no-font-installed",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Xu Bing, Book from the Sky (天書), 1987-1991",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "Unicode .notdef glyph / 'tofu' / Google Noto"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument: canvas glyph-rasterisation against a guaranteed-unassigned codepoint (U+10FFFF) is a literal interrogation of the browser's font fallback chain, and the per-device verdict (e.g. '3 of 11 scripts') is the artwork. It cleanly inverts Xu Bing's invented-but-legible glyphs into real-but-unreadable ones, with the .notdef/tofu as a digital readymade. The piece is materially distinct from neighbours: COPY / COPY concerns homoglyphs that look identical but differ in bytes, while this concerns real bytes that render as nothing — the opposite failure mode — and The Most Reproduced Image is about broken-image icons, not font coverage. Ethics are honoured (CC BY 4.0, no cookies/storage/network, attribution to Xu Bing and Benjamin). Tone is dry and intelligent without being preachy.",
+  "reservations": "The bitmap-comparison heuristic is sound but not bulletproof: some browsers ship colour-emoji .notdef fallbacks or render tofu as a blank glyph with identical alpha to U+10FFFF, which could yield false negatives. The piece also leans heavily on the motivation text to land the Benjamin inversion; the surface gag (boxes vs. glyphs + tally) carries, but the deeper argument benefits from reading the lede.",
+  "revision_suggestion": "Consider a small fallback path that also samples a second probe codepoint (e.g. U+FFFE or a known-unassigned plane-15 codepoint) and ORs the results, to harden detection against browsers whose .notdef is a blank rather than a box. Optionally surface a one-line note in the cartel when detection is ambiguous.",
+  "jury_model": "minimax/minimax-m3"
+}

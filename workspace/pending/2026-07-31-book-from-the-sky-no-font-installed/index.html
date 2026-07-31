@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Book from the Sky (No Font Installed)</title>
+<style>
+  :root {
+    --ink: #ecebe6;
+    --wall: #14130f;
+    --dim: #7c7a71;
+    --accent: hsl(var(--hue, 40) 60% 62%);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--wall); color: var(--ink); }
+  body {
+    font: 16px/1.55 ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: clamp(20px, 5vw, 72px);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  header { margin-bottom: 2.2rem; }
+  h1 {
+    font-weight: 600;
+    font-size: clamp(1.5rem, 4.4vw, 2.4rem);
+    line-height: 1.12;
+    margin: 0 0 .5rem;
+    letter-spacing: -.01em;
+  }
+  h1 .tofu { color: var(--accent); }
+  .lede { color: var(--dim); max-width: 62ch; margin: 0; }
+  .lede em { color: var(--ink); font-style: normal; }
+
+  .tally {
+    margin: 2rem 0 1.4rem;
+    font: 600 clamp(1.05rem, 3vw, 1.4rem)/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .tally b { color: var(--accent); }
+
+  .plate {
+    border-top: 1px solid #2b2a24;
+  }
+  .specimen {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: .4rem 1.2rem;
+    align-items: baseline;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid #2b2a24;
+  }
+  .glyphs {
+    /* generic serif: the browser resolves whatever font it owns, or draws .notdef */
+    font-family: serif;
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    line-height: 1;
+    word-break: break-all;
+    color: var(--ink);
+  }
+  .meta { grid-column: 1; color: var(--dim); font-size: .82rem; }
+  .meta .name { color: var(--ink); font-weight: 600; }
+  .status {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: center;
+    justify-self: end;
+    text-align: right;
+    font: .78rem/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    white-space: nowrap;
+  }
+  .status.present { color: var(--accent); }
+  .status.absent { color: var(--dim); }
+  .status .dot { font-size: 1.1em; vertical-align: -.05em; }
+
+  .cartel {
+    margin-top: 3rem;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid #2b2a24;
+    background: #100f0b;
+    font-size: .82rem;
+    line-height: 1.7;
+    color: var(--dim);
+    max-width: 46ch;
+  }
+  .cartel .t { color: var(--ink); font-weight: 600; }
+  .cartel dfn { font-style: italic; }
+
+  footer {
+    margin-top: 2.4rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #2b2a24;
+    font-size: .74rem;
+    color: var(--dim);
+    line-height: 1.7;
+  }
+  footer a { color: var(--dim); }
+  noscript { color: var(--dim); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Book from the Sky <span class="tofu">(&#x25A1; No Font Installed)</span></h1>
+  <p class="lede">Every character below is genuinely present &mdash; in this page's source, on your clipboard, in the machine's memory. Whether you can <em>see</em> it depends on a font your device may or may not own. Where the font is missing, the browser draws <em>&#x25A1;</em> &mdash; &ldquo;tofu&rdquo;, the glyph that means <em>no glyph</em>. So the same work is script to one viewer and empty boxes to another. No two editions match.</p>
+</header>
+
+<p class="tally" id="tally">Reading your device&hellip;</p>
+
+<div class="plate" id="plate"></div>
+
+<aside class="cartel">
+  <span class="t">Book from the Sky (&#x25A1; No Font Installed)</span>, y-a-v-a, 2026.<br>
+  After Xu Bing, <dfn>Book from the Sky (&#22825;&#26360;)</dfn>, 1987&ndash;1991.<br>
+  Medium: the browser&rsquo;s font-fallback and the Unicode <dfn>.notdef</dfn> glyph, on your device.<br>
+  Edition: 1 of &infin; &mdash; unique to your installed fonts, minted this visit, kept nowhere.
+</aside>
+
+<footer>
+  <p><a href="https://creativecommons.org/licenses/by/4.0/" rel="license noopener">CC&nbsp;BY&nbsp;4.0</a> &mdash; y-a-v-a (yet another visual artist). References Xu Bing, <em>Book from the Sky (&#22825;&#26360;)</em>, 1987&ndash;1991; Walter Benjamin, <em>The Work of Art in the Age of Mechanical Reproduction</em>, 1935; and the web-native <em>.notdef</em> / &ldquo;tofu&rdquo; glyph (cf. Google Noto, &ldquo;no more tofu&rdquo;).</p>
+  <p>No cookies. No trackers. No storage. No network requests of any kind. The verdict below is computed entirely on your device and forgotten on reload.</p>
+  <noscript>Without JavaScript there is no per-device readout &mdash; but the boxes, or the glyphs, are already the work.</noscript>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // Per-visit accent: this edition is minted now and stored nowhere.
+  document.documentElement.style.setProperty("--hue", String(Math.floor(Math.random() * 360)));
+
+  // Named Unicode blocks. We claim only what is safe: the SCRIPT NAME.
+  // No translations are offered — these are specimens, not messages.
+  var SCRIPTS = [
+    { name: "Ogham",                start: 0x1681,  n: 8, era: "Old Irish, c. 4th c." },
+    { name: "Runic",                start: 0x16A0,  n: 8, era: "Elder Futhark, c. 2nd c." },
+    { name: "Gothic",               start: 0x10330, n: 8, era: "Ulfilas, 4th c." },
+    { name: "Old Italic",           start: 0x10300, n: 8, era: "Etruscan, c. 7th c. BCE" },
+    { name: "Phoenician",           start: 0x10900, n: 8, era: "c. 12th c. BCE" },
+    { name: "Old Turkic",           start: 0x10C00, n: 8, era: "Orkhon, 8th c." },
+    { name: "Deseret",              start: 0x10400, n: 8, era: "Mormon alphabet, 1854" },
+    { name: "Linear B",             start: 0x10000, n: 8, era: "Mycenaean Greek, c. 1450 BCE" },
+    { name: "Cuneiform",            start: 0x12000, n: 6, era: "Sumerian, c. 3200 BCE" },
+    { name: "Egyptian Hieroglyphs", start: 0x13000, n: 6, era: "c. 3200 BCE" },
+    { name: "Tangut",               start: 0x17000, n: 6, era: "Western Xia, 1036" }
+  ];
+
+  function run(start, n) {
+    var s = "";
+    for (var i = 0; i < n; i++) s += String.fromCodePoint(start + i);
+    return s;
+  }
+
+  // Glyph-support detection: render a character through the browser's fallback
+  // chain and compare its bitmap to a codepoint guaranteed to have no glyph.
+  // Identical bitmap => the character was also drawn as .notdef (a box or blank).
+  var NOTDEF = String.fromCodePoint(0x10FFFF); // unassigned: always tofu
+  var probe = document.createElement("canvas");
+  probe.width = probe.height = 28;
+  var ctx = probe.getContext("2d", { willReadFrequently: true });
+
+  function bitmap(ch) {
+    ctx.clearRect(0, 0, 28, 28);
+    ctx.font = "22px serif";
+    ctx.textBaseline = "top";
+    ctx.fillStyle = "#000";
+    ctx.fillText(ch, 1, 1);
+    return ctx.getImageData(0, 0, 28, 28).data;
+  }
+
+  function hasFont(ch) {
+    var a = bitmap(ch), b = bitmap(NOTDEF);
+    for (var i = 0; i < a.length; i += 4) {
+      // compare alpha channel only: shape presence, ignore antialias colour
+      if (a[i + 3] !== b[i + 3]) return true;
+    }
+    return false;
+  }
+
+  var plate = document.getElementById("plate");
+  var owned = 0;
+
+  SCRIPTS.forEach(function (sc) {
+    var glyphs = run(sc.start, sc.n);
+    var present = hasFont(String.fromCodePoint(sc.start));
+    if (present) owned++;
+
+    var row = document.createElement("div");
+    row.className = "specimen";
+
+    var g = document.createElement("div");
+    g.className = "glyphs";
+    g.textContent = glyphs;
+
+    var meta = document.createElement("div");
+    meta.className = "meta";
+    meta.innerHTML = '<span class="name">' + sc.name + "</span> &middot; " + sc.era +
+                     " &middot; U+" + sc.start.toString(16).toUpperCase();
+
+    var st = document.createElement("div");
+    st.className = "status " + (present ? "present" : "absent");
+    st.innerHTML = present
+      ? '<span class="dot">&#9679;</span> your device has this font'
+      : '<span class="dot">&#9675;</span> absent &mdash; shown as &#x25A1;';
+
+    row.appendChild(g);
+    row.appendChild(meta);
+    row.appendChild(st);
+    plate.appendChild(row);
+  });
+
+  var tally = document.getElementById("tally");
+  tally.innerHTML = "Your device can read <b>" + owned + "</b> of <b>" +
+    SCRIPTS.length + "</b> scripts. The rest are here, unread.";
+})();
+</script>
+</body>
+</html>
