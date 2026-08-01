@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Door, 11 rue Larrey (Open a Second Doorway)</title>
+<style>
+  :root{
+    --bg:#14110e;
+    --jamb:#0b0907;
+    --paint:#b8552f;          /* set per visit */
+    --ink:#e9e2d4;
+    --dim:#8a8272;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.5 Georgia,"Times New Roman",serif;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:26px;padding:28px;
+  }
+
+  /* ---- the doorway (this tab is one of two frames) ---- */
+  .stage{perspective:1400px;perspective-origin:60% 50%}
+  .doorway{
+    position:relative;width:min(46vw,300px);aspect-ratio:3/5;
+    border:14px solid var(--jamb);
+    box-shadow:0 30px 60px rgba(0,0,0,.6), inset 0 0 40px rgba(0,0,0,.7);
+    background:
+      /* the next room, seen when the door is not here */
+      linear-gradient(180deg,#3a3222 0%,#241f16 46%,#0d0b08 100%);
+    overflow:hidden;
+  }
+  /* a far lit wall in the next room */
+  .doorway::after{
+    content:"";position:absolute;left:28%;top:20%;width:44%;height:52%;
+    background:linear-gradient(180deg,#5b5138,#2c2619);
+    box-shadow:0 0 40px rgba(0,0,0,.6);opacity:.85;
+  }
+
+  .door{
+    position:absolute;inset:0;transform-origin:left center;
+    transform:rotateY(0deg);
+    transition:transform 1.15s cubic-bezier(.6,.02,.2,1);
+    background:
+      linear-gradient(90deg,rgba(0,0,0,.35),transparent 12%,transparent 88%,rgba(0,0,0,.28)),
+      var(--paint);
+    box-shadow:inset 0 0 0 8px rgba(0,0,0,.18);
+    z-index:2;
+  }
+  /* two sunken panels + a knob, in pure CSS */
+  .door::before{
+    content:"";position:absolute;left:16%;right:16%;top:8%;height:38%;
+    border:6px solid rgba(0,0,0,.22);
+    box-shadow:inset 0 0 22px rgba(0,0,0,.35);
+  }
+  .door::after{
+    content:"";position:absolute;left:16%;right:16%;top:54%;height:38%;
+    border:6px solid rgba(0,0,0,.22);
+    box-shadow:inset 0 0 22px rgba(0,0,0,.35);
+  }
+  .knob{position:absolute;right:12%;top:50%;width:12px;height:12px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#ffe9b0,#8a6a2a);z-index:3;
+    box-shadow:0 1px 3px rgba(0,0,0,.6)}
+
+  /* when this frame is OPEN, the single door has swung into the other frame */
+  .stage.open .door{transform:rotateY(-84deg)}
+  .stage.open .knob{opacity:0;transition:opacity .3s}
+
+  @media (prefers-reduced-motion:reduce){
+    .door{transition:none}
+  }
+
+  /* ---- wall label ---- */
+  .label{max-width:440px;border-left:2px solid var(--dim);padding-left:16px}
+  .label h1{font-size:1.05rem;margin:0 0 2px;font-weight:normal}
+  .label .yr{color:var(--dim);font-style:italic}
+  .label p{margin:.5em 0;font-size:.92rem}
+  .state{color:var(--paint);font-weight:bold}
+  .paradox{color:var(--dim);font-size:.85rem;font-style:italic}
+  button{
+    font:inherit;font-size:.85rem;background:transparent;color:var(--ink);
+    border:1px solid var(--dim);padding:7px 12px;cursor:pointer;margin-top:6px;
+  }
+  button:hover{background:var(--dim);color:var(--bg)}
+  footer{color:var(--dim);font-size:.72rem;max-width:440px;line-height:1.6}
+  footer a{color:var(--dim)}
+</style>
+</head>
+<body>
+
+  <div class="stage shut" id="stage" aria-label="a doorway">
+    <div class="doorway">
+      <div class="door"><span class="knob"></span></div>
+    </div>
+  </div>
+
+  <div class="label">
+    <h1>Door, 11 rue Larrey <span class="yr">— after Marcel Duchamp, 1927</span></h1>
+    <p class="state" id="state">This doorway: SHUT.</p>
+    <p id="note">A door needs two doorways to be a paradox. Open the second and stand in both.</p>
+    <p class="paradox">One door. Two doorways. Musset wanted it open <em>or</em> shut; Duchamp hinged it to be both at once.</p>
+    <button id="open">Open the second doorway</button>
+  </div>
+
+  <footer>
+    <strong>Door, 11 rue Larrey (Open a Second Doorway)</strong> — y-a-v-a, 2026.
+    After Marcel Duchamp, <em>Door: 11 rue Larrey</em> (1927), and the proverb from
+    Alfred de Musset, <em>Il faut qu'une porte soit ouverte ou fermée</em> (1845).
+    The two frames share one door over a local BroadcastChannel — same origin only,
+    no server, no cookies, no tracking, nothing stored.
+    Licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+  </footer>
+
+<script>
+(function(){
+  var stage = document.getElementById('stage');
+  var stateEl = document.getElementById('state');
+  var noteEl = document.getElementById('note');
+  var openBtn = document.getElementById('open');
+
+  // per-visit door paint (Duchamp painted the real door plain; we take a hue)
+  var hue = Math.floor(Math.random()*360);
+  document.documentElement.style.setProperty('--paint','hsl('+hue+' 46% 46%)');
+
+  var myId = Math.random().toString(36).slice(2);
+  var bc = ('BroadcastChannel' in window) ? new BroadcastChannel('porte-11-rue-larrey') : null;
+  var paired = false;
+
+  function render(which){
+    // which: 'shut' (door is in this frame) or 'open' (door swung to the other)
+    stage.className = 'stage ' + which;
+    if(which === 'open'){
+      stateEl.textContent = 'This doorway: OPEN.';
+      noteEl.textContent = 'The door has swung into the other frame. You look through into the next room.';
+    } else {
+      stateEl.textContent = 'This doorway: SHUT.';
+      noteEl.textContent = paired
+        ? 'The single door stands closed in your frame — which means the other doorway is open.'
+        : 'A door needs two doorways to be a paradox. Open the second and stand in both.';
+    }
+  }
+
+  // Claiming the door = the door is HERE = this frame reads SHUT,
+  // and by the same swing the other frame necessarily reads OPEN.
+  function claim(){
+    render('shut');
+    if(bc) bc.postMessage({t:'claim', id:myId});
+  }
+
+  if(bc){
+    bc.onmessage = function(e){
+      var m = e.data;
+      if(!m || m.id === myId) return;
+      paired = true;
+      if(m.t === 'hello'){
+        bc.postMessage({t:'here', id:myId});
+        if(document.hasFocus()) claim();      // I hold the door; push the newcomer open
+      } else if(m.t === 'here'){
+        // just acknowledge the other frame exists
+        if(stage.classList.contains('shut')) render('shut');
+      } else if(m.t === 'claim'){
+        render('open');                        // the door left me for the other frame
+      }
+    };
+    bc.postMessage({t:'hello', id:myId});
+    window.addEventListener('focus', claim);
+    window.addEventListener('pagehide', function(){ try{ bc.close(); }catch(_){} });
+  } else {
+    noteEl.textContent = 'This browser has no BroadcastChannel, so the door can only be shut. The paradox needs two connected frames.';
+    openBtn.disabled = true;
+  }
+
+  // start: the door rests in whichever frame is being looked at
+  if(document.hasFocus()) claim(); else render('shut');
+
+  openBtn.addEventListener('click', function(){
+    // opens the same local file in a second window; it connects over the channel
+    var w = window.open(location.href, 'larrey-2', 'width=520,height=680');
+    if(!w) noteEl.textContent = 'Pop-up blocked — open this same page in a second tab or window by hand; the two frames will find each other.';
+  });
+})();
+</script>
+</body>
+</html>

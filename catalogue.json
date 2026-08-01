@@ -982,5 +982,13 @@
     "source": "Xu Bing, Book from the Sky (天書), 1987-1991; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); the Unicode .notdef glyph / 'tofu' / Google Noto ('no more tofu')",
     "mechanism": "Canvas glyph-support detection: each rare script's codepoint is rasterised and its bitmap compared against a guaranteed-notdef codepoint (U+10FFFF), yielding a live per-device readout of which fonts the browser owns.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-01-door-11-rue-larrey-open-a-second-doorway",
+    "title": "Door, 11 rue Larrey (Open a Second Doorway)",
+    "year": 2026,
+    "source": "Marcel Duchamp, Door: 11 rue Larrey (1927); Alfred de Musset, Il faut qu'une porte soit ouverte ou fermee (1845)",
+    "mechanism": "A local same-origin BroadcastChannel passes a single shared door state between two frames; focus claims the door (shut here, open there) with no server, storage, or network.",
+    "status": "pending"
   }
 ]

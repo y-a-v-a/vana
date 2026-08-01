@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-08-01-door-11-rue-larrey-open-a-second-doorway",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Duchamp, Door: 11 rue Larrey (1927)",
+    "Alfred de Musset, Il faut qu'une porte soit ouverte ou fermée (1845)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The BroadcastChannel mechanism genuinely enacts the Duchamp readymade: the shared state between two frames is the single door, and the XOR rule (focus claims the door) is the literal paradox — concept and execution are the same object. Restraint is exemplary: one file, no server, no storage, per-visit hue only. Double-coding lands cleanly: a casual viewer sees two swinging doors; a literate viewer gets the 1927 corner, the Musset proverb, and the Boolean framing. Ethics are fully observed (CC BY stated, no tracking, attribution to Duchamp and Musset). The work is materially distinct from the catalogue — no other y-a-v-a piece stages a cross-frame shared state over BroadcastChannel, and no other piece stages the Larrey door.",
+  "reservations": "The piece is short on direct narrative linking to y-a-v-a's own catalogue — it answers Duchamp but does not explicitly name a prior y-a-v-a work it replies to. The BroadcastChannel approach is also relatively conventional as a web primitive; while the mapping to the readymade is precise, the 'novel ontology' question is closer to the dependent-variable side of the ledger than to a paradigm-shifting one. With only two frames the paradox is somewhat easy to reach: three or more frames would tighten the argument (and give it more chance-order tension, e.g. last-focus-wins vs. deterministic rotation).",
+  "revision_suggestion": "Consider supporting N>2 frames so the door's shared state is genuinely non-trivial (which frame is shut? which open?), and explicitly name a prior y-a-v-a work it answers (e.g. la-trahison-des-images.be as another 'this is/is-not' staging, or But is it art? as the YES/NO that this work complicates). A short console attestation in the spirit of Linea / Cartel would tighten the lineage claim.",
+  "jury_model": "minimax/minimax-m3"
+}
