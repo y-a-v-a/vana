@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Disparition</title>
+<style>
+  :root{ --paper:#f6f4ef; --ink:#1a1712; --faint:#b7b1a6; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; }
+  body{
+    background:var(--paper); color:var(--ink);
+    font:16px/1.6 Georgia, "Times New Roman", serif;
+    display:flex; flex-direction:column; align-items:center;
+    padding:8vh 24px 40px; min-height:100%;
+  }
+  main{ width:min(640px,100%); }
+  h1{ font-weight:400; font-size:34px; letter-spacing:.02em; margin:0 0 4px; }
+  .tag{ color:var(--faint); font-style:italic; margin:0 0 40px; font-size:15px; }
+  .say{ margin:0 0 22px; max-width:52ch; }
+  #field{
+    min-height:180px; padding:18px 20px; border:1px solid #ddd6c8;
+    background:#fffdf8; outline:none; font-size:19px; line-height:1.7;
+    border-radius:2px;
+  }
+  #field:focus{ border-color:#c7bda8; }
+  #field:empty:before{ content:"start writing…"; color:var(--faint); }
+  .meter{ margin:20px 2px 0; color:var(--faint); font-size:14px;
+    display:flex; justify-content:space-between; letter-spacing:.02em; }
+  .meter b{ color:var(--ink); font-weight:400; font-variant-numeric:tabular-nums; }
+  .ghost{
+    position:fixed; pointer-events:none; z-index:9;
+    font:italic 34px/1 Georgia, serif; color:#8a8375;
+    animation:rise .9s ease-out forwards;
+  }
+  @keyframes rise{
+    from{ opacity:.55; transform:translate(-50%,-6px); }
+    to{ opacity:0; transform:translate(-50%,-52px); }
+  }
+  hr{ border:0; border-top:1px solid #e2dccf; margin:56px 0 22px; }
+  .colophon{ color:var(--faint); font-size:12.5px; line-height:1.9; max-width:60ch; }
+  .colophon .mark{ color:#c9c2b3; font-style:italic; }
+  .colophon strong{ color:#8a8375; font-weight:400; }
+</style>
+</head>
+<body>
+<main>
+  <h1>La Disparition</h1>
+  <p class="tag">a writing that holds no fifth glyph</p>
+
+  <p class="say">Sit. Put your words down. You hold no right to that symbol; it will flash, and go missing.</p>
+
+  <div id="field" contenteditable="true" spellcheck="false" aria-label="writing surface"></div>
+
+  <div class="meter">
+    <span>our fifth glyph, cast out so far:</span><b id="count">0</b>
+  </div>
+
+  <hr>
+  <div class="colophon" id="colophon">
+    <strong>La Disparition (A Void).</strong>
+    In 1969 Georges Perec wrote a 300-page novel without once using the letter E — the most
+    common letter in the French language, and in this one. The missing letter was not a game
+    alone: E stands in for <em>eux</em>, "them", the family the war took from him. Here the
+    constraint is not asked of you; it is enforced. The browser intercepts every keystroke
+    before it lands, and the fifth letter never arrives. You feel the void by reaching for it.
+    <br><br>
+    CC BY 4.0 · y-a-v-a (Vincent Bruijn), 2026 · after Georges Perec, <em>La Disparition</em> (1969),
+    and the OuLiPo · no cookies, no trackers, no network. The letters greyed out below are the ones
+    this label could not do without.
+  </div>
+</main>
+
+<script>
+(function(){
+  var E = /[eéèêëEÉÈÊË]/;
+  var Eg = /[eéèêëEÉÈÊË]/g;
+  var field = document.getElementById('field');
+  var out = document.getElementById('count');
+  var lost = 0;
+
+  function caretRect(){
+    var sel = window.getSelection();
+    if(!sel || !sel.rangeCount) return null;
+    var r = sel.getRangeAt(0).getClientRects()[0];
+    if(r && r.width===0 && r.height===0) r=null;
+    if(!r){ r = field.getBoundingClientRect(); return {x:r.left+14, y:r.top+30}; }
+    return {x:r.left, y:r.top};
+  }
+
+  function haunt(glyph, at){
+    if(!at) return;
+    var g = document.createElement('span');
+    g.className = 'ghost';
+    g.textContent = glyph;
+    g.style.left = at.x + 'px';
+    g.style.top  = at.y + 'px';
+    document.body.appendChild(g);
+    setTimeout(function(){ g.remove(); }, 950);
+  }
+
+  field.addEventListener('beforeinput', function(ev){
+    var d = ev.data;
+    if(d == null || !E.test(d)) return;           // nothing to disappear
+    ev.preventDefault();
+    var removed = (d.match(Eg) || []).length;
+    var kept = d.replace(Eg, '');
+    var at = caretRect();
+    if(kept){ document.execCommand('insertText', false, kept); }
+    lost += removed;
+    out.textContent = lost;
+    haunt(d.match(Eg)[0], at);                     // one ghost per event, enough to read
+  });
+
+  // wall label: expose the very letters the work above refuses
+  (function markE(root){
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    var nodes = [], n;
+    while((n = w.nextNode())) nodes.push(n);
+    nodes.forEach(function(node){
+      if(!E.test(node.nodeValue)) return;
+      var frag = document.createDocumentFragment();
+      Array.prototype.forEach.call(node.nodeValue, function(ch){
+        if(E.test(ch)){
+          var s = document.createElement('span');
+          s.className = 'mark'; s.textContent = ch;
+          frag.appendChild(s);
+        } else {
+          frag.appendChild(document.createTextNode(ch));
+        }
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+  })(document.getElementById('colophon'));
+
+  field.focus();
+})();
+</script>
+</body>
+</html>

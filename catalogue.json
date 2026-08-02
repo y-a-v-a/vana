@@ -990,5 +990,13 @@
     "source": "Marcel Duchamp, Door: 11 rue Larrey (1927); Alfred de Musset, Il faut qu'une porte soit ouverte ou fermee (1845)",
     "mechanism": "A local same-origin BroadcastChannel passes a single shared door state between two frames; focus claims the door (shut here, open there) with no server, storage, or network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-02-la-disparition",
+    "title": "La Disparition",
+    "year": 2026,
+    "source": "Georges Perec, La Disparition (1969); OuLiPo (Ouvroir de litterature potentielle); Marcel Duchamp, infrathin (inframince)",
+    "mechanism": "A beforeinput handler strips the fifth glyph from the input stream before it lands, ghosts it at the caret, and tallies the losses; the page's own copy is itself E-less.",
+    "status": "pending"
   }
 ]

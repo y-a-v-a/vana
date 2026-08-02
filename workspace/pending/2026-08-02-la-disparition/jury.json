@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-08-02-la-disparition",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 5
+  },
+  "weighted_total": 44,
+  "verdict": "strong",
+  "references_named": [
+    "Georges Perec, La Disparition (1969)",
+    "OuLiPo (Ouvroir de litterature potentielle)",
+    "Marcel Duchamp, infrathin (inframince)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument: a beforeinput handler strips the letter E before it lands, ghosts it at the caret, and tallies the losses, so the viewer does not read about absence but collides with it. The colophon doubles the gag by greying out the very E's it cannot avoid, a clean piece of double-coding (P7) that lands the Perec reference without wall-text dependence. Restraint is exemplary (P3): one event handler, one ghost animation, one counter. The chance/order axis is honored at the strict-order pole (P5), and the work sits naturally in the catalogue's language-toy lineage (Modernipsum, Artist's Statement) while naming a reference the catalogue has not touched. Tone is dry and cheerful-cynic, not maudlin despite the war subtext.",
+  "reservations": "The ghost animation is a small flourish that borders on decoration; it is justified by P1 (the ghost is the visible trace of the refusal) but a stricter reading could call it illustrative. The use of document.execCommand is deprecated; a modern Input Events Level 2 approach would be cleaner, though functionally equivalent here. Narrative weight is solid but the work does not strongly extend the twenty-year argument beyond the language-toy thread.",
+  "revision_suggestion": "Replace document.execCommand with a direct Range-based insertion using getSelection().getRangeAt(0) for forward-compatibility, and consider letting the ghost linger slightly longer or vary its drift so the loss feels less uniform across keystrokes.",
+  "jury_model": "minimax/minimax-m3"
+}
