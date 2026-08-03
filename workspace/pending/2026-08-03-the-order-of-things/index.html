@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Order of Things</title>
+<style>
+  :root{
+    --bg:#111013; --ink:#e9e7e0; --dim:#6f6b63; --line:#2a2823; --hot:#c8a24a;
+    --font:"Iowan Old Style",Palatino,"Palatino Linotype",Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font)}
+  body{min-height:100vh;display:flex;flex-direction:column;align-items:center;
+       padding:min(9vh,72px) 20px 40px;line-height:1.5}
+  header{max-width:640px;width:100%;text-align:center}
+  h1{font-weight:600;font-size:clamp(26px,5vw,40px);letter-spacing:.01em;margin:0 0 .35em}
+  .sub{color:var(--dim);font-size:15px;font-style:italic;margin:0 auto;max-width:44ch}
+  .controls{max-width:640px;width:100%;margin:26px 0 6px;display:flex;flex-wrap:wrap;
+            gap:8px;justify-content:center}
+  button{font-family:var(--font);font-size:14px;color:var(--ink);background:transparent;
+         border:1px solid var(--line);border-radius:2px;padding:7px 13px;cursor:pointer;
+         transition:border-color .2s,color .2s}
+  button:hover{border-color:var(--dim)}
+  button[aria-pressed="true"]{border-color:var(--hot);color:var(--hot)}
+  .mine{position:relative}
+  .mine::after{content:"your locale";position:absolute;top:-8px;right:-6px;font-size:9px;
+               font-style:italic;color:var(--hot);background:var(--bg);padding:0 3px}
+  ol{list-style:none;margin:30px 0 0;padding:0;max-width:640px;width:100%}
+  li{display:flex;align-items:baseline;gap:16px;padding:10px 4px;border-bottom:1px solid var(--line);
+     font-size:clamp(19px,3.6vw,26px);will-change:transform}
+  .rank{color:var(--dim);font-size:14px;min-width:2ch;text-align:right;font-variant-numeric:tabular-nums}
+  .name{flex:1}
+  .caption{max-width:640px;width:100%;margin:26px 0 0;color:var(--dim);font-size:13px;
+           display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .caption code{color:var(--ink);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+  footer{max-width:640px;width:100%;margin-top:44px;color:var(--dim);font-size:12px;
+         line-height:1.7;border-top:1px solid var(--line);padding-top:16px}
+  footer a{color:var(--dim)}
+  noscript{display:block;margin-top:30px;color:var(--dim);font-style:italic}
+</style>
+</head>
+<body>
+  <header>
+    <h1>The Order of Things</h1>
+    <p class="sub">Nine artists, filed alphabetically. Alphabetical according to whom?</p>
+  </header>
+
+  <div class="controls" id="controls" role="group" aria-label="Choose a collation locale"></div>
+
+  <ol id="list" aria-live="polite"></ol>
+
+  <div class="caption">
+    <span>Sorted by <code id="loc">—</code></span>
+    <span>Same list. Their order is not.</span>
+  </div>
+
+  <noscript>The filing cabinet is closed. Enable JavaScript to open the drawer.</noscript>
+
+  <footer>
+    <strong>The Order of Things</strong> — y-a-v-a, 2026. Pixels on screen.<br>
+    After Alighiero Boetti, <em>Classifying the thousand longest rivers in the world</em> (1977);
+    Jorge Luis Borges, <em>The Analytical Language of John Wilkins</em> (1942);
+    Michel Foucault, <em>Les mots et les choses</em> (1966).<br>
+    The order above is produced entirely by your browser's built-in
+    <code style="font-family:ui-monospace,Menlo,monospace">Intl.Collator</code> locale tables.
+    No fonts, requests, cookies, storage, or trackers. Licensed
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+  // Nine real art figures, chosen so locale collation tables genuinely disagree
+  // about their precedence (Ö, ü, ch, ll, Č, diacritics).
+  var NAMES = [
+    "Böcklin, Arnold",
+    "Brâncuși, Constantin",
+    "Cézanne, Paul",
+    "Chillida, Eduardo",
+    "Cornell, Joseph",
+    "Dürer, Albrecht",
+    "Miró, Joan",
+    "Munch, Edvard",
+    "Öyvind Fahlström"
+  ];
+
+  // Locales whose collation ICU ships differently in every browser.
+  var LOCALES = [
+    {id:"en",              label:"English"},
+    {id:"sv",              label:"Svenska"},          // å ä ö sort AFTER z
+    {id:"es-u-co-trad",    label:"Español (trad.)"},  // ch after c, ll after l
+    {id:"de-u-co-phonebk", label:"Deutsch (Tel.buch)"},// ü≈ue, ö≈oe
+    {id:"cs",              label:"Čeština"}           // č after c, ch after h
+  ];
+
+  var listEl = document.getElementById("list");
+  var controlsEl = document.getElementById("controls");
+  var locEl = document.getElementById("loc");
+
+  // Build the rows once; we only ever reorder them (FLIP), never rebuild.
+  var rows = NAMES.map(function(n){
+    var li = document.createElement("li");
+    var rank = document.createElement("span"); rank.className = "rank";
+    var name = document.createElement("span"); name.className = "name"; name.textContent = n;
+    li.appendChild(rank); li.appendChild(name);
+    li.dataset.name = n;
+    listEl.appendChild(li);
+    return li;
+  });
+
+  function sortBy(localeId){
+    var collator;
+    try { collator = new Intl.Collator(localeId, {sensitivity:"variant"}); }
+    catch(e){ collator = new Intl.Collator("en"); }
+
+    // Record current positions (First).
+    var first = rows.map(function(li){ return li.getBoundingClientRect().top; });
+
+    // Ask the browser's locale table for precedence.
+    var ordered = rows.slice().sort(function(a,b){
+      return collator.compare(a.dataset.name, b.dataset.name);
+    });
+    ordered.forEach(function(li){ listEl.appendChild(li); });
+
+    // Renumber the slots, then FLIP each name from where it was to where it is.
+    ordered.forEach(function(li,i){
+      li.querySelector(".rank").textContent = (i+1);
+    });
+    rows.forEach(function(li,idx){
+      var last = li.getBoundingClientRect().top;
+      var dy = first[idx] - last;
+      if (dy){
+        li.style.transition = "none";
+        li.style.transform = "translateY(" + dy + "px)";
+        li.getBoundingClientRect(); // force reflow
+        li.style.transition = "transform .5s cubic-bezier(.2,.7,.2,1)";
+        li.style.transform = "";
+      }
+    });
+
+    locEl.textContent = collator.resolvedOptions().locale;
+  }
+
+  // Which of our locales is the viewer's own?
+  var mine = null, viewer = (navigator.language || "en").toLowerCase();
+  LOCALES.forEach(function(L){
+    var base = L.id.split("-")[0];
+    if (viewer === base || viewer.indexOf(base + "-") === 0) mine = L.id;
+  });
+
+  LOCALES.forEach(function(L){
+    var b = document.createElement("button");
+    b.textContent = L.label;
+    b.setAttribute("aria-pressed","false");
+    if (L.id === mine) b.className = "mine";
+    b.addEventListener("click", function(){
+      controlsEl.querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed","false"); });
+      b.setAttribute("aria-pressed","true");
+      sortBy(L.id);
+    });
+    controlsEl.appendChild(b);
+  });
+
+  // Open the drawer in the reader's own locale — the ideology, made personal.
+  var startId = mine || "en";
+  var startBtn = controlsEl.children[Math.max(0, LOCALES.map(function(L){return L.id;}).indexOf(startId))];
+  startBtn.setAttribute("aria-pressed","true");
+  sortBy(startId);
+})();
+</script>
+</body>
+</html>

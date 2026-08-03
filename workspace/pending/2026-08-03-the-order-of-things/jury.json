@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-08-03-the-order-of-things",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 3
+  },
+  "weighted_total": 39,
+  "verdict": "strong",
+  "references_named": [
+    "Alighiero Boetti, Classifying the thousand longest rivers in the world (1977)",
+    "Jorge Luis Borges, The Analytical Language of John Wilkins (1942)",
+    "Michel Foucault, Les mots et les choses (1966)",
+    "y-a-v-a, Modernipsum (2012)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism (Intl.Collator + locale switching) cleanly enacts the idea that alphabetical order is culturally constructed, which is exactly the P1 unity this DNA prizes. The choice of artists with diacritics and digraphs (Ö, ü, ch, ll) ensures the argument is visibly demonstrated rather than merely asserted. The line to Boetti's classificatory labour is well-pitched, and the Modernipsum callback (the archive's filing system as readymade) gives it a clear place in the existing catalogue. The footer, license, and absence of network/storage/tracking all satisfy G4 cleanly.",
+  "reservations": "The casual surface gag is fairly thin — a button-driven reorder is fun for a minute but the 'wow' moment is modest compared to pieces like Three Ball Total Equilibrium Slot Machine or 148 Colours. The Foucault/Borges scaffolding is name-checked in the footer but not enacted in the page itself; the work delivers the argument without quite landing the deeper institutional-critique weight that the references promise. The wit ('Same list. Their order is not.') is serviceable but not barbed.",
+  "revision_suggestion": "Consider one more layer of double-coding: e.g., a single subtle reference to the artist whose particular letter-rule is being violated (a footnote when Ö drops below Z, citing the Swedish alphabet convention), so the literate viewer gets the extra payoff the motivation already gestures toward. Alternatively, seed the list with Boetti-style metadata (length in cm, year of one-person show, etc.) so the 'order' being reordered carries more conceptual weight per name.",
+  "jury_model": "minimax/minimax-m3"
+}

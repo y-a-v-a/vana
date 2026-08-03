@@ -998,5 +998,13 @@
     "source": "Georges Perec, La Disparition (1969); OuLiPo (Ouvroir de litterature potentielle); Marcel Duchamp, infrathin (inframince)",
     "mechanism": "A beforeinput handler strips the fifth glyph from the input stream before it lands, ghosts it at the caret, and tallies the losses; the page's own copy is itself E-less.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-03-the-order-of-things",
+    "title": "The Order of Things",
+    "year": 2026,
+    "source": "Alighiero Boetti, Classifying the thousand longest rivers in the world (1977); Jorge Luis Borges, The Analytical Language of John Wilkins (1942); Michel Foucault, Les mots et les choses (1966); y-a-v-a, Modernipsum (2012)",
+    "mechanism": "The browser's built-in Intl.Collator locale tables (ICU) compute precedence live per selected locale, with a FLIP reorder animation; no network, storage, or fonts.",
+    "status": "pending"
   }
 ]
