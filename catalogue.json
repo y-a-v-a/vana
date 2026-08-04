@@ -1006,5 +1006,13 @@
     "source": "Alighiero Boetti, Classifying the thousand longest rivers in the world (1977); Jorge Luis Borges, The Analytical Language of John Wilkins (1942); Michel Foucault, Les mots et les choses (1966); y-a-v-a, Modernipsum (2012)",
     "mechanism": "The browser's built-in Intl.Collator locale tables (ICU) compute precedence live per selected locale, with a FLIP reorder animation; no network, storage, or fonts.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-04-equivalent",
+    "title": "Equivalent",
+    "year": 2026,
+    "source": "Alfred Stieglitz, Equivalents (1925-1934); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); SVG filter specification (feTurbulence); y-a-v-a, Arranged According to the Laws of Chance (2026)",
+    "mechanism": "SVG feTurbulence filter primitive: a specification-defined pseudo-random generator renders fractal-noise clouds live from one integer seed, deterministic and identical across conforming browsers; JS only mutates the seed attribute.",
+    "status": "rejected"
   }
 ]

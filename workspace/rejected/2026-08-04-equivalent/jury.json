@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-08-04-equivalent",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": false
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "reject",
+  "references_named": [
+    "Alfred Stieglitz, Equivalents (1925-1934)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "SVG filter specification (feTurbulence)",
+    "y-a-v-a, Arranged According to the Laws of Chance (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The mechanism-as-argument is clean: feTurbulence's spec-defined pseudo-random generator is the photograph, and the inversion of Stieglitz's singular exposure into a shared deterministic integer is a precise, witty read on Benjamin's reproduction thesis. The chance/order axis is staged exactly (turbulent surface, integer underneath), the build is minimal, and the surface gag (moody sky portfolio) lands without the wall text. However, G6 fails: the catalogue already contains 'Equivalent (Any of the Fourteen)' (2026), a Carl Andre work explicitly titled 'Equivalent' that uses the same word as its primary title and operates in the same conceptual register (deterministic, browser-native, no storage, no network). The candidate's title 'Equivalent' collides directly with that existing work, and the mechanism (deterministic per-visit render from a spec-defined function) is materially adjacent to several other 2026 entries (e.g. 'What You See Is What You See', 'Composition in Red, Yellow and Blue (32 × 32)', '148 Colours') that also use browser-native primitives as the artwork.",
+  "reservations": "Title collision with the existing 'Equivalent (Any of the Fourteen)' (2026) is a direct G6 problem. The work is strong on its own merits but needs a distinguishing title and a clearer differentiation from the existing deterministic-browser-primitive cluster in the 2026 catalogue.",
+  "revision_suggestion": "Rename to something that signals the Stieglitz/Benjamin inversion specifically (e.g. 'Equivalents (Seed 0)' or 'The Shared Sky') to avoid the title collision with the Carl Andre 'Equivalent' entry, and tighten the rationale to make the inversion of 'Arranged According to the Laws of Chance' the central narrative move rather than one of several references.",
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Equivalent</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #0a0a0a;
+    color: #e8e6e1;
+    font-family: Georgia, "Times New Roman", serif;
+    overflow: hidden;
+  }
+  #stage {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #000;
+  }
+  /* frame + gallery vignette, drawn with CSS so nothing loads */
+  #vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 22vmin 6vmin rgba(0,0,0,0.85);
+  }
+  #frame {
+    position: fixed;
+    inset: 3.2vmin;
+    pointer-events: none;
+    border: 1px solid rgba(232,230,225,0.18);
+  }
+  /* museum tombstone */
+  #label {
+    position: fixed;
+    left: 5vmin;
+    bottom: 5vmin;
+    max-width: min(46ch, 82vw);
+    background: rgba(10,10,10,0.62);
+    padding: 1.1rem 1.3rem;
+    border-left: 2px solid rgba(232,230,225,0.5);
+    line-height: 1.5;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+  #label h1 {
+    margin: 0 0 .15rem 0;
+    font-size: 1.5rem;
+    font-weight: normal;
+    letter-spacing: .02em;
+  }
+  #label .seedline {
+    font-style: italic;
+    color: #b9b6ae;
+    margin: 0 0 .55rem 0;
+    font-size: 1rem;
+  }
+  #label .after {
+    margin: 0 0 .55rem 0;
+    font-size: .92rem;
+    color: #cfccc4;
+  }
+  #label .medium {
+    margin: 0 0 .7rem 0;
+    font-size: .82rem;
+    color: #8f8c85;
+    font-family: "Courier New", monospace;
+    letter-spacing: 0;
+  }
+  #label .thesis {
+    margin: 0 0 .8rem 0;
+    font-size: .9rem;
+    color: #d7d4cc;
+  }
+  #controls {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    font-size: .85rem;
+  }
+  #controls button {
+    background: transparent;
+    color: #e8e6e1;
+    border: 1px solid rgba(232,230,225,0.4);
+    padding: .28rem .7rem;
+    font-family: inherit;
+    font-size: .95rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  #controls button:hover { background: rgba(232,230,225,0.1); }
+  #controls input {
+    width: 7ch;
+    background: transparent;
+    color: #e8e6e1;
+    border: none;
+    border-bottom: 1px solid rgba(232,230,225,0.4);
+    font-family: "Courier New", monospace;
+    font-size: 1rem;
+    text-align: center;
+  }
+  #controls .hint { color: #7d7a74; font-size: .74rem; font-style: italic; }
+  #license {
+    position: fixed;
+    right: 5vmin;
+    bottom: 5vmin;
+    font-size: .72rem;
+    color: #6e6b65;
+    text-align: right;
+    line-height: 1.5;
+    pointer-events: none;
+  }
+  #license a { color: #8f8c85; }
+  @media (max-width: 620px) {
+    #license { display: none; }
+    #label { left: 4vw; right: 4vw; bottom: 4vw; max-width: none; }
+  }
+</style>
+</head>
+<body>
+
+<svg id="stage" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="equivalent" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <!-- The browser's own spec-defined pseudo-random generator IS the photograph. -->
+      <feTurbulence id="turb" type="fractalNoise"
+                    baseFrequency="0.009 0.016" numOctaves="5" seed="0"
+                    stitchTiles="noStitch" result="noise"/>
+      <!-- strip it of colour: Stieglitz shot gelatin-silver -->
+      <feColorMatrix in="noise" type="saturate" values="0" result="gray"/>
+      <!-- push it toward a dramatic, high-contrast sky -->
+      <feComponentTransfer in="gray" result="contrast">
+        <feFuncR type="linear" slope="1.7" intercept="-0.32"/>
+        <feFuncG type="linear" slope="1.7" intercept="-0.32"/>
+        <feFuncB type="linear" slope="1.7" intercept="-0.32"/>
+      </feComponentTransfer>
+      <feComponentTransfer in="contrast">
+        <feFuncR type="gamma" amplitude="1" exponent="1.35" offset="0"/>
+        <feFuncG type="gamma" amplitude="1" exponent="1.35" offset="0"/>
+        <feFuncB type="gamma" amplitude="1" exponent="1.35" offset="0"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  <rect x="0" y="0" width="100%" height="100%" filter="url(#equivalent)"/>
+</svg>
+
+<div id="vignette"></div>
+<div id="frame"></div>
+
+<div id="label">
+  <h1>Equivalent</h1>
+  <p class="seedline">Seed <span id="seedShown">0</span></p>
+  <p class="after">after Alfred Stieglitz, <em>Equivalents</em> (1925&ndash;1934)</p>
+  <p class="medium">feTurbulence fractal noise &middot; pixels on screen</p>
+  <p class="thesis">Not a photograph. Not weather. This sky is value&nbsp;N of a
+    function defined by the SVG&nbsp;filter specification &mdash; so the same seed
+    shows every viewer, on every browser, the very same cloud, forever.</p>
+  <div id="controls">
+    <button id="prev" aria-label="Previous equivalent">&#9664; prev</button>
+    <button id="next" aria-label="Next equivalent">next &#9654;</button>
+    <input id="seedInput" type="number" value="0" step="1" aria-label="Seed">
+    <span class="hint">&larr;&rarr; to travel</span>
+  </div>
+</div>
+
+<div id="license">
+  <div>y-a-v-a &mdash; <em>Equivalent</em></div>
+  <div>after Alfred Stieglitz</div>
+  <div>CC&nbsp;BY-SA&nbsp;4.0 &middot; no cookies &middot; no tracking</div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var turb = document.getElementById("turb");
+  var shown = document.getElementById("seedShown");
+  var input = document.getElementById("seedInput");
+  var seed = 0;
+
+  function render(n) {
+    // feTurbulence's seed is truncated toward zero; keep it a plain integer.
+    seed = Math.trunc(n) || 0;
+    turb.setAttribute("seed", String(seed));
+    shown.textContent = String(seed);
+    if (document.activeElement !== input) input.value = String(seed);
+  }
+
+  document.getElementById("prev").addEventListener("click", function () { render(seed - 1); });
+  document.getElementById("next").addEventListener("click", function () { render(seed + 1); });
+  input.addEventListener("input", function () { render(input.value); });
+
+  window.addEventListener("keydown", function (e) {
+    if (e.target === input) return;
+    if (e.key === "ArrowRight" || e.key === "ArrowUp") { render(seed + 1); e.preventDefault(); }
+    else if (e.key === "ArrowLeft" || e.key === "ArrowDown") { render(seed - 1); e.preventDefault(); }
+  });
+
+  // Opens at seed 0 on purpose: the canonical sky everyone shares.
+  render(0);
+})();
+</script>
+</body>
+</html>
