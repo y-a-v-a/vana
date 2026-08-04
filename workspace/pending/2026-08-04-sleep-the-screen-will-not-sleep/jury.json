@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-04-sleep-the-screen-will-not-sleep",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Andy Warhol, Sleep (1963)",
+    "John Giorno",
+    "W3C Screen Wake Lock API"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The Screen Wake Lock API is the perfect mechanism-as-message for a Warhol Sleep re-enactment: a page that refuses sleep literally requests the device not to sleep, and the visibility-gated vigil counter turns the user's attention into the work's medium. Concept and execution collapse cleanly (P1), the readymade is a device API (P2), restraint is honored (P3), and live/no-storage fits the DNA (P4). Tonal control is dry and cheerful-cynic; the small loss-of-support branch ('your browser withholds the vigil') echoes Vanitas/Battery without being derivative. The vignette is materially distinct from the catalogue.",
+  "reservations": "The pixel-grain/per-frame reseed is a bit busy and could read as 'AI/tech demo' rather than Warhol's flat projection-feel; the breathing ellipse is a small departure from Warhol's figurative subject, replaced here by a luminous mound. The (date, e.g. 2026) on the rights line should be confirmed; otherwise ethics are clean.",
+  "revision_suggestion": "Consider darkening/desaturating the per-frame grain and slowing the reel-flicker so the loop reads as projection stillness rather than effect; optionally let the sleeper occasionally shift silhouette (arm, turn of head) per minute so five hours feels inhabited without adding storage.",
+  "jury_model": "minimax/minimax-m3"
+}

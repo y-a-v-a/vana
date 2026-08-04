@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sleep (The Screen Will Not Sleep)</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #050505; }
+  body {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color: #b9b9b9;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #film { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+
+  #gate {
+    position: fixed; inset: 0; z-index: 3;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1.2rem; text-align: center; padding: 2rem;
+    background: #050505;
+  }
+  #gate h1 { font-size: clamp(1.4rem, 5vw, 2.4rem); font-weight: 400; letter-spacing: .18em; margin: 0; }
+  #gate p { max-width: 30rem; line-height: 1.6; font-size: .82rem; color: #7a7a7a; margin: 0; }
+  #begin {
+    appearance: none; background: none; color: #cfcfcf;
+    border: 1px solid #444; padding: .8em 2em;
+    font: inherit; letter-spacing: .12em; cursor: pointer;
+    transition: border-color .3s, color .3s;
+  }
+  #begin:hover, #begin:focus-visible { border-color: #999; color: #fff; outline: none; }
+
+  #label {
+    position: fixed; z-index: 2; left: 0; right: 0; bottom: 0;
+    padding: 1rem 1.1rem calc(1rem + env(safe-area-inset-bottom));
+    display: grid; grid-template-columns: 1fr auto; gap: .35rem 1.5rem;
+    align-items: end;
+    background: linear-gradient(to top, rgba(5,5,5,.92), rgba(5,5,5,0));
+    font-size: .72rem; line-height: 1.5;
+    opacity: 0; transition: opacity 1.4s; pointer-events: none;
+  }
+  #label.on { opacity: 1; }
+  #label .tomb { color: #8f8f8f; }
+  #label .tomb b { color: #d8d8d8; font-weight: 400; }
+  #label .right { text-align: right; font-variant-numeric: tabular-nums; }
+  #vigil { font-size: 1.15rem; color: #e6e6e6; letter-spacing: .04em; }
+  #state { color: #6f6f6f; }
+  #state.held { color: #a7d3a7; }
+  #state.dropped { color: #d3a7a7; }
+  #rights { grid-column: 1 / -1; color: #4c4c4c; font-size: .64rem; letter-spacing: .02em; margin-top: .4rem; }
+  #rights a { color: #6a6a6a; }
+</style>
+</head>
+<body>
+<canvas id="film"></canvas>
+
+<section id="label" aria-hidden="true">
+  <div class="tomb">
+    <b>Sleep (The Screen Will Not Sleep)</b><br>
+    after Andy Warhol, <i>Sleep</i> (1963) — John Giorno, 6 reels, ~5 h 21 m<br>
+    medium: pixels on screen; the device&rsquo;s own sleep, withheld
+  </div>
+  <div class="right">
+    <div id="vigil">0:00:00</div>
+    <div>of 5:21:00 vigil</div>
+    <div id="state">&mdash;</div>
+  </div>
+  <div id="rights">
+    y-a-v-a, 2026 &middot; answers Andy Warhol, <i>Sleep</i> (1963) &middot;
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a> &middot;
+    no cookies, no tracking, no network. Look away and it releases.
+  </div>
+</section>
+
+<section id="gate">
+  <h1>S L E E P</h1>
+  <p>Warhol pointed a camera at a sleeping man for five hours and twenty-one minutes.
+     To keep the watch, this page asks your device not to fall asleep.
+     Begin, and stay. Leave the tab, and the screen is free to rest.</p>
+  <button id="begin" type="button">begin the vigil</button>
+  <p id="support"></p>
+</section>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---- the film: a breathing sleeper, grain, no footage stored or fetched ----
+  var cv = document.getElementById("film");
+  var ctx = cv.getContext("2d");
+  var W = 0, H = 0, DPR = 1;
+
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.width = Math.floor(innerWidth * DPR);
+    H = cv.height = Math.floor(innerHeight * DPR);
+  }
+  addEventListener("resize", resize);
+  resize();
+
+  // a small reusable grain tile so we never allocate per frame
+  var grain = document.createElement("canvas");
+  grain.width = grain.height = 160;
+  var gctx = grain.getContext("2d");
+  function reseedGrain() {
+    var img = gctx.createImageData(160, 160);
+    var d = img.data, prev = 0;
+    for (var i = 0; i < d.length; i += 4) {
+      // cheap deterministic-ish churn without Math.random dependency for texture
+      prev = (prev * 1103515245 + 12345 + i) & 0x7fffffff;
+      var v = 20 + (prev % 40);
+      d[i] = d[i + 1] = d[i + 2] = v;
+      d[i + 3] = 22;
+    }
+    gctx.putImageData(img, 0, 0);
+  }
+
+  var breath = 0; // radians
+  function frame(t) {
+    // breathing: one slow cycle ~4.6s
+    breath = (t / 4600) * Math.PI * 2;
+    var rise = (Math.sin(breath) * 0.5 + 0.5); // 0..1
+
+    // ground
+    ctx.fillStyle = "#050505";
+    ctx.fillRect(0, 0, W, H);
+
+    // the sleeper: a soft luminous mound low in the frame that swells to breathe
+    var cx = W * 0.5;
+    var baseY = H * 0.86;
+    var rw = W * (0.34 + rise * 0.012);
+    var rh = H * (0.20 + rise * 0.03);
+    var g = ctx.createRadialGradient(cx, baseY, 0, cx, baseY, Math.max(rw, rh));
+    g.addColorStop(0, "rgba(190,190,190," + (0.42 + rise * 0.12) + ")");
+    g.addColorStop(0.55, "rgba(120,120,120,0.16)");
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.save();
+    ctx.translate(cx, baseY);
+    ctx.scale(rw / rh, 1);
+    ctx.beginPath();
+    ctx.arc(0, 0, rh, 0, Math.PI * 2);
+    ctx.restore();
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.ellipse(cx, baseY, rw, rh, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // reel-flicker: a faint global luminance wobble like 16fps projection
+    var flick = 0.02 * Math.sin(t / 90);
+    ctx.fillStyle = "rgba(255,255,255," + Math.max(0, flick) + ")";
+    ctx.fillRect(0, 0, W, H);
+
+    // grain, tiled, reseeded occasionally
+    if ((t | 0) % 4 === 0) reseedGrain();
+    var p = ctx.createPattern(grain, "repeat");
+    ctx.fillStyle = p;
+    ctx.fillRect(0, 0, W, H);
+
+    raf = requestAnimationFrame(frame);
+  }
+  var raf = 0;
+  reseedGrain();
+
+  // ---- the vigil: time held only while visible AND the screen is kept awake ----
+  var RUNTIME = 5 * 3600 + 21 * 60; // 5h21m, in seconds, Warhol's Sleep
+  var held = 0; // accumulated seconds of true vigil
+  var last = null;
+  var vigilEl = document.getElementById("vigil");
+  var stateEl = document.getElementById("state");
+  var labelEl = document.getElementById("label");
+
+  function hms(s) {
+    s = Math.floor(s);
+    var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60;
+    return h + ":" + String(m).padStart(2, "0") + ":" + String(x).padStart(2, "0");
+  }
+
+  function tick(now) {
+    if (last != null && wakeLock && document.visibilityState === "visible") {
+      held += (now - last) / 1000;
+      if (held > RUNTIME) held = RUNTIME;
+    }
+    last = now;
+    vigilEl.textContent = hms(held);
+    tickRaf = requestAnimationFrame(tick);
+  }
+  var tickRaf = 0;
+
+  // ---- Screen Wake Lock: the mechanism that IS the piece ----
+  var wakeLock = null;
+  var watching = false;
+  var supported = ("wakeLock" in navigator);
+
+  function setState(kind, text) {
+    stateEl.className = kind;
+    stateEl.textContent = text;
+  }
+
+  async function acquire() {
+    if (!supported) { setState("dropped", "your device cannot be kept awake"); return; }
+    try {
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", function () {
+        wakeLock = null;
+        setState("dropped", "the screen may sleep now");
+      });
+      setState("held", "the screen will not sleep");
+    } catch (e) {
+      wakeLock = null;
+      setState("dropped", "the vigil was refused");
+    }
+  }
+
+  document.addEventListener("visibilitychange", function () {
+    if (!watching) return;
+    if (document.visibilityState === "visible") {
+      last = null;      // don't credit time spent away
+      acquire();        // wake lock is auto-released when hidden; reclaim it
+    } else {
+      setState("dropped", "you looked away");
+    }
+  });
+
+  var gate = document.getElementById("gate");
+  var support = document.getElementById("support");
+  support.textContent = supported
+    ? ""
+    : "(Your browser withholds the Wake Lock API — the vigil can be kept in spirit only.)";
+
+  document.getElementById("begin").addEventListener("click", function () {
+    watching = true;
+    gate.style.display = "none";
+    labelEl.classList.add("on");
+    labelEl.setAttribute("aria-hidden", "false");
+    raf = requestAnimationFrame(frame);
+    tickRaf = requestAnimationFrame(tick);
+    acquire();
+  });
+})();
+</script>
+</body>
+</html>

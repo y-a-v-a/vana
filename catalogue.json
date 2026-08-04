@@ -1014,5 +1014,13 @@
     "source": "Alfred Stieglitz, Equivalents (1925-1934); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); SVG filter specification (feTurbulence); y-a-v-a, Arranged According to the Laws of Chance (2026)",
     "mechanism": "SVG feTurbulence filter primitive: a specification-defined pseudo-random generator renders fractal-noise clouds live from one integer seed, deterministic and identical across conforming browsers; JS only mutates the seed attribute.",
     "status": "rejected"
+  },
+  {
+    "id": "2026-08-04-sleep-the-screen-will-not-sleep",
+    "title": "Sleep (The Screen Will Not Sleep)",
+    "year": 2026,
+    "source": "Andy Warhol, Sleep (1963); John Giorno; W3C Screen Wake Lock API",
+    "mechanism": "Screen Wake Lock API holds the OS awake and a vigil counter accrues only while visible + locked; visibilitychange auto-releases it and stops the count.",
+    "status": "pending"
   }
 ]
