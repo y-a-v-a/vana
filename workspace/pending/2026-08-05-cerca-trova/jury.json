@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-08-05-cerca-trova",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 5,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 48,
+  "verdict": "strong",
+  "references_named": [
+    "Leonardo da Vinci, The Battle of Anghiari (1505, lost)",
+    "Giorgio Vasari, The Battle of Marciano / the 'cerca trova' flag (1563)",
+    "Maurizio Seracini, the search behind the Palazzo Vecchio wall",
+    "net.art (the browser's Find function as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P6",
+    "P7"
+  ],
+  "rationale": "This is a near-perfect execution of the DNA. The mechanism (hidden=until-found + beforematch) is not a metaphor for the lost Leonardo — it literally enacts the cerca trova legend: the painting is present in the DOM, sealed, and only the browser's native Find can unseal it. Concept and execution collapse into one object (P1). The double-coding is clean: a casual visitor gets the gag of having to search the page, while a literate visitor gets the Vasari/Seracini argument about buried masterpieces and the value of the merely rumoured (P6/P7). Restraint is exemplary — one hidden attribute, one event, a small canvas sketch on reveal (P3). The honest adoption of the Firefox/Safari limitation as the concept (the Leonardo stays lost) is exactly the cheerful-cynic voice the DNA demands. Tone is dry and intelligent, not edgy or sentimental.",
+  "reservations": "Narrative placement is strong but slightly thin on the chance/order axis (P5) — the work leans on P1/P2/P4/P6/P7 rather than staging the order↔chance tension that anchors much of the catalogue. Minor: the canvas mural on reveal is pleasant but generic 'sanguine battle sketch' rather than a precise visual reference to a specific Anghiari composition; it could be tightened.",
+  "revision_suggestion": "Consider seeding the revealed canvas with a more recognisable Anghiari motif (the fight for the standard, the rearing horses, the intertwined combatants) so the reveal carries a sharper visual citation. Optionally introduce a small chance/order element — e.g., the mural's composition permuted per visit from a fixed rule set — to deepen the P5 axis.",
+  "jury_model": "minimax/minimax-m3"
+}
