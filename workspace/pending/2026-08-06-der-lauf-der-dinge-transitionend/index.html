@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Der Lauf der Dinge (transitionend)</title>
+<style>
+  :root{
+    --ink:#e8e4dc; --steel:#8a8578; --steel2:#5c584e;
+    --fire:hsl(28 90% 55%); --bg1:#26241f; --bg2:#151410;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:radial-gradient(120% 90% at 50% 0%, var(--bg1), var(--bg2));
+    color:var(--ink);
+    font:14px/1.5 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    overflow:hidden;
+  }
+  #stage{position:fixed; inset:0; overflow:hidden}
+  .obj{position:absolute; will-change:transform; transform:translateZ(0)}
+  .ball{border-radius:50%;
+    background:radial-gradient(30% 30% at 35% 30%, #cfc9bc, var(--steel) 60%, var(--steel2))}
+  .domino{transform-origin:bottom left; border-radius:2px;
+    background:linear-gradient(90deg, var(--steel), var(--steel2))}
+  .block{border-radius:3px;
+    background:linear-gradient(180deg, var(--steel), var(--steel2))}
+  .weight{border-radius:8px 8px 4px 4px;
+    background:radial-gradient(60% 40% at 50% 25%, #b7b1a3, var(--steel2))}
+  .pend{transform-origin:top center; border-radius:3px;
+    background:linear-gradient(180deg, var(--steel2), var(--steel))}
+  .fire{transform-origin:left center; border-radius:2px;
+    background:linear-gradient(90deg, var(--fire), hsl(48 95% 60%));
+    box-shadow:0 0 18px var(--fire)}
+  .rest{filter:saturate(.6) brightness(.92)}
+
+  /* wall label */
+  #label{position:fixed; left:16px; bottom:14px; max-width:min(46ch,86vw);
+    color:#bdb8ac; z-index:5}
+  #label h1{margin:0 0 .35em; font-size:14px; letter-spacing:.02em; color:var(--ink)}
+  #label p{margin:.3em 0}
+  #label .dim{color:#7f7a6e}
+  #label a{color:#c8c2b4}
+  #again{margin-top:.6em; background:transparent; color:var(--ink);
+    border:1px solid var(--steel); border-radius:4px; padding:.35em .7em;
+    font:inherit; cursor:pointer}
+  #again:hover{border-color:var(--ink)}
+  #verdict{position:fixed; top:12px; right:16px; z-index:5; color:#7f7a6e;
+    text-align:right; font-size:12px; max-width:34ch}
+  #verdict b{color:var(--ink); font-weight:600}
+</style>
+</head>
+<body>
+  <div id="stage" aria-hidden="true"></div>
+
+  <div id="verdict">
+    <div id="status">winding up…</div>
+    <div class="dim">completions: <b id="count">0</b> / <span id="total">0</span></div>
+  </div>
+
+  <div id="label">
+    <h1>Der Lauf der Dinge <span class="dim">(transitionend)</span></h1>
+    <p>After Fischli &amp; Weiss, <em>The Way Things Go</em> (1987).</p>
+    <p class="dim">Each object moves only because the one before it finished:
+      the browser's <b>transitionend</b> event is the nudge. No timeline drives it —
+      it is a real causal chain. In the warehouse the suspense was <em>will it work?</em>
+      Here the event cannot fail to fire, so the chain always completes. Mechanical
+      reproduction kept the motion and threw away the doubt.</p>
+    <p class="dim">Positions and timings are re-thrown each visit and kept only in memory.
+      Nothing is stored; reload runs a chain that has never run before and never will again.</p>
+    <button id="again">↺ let things go again</button>
+    <p class="dim" style="margin-top:.7em">
+      y-a-v-a · CC BY 4.0 · after Peter Fischli &amp; David Weiss · no cookies, no trackers, no network.</p>
+  </div>
+
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const rnd  = (a,b) => a + Math.random()*(b-a);
+  const jit  = v => v * rnd(0.85, 1.15);
+
+  // fresh accent per visit (a fire that is never the same fire)
+  document.documentElement.style.setProperty('--fire', `hsl(${Math.round(rnd(14,40))} 90% 55%)`);
+
+  // The links of the chain. Position in vw/vh; each "go" transform is expressed
+  // in the same units so motion roughly hands off to the next object.
+  const links = [
+    {t:'ball',   x:4,  y:9,  w:7,  h:7,  go:'translateX(17vw) rotate(720deg)',  d:1100, e:'linear'},
+    {t:'domino', x:23, y:8,  w:3,  h:17, go:'rotate(86deg)',                     d:520,  e:'cubic-bezier(.5,0,1,1)'},
+    {t:'block',  x:31, y:30, w:9,  h:6,  go:'translateX(11vw)',                  d:640,  e:'cubic-bezier(.2,.7,.4,1)'},
+    {t:'weight', x:46, y:20, w:7,  h:8,  go:'translateY(20vh)',                  d:520,  e:'cubic-bezier(.6,0,.9,.4)'},
+    {t:'pend',   x:60, y:4,  w:3,  h:20, go:'rotate(112deg)',                    d:900,  e:'cubic-bezier(.4,0,.6,1)'},
+    {t:'fire',   x:57, y:47, w:6,  h:3,  go:'scaleX(6)',                         d:1200, e:'linear'},
+    {t:'ball',   x:73, y:45, w:6,  h:6,  go:'translateX(8vw) translateY(15vh) rotate(560deg)', d:900, e:'cubic-bezier(.4,0,.7,.5)'},
+    {t:'block',  x:82, y:62, w:10, h:6,  go:'translateX(-6vw)',                  d:700,  e:'cubic-bezier(.2,.8,.3,1)'},
+  ];
+
+  document.getElementById('total').textContent = links.length;
+
+  // build objects
+  for(const L of links){
+    const el = document.createElement('div');
+    el.className = 'obj ' + L.t;
+    el.style.left = L.x + 'vw';
+    el.style.top  = L.y + 'vh';
+    el.style.width  = L.w + 'vmin';
+    el.style.height = L.h + 'vmin';
+    stage.appendChild(el);
+    L.el = el;
+    L.dur = Math.round(jit(L.d));
+  }
+
+  const countEl = document.getElementById('count');
+  const statusEl = document.getElementById('status');
+  let count = 0, running = false;
+
+  function step(i){
+    if(i >= links.length){ rest(); return; }
+    const L = links[i];
+    L.el.style.transition = `transform ${L.dur}ms ${L.e}`;
+    // the completion of one link is literally what starts the next
+    L.el.addEventListener('transitionend', () => {
+      count++; countEl.textContent = count;
+      step(i+1);
+    }, {once:true});
+    requestAnimationFrame(() => { L.el.style.transform = L.go; });
+  }
+
+  function rest(){
+    running = false;
+    for(const L of links) L.el.classList.add('rest');
+    statusEl.innerHTML = 'and so, <b>the way things go</b>.';
+  }
+
+  function reset(){
+    count = 0; countEl.textContent = 0;
+    for(const L of links){
+      L.el.classList.remove('rest');
+      L.el.style.transition = 'none';
+      L.el.style.transform = '';
+      L.dur = Math.round(jit(L.d));
+      L.x2 = null;
+    }
+    // reflow so the cleared transforms take before we start again
+    void stage.offsetWidth;
+  }
+
+  function run(){
+    if(running) return;
+    reset();
+    running = true;
+    statusEl.textContent = 'letting go…';
+    step(0);
+  }
+
+  document.getElementById('again').addEventListener('click', run);
+
+  // Autoplay only when motion is welcome; otherwise wait for a hand.
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(calm){
+    statusEl.textContent = 'press ↺ to let things go';
+  } else {
+    run();
+  }
+})();
+</script>
+</body>
+</html>

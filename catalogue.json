@@ -1030,5 +1030,13 @@
     "source": "Leonardo da Vinci, The Battle of Anghiari (1505, lost); Giorgio Vasari, The Battle of Marciano / the 'cerca trova' flag (1563); Maurizio Seracini, the search behind the Palazzo Vecchio wall; net.art (the browser's Find function as material)",
     "mechanism": "HTML hidden=\"until-found\" plus the beforematch event: an unrendered DOM region revealed solely by the browser's native Find-in-page, drawing a per-visit sanguine canvas mural on reveal.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-06-der-lauf-der-dinge-transitionend",
+    "title": "Der Lauf der Dinge (transitionend)",
+    "year": 2026,
+    "source": "Peter Fischli & David Weiss, Der Lauf der Dinge / The Way Things Go (1987); Jean Tinguely; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "DOM transitionend events chain one CSS transform transition to the next, so completion is the literal cause of the following motion; per-visit Math.random re-throws geometry and timing, RAM only.",
+    "status": "pending"
   }
 ]

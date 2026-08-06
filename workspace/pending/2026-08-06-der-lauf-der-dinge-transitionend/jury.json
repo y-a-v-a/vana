@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-08-06-der-lauf-der-dinge-transitionend",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Peter Fischli & David Weiss, Der Lauf der Dinge / The Way Things Go (1987)",
+    "Jean Tinguely",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P9"
+  ],
+  "rationale": "The mechanism is the concept cleanly: each link's motion is triggered by the previous link's transitionend event, so causality is the browser's own primitive rather than a depicted timeline. The chance/order axis is well-staged — per-visit Math.random re-throws geometry and timing (chance, RAM-only) while the underlying event firing is deterministic order. The Benjamin twist (mechanical reproduction deletes the doubt) lands as a quiet, cheerful-cynic payoff rather than a wall-text lecture. Craft is restrained: a single self-contained page, no storage, no network, prefers-reduced-motion respected, CC BY stated, attribution present.",
+  "reservations": "The novelty is real but not extreme — DOM event chaining as substance has obvious precedent in the catalogue's broader event-as-material program (e.g. Page Visibility in The Unkept, hashchange in If I Say So, visibilitychange in The Artist Is Present). The piece is materially distinct from all catalogued works (none uses transitionend propagation as its causal spine), but it sits comfortably within an established house style rather than breaking new ground. The 'will it work?' suspense is genuinely absent, which is the point, but it also slightly flattens the dramatic arc the source film is famous for.",
+  "revision_suggestion": "Consider seeding the per-visit randomness so the chain occasionally stalls or drops a link (e.g. a small probability that a transitionend listener is intentionally not attached), letting the cheerful-cynic thesis sharpen: the web's chain is reliable precisely because we removed the failure mode that gave the original its meaning. A toggle exposing this would deepen the Benjamin argument without breaking the P1 mechanism.",
+  "jury_model": "minimax/minimax-m3"
+}
