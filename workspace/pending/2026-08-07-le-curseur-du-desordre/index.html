@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Curseur du Désordre</title>
+<style>
+  :root{ --paper:#f4f1ea; --ink:#191712; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; }
+  body{
+    background:var(--paper); color:var(--ink);
+    font:14px/1.5 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    display:flex; flex-direction:column; align-items:center;
+    padding:24px 16px 40px; gap:18px; min-height:100%;
+    -webkit-text-size-adjust:100%;
+  }
+  #plate{ width:min(86vmin,640px); }
+  canvas{ display:block; width:100%; aspect-ratio:1/1; background:var(--paper); }
+  #dial{ width:min(86vmin,640px); }
+  .axis{ display:flex; justify-content:space-between; letter-spacing:.18em;
+    font-size:11px; opacity:.7; margin-bottom:4px; }
+  input[type=range]{ width:100%; accent-color:var(--ink); cursor:ew-resize; }
+  #read{ margin-top:10px; text-align:center; }
+  #pct{ font-size:26px; letter-spacing:.02em; }
+  #verdict{ min-height:1.4em; opacity:.85; }
+  #label{ width:min(86vmin,640px); border-top:1px solid rgba(0,0,0,.25);
+    padding-top:12px; font-size:11px; line-height:1.65; opacity:.72; }
+  #label b{ font-weight:600; opacity:.95; }
+  a{ color:inherit; }
+</style>
+</head>
+<body>
+  <div id="plate"><canvas id="c"></canvas></div>
+
+  <div id="dial">
+    <div class="axis"><span>ORDRE</span><span>HASARD</span></div>
+    <input id="r" type="range" min="0" max="1" step="0.001" value="0.01"
+           aria-label="disorder, from order to chance">
+    <div id="read">
+      <div id="pct">1&#8201;%</div>
+      <div id="verdict"></div>
+    </div>
+  </div>
+
+  <div id="label">
+    <b>Le Curseur du Désordre</b> — y-a-v-a, 2026. After Vera Molnár,
+    <i>1% de Désordre</i> / <i>(Dés)Ordres</i> (1976) &amp; <i>Interruptions</i>.
+    Answers Kenneth Martin, <i>Chance and Order</i>, and y-a-v-a, <i>A Chance of Order</i> (2021);
+    with a nod to Mondrian at zero. The slider <i>is</i> the axis: the same
+    per-visit random field, scaled from &times;0 (rule) to &times;1 (chance).
+    Medium: pixels on screen. No cookies, no trackers, no data leaves your browser.
+    <br>Licensed <b>CC&nbsp;BY-SA&nbsp;4.0</b>.
+  </div>
+
+<script>
+(function(){
+  const cv = document.getElementById('c');
+  const ctx = cv.getContext('2d');
+  const r   = document.getElementById('r');
+  const pct = document.getElementById('pct');
+  const vd  = document.getElementById('verdict');
+
+  const COLS = 6, ROWS = 6, SQUARES = 7;
+
+  // The chance engine, seeded once per visit and held only in RAM.
+  // Each vertex gets a fixed unit offset in [-1,1]; the slider scales it.
+  const seed = [];
+  for (let i = 0; i < ROWS; i++){
+    const row = [];
+    for (let j = 0; j < COLS; j++){
+      const cell = [];
+      for (let s = 0; s < SQUARES; s++){
+        const corners = [];
+        for (let k = 0; k < 4; k++){
+          corners.push([Math.random()*2 - 1, Math.random()*2 - 1]);
+        }
+        cell.push(corners);
+      }
+      row.push(cell);
+    }
+    seed.push(row);
+  }
+
+  function fit(){
+    const css = cv.getBoundingClientRect().width || 400;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width  = Math.round(css * dpr);
+    cv.height = Math.round(css * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return css;
+  }
+
+  function draw(){
+    const d = parseFloat(r.value);          // 0..1, the order↔chance position
+    const W = fit();
+    ctx.clearRect(0, 0, W, W);
+    ctx.strokeStyle = getComputedStyle(document.body).color;
+    ctx.lineWidth = 1.1;
+    ctx.lineJoin = 'round';
+
+    const cell = W / COLS;
+    const pad  = cell * 0.09;
+    const inner = cell - pad * 2;
+    const step = (inner / 2) / (SQUARES + 0.5);
+    const jit  = cell * 0.55 * d;            // chance amplitude
+
+    for (let i = 0; i < ROWS; i++){
+      for (let j = 0; j < COLS; j++){
+        const ox = j * cell + pad;
+        const oy = i * cell + pad;
+        for (let s = 0; s < SQUARES; s++){
+          const ins = s * step;
+          const x0 = ox + ins,       y0 = oy + ins;
+          const x1 = ox + inner-ins, y1 = oy + inner-ins;
+          const base = [[x0,y0],[x1,y0],[x1,y1],[x0,y1]];  // strict order
+          const off = seed[i][j][s];
+          ctx.beginPath();
+          for (let k = 0; k < 4; k++){
+            const px = base[k][0] + off[k][0]*jit;
+            const py = base[k][1] + off[k][1]*jit;
+            k ? ctx.lineTo(px,py) : ctx.moveTo(px,py);
+          }
+          ctx.closePath();
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function verdict(d){
+    if (d === 0)        return 'Perfect order. Not yet a Molnár — this is Mondrian.';
+    if (d <= 0.02)      return '≈1%. The living band. This is a Molnár.';
+    if (d <= 0.20)      return 'Controlled disorder. Still art.';
+    if (d <= 0.60)      return 'Losing the grid.';
+    return 'Noise. Not yet a Molnár — this is chance.';
+  }
+
+  function update(){
+    const d = parseFloat(r.value);
+    pct.innerHTML = Math.round(d*100) + '&#8201;%';
+    vd.textContent = verdict(d);
+    draw();
+  }
+
+  r.addEventListener('input', update);
+  window.addEventListener('resize', draw);
+  update();
+})();
+</script>
+</body>
+</html>

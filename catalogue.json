@@ -1038,5 +1038,13 @@
     "source": "Peter Fischli & David Weiss, Der Lauf der Dinge / The Way Things Go (1987); Jean Tinguely; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "DOM transitionend events chain one CSS transform transition to the next, so completion is the literal cause of the following motion; per-visit Math.random re-throws geometry and timing, RAM only.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-07-le-curseur-du-desordre",
+    "title": "Le Curseur du Désordre",
+    "year": 2026,
+    "source": "Vera Molnár, 1% de Désordre / (Dés)Ordres (1976); Vera Molnár, Interruptions (1968–69); Kenneth Martin, Chance and Order; Piet Mondrian; y-a-v-a, A Chance of Order (2021)",
+    "mechanism": "An <input type=range> continuously scales a once-seeded RNG offset field (×0 to ×1) over a rule-generated canvas grid of nested squares, redrawing live; the slider track is the chance↔order axis itself.",
+    "status": "pending"
   }
 ]

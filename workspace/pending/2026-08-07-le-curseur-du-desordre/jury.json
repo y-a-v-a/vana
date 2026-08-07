@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-07-le-curseur-du-desordre",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 5,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 42,
+  "verdict": "strong",
+  "references_named": [
+    "Vera Molnár, 1% de Désordre / (Dés)Ordres (1976)",
+    "Vera Molnár, Interruptions (1968–69)",
+    "Kenneth Martin, Chance and Order",
+    "Piet Mondrian",
+    "y-a-v-a, A Chance of Order (2021)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "Le Curseur du Désordre is a strong, materially distinct addition to the catalogue. It explicitly stages the chance/order axis (P5) as a single draggable native range slider, with the slider literally being the axis — a clean P1 collapse of mechanism and concept. The Molnár reference is well-chosen and previously absent from the lineage, and the work answers A Chance of Order (2021) and Arranged According to the Laws of Chance (2026) by refusing to fix a single throw. The verdict text carries the idea with dry wit (P9), and the build is appropriately minimal (P3).",
+  "reservations": "The novelty is real but the form (slider scales a random field over a grid) is a familiar generative-art gesture; the work leans heavily on the Molnár reference to do the conceptual heavy lifting. The 'live verdict' is a nice touch but the per-visit seed is held only in RAM, so reload resets the field — fine, but it means the 'same chance field' promise only holds within a single visit, which slightly weakens the P1 claim that the slider is the axis (the axis itself is re-seeded each visit).",
+  "revision_suggestion": "Consider seeding the random field from a stable per-day or per-session key (e.g., today's date) so the axis is genuinely the same field across visits and the slider truly traverses one continuum rather than re-throwing it each load. Also consider a tiny attribution to Molnár's Interruptions more visibly in the surface (e.g., a single interrupted line at the 1% mark) to deepen the double-coding.",
+  "jury_model": "minimax/minimax-m3"
+}
