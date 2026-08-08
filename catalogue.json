@@ -1046,5 +1046,13 @@
     "source": "Vera Molnár, 1% de Désordre / (Dés)Ordres (1976); Vera Molnár, Interruptions (1968–69); Kenneth Martin, Chance and Order; Piet Mondrian; y-a-v-a, A Chance of Order (2021)",
     "mechanism": "An <input type=range> continuously scales a once-seeded RNG offset field (×0 to ×1) over a rule-generated canvas grid of nested squares, redrawing live; the slider track is the chance↔order axis itself.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-08-nude-descending-a-staircase-no-3",
+    "title": "Nude Descending a Staircase (No. 3)",
+    "year": 2026,
+    "source": "Marcel Duchamp, Nude Descending a Staircase, No. 2 (1912); View Transition API (W3C/WHATWG); y-a-v-a, Images That Never Were (2026)",
+    "mechanism": "document.startViewTransition() interpolates unauthored frames between two figure poses; a rAF proxy counts them, none are kept, stored, or sent.",
+    "status": "pending"
   }
 ]

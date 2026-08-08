@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nude Descending a Staircase (No. 3)</title>
+<style>
+  :root{
+    --ground:#171310;
+    --ink:#d8c4a4;
+    --faint:#5b4a36;
+    --tan1:#c69a5f; --tan2:#a8763f; --tan3:#8a5a2c; --tan4:#e0c48c; --tan5:#6f4a25;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--ground);
+    color:var(--ink);
+    font:15px/1.5 Georgia,"Times New Roman",serif;
+    display:flex;flex-direction:column;min-height:100%;
+    -webkit-font-smoothing:antialiased;
+  }
+  header{padding:22px 22px 6px}
+  h1{font-size:19px;font-weight:normal;letter-spacing:.02em;margin:0}
+  h1 em{font-style:italic;color:var(--tan4)}
+  .sub{color:var(--faint);font-size:12.5px;margin-top:4px}
+
+  .stage{
+    position:relative;flex:1 1 auto;min-height:340px;margin:8px 12px;
+    border:1px solid #2a2119;overflow:hidden;
+    /* the staircase: faint descending treads */
+    background:
+      repeating-linear-gradient(135deg,
+        transparent 0 46px,
+        rgba(91,74,54,.16) 46px 47px);
+  }
+  .figure{
+    position:absolute;width:96px;height:150px;
+    left:var(--x);top:var(--y);
+    transform:translate(-50%,-50%);
+    view-transition-name:nude;
+    filter:drop-shadow(0 6px 10px rgba(0,0,0,.5));
+  }
+  /* angular cubo-futurist facets */
+  .figure b{position:absolute;inset:0;display:block}
+  .f1{background:var(--tan1);clip-path:polygon(40% 0,70% 8%,58% 34%,30% 26%)}
+  .f2{background:var(--tan2);clip-path:polygon(30% 24%,60% 32%,54% 60%,24% 52%)}
+  .f3{background:var(--tan3);clip-path:polygon(24% 50%,56% 58%,66% 100%,30% 96%)}
+  .f4{background:var(--tan4);clip-path:polygon(56% 30%,86% 44%,70% 74%,52% 58%)}
+  .f5{background:var(--tan5);clip-path:polygon(58% 6%,84% 20%,78% 46%,60% 34%)}
+
+  .controls{padding:6px 22px 4px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+  button{
+    font:inherit;font-size:13px;color:var(--ground);background:var(--tan4);
+    border:0;padding:8px 16px;cursor:pointer;letter-spacing:.03em;
+  }
+  button:active{background:var(--tan1)}
+  .readout{color:var(--faint);font-size:12.5px}
+  .readout b{color:var(--ink);font-weight:normal;font-variant-numeric:tabular-nums}
+
+  footer{padding:10px 22px 20px;color:var(--faint);font-size:11.5px;max-width:62ch}
+  footer a{color:var(--tan2)}
+  .label{color:#8a7a63}
+
+  /* the browser is allowed to invent the in-between frames */
+  ::view-transition-group(nude){animation-duration:820ms}
+  ::view-transition-old(nude),::view-transition-new(nude){
+    animation-duration:820ms;
+    mix-blend-mode:normal;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .sub::after{content:" — motion reduced: your browser is shown no descent."}
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1><em>Nude Descending a Staircase</em>, No. 3</h1>
+    <div class="sub" id="sub">after Duchamp, 1912 — the descent is computed, then thrown away</div>
+  </header>
+
+  <div class="stage" id="stage" aria-label="A staircase. A figure stands on it.">
+    <div class="figure" id="fig" style="--x:14%;--y:16%">
+      <b class="f1"></b><b class="f2"></b><b class="f3"></b><b class="f4"></b><b class="f5"></b>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="step">Descend one step</button>
+    <span class="readout">
+      last descent: <b id="last">—</b> frames rendered, then discarded ·
+      kept: <b>0</b> · lifetime discarded: <b id="total">0</b>
+    </span>
+  </div>
+
+  <footer>
+    <p><span class="label">Wall label —</span> The <a href="https://developer.mozilla.org/docs/Web/API/View_Transition_API" rel="noopener">View Transition API</a> paints the interstitial phases of the descent: the browser snapshots the figure before and after, and invents every frame between. Duchamp froze the descent into one permanent, superimposed picture. This document keeps only two poses — top and bottom. Everything in between — the actual <em>nude descending</em> — is rendered by your machine and destroyed on arrival. None of it is in this page, in storage, or on any wire. The frame count is a proxy your browser will not otherwise disclose.</p>
+    <p><span class="label">Nude Descending a Staircase (No. 3)</span> · y-a-v-a, 2026 · after Marcel Duchamp, <em>Nude Descending a Staircase, No. 2</em> (1912). Medium: pixels on screen, not kept. No cookies, no storage, no network. <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener">CC BY-SA 4.0</a>.</p>
+  </footer>
+
+<script>
+(function(){
+  var fig = document.getElementById('fig');
+  var stepBtn = document.getElementById('step');
+  var lastEl = document.getElementById('last');
+  var totalEl = document.getElementById('total');
+
+  // discrete treads, top-left to bottom-right — the phases Duchamp drew at once
+  var steps = [
+    {x:14,y:16},{x:26,y:30},{x:39,y:44},{x:53,y:58},{x:67,y:72},{x:82,y:86}
+  ];
+  var i = 0, total = 0;
+
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var supported = typeof document.startViewTransition === 'function';
+
+  function place(n){
+    fig.style.setProperty('--x', steps[n].x + '%');
+    fig.style.setProperty('--y', steps[n].y + '%');
+  }
+
+  function next(){
+    i = (i + 1) % steps.length;   // reaching the floor begins a new descent
+    place(i);
+  }
+
+  function descend(){
+    if(!supported || reduce){
+      // the browser declines to render the in-between: only endpoints exist
+      next();
+      lastEl.textContent = '0 (not rendered)';
+      return;
+    }
+    var frames = 0, running = true;
+    (function tick(){ if(running){ frames++; requestAnimationFrame(tick); } })();
+
+    var vt = document.startViewTransition(next);
+    vt.finished.then(function(){
+      running = false;
+      // the frames existed; now they do not
+      lastEl.textContent = frames;
+      total += frames;
+      totalEl.textContent = total;
+    }).catch(function(){ running = false; });
+  }
+
+  stepBtn.addEventListener('click', descend);
+  if(!supported){
+    document.getElementById('sub').textContent =
+      'after Duchamp, 1912 — your browser cannot compute the descent; it shows only the two poses';
+  }
+})();
+</script>
+</body>
+</html>

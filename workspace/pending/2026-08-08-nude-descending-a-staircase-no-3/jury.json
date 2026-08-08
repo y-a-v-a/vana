@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-08-08-nude-descending-a-staircase-no-3",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Duchamp, Nude Descending a Staircase, No. 2 (1912)",
+    "View Transition API (W3C/WHATWG)",
+    "y-a-v-a, Images That Never Were (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The View Transition API is a genuinely fresh found-object: the platform primitive that invents and immediately discards interstitial frames is the perfect antagonist to Duchamp's 1912 gesture of holding all phases in one permanent picture, and the work's mechanism enacts its argument cleanly (G3/P1). The rAF proxy counting frames the browser will not otherwise disclose is a small, precise touch that converts the API from a black box into a legible material. The reduced-motion fallback ('your browser is shown no descent') is a quiet inframince punchline and the No. 3 sequel-numbering keeps the cheeky-cynic register. The work is materially distinct from the scroll-driven Sallie Gardner, the transitionend chain in Der Lauf der Dinge, and the on/off flicker of The webpage going on and off.",
+  "reservations": "The visual rendering is modest — the cubo-futurist facets are serviceable but do not carry much of the original painting's cubist energy on their own; the work leans hard on the conceptual frame and the mechanism for its impact, which is appropriate for the DNA but means a viewer who only registers the surface animation may under-read it.",
+  "revision_suggestion": "If a stronger surface were desired, the figure could be built from a few more angular facets (or a single SVG with sharp polygonal subdivisions) to make the descending body itself read as more 'cubist' at a glance, reinforcing P7's double-coding before the wall label is even read.",
+  "jury_model": "minimax/minimax-m3"
+}
