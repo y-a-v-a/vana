@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-08-09-progress-indeterminate",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Clement Greenberg, 'Modernist Painting' (1960)",
+    "Alfred H. Barr Jr., Cubism and Abstract Art flowchart (MoMA, 1936)",
+    "Marcel Duchamp / the readymade"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument: native indeterminate <progress> elements are spec-obliged to animate striving toward a finish they are never given, so the modernist teleology (Greenberg/Barr) is performed rather than illustrated. Leaving the widget unstyled (no appearance:none) makes the browser/OS the author of the look, a clean Duchampian readymade move. The prefers-reduced-motion freeze is a genuinely witty double-coding: accessibility default doubles as the punchline. Build is minimal and honest — declarative markup, one timer, no storage, no network. Distinct from the catalogue: no prior work targets the indeterminate-progress gesture or the Greenberg/Barr modernist-progress myth specifically.",
+  "reservations": "The narrative link to the twenty-year argument is somewhat thin — it answers a discourse (modernist teleology) rather than a specific prior y-a-v-a work, though it sits comfortably on the chance/order-adjacent axis of 'behaviour over artifact.' The 'six movements' list is illustrative scaffolding rather than load-bearing mechanism; a single indeterminate bar would carry the idea equally well, which slightly dilutes P3's restraint.",
+  "revision_suggestion": "Consider whether the six-bar list earns its keep or whether a single indeterminate bar with the same caption lands the joke more sharply; if kept, the movements could be chosen to rhyme with prior catalogue entries (e.g., one Suprematist, one readymade) to tighten the lineage.",
+  "jury_model": "minimax/minimax-m3"
+}

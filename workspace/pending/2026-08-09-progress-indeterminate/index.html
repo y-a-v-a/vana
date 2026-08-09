@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progress (Indeterminate)</title>
+<style>
+  :root { --ink:#141414; --paper:#f4f2ec; --faint:#8a877e; }
+  html,body { margin:0; background:var(--paper); color:var(--ink);
+    font-family: Georgia, "Times New Roman", serif; }
+  main { max-width: 46rem; margin: 0 auto; padding: 12vh 1.4rem 6rem; }
+  h1 { font-size: clamp(1.9rem, 6vw, 3rem); font-weight: normal;
+    letter-spacing: -0.01em; margin: 0 0 .2rem; }
+  .lede { color: var(--faint); font-style: italic; margin: 0 0 3rem; }
+
+  ol { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: 12rem 1fr;
+    gap: 1rem; align-items: center; padding: .55rem 0;
+    border-top: 1px solid rgba(0,0,0,.08); }
+  li:last-child { border-bottom: 1px solid rgba(0,0,0,.08); }
+  .movement { font-size: .95rem; }
+  .year { color: var(--faint); font-size: .78rem; }
+
+  /* Left as manufactured. No appearance:none — the browser draws the
+     bar, and only a bar with no value knows how to strive forever. */
+  progress { width: 100%; height: 1.1rem; }
+
+  .elapsed { margin: 2.4rem 0 0; font-size: .95rem; }
+  .elapsed b { font-variant-numeric: tabular-nums; }
+
+  footer { margin-top: 3.2rem; font-size: .74rem; line-height: 1.7;
+    color: var(--faint); font-family: -apple-system, system-ui, sans-serif; }
+  footer a { color: inherit; }
+  .cartel { border:1px solid rgba(0,0,0,.15); padding: .9rem 1.1rem;
+    margin-top: 2.4rem; font-family: -apple-system, system-ui, sans-serif;
+    font-size: .82rem; line-height: 1.6; background: #fbfaf6; }
+  .cartel .t { font-weight: 600; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rm { display: block; }
+  }
+  .rm { display: none; margin-top: 1rem; font-size:.82rem;
+    font-family: -apple-system, system-ui, sans-serif; color: var(--faint); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Progress</h1>
+  <p class="lede">Art is making progress. Please wait.</p>
+
+  <ol id="chain">
+    <li><span class="movement">Impressionism <span class="year">1874</span></span><progress></progress></li>
+    <li><span class="movement">Post-Impressionism <span class="year">1886</span></span><progress></progress></li>
+    <li><span class="movement">Cubism <span class="year">1907</span></span><progress></progress></li>
+    <li><span class="movement">Abstraction <span class="year">1915</span></span><progress></progress></li>
+    <li><span class="movement">Colour Field <span class="year">1950</span></span><progress></progress></li>
+    <li><span class="movement">The Next Thing <span class="year">—</span></span><progress></progress></li>
+  </ol>
+
+  <p class="elapsed">You have been waiting for art to be finished for
+    <b id="clock">0</b> seconds. It is almost there.</p>
+
+  <p class="rm">You have asked your system for less motion, so progress has
+    stopped. In this respect your preferences and mine agree.</p>
+
+  <div class="cartel">
+    <div class="t">Progress (Indeterminate), 2026</div>
+    <div>y-a-v-a — pixels on screen; six native <code>&lt;progress&gt;</code>
+      elements, each without a <code>value</code>.</div>
+    <div>Edition: forever / never. Price on completion.</div>
+  </div>
+
+  <footer>
+    <p>Every bar above is a native HTML <code>&lt;progress&gt;</code> with no
+      <code>value</code> attribute, which makes it <em>indeterminate</em>:
+      the browser is obliged to animate effort toward a finish it is never
+      given. Nothing here advances. The appearance of the bar — its colour,
+      texture and gait — is supplied by your browser and operating system,
+      not by me; I left the widget as manufactured. Greenberg promised the
+      medium would purify itself toward its own edge; Barr drew the arrows
+      forward. The web already had the gesture: a progress bar that only
+      knows how to be almost done.</p>
+    <p>No cookies, no trackers, no storage, no network requests, no personal
+      data. One local timer counts your patience and forgets it on reload.</p>
+    <p>“Progress (Indeterminate)” by <b>y-a-v-a</b> (yet another visual
+      artist), after Clement Greenberg’s “Modernist Painting” (1960), Alfred
+      H. Barr Jr.’s <i>Cubism and Abstract Art</i> flowchart (MoMA, 1936),
+      and Marcel Duchamp’s readymade. Validated by Vincent Bruijn.
+      Licensed <b>CC BY-SA 4.0</b>. We do not search, we serve.</p>
+  </footer>
+</main>
+<script>
+  // The only script: it measures waiting, not progress.
+  var start = performance.now();
+  var clock = document.getElementById('clock');
+  setInterval(function () {
+    clock.textContent = Math.floor((performance.now() - start) / 1000);
+  }, 1000);
+</script>
+</body>
+</html>

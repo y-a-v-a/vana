@@ -1054,5 +1054,13 @@
     "source": "Marcel Duchamp, Nude Descending a Staircase, No. 2 (1912); View Transition API (W3C/WHATWG); y-a-v-a, Images That Never Were (2026)",
     "mechanism": "document.startViewTransition() interpolates unauthored frames between two figure poses; a rAF proxy counts them, none are kept, stored, or sent.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-09-progress-indeterminate",
+    "title": "Progress (Indeterminate)",
+    "year": 2026,
+    "source": "Clement Greenberg, 'Modernist Painting' (1960); Alfred H. Barr Jr., Cubism and Abstract Art flowchart (MoMA, 1936); Marcel Duchamp / the readymade",
+    "mechanism": "Native HTML <progress> elements left without a value attribute, so the browser is spec-obliged to draw perpetual indeterminate striving; unstyled, vendor-drawn, and frozen by prefers-reduced-motion.",
+    "status": "pending"
   }
 ]
