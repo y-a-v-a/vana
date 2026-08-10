@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-10-mobile-solved-for-equilibrium",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Alexander Calder",
+    "Marcel Duchamp (coined 'mobile', 1931)",
+    "Jean Arp (coined 'stabile')",
+    "Kenneth Martin (Chance and Order)",
+    "y-a-v-a, A Chance of Order (2021)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "Strong P1 execution: the law of the lever literally computes the composition, so the mechanism enacts the argument that the artist does not arrange the mobile, physics does. The prefers-reduced-motion path is genuinely good P9/P7 — asking for stillness hands you a 'corpse,' the print the work exists to escape. Sits cleanly on the chance↔order axis (order = torque balance, chance = per-visit random parts and wind), and explicitly answers y-a-v-a's own A Chance of Order (2021) by refusing to resolve at all. The Duchamp-coined-the-word-'mobile' move is a tight readymade connection. CC BY-SA, no network, attributed.",
+  "reservations": "The kinetic-mobile-as-web-art genre has prior art (e.g. various browser-based kinetic pieces), so novelty lives more in the specific lever-law engine and the 'corpse' joke than in a wholly new ontology. The wind oscillator is competent but not surprising; the work's single sharpest line ('here is the corpse') is doing disproportionate conceptual work, which is fine but means the piece is more one-deep-gesture-plus-engine than uniformly surprising throughout.",
+  "revision_suggestion": "Lean harder into the readymade layer: make the per-visit part-count, colours, or arm ratios visibly quote specific named Calders (or specific other artists) so the 'solved for equilibrium' surface also doubles as a tiny catalogue of who's been solved into the law — turning the lever into a critique of authorship rather than only a demonstration of it.",
+  "jury_model": "minimax/minimax-m3"
+}

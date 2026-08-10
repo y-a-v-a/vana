@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile (Solved for Equilibrium)</title>
+<style>
+  :root { --ink:#141210; --paper:#f5f2ea; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; }
+  body {
+    background:var(--paper); color:var(--ink);
+    font:14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  header { padding:14px 18px 4px; }
+  h1 { margin:0; font-size:16px; font-weight:600; letter-spacing:.2px; }
+  .sub { margin:2px 0 0; font-size:12px; color:#6b6357; max-width:60ch; }
+  #stage { flex:1 1 auto; min-height:0; position:relative; }
+  svg { width:100%; height:100%; display:block; touch-action:none; cursor:crosshair; }
+  footer {
+    padding:8px 18px 14px; font-size:11px; color:#6b6357;
+    display:flex; flex-wrap:wrap; gap:10px 22px; align-items:baseline;
+  }
+  footer a { color:#6b6357; }
+  button {
+    font:inherit; font-size:12px; color:var(--ink); background:transparent;
+    border:1px solid #cdc6b8; border-radius:2px; padding:4px 10px; cursor:pointer;
+  }
+  button:hover { background:#eceae2; }
+  .corpse { display:none; }
+  @media (prefers-reduced-motion: reduce) { .corpse { display:inline; } .breeze { display:none; } }
+  noscript { display:block; padding:18px; color:#6b6357; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Mobile (Solved for Equilibrium)</h1>
+    <p class="sub">
+      No two moments alike. Nothing here is arranged &mdash; the pivots are forced by the law of
+      the lever, the parts are thrown afresh on every visit, and it will not hold still.
+      A screenshot would freeze the one thing a mobile is defined by refusing to be.
+      <span class="corpse"><br>You have asked for stillness. Here is the corpse of the mobile: the print it was never meant to become.</span>
+    </p>
+  </header>
+
+  <div id="stage">
+    <svg id="m" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet" aria-label="A generative Calder-style hanging mobile, balanced by torque and swayed by simulated air."></svg>
+    <noscript>This mobile is hung live by your browser. Enable scripting to let it balance and sway.</noscript>
+  </div>
+
+  <footer>
+    <span><button id="rehang">&#8635; re-hang</button> <span class="breeze">&mdash; drag across it; you are the draft.</span></span>
+    <span>After <b>Alexander Calder</b>. The word &ldquo;mobile&rdquo; was coined by Marcel Duchamp (1931); &ldquo;stabile&rdquo; by Jean Arp. In the lineage of Kenneth Martin&rsquo;s <i>Chance and Order</i> and y-a-v-a&rsquo;s <i>A Chance of Order</i> (2021).</span>
+    <span>&copy; 2026 <b>y-a-v-a</b> (Vincent Bruijn) &mdash; <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. No cookies, no tracking, no network.</span>
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+  var NS="http://www.w3.org/2000/svg";
+  var svg=document.getElementById("m");
+  var RM=matchMedia("(prefers-reduced-motion: reduce)");
+  var COLORS=["#e4032e","#0056a7","#f6c700","#141210","#ffffff"];
+  var WIND=0.5, K=1.4, C=1.2;
+  var nodes=[], raf=0, last=0, gust=0;
+
+  function rnd(a,b){ return a+Math.random()*(b-a); }
+  function pick(a){ return a[(Math.random()*a.length)|0]; }
+  function el(tag,at){ var e=document.createElementNS(NS,tag); for(var k in at) e.setAttribute(k,at[k]); return e; }
+
+  // A mobile is a binary tree: rods carry two hanging children; leaves are weighted disks.
+  function make(rem){
+    if(rem<=0 || (rem<=2 && Math.random()<0.4))
+      return { type:"leaf", r:rnd(9,24), color:pick(COLORS) };
+    return { type:"rod", L:make(rem-1), R:make(rem-1), width:rnd(70,170) };
+  }
+  function weigh(n){
+    if(n.type==="leaf"){ n.w=n.r*n.r; return n.w; }
+    var wl=weigh(n.L), wr=weigh(n.R); n.w=wl+wr; return n.w;
+  }
+  // Law of the lever: the composition is not chosen, it is the equilibrium solution.
+  function geom(n){
+    if(n.type==="leaf") return;
+    var W=n.width, wl=n.L.w, wr=n.R.w, t=wl+wr;
+    n.a=W*wr/t;              // left arm  (heavier left child -> shorter arm)
+    n.b=W*wl/t;              // right arm
+    n.dropL=rnd(26,64); n.dropR=rnd(26,64);
+    geom(n.L); geom(n.R);
+  }
+
+  function render(n,parent){
+    var g=el("g",{}), node={ g:g, hangX:0, drop:0, theta:0, omega:0,
+      ph:rnd(0,6.283), ph2:rnd(0,6.283), gsign:Math.random()<0.5?-1:1 };
+    parent.appendChild(g); nodes.push(node);
+    if(n.type==="leaf"){
+      g.appendChild(el("circle",{ cx:0, cy:0, r:n.r, fill:n.color, stroke:"#141210",
+        "stroke-width": n.color==="#ffffff"?2:1.2 }));
+      node.inertia=0.4+n.r/60; node.sail=0.45;
+    } else {
+      g.appendChild(el("line",{ x1:-n.a, y1:0, x2:n.b, y2:0, stroke:"#141210",
+        "stroke-width":2.4, "stroke-linecap":"round" }));
+      g.appendChild(el("circle",{ cx:0, cy:0, r:2.2, fill:"#141210" }));
+      g.appendChild(el("line",{ x1:-n.a, y1:0, x2:-n.a, y2:n.dropL, stroke:"#141210", "stroke-width":1 }));
+      g.appendChild(el("line",{ x1:n.b,  y1:0, x2:n.b,  y2:n.dropR, stroke:"#141210", "stroke-width":1 }));
+      var cl=render(n.L,g); cl.hangX=-n.a; cl.drop=n.dropL;
+      var cr=render(n.R,g); cr.hangX=n.b;  cr.drop=n.dropR;
+      var span=Math.max(n.a,n.b);
+      node.inertia=1+span*span/1400+n.w/2500; node.sail=0.3+span/140;
+    }
+    return node;
+  }
+
+  function layout(n,x,y,pts){
+    if(n.type==="leaf"){ pts.push([x,y,n.r]); return; }
+    pts.push([x-n.a,y,3],[x+n.b,y,3]);
+    layout(n.L, x-n.a, y+n.dropL, pts);
+    layout(n.R, x+n.b, y+n.dropR, pts);
+  }
+
+  function frame(now){
+    now/=1000; var dt=now-last; last=now; if(dt>0.05) dt=0.05;
+    gust*=Math.pow(0.02,dt);
+    for(var i=0;i<nodes.length;i++){
+      var nd=nodes[i];
+      var drive=nd.sail*( WIND*(Math.sin(now*0.6+nd.ph)+0.6*Math.sin(now*0.23+nd.ph2)) + gust*nd.gsign );
+      var alpha=(-K*nd.theta - C*nd.omega + drive)/nd.inertia;
+      nd.omega+=alpha*dt; nd.theta+=nd.omega*dt;
+      nd.g.setAttribute("transform","translate("+nd.hangX+" "+nd.drop+") rotate("+(nd.theta*57.2958)+")");
+    }
+    raf=requestAnimationFrame(frame);
+  }
+
+  function build(){
+    if(raf) cancelAnimationFrame(raf);
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    nodes=[];
+    var root=make(3+(Math.random()<0.5?1:0));
+    if(root.type!=="rod") root={ type:"rod", L:make(2), R:make(2), width:rnd(90,150) };
+    weigh(root); geom(root);
+    var rootDrop=rnd(18,40);
+    svg.appendChild(el("line",{ x1:0, y1:0, x2:0, y2:rootDrop, stroke:"#141210", "stroke-width":1 }));
+    svg.appendChild(el("circle",{ cx:0, cy:0, r:2.5, fill:"#141210" }));
+    var r=render(root,svg); r.hangX=0; r.drop=rootDrop;
+
+    var pts=[[0,0,3]]; layout(root,0,rootDrop,pts);
+    var minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
+    for(var i=0;i<pts.length;i++){
+      var p=pts[i];
+      if(p[0]-p[2]<minx)minx=p[0]-p[2]; if(p[0]+p[2]>maxx)maxx=p[0]+p[2];
+      if(p[1]-p[2]<miny)miny=p[1]-p[2]; if(p[1]+p[2]>maxy)maxy=p[1]+p[2];
+    }
+    var pad=Math.max(30,(maxx-minx)*0.14);
+    svg.setAttribute("viewBox",(minx-pad)+" "+(miny-pad)+" "+(maxx-minx+2*pad)+" "+(maxy-miny+2*pad));
+
+    if(RM.matches){
+      for(var j=0;j<nodes.length;j++)
+        nodes[j].g.setAttribute("transform","translate("+nodes[j].hangX+" "+nodes[j].drop+") rotate(0)");
+    } else { last=performance.now()/1000; raf=requestAnimationFrame(frame); }
+  }
+
+  // The viewer is the air current.
+  var px=0,py=0,have=false;
+  svg.addEventListener("pointermove",function(e){
+    if(have){ var d=Math.hypot(e.clientX-px,e.clientY-py); gust=Math.min(7,gust+d*0.02); }
+    px=e.clientX; py=e.clientY; have=true;
+  });
+  svg.addEventListener("pointerleave",function(){ have=false; });
+  document.getElementById("rehang").addEventListener("click",build);
+  RM.addEventListener&&RM.addEventListener("change",build);
+
+  build();
+})();
+</script>
+</body>
+</html>
