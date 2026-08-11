@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Character Limit</title>
+<style>
+  :root{
+    --ink:#151515; --paper:#f4f2ec; --faint:#9a968c; --rule:#d9d4c8;
+    --over:#b21f24; --ok:#2b6b4f;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --serif:Georgia,"Times New Roman",serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--ink:#eceae3;--paper:#141412;--faint:#6f6b62;--rule:#2c2a26;--over:#e5646a;--ok:#68b48f}
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:var(--serif);
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh; padding:6vh 20px 40px; gap:26px;
+  }
+  h1{
+    font-weight:400; font-size:clamp(22px,4vw,30px);
+    letter-spacing:.02em; margin:0; text-align:center;
+  }
+  .sub{color:var(--faint); font-size:14px; text-align:center; max-width:34em; margin:-14px 0 0; line-height:1.5}
+  .compose{
+    width:min(680px,100%); border:1px solid var(--rule); background:transparent;
+    color:inherit; font-family:var(--serif); font-size:clamp(20px,3.4vw,26px);
+    line-height:1.5; padding:20px 22px; min-height:120px; border-radius:2px;
+    outline:none; resize:vertical; caret-color:var(--ink);
+  }
+  .compose:focus{border-color:var(--faint)}
+  .limit{
+    width:min(680px,100%); display:flex; align-items:baseline;
+    justify-content:space-between; gap:16px; font-family:var(--mono); font-size:13px;
+  }
+  .limit .track{flex:1; height:2px; background:var(--rule); position:relative; overflow:hidden}
+  .limit .fill{position:absolute; inset:0 auto 0 0; width:0; background:var(--ok); transition:width .12s linear}
+  .limit.over .fill{background:var(--over)}
+  .remain{min-width:5ch; text-align:right; color:var(--ok)}
+  .limit.over .remain{color:var(--over)}
+  table{
+    width:min(680px,100%); border-collapse:collapse;
+    font-family:var(--mono); font-size:14px;
+  }
+  th,td{padding:11px 4px; border-bottom:1px solid var(--rule); text-align:left}
+  th{font-weight:400; color:var(--faint)}
+  td.n{text-align:right; font-variant-numeric:tabular-nums; font-size:18px}
+  td small{display:block; color:var(--faint); font-family:var(--serif); font-size:12px; margin-top:2px; line-height:1.35}
+  .charged td.n{color:var(--over)}
+  .seen td.n{color:var(--ok)}
+  .label{
+    width:min(680px,100%); border-top:1px solid var(--rule); padding-top:16px;
+    font-family:var(--mono); font-size:11px; color:var(--faint);
+    line-height:1.7; letter-spacing:.01em;
+  }
+  .label b{color:var(--ink); font-weight:400}
+  a{color:inherit}
+  .warn{color:var(--over)}
+</style>
+</head>
+<body>
+  <h1>Character Limit</h1>
+  <p class="sub">The counter decides whether you may speak. Type below. It cannot agree with your eye on what a character is.</p>
+
+  <div class="compose" contenteditable="plaintext-only" spellcheck="false" aria-label="Compose"></div>
+
+  <div class="limit" id="limit">
+    <span class="track"><span class="fill" id="fill"></span></span>
+    <span class="remain" id="remain">280</span>
+  </div>
+
+  <table>
+    <thead><tr><th>the unit</th><th style="text-align:right">count</th></tr></thead>
+    <tbody>
+      <tr class="seen"><td>graphemes <small>what your eye reads as one character (Unicode&nbsp;UAX&nbsp;#29, via Intl.Segmenter)</small></td><td class="n" id="g">0</td></tr>
+      <tr><td>code points <small>abstract Unicode scalars</small></td><td class="n" id="cp">0</td></tr>
+      <tr class="charged"><td>UTF-16 units <small>what the classic character counter charges you (String.length)</small></td><td class="n" id="cu">0</td></tr>
+      <tr><td>UTF-8 bytes <small>what the wire actually carries (TextEncoder)</small></td><td class="n" id="by">0</td></tr>
+    </tbody>
+  </table>
+
+  <div class="label">
+    <b>y-a-v-a — Character Limit</b> (2026). Medium: pixels, Intl.Segmenter, and String.length.<br>
+    After Marcel Duchamp, <i>infra-mince</i> (notes, c.&nbsp;1935) — the immeasurable gap between two things all but identical.<br>
+    Answering the platform character counter (SMS 160, Twitter&nbsp;280) as readymade, and Unicode UAX&nbsp;#29.<br>
+    One family emoji: <b>one</b> thing to your eye, <b>eleven</b> to the counter. The limit is not neutral — it charges emoji and non-Latin scripts more for the same room.<br>
+    <span id="verdict"></span><br>
+    No cookies, no trackers, no data leaves this page. Licence <b>CC BY-SA 4.0</b>. Reproduce and remix with attribution.
+  </div>
+
+<script>
+(function(){
+  var box=document.querySelector('.compose');
+  var LIMIT=280;
+  var els={g:'g',cp:'cp',cu:'cu',by:'by'};
+  var g=document.getElementById('g'), cp=document.getElementById('cp'),
+      cu=document.getElementById('cu'), by=document.getElementById('by'),
+      remain=document.getElementById('remain'), fill=document.getElementById('fill'),
+      limit=document.getElementById('limit'), verdict=document.getElementById('verdict');
+
+  var enc=(typeof TextEncoder!=='undefined')?new TextEncoder():null;
+  var seg=(typeof Intl!=='undefined'&&Intl.Segmenter)?new Intl.Segmenter(undefined,{granularity:'grapheme'}):null;
+
+  function graphemes(s){
+    if(!s) return 0;
+    if(seg){ var n=0; var it=seg.segment(s); for(var _ of it) n++; return n; }
+    return Array.from(s).length; // fallback: code points
+  }
+
+  function render(){
+    var s=box.innerText.replace(/\n$/,''); // trailing newline from contenteditable
+    var gr=graphemes(s);
+    var pts=Array.from(s).length;
+    var units=s.length;               // UTF-16 — the naive counter's toll
+    var bytes=enc?enc.encode(s).length:units;
+
+    g.textContent=gr; cp.textContent=pts; cu.textContent=units; by.textContent=bytes;
+
+    var left=LIMIT-units;             // you are charged in UTF-16 units
+    remain.textContent=left;
+    var pct=Math.max(0,Math.min(100,units/LIMIT*100));
+    fill.style.width=pct+'%';
+    limit.classList.toggle('over',left<0);
+
+    var seenLeft=LIMIT-gr;            // what you'd have if it counted what you see
+    var diff=units-gr;
+    if(diff>0){
+      verdict.className='warn';
+      verdict.innerHTML='You have written <b>'+gr+'</b> characters and been charged for <b>'+units+'</b>. '+
+        'Counted by eye you would still have '+seenLeft+' left; counted by machine you have '+left+'.';
+    }else{
+      verdict.className='';
+      verdict.innerHTML='So far the eye and the machine agree. Add an emoji, a flag, or a script that combines its marks — and they will not.';
+    }
+  }
+
+  box.addEventListener('input',render);
+  // seed the argument
+  box.textContent='But is it one character? 👨‍👩‍👧‍👦🏳️‍🌈';
+  render();
+  box.focus();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-11-character-limit",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 38,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Duchamp, infra-mince (notes, c. 1935)",
+    "The platform character counter (SMS 160 / Twitter 280)",
+    "Unicode UAX #29 (grapheme cluster boundaries)",
+    "Mel Bochner, Measurement series (1968-69)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "Concept and execution collapse cleanly: four live counts of the same string (graphemes, code points, UTF-16 units, UTF-8 bytes) are the argument, with the 'remaining' meter deliberately wired to String.length so it reddens faster than the eye justifies — the disagreement is the mechanism, not a decoration of it. The readymade move (the platform character counter as Duchampian infra-mince relocated) is fresh and earns its place next to Bochner's measurement tradition. Material is well-distinguished from COPY / COPY (which hides a byte-level difference behind identical rendering) and from La Disparition (which removes); here nothing is hidden, the string is fully visible, and the fracture lives in the counting itself.",
+  "reservations": "The underlying technical fact (emoji span multiple UTF-16 units) is well-known in web development circles, so a chunk of the 'discovery' is pre-loaded for the literate viewer; the work leans on infra-mince to elevate what is otherwise a known curiosity. Narrative connection to the catalogue is more thematic than responsive to a specific prior work — it answers the tradition broadly rather than a single predecessor.",
+  "revision_suggestion": "Consider seeding the compose field with a non-Latin script example (Devanagari combining marks, or an Arabic combining sequence) alongside the emoji so the casual viewer hits the gap faster and the 'value/politics' reading (P6) lands without needing the literate footnote; optionally, log a one-line history of which string provoked the largest eye/machine gap in RAM only, to make the 'measurement' dimension (Bochner) feel less illustrative and more cumulative.",
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1070,5 +1070,13 @@
     "source": "Alexander Calder (mobiles); Marcel Duchamp (coined 'mobile', 1931); Jean Arp (coined 'stabile'); Kenneth Martin, Chance and Order; y-a-v-a, A Chance of Order (2021)",
     "mechanism": "Per-visit random binary tree of SVG rods whose pivots are placed by torque balance (order), swayed by a requestAnimationFrame damped-oscillator wind and pointer 'draft' (chance); prefers-reduced-motion freezes it into the print a mobile refuses to be.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-11-character-limit",
+    "title": "Character Limit",
+    "year": 2026,
+    "source": "Marcel Duchamp, infra-mince (notes, c. 1935); The platform character counter (SMS 160 / Twitter 280) as readymade; Unicode UAX #29 (grapheme cluster boundaries); Mel Bochner, Measurement series (1968-69)",
+    "mechanism": "Live counts of the same input via Intl.Segmenter (graphemes/UAX #29), Array.from (code points), String.length (UTF-16, the counter's toll) and TextEncoder (UTF-8 bytes); the 280 meter is wired to String.length so it reddens faster than the eye can justify.",
+    "status": "pending"
   }
 ]
