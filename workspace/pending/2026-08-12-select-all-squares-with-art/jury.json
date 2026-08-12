@@ -1,0 +1,42 @@
+{
+  "work_id": "2026-08-12-select-all-squares-with-art",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 5,
+    "nuance": 5,
+    "narrative": 5,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 50,
+  "verdict": "strong",
+  "references_named": [
+    "Google reCAPTCHA / Luis von Ahn",
+    "Kazimir Malevich, Black Square (1915)",
+    "Marcel Duchamp / the readymade",
+    "Alan Turing / the Turing test",
+    "y-a-v-a, But is it art? (2025)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9",
+    "P10"
+  ],
+  "rationale": "This is a near-perfect fit for the DNA. The mechanism (a reCAPTCHA image challenge that only ever reshuffles) is the argument: the verify-loop enacts the unwinnable authentication of art, so concept and execution collapse into one object (P1). The reCAPTCHA readymade is a fresh web-native found object (P2), and the Suprematist generator sits cleanly on the chance/order axis (P5). It double-codes perfectly (P7): a casual viewer gets the gag, a literate viewer gets Malevich, the reverse-Turing test, and the market critique (P6). It explicitly answers But is it art? (2025) as its anti-YES, and the footer line interrogates reCAPTCHA's hidden human-computation purpose rather than merely using it (P10). Build is minimal (P3), client-side only, CC BY-SA, no trackers (P8), dry and witty (P9).",
+  "reservations": null,
+  "revision_suggestion": null,
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1078,5 +1078,13 @@
     "source": "Marcel Duchamp, infra-mince (notes, c. 1935); The platform character counter (SMS 160 / Twitter 280) as readymade; Unicode UAX #29 (grapheme cluster boundaries); Mel Bochner, Measurement series (1968-69)",
     "mechanism": "Live counts of the same input via Intl.Segmenter (graphemes/UAX #29), Array.from (code points), String.length (UTF-16, the counter's toll) and TextEncoder (UTF-8 bytes); the 280 meter is wired to String.length so it reddens faster than the eye can justify.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-12-select-all-squares-with-art",
+    "title": "Select all squares with art",
+    "year": 2026,
+    "source": "Google reCAPTCHA / Luis von Ahn (the reverse-Turing test as web readymade); Kazimir Malevich, Black Square (1915); Marcel Duchamp / the readymade; Alan Turing / the Turing test; y-a-v-a, But is it art? (2025)",
+    "mechanism": "A pixel-faithful reCAPTCHA image-challenge readymade whose canvas-generated Malevich tiles reshuffle on every Verify click and never pass, staging the reverse-Turing test as an unwinnable authentication of art.",
+    "status": "pending"
   }
 ]

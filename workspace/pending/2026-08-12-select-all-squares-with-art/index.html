@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Select all squares with art</title>
+<style>
+  :root{
+    --blue:#1a73e8;
+    --ink:#202124;
+    --line:#d3d3d3;
+    --bg:#f2f2f2;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font:14px/1.4 Arial, "Helvetica Neue", Helvetica, sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+    gap:22px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* --- the "I'm not a robot" box --- */
+  .box{
+    width:302px;
+    background:#f9f9f9;
+    border:1px solid #d3d3d3;
+    border-radius:3px;
+    box-shadow:0 0 4px 1px rgba(0,0,0,.08);
+    display:flex;
+    align-items:center;
+    padding:12px;
+    user-select:none;
+  }
+  .check{
+    width:28px;height:28px;
+    border:2px solid #c1c1c1;
+    border-radius:2px;
+    background:#fff;
+    cursor:pointer;
+    flex:0 0 auto;
+    position:relative;
+  }
+  .check.loading{border-color:#c1c1c1}
+  .spinner{
+    position:absolute;inset:-2px;
+    border:3px solid #cfcfcf;
+    border-top-color:var(--blue);
+    border-radius:50%;
+    display:none;
+    animation:spin .8s linear infinite;
+  }
+  .check.loading .spinner{display:block}
+  .check.done{background:var(--blue);border-color:var(--blue)}
+  .check .tick{
+    position:absolute;inset:0;display:none;
+    align-items:center;justify-content:center;
+    color:#fff;font-size:20px;
+  }
+  .check.done .tick{display:flex}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.spinner{animation:none}}
+  .box .label{margin-left:12px;flex:1 1 auto}
+  .brand{
+    margin-left:auto;text-align:center;color:#9aa0a6;font-size:10px;line-height:1.2;
+  }
+  .brand b{display:block;color:#5f6368;font-size:11px;letter-spacing:.3px}
+
+  /* --- the image challenge --- */
+  .challenge{
+    width:302px;
+    background:#fff;
+    border-radius:3px;
+    box-shadow:0 0 8px 3px rgba(0,0,0,.18);
+    overflow:hidden;
+    display:none;
+  }
+  .challenge.open{display:block}
+  .head{
+    background:var(--blue);
+    color:#fff;
+    padding:14px 16px 16px;
+  }
+  .head .lead{font-size:16px;font-weight:400}
+  .head .task{font-size:26px;font-weight:700;line-height:1.15;margin-top:2px}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3,100px);
+    grid-template-rows:repeat(3,100px);
+    justify-content:center;
+    padding:0;
+    background:#fff;
+  }
+  .tile{
+    width:100px;height:100px;
+    background-repeat:no-repeat;
+    background-size:300px 300px;
+    box-shadow:inset 0 0 0 2px #fff;
+    cursor:pointer;
+    position:relative;
+    outline:none;
+  }
+  .tile .badge{
+    position:absolute;top:6px;left:6px;
+    width:26px;height:26px;border-radius:50%;
+    background:var(--blue);color:#fff;
+    display:none;align-items:center;justify-content:center;
+    font-size:16px;
+    box-shadow:0 1px 3px rgba(0,0,0,.4);
+  }
+  .tile.sel{box-shadow:inset 0 0 0 6px var(--blue)}
+  .tile.sel .badge{display:flex}
+  .tile.fade{opacity:0;transition:opacity .35s}
+  @media (prefers-reduced-motion:reduce){.tile.fade{transition:none}}
+
+  .foot{
+    display:flex;align-items:center;
+    padding:8px 12px;border-top:1px solid #f0f0f0;
+  }
+  .icons{display:flex;gap:14px;color:#9aa0a6;font-size:19px}
+  .icons span{cursor:default}
+  .verify{
+    margin-left:auto;
+    background:var(--blue);color:#fff;border:0;border-radius:3px;
+    font:600 14px Arial, sans-serif;
+    padding:10px 18px;cursor:pointer;
+  }
+  .verify:hover{background:#1765cc}
+
+  .status{
+    width:302px;text-align:center;color:#70757a;font-size:12px;min-height:1.2em;
+  }
+
+  /* --- wall label --- */
+  .label-card{
+    max-width:520px;text-align:center;color:#5f6368;font-size:12px;line-height:1.6;
+  }
+  .label-card h1{font-size:14px;font-weight:700;color:#3c4043;margin:0 0 4px}
+  .label-card em{color:#3c4043}
+  .label-card a{color:#5f6368}
+  .label-card .cc{margin-top:8px}
+</style>
+</head>
+<body>
+
+  <div class="box" id="box">
+    <div class="check" id="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="I'm not a robot">
+      <div class="spinner"></div>
+      <div class="tick">&#10003;</div>
+    </div>
+    <div class="label">I'm not a robot</div>
+    <div class="brand">
+      <b>reCARTCHA</b>
+      Privacy&nbsp;&middot;&nbsp;Terms
+    </div>
+  </div>
+
+  <div class="challenge" id="challenge" aria-live="polite">
+    <div class="head">
+      <div class="lead">Select all squares with</div>
+      <div class="task" id="task">art</div>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="foot">
+      <div class="icons">
+        <span title="Get a new challenge (it changes nothing)">&#8635;</span>
+        <span title="Audio challenge unavailable — art is silent">&#127911;</span>
+        <span title="This test protects nothing and stores nothing">&#9432;</span>
+      </div>
+      <button class="verify" id="verify">VERIFY</button>
+    </div>
+  </div>
+
+  <div class="status" id="status">&nbsp;</div>
+
+  <div class="label-card">
+    <h1>Select all squares with art</h1>
+    A completely automated public test to tell art from not art. The challenge is a
+    fresh <em>Suprematist composition</em> minted in your browser and cut into nine tiles;
+    press&nbsp;VERIFY and it will only ever hand you another. The machine cannot pass you,
+    because it cannot answer the question it is asking.
+    <div class="cc">
+      <em>y-a-v-a</em> (Vincent Bruijn), 2026 &middot; after Kazimir Malevich, <em>Black Square</em> (1915),
+      the reCAPTCHA reverse-Turing test (L.&nbsp;von&nbsp;Ahn), and Duchamp's readymade &middot;
+      answers y-a-v-a, <em>But is it art?</em> (2025).<br>
+      Pixels on screen. No cookies, no trackers, no data leaves this page.
+      Licensed <em>CC BY-SA 4.0</em>.
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  var grid = document.getElementById('grid');
+  var challenge = document.getElementById('challenge');
+  var verify = document.getElementById('verify');
+  var check = document.getElementById('check');
+  var status = document.getElementById('status');
+  var attempts = 0;
+
+  var lines = [
+    "The machine is not sure either.",
+    "Please try again.",
+    "Selection noted. It changes nothing.",
+    "Still verifying. Still no verdict.",
+    "Every square you label teaches a machine what art is. It has not learned.",
+    "A black square is either everything or nothing. Reshuffling.",
+    "Reverse Turing test: you passed as human. Your taste did not.",
+    "But is it art? (unresolved — see reload icon)"
+  ];
+
+  var reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  // Palette after Malevich: warm ground, black, red, occasional blue/yellow.
+  function rnd(a,b){ return a + Math.random()*(b-a); }
+  function pick(arr){ return arr[(Math.random()*arr.length)|0]; }
+
+  function composition(){
+    var c = document.createElement('canvas');
+    c.width = 300; c.height = 300;
+    var x = c.getContext('2d');
+    x.fillStyle = '#f4f0e6';            // aged white ground
+    x.fillRect(0,0,300,300);
+
+    var colors = ['#111111','#c1272d','#111111','#1a4a8a','#e6b800','#111111'];
+    var n = 3 + (Math.random()*4|0);
+    for(var i=0;i<n;i++){
+      x.save();
+      x.translate(rnd(40,260), rnd(40,260));
+      x.rotate(rnd(-0.5,0.5));
+      x.fillStyle = pick(colors);
+      var shape = Math.random();
+      if(shape < 0.55){                 // the square, always the square
+        var s = rnd(50,140);
+        x.fillRect(-s/2,-s/2,s,s);
+      } else if(shape < 0.8){           // a bar
+        x.fillRect(-rnd(60,120)/2,-rnd(8,26)/2, rnd(60,120), rnd(8,26));
+      } else {                          // a thin drifting line
+        x.strokeStyle = x.fillStyle;
+        x.lineWidth = rnd(2,5);
+        x.beginPath();
+        x.moveTo(-rnd(40,90),0);
+        x.lineTo(rnd(40,90),rnd(-40,40));
+        x.stroke();
+      }
+      x.restore();
+    }
+    // the canonical black square, dead centre-ish, so "art" is unmistakably present
+    x.save();
+    x.translate(rnd(120,180), rnd(120,180));
+    x.rotate(rnd(-0.15,0.15));
+    x.fillStyle = '#111111';
+    var bs = rnd(70,110);
+    x.fillRect(-bs/2,-bs/2,bs,bs);
+    x.restore();
+
+    return c.toDataURL('image/png');
+  }
+
+  function build(){
+    var url = composition();
+    grid.innerHTML = '';
+    for(var i=0;i<9;i++){
+      var t = document.createElement('div');
+      t.className = 'tile';
+      t.setAttribute('role','checkbox');
+      t.setAttribute('aria-checked','false');
+      t.tabIndex = 0;
+      var col = i%3, row = (i/3)|0;
+      t.style.backgroundImage = 'url(' + url + ')';
+      t.style.backgroundPosition = (-col*100) + 'px ' + (-row*100) + 'px';
+      var b = document.createElement('div');
+      b.className = 'badge';
+      b.innerHTML = '&#10003;';
+      t.appendChild(b);
+      t.addEventListener('click', toggle);
+      t.addEventListener('keydown', function(e){
+        if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggle.call(this); }
+      });
+      grid.appendChild(t);
+    }
+  }
+
+  function toggle(){
+    var on = this.classList.toggle('sel');
+    this.setAttribute('aria-checked', on ? 'true' : 'false');
+  }
+
+  function reshuffle(){
+    var tiles = grid.querySelectorAll('.tile');
+    for(var i=0;i<tiles.length;i++) tiles[i].classList.add('fade');
+    var swap = function(){
+      build();
+      attempts++;
+      status.textContent = lines[attempts % lines.length];
+    };
+    if(reduce) swap(); else setTimeout(swap, 380);
+  }
+
+  verify.addEventListener('click', reshuffle);
+
+  function openChallenge(){
+    build();
+    challenge.classList.add('open');
+    status.textContent = "Select all squares with art. There is no wrong answer, and no right one.";
+  }
+
+  function armCheck(){
+    if(check.classList.contains('loading')) return;
+    check.classList.add('loading');
+    check.setAttribute('aria-checked','true');
+    var reveal = function(){
+      check.classList.remove('loading');
+      openChallenge();
+    };
+    if(reduce) reveal(); else setTimeout(reveal, 650);
+  }
+
+  check.addEventListener('click', armCheck);
+  check.addEventListener('keydown', function(e){
+    if(e.key===' '||e.key==='Enter'){ e.preventDefault(); armCheck(); }
+  });
+})();
+</script>
+</body>
+</html>
