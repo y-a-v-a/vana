@@ -1094,5 +1094,13 @@
     "source": "Piero Manzoni, Socle du Monde / Base of the World (1961); Marcel Duchamp / the readymade; the HTML <base> element (net.art: browser plumbing as material)",
     "mechanism": "A single <base href> governs live URL resolution of every relative link (read via a.href, never navigated); removing the tag re-resolves the world back to the document's own location.",
     "status": "rejected"
+  },
+  {
+    "id": "2026-08-13-balance-des-peintres",
+    "title": "Balance des Peintres",
+    "year": 2026,
+    "source": "Roger de Piles, Balance des Peintres / Cours de peinture par principes (1708); Andre Felibien, hierarchy of genres (1667); Marcel Duchamp / the readymade",
+    "mechanism": "Native HTML <meter> elements (min/max/low/high/optimum) whose vendor-drawn green/yellow/red fill supplies the aesthetic verdict; zero JavaScript, no network.",
+    "status": "pending"
   }
 ]

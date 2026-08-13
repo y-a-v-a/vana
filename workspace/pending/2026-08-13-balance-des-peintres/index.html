@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Balance des Peintres</title>
+<style>
+  :root{
+    --ink:#211d16;
+    --paper:#efe7d6;
+    --rule:#c9bda0;
+  }
+  html,body{margin:0;background:var(--paper);color:var(--ink);}
+  body{
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    line-height:1.5;
+    padding:min(9vw,4rem) 1rem 4rem;
+    -webkit-text-size-adjust:100%;
+  }
+  main{max-width:56rem;margin:0 auto;}
+  h1{
+    font-weight:600;font-size:clamp(1.6rem,5vw,2.6rem);
+    margin:0 0 .1em;letter-spacing:.01em;
+  }
+  .sub{font-style:italic;margin:0 0 2rem;max-width:40rem;color:#4a4234;}
+  table{border-collapse:collapse;width:100%;}
+  caption{caption-side:bottom;}
+  th,td{padding:.35rem .5rem;text-align:left;vertical-align:middle;}
+  thead th{
+    font-weight:600;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;
+    border-bottom:1.5px solid var(--ink);white-space:nowrap;
+  }
+  tbody tr{border-bottom:1px solid var(--rule);}
+  th.painter{font-weight:600;font-size:1.02rem;white-space:nowrap;}
+  td.score{white-space:nowrap;}
+  /* The meter itself is deliberately left to the browser vendor to draw.
+     Only its box size is set here; the fill, and the green / yellow / red
+     verdict, are supplied by the rendering engine — never by this file. */
+  meter{width:5.2rem;height:.85rem;vertical-align:-.05em;}
+  .num{
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:.85rem;margin-left:.45rem;color:#5a5140;
+  }
+  th.painter small{display:block;font-weight:400;font-style:italic;font-size:.72rem;color:#6a6152;}
+  footer{
+    margin-top:2.4rem;padding-top:1rem;border-top:1.5px solid var(--ink);
+    font-size:.82rem;color:#4a4234;max-width:42rem;
+  }
+  footer p{margin:.5rem 0;}
+  a{color:inherit;}
+  @media (max-width:34rem){
+    meter{width:3.6rem;}
+    .num{display:none;}
+    th,td{padding:.3rem .28rem;}
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Balance des Peintres</h1>
+  <p class="sub">Roger de Piles weighed the great painters on four qualities, twenty points each, in 1708. Three centuries later the browser reads his numbers and paints, of its own accord, which masters are green and which are red.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Painter</th>
+        <th scope="col">Composition</th>
+        <th scope="col">Drawing</th>
+        <th scope="col">Colour</th>
+        <th scope="col">Expression</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th class="painter" scope="row">Raphael <small>Sanzio</small></th>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="17"></meter><span class="num">17</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="18"></meter><span class="num">18</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="12"></meter><span class="num">12</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="18"></meter><span class="num">18</span></td>
+      </tr>
+      <tr>
+        <th class="painter" scope="row">Rubens</th>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="18"></meter><span class="num">18</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="13"></meter><span class="num">13</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="17"></meter><span class="num">17</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="17"></meter><span class="num">17</span></td>
+      </tr>
+      <tr>
+        <th class="painter" scope="row">Rembrandt</th>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="15"></meter><span class="num">15</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="6"></meter><span class="num">6</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="17"></meter><span class="num">17</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="12"></meter><span class="num">12</span></td>
+      </tr>
+      <tr>
+        <th class="painter" scope="row">Titian</th>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="12"></meter><span class="num">12</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="15"></meter><span class="num">15</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="18"></meter><span class="num">18</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="6"></meter><span class="num">6</span></td>
+      </tr>
+      <tr>
+        <th class="painter" scope="row">Leonardo <small>da Vinci</small></th>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="15"></meter><span class="num">15</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="16"></meter><span class="num">16</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="4"></meter><span class="num">4</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="14"></meter><span class="num">14</span></td>
+      </tr>
+      <tr>
+        <th class="painter" scope="row">Michelangelo</th>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="8"></meter><span class="num">8</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="17"></meter><span class="num">17</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="4"></meter><span class="num">4</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="8"></meter><span class="num">8</span></td>
+      </tr>
+      <tr>
+        <th class="painter" scope="row">Caravaggio</th>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="6"></meter><span class="num">6</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="6"></meter><span class="num">6</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="16"></meter><span class="num">16</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="0"></meter><span class="num">0</span></td>
+      </tr>
+      <tr>
+        <th class="painter" scope="row">Poussin</th>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="15"></meter><span class="num">15</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="17"></meter><span class="num">17</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="6"></meter><span class="num">6</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="15"></meter><span class="num">15</span></td>
+      </tr>
+      <tr>
+        <th class="painter" scope="row">Dürer</th>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="8"></meter><span class="num">8</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="10"></meter><span class="num">10</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="10"></meter><span class="num">10</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="8"></meter><span class="num">8</span></td>
+      </tr>
+      <tr>
+        <th class="painter" scope="row">Veronese</th>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="15"></meter><span class="num">15</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="10"></meter><span class="num">10</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="16"></meter><span class="num">16</span></td>
+        <td class="score"><meter min="0" max="20" low="8" high="14" optimum="20" value="3"></meter><span class="num">3</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <footer>
+    <p>Scores from Roger de Piles, <em>Cours de peinture par principes, avec un balance des peintres</em> (Paris, 1708). De Piles set 20 at perfection, then declared it unreachable — so the gauges can never fill, and no painter is ever entirely green. Caravaggio's Expression stands at 0.</p>
+    <p>No script runs on this page. The bars, their fill, and the colour of the verdict — green where a number clears the vendor's threshold, red where it falls short — are drawn entirely by your browser's native <code>&lt;meter&gt;</code> element. The taste is nobody's.</p>
+    <p><strong>Balance des Peintres</strong> — y-a-v-a, 2026, after Roger de Piles. Medium: pixels on screen. Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. No cookies, no tracking, no data collected.</p>
+  </footer>
+</main>
+</body>
+</html>

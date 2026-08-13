@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-08-13-balance-des-peintres",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Roger de Piles, Balance des Peintres / Cours de peinture par principes (1708)",
+    "Andre Felibien, hierarchy of genres (1667)",
+    "Marcel Duchamp / the readymade"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism is genuinely the argument: native <meter> with low/high/optimum is spec-obliged to color itself green or red, so the aesthetic verdict is authored by the browser vendor, not the file. This is a clean digital readymade (de Piles's table + the HTML gauge primitive snapped together) that sits squarely on the order pole of the chance/order axis and targets value/canonization. Double-coding works: a casual viewer sees colored bars grading Old Masters; a literate viewer gets the Enlightenment's dream of measurable taste and its rating-economy afterlife. Restraint is exemplary — zero JS, smallest possible build, attribution and license stated.",
+  "reservations": "Novelty is real but the <meter>-as-verdict move is a recognizable net.art trope (browser chrome as material); the piece earns its place by the specific historical pairing with de Piles rather than by inventing the technique. The work is static — no live/regenerating behavior beyond the per-vendor rendering — which slightly undercuts P4, though the vendor-drawn verdict is itself a form of per-visit variation.",
+  "revision_suggestion": "Consider a tiny per-visit perturbation (e.g., a CSS custom property seeded from the visit that nudges the low/high thresholds by ±1) so the same painter can flip green/red across reloads, making the 'taste is nobody's' point literally unstable rather than only vendor-dependent.",
+  "jury_model": "minimax/minimax-m3"
+}
