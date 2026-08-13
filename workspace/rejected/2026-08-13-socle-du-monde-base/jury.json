@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-08-13-socle-du-monde-base",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Piero Manzoni, Socle du Monde / Base of the World (1961)",
+    "Marcel Duchamp / the readymade",
+    "HTML <base> element (net.art: browser plumbing as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The mechanism enacts the idea cleanly: a single <base href> tag literally governs resolution of every relative link, and its removal instantly re-resolves the world back to the document's own location. This is a precise Manzoni pun staged via browser plumbing, with the resolve/collapse interaction doing the conceptual work rather than decorating it. Voice is restrained and dry, the surface gag (a tiny invisible tag holding up masterpieces) reads at two depths, and the build is genuinely minimal (P3) with no outbound requests. It sits on the order side of the chance↔order axis and clearly answers Manzoni and the Duchampian readymade lineage. Materially distinct from the catalogue: prior Manzoni entries (Linea, Merda d'artista) use different mechanisms, and no other work appropriates <base> as a plinth.",
+  "reservations": "The novelty of location is real but somewhat quiet — once a viewer sees the resolved addresses update, the conceptual payload is delivered and the piece has no further behavior. The 'everything else' link and the dark-humored note that 'the links do not lead anywhere' slightly nudge toward explanation; the surface gag lands without it but the footer paragraph could be trimmed to trust the read more.",
+  "revision_suggestion": "Consider letting the resolved addresses repaint continuously on a slow timer (e.g., showing how the same relative URL resolves differently under a rotating <base> set of hostnames — the Galerie-fix, the Louvre, Gagosian) so the socle's authority is shown moving rather than toggled once. Trimming the footer paragraph would also strengthen P7's demand that the surface not require wall text.",
+  "jury_model": "minimax/minimax-m3"
+}

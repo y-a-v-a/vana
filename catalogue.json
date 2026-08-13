@@ -1086,5 +1086,13 @@
     "source": "Google reCAPTCHA / Luis von Ahn (the reverse-Turing test as web readymade); Kazimir Malevich, Black Square (1915); Marcel Duchamp / the readymade; Alan Turing / the Turing test; y-a-v-a, But is it art? (2025)",
     "mechanism": "A pixel-faithful reCAPTCHA image-challenge readymade whose canvas-generated Malevich tiles reshuffle on every Verify click and never pass, staging the reverse-Turing test as an unwinnable authentication of art.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-13-socle-du-monde-base",
+    "title": "Socle du Monde (<base>)",
+    "year": 2026,
+    "source": "Piero Manzoni, Socle du Monde / Base of the World (1961); Marcel Duchamp / the readymade; the HTML <base> element (net.art: browser plumbing as material)",
+    "mechanism": "A single <base href> governs live URL resolution of every relative link (read via a.href, never navigated); removing the tag re-resolves the world back to the document's own location.",
+    "status": "rejected"
   }
 ]

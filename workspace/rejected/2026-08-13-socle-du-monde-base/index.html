@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Socle du Monde</title>
+
+<!--
+  THE ARTWORK IS THIS TAG.
+  One invisible <base> in the <head>. Every relative address in the
+  whole document below rests on it — Manzoni's plinth, turned upside down,
+  with the entire World stood on top of it.
+-->
+<base href="https://socle.du.monde/">
+
+<style>
+  :root{
+    --ink:#111; --paper:#f4f1ea; --dim:#7a746a; --steel1:#8d8f93; --steel2:#5c5e63;
+    --line:#d8d2c6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--paper); color:var(--ink);
+    font:16px/1.5 ui-serif, Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex; flex-direction:column; align-items:center;
+    padding:34px 20px 70px; min-height:100vh;
+  }
+  header{max-width:640px; text-align:center}
+  h1{font-size:1.5rem; font-weight:600; letter-spacing:.02em; margin:0 0 .3em}
+  .sub{color:var(--dim); font-style:italic; margin:0}
+
+  /* ---- THE WORLD, resting on the base ---- */
+  .world{
+    max-width:640px; width:100%; margin:30px 0 6px;
+    border:1px solid var(--line); background:#fbfaf6;
+    padding:18px 20px 20px;
+  }
+  .world h2{
+    font-size:.72rem; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--dim); margin:0 0 12px; font-weight:600;
+  }
+  ul{list-style:none; margin:0; padding:0}
+  li{
+    display:flex; justify-content:space-between; gap:14px; align-items:baseline;
+    padding:7px 0; border-bottom:1px dotted var(--line); font-size:.92rem;
+  }
+  li:last-child{border-bottom:0}
+  li a{color:var(--ink); text-decoration:none; white-space:nowrap}
+  li .addr{
+    color:var(--dim); font:12px/1.4 ui-monospace, "SF Mono", Menlo, monospace;
+    text-align:right; word-break:break-all;
+  }
+  .status{
+    max-width:640px; width:100%; text-align:center;
+    font-size:.8rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--dim); margin:2px 0 0; min-height:1.2em;
+  }
+
+  /* ---- THE PLINTH (inverted, inscription upside down) ---- */
+  .plinth{
+    margin:8px 0 0; width:230px; height:132px; position:relative;
+    background:linear-gradient(150deg,var(--steel1),var(--steel2));
+    clip-path:polygon(0 0, 100% 0, 84% 100%, 16% 100%);
+    box-shadow:0 14px 22px -14px rgba(0,0,0,.5);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .plinth .engrave{
+    transform:rotate(180deg);
+    text-align:center; color:#e9e9ea; opacity:.85;
+    font-size:9px; line-height:1.7; letter-spacing:.06em;
+    text-shadow:0 1px 0 rgba(0,0,0,.35); padding:0 14px; user-select:none;
+  }
+  .plinth .engrave b{font-size:10px; letter-spacing:.14em}
+  .stage{ text-align:center; }
+  .caption{color:var(--dim); font-style:italic; font-size:.82rem; margin:12px 0 0}
+
+  button{
+    margin-top:26px; font:inherit; font-size:.85rem; cursor:pointer;
+    background:var(--ink); color:var(--paper); border:0;
+    padding:11px 20px; letter-spacing:.03em;
+  }
+  button:hover{background:#000}
+
+  footer{
+    max-width:640px; margin-top:44px; text-align:center;
+    color:var(--dim); font-size:.72rem; line-height:1.6;
+  }
+  footer a{color:var(--dim)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Socle du Monde</h1>
+  <p class="sub">Base of the World — after Piero Manzoni, 1961</p>
+</header>
+
+<!-- The whole world of images. Not one carries an address of its own;
+     each rests on the invisible <base> in the head. -->
+<section class="world" aria-label="The collection standing on the base">
+  <h2>The world, standing on the base</h2>
+  <ul id="world">
+    <li><a href="mona-lisa">Mona Lisa</a></li>
+    <li><a href="the-night-watch">The Night Watch</a></li>
+    <li><a href="guernica">Guernica</a></li>
+    <li><a href="black-square">Black Square</a></li>
+    <li><a href="fountain">Fountain</a></li>
+    <li><a href="everything-else">…everything else</a></li>
+  </ul>
+</section>
+<p class="status" id="status">&nbsp;</p>
+
+<div class="stage">
+  <div class="plinth" title="Socle Magique — hommage à Galileo">
+    <div class="engrave">
+      <b>SOCLE DU MONDE</b><br>
+      socle magique n.&nbsp;∞ &nbsp;·&nbsp; hommage à Galileo<br>
+      &lt;base&gt; · y-a-v-a · MMXXVI
+    </div>
+  </div>
+  <p class="caption">one invisible tag, in the head, holding up the page</p>
+  <button id="toggle">Remove the base</button>
+</div>
+
+<footer>
+  <p>
+    The artwork is the <code>&lt;base&gt;</code> element. Every address above is
+    <em>relative</em>: it owns no location and inherits the base's. Lift the plinth
+    away and the whole world falls back to wherever this page merely happens to sit.
+  </p>
+  <p>
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>
+    · <strong>y-a-v-a</strong>, after Piero Manzoni, <em>Socle du Monde</em> (1961).
+    No cookies, no trackers, no requests. The links do not lead anywhere; they only confess where they would.
+  </p>
+</footer>
+
+<script>
+(function(){
+  var list = document.getElementById('world');
+  var links = Array.prototype.slice.call(list.querySelectorAll('a'));
+  var status = document.getElementById('status');
+  var btn = document.getElementById('toggle');
+  var head = document.head;
+  var baseEl = head.querySelector('base');
+  var savedHref = baseEl ? baseEl.getAttribute('href') : null;
+
+  // The links only confess their resolved address; they never navigate,
+  // so nothing is ever requested.
+  links.forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); });
+  });
+
+  function render(){
+    var onBase = !!head.querySelector('base');
+    links.forEach(function(a){
+      var li = a.parentNode;
+      var addr = li.querySelector('.addr');
+      if(!addr){ addr = document.createElement('span'); addr.className='addr'; li.appendChild(addr); }
+      // a.href is the browser's RESOLVED absolute URL — computed against
+      // whatever base is currently in force. No network touched.
+      addr.textContent = a.href;
+    });
+    if(onBase){
+      status.textContent = 'The world rests on the base';
+      btn.textContent = 'Remove the base';
+    }else{
+      status.textContent = 'The base is gone — everything falls back to here';
+      btn.textContent = 'Set the base beneath the world';
+    }
+  }
+
+  btn.addEventListener('click', function(){
+    var existing = head.querySelector('base');
+    if(existing){
+      existing.parentNode.removeChild(existing);
+    }else{
+      var b = document.createElement('base');
+      b.setAttribute('href', savedHref || 'https://socle.du.monde/');
+      // <base> is spec-required to sit in <head>, ahead of any resource URL.
+      head.insertBefore(b, head.firstChild);
+    }
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
