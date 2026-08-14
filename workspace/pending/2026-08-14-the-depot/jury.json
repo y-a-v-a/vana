@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-14-the-depot",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Fred Wilson, Mining the Museum (1992)",
+    "Kazimir Malevich (Black Square)",
+    "Mark Rothko",
+    "Barnett Newman (zip)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The Depot is a clean, well-executed piece that uses the CSS :target selector's structural one-or-none matching as a literal enactment of museum display policy. The mechanism is the argument (P1): exclusivity is enforced by the layout engine, not by JavaScript. The Fred Wilson reference is precise and the institutional critique is legible without wall text. The twelve CSS-drawn paintings are deliberately quiet pastiches (Malevich, Rothko, Newman) that keep the focus on the selector-as-curator. Restraint is exemplary — zero JS, no storage, no network — and the dry tone matches the DNA's cheerful-cynic register.",
+  "reservations": "The twelve paintings are decorative pastiches of canonical works rather than interrogating them; the work leans on the selector mechanism for its argument and the visual content is intentionally minimal, which is defensible but slightly thin. The piece is also relatively close in spirit to other URL/hash-driven works in the catalogue (If I Say So, I Went) though it is materially distinct in mechanism (pure CSS :target vs. JS hashchange / :visited).",
+  "revision_suggestion": "Consider adding one work that visibly resists the depot policy (e.g., a painting whose :target state is overridden by a media query, or a work that is always partially visible) to sharpen the critique of curatorial power — currently the policy is total and unchallenged, which slightly flattens the institutional argument.",
+  "jury_model": "minimax/minimax-m3"
+}

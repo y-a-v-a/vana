@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Depot — On View / In Storage</title>
+<meta name="license" content="CC BY-SA 4.0">
+<style>
+  :root{
+    --ink:#1a1712; --paper:#e9e4d8; --dust:#c9c2b2; --crate:#2b2620;
+    --shadow: 0 1px 0 #fff6, inset 0 0 0 1px #0002;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font:16px/1.5 ui-serif, Georgia, "Times New Roman", serif;
+    padding:clamp(16px,4vw,48px);
+    -webkit-font-smoothing:antialiased;
+  }
+  header{max-width:64ch;margin:0 auto 2.2rem}
+  h1{
+    font-size:clamp(1.5rem,4vw,2.4rem);
+    letter-spacing:.14em; text-transform:uppercase; margin:0 0 .3rem;
+  }
+  .policy{color:#5b5346;margin:.2rem 0 1rem}
+  .policy b{color:var(--ink)}
+  .reserve{
+    display:inline-block; font-size:.8rem; letter-spacing:.08em;
+    text-transform:uppercase; text-decoration:none; color:#5b5346;
+    border:1px solid var(--dust); padding:.4rem .7rem; background:#fff4;
+  }
+  .reserve:hover{background:#fff9;color:var(--ink)}
+
+  /* ---- the collection ---- */
+  .gallery{
+    max-width:960px; margin:0 auto;
+    display:grid; gap:clamp(14px,3vw,28px);
+    grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  }
+  .frame{
+    margin:0; text-align:center;
+    transition:transform .35s ease, filter .35s ease;
+  }
+  .plinth{
+    position:relative; aspect-ratio:4/5;
+    background:var(--crate);
+    box-shadow:var(--shadow);
+    display:grid; place-items:center; overflow:hidden;
+  }
+  /* default: the work is crated, in the dark */
+  .painting{position:absolute; inset:0; opacity:0; transition:opacity .35s ease}
+  .stamp{
+    position:relative; z-index:2;
+    font:600 .72rem/1 ui-monospace, "SF Mono", Menlo, monospace;
+    letter-spacing:.18em; text-transform:uppercase; color:#8a8272;
+  }
+  .stamp .on{display:none}
+  .caption{
+    display:block; margin-top:.6rem;
+    font:.78rem/1.3 ui-monospace, Menlo, monospace;
+    letter-spacing:.05em; color:#5b5346; text-decoration:none;
+  }
+  .caption:hover{color:var(--ink); text-decoration:underline}
+  .caption b{display:block; font-weight:600; color:var(--ink)}
+
+  /* ---- on view: exactly zero or one, decided by the URL ---- */
+  .frame:target{transform:scale(1.04)}
+  .frame:not(:target){filter:saturate(.9)}
+  .frame:target .plinth{
+    background:#f4f0e6;
+    box-shadow:0 0 0 1px #0003, 0 18px 40px -18px #0007, 0 0 0 12px #fff6;
+  }
+  .frame:target .painting{opacity:1}
+  .frame:target .stamp{color:#3a342a}
+  .frame:target .stamp .off{display:none}
+  .frame:target .stamp .on{display:inline}
+
+  /* ---- the works themselves: minimal, CSS-drawn, deliberately quiet ---- */
+  .painting{background:hsl(var(--h) 24% 90%)}
+  .painting::before,.painting::after{content:"";position:absolute}
+  /* v1 — a square, slightly adrift (after Malevich) */
+  .v1::before{width:42%;aspect-ratio:1;top:22%;left:20%;
+    background:hsl(var(--h) 46% 20%);transform:rotate(6deg)}
+  /* v2 — two fields (after Rothko) */
+  .v2::before{inset:8% 12% 52% 12%;background:hsl(var(--h) 40% 42%)}
+  .v2::after{inset:52% 12% 8% 12%;background:hsl(var(--h) 30% 28%)}
+  /* v3 — a disc */
+  .v3::before{width:56%;aspect-ratio:1;top:22%;left:22%;border-radius:50%;
+    background:hsl(var(--h) 44% 34%)}
+  /* v4 — a single zip (after Newman) */
+  .v4::before{top:0;bottom:0;left:38%;width:10%;background:hsl(var(--h) 52% 30%)}
+
+  footer{
+    max-width:64ch;margin:3rem auto 0;padding-top:1rem;
+    border-top:1px solid var(--dust);
+    font-size:.78rem;line-height:1.6;color:#6b6357;
+  }
+  footer a{color:inherit}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>The&nbsp;Depot</h1>
+  <p class="policy">
+    This institution holds <b>twelve</b> works. Exhibition policy permits
+    <b>one</b> on view at a time; the remainder are held, in the dark, at your
+    discretion. To recall a work from storage, name it in the address bar.
+  </p>
+  <a class="reserve" href="#reserve">▸ Return everything to storage</a>
+</header>
+
+<main class="gallery">
+
+  <article class="frame" id="w-1915-04" style="--h:8">
+    <a class="caption" href="#w-1915-04">
+      <div class="plinth"><div class="painting v1"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Untitled (Field with Square)</b>1915.04
+    </a>
+  </article>
+
+  <article class="frame" id="w-1948-11" style="--h:200">
+    <a class="caption" href="#w-1948-11">
+      <div class="plinth"><div class="painting v2"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Two Fields, Descending</b>1948.11
+    </a>
+  </article>
+
+  <article class="frame" id="w-1957-02" style="--h:32">
+    <a class="caption" href="#w-1957-02">
+      <div class="plinth"><div class="painting v3"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Disc, Midday</b>1957.02
+    </a>
+  </article>
+
+  <article class="frame" id="w-1951-07" style="--h:0">
+    <a class="caption" href="#w-1951-07">
+      <div class="plinth"><div class="painting v4"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Zip (Vertical)</b>1951.07
+    </a>
+  </article>
+
+  <article class="frame" id="w-1963-19" style="--h:150">
+    <a class="caption" href="#w-1963-19">
+      <div class="plinth"><div class="painting v3"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Green Disc, No. 3</b>1963.19
+    </a>
+  </article>
+
+  <article class="frame" id="w-1930-01" style="--h:48">
+    <a class="caption" href="#w-1930-01">
+      <div class="plinth"><div class="painting v1"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Ochre Square, Adrift</b>1930.01
+    </a>
+  </article>
+
+  <article class="frame" id="w-1959-08" style="--h:275">
+    <a class="caption" href="#w-1959-08">
+      <div class="plinth"><div class="painting v2"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Violet, Divided</b>1959.08
+    </a>
+  </article>
+
+  <article class="frame" id="w-1972-05" style="--h:18">
+    <a class="caption" href="#w-1972-05">
+      <div class="plinth"><div class="painting v4"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Rust Zip</b>1972.05
+    </a>
+  </article>
+
+  <article class="frame" id="w-1926-14" style="--h:120">
+    <a class="caption" href="#w-1926-14">
+      <div class="plinth"><div class="painting v1"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Leaf Square</b>1926.14
+    </a>
+  </article>
+
+  <article class="frame" id="w-1968-22" style="--h:230">
+    <a class="caption" href="#w-1968-22">
+      <div class="plinth"><div class="painting v3"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Blue Disc</b>1968.22
+    </a>
+  </article>
+
+  <article class="frame" id="w-1944-03" style="--h:340">
+    <a class="caption" href="#w-1944-03">
+      <div class="plinth"><div class="painting v2"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Crimson, Two Parts</b>1944.03
+    </a>
+  </article>
+
+  <article class="frame" id="w-1992-01" style="--h:90">
+    <a class="caption" href="#w-1992-01">
+      <div class="plinth"><div class="painting v4"></div>
+        <span class="stamp"><span class="off">In storage</span><span class="on">On view</span></span></div>
+      <b>Zip (After the Depot)</b>1992.01
+    </a>
+  </article>
+
+</main>
+
+<footer>
+  <p><b>The Depot</b> — after Fred Wilson, <i>Mining the Museum</i> (1992).
+  Most of any collection is never shown; visibility is a single-file privilege
+  granted by an act of naming. The browser's <code>:target</code> selector
+  matches at most one element per URL, so this page can hang at most one work
+  at a time — and, until you address one, none. The policy is the selector.</p>
+  <p>This page contains <b>zero JavaScript</b>, no cookies, no trackers, no
+  network requests. <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>
+  — <b>y-a-v-a</b> (yet another visual artist), 2026. Reference: Fred Wilson,
+  <i>Mining the Museum</i>, Maryland Historical Society, 1992.</p>
+</footer>
+
+</body>
+</html>

@@ -1110,5 +1110,13 @@
     "source": "Joseph Beuys, Jeder Mensch ist ein Kunstler / Soziale Plastik (social sculpture); Roland Barthes, The Death of the Author (1967); y-a-v-a, The Death of the Author (2026); Marcel Duchamp / the readymade",
     "mechanism": "document.designMode='on' grants everyone edit rights over the entire document with zero event handlers and no persistence",
     "status": "rejected"
+  },
+  {
+    "id": "2026-08-14-the-depot",
+    "title": "The Depot",
+    "year": 2026,
+    "source": "Fred Wilson, Mining the Museum (1992); institutional critique / the museum depot; net.art (the URL fragment / CSS :target as material)",
+    "mechanism": "Pure-CSS :target pseudo-class (zero JavaScript): the URL fragment can light at most one work and by default lights none, enacting the museum's one-on-view / rest-in-storage policy.",
+    "status": "pending"
   }
 ]
