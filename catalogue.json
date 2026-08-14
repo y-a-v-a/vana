@@ -1102,5 +1102,13 @@
     "source": "Roger de Piles, Balance des Peintres / Cours de peinture par principes (1708); Andre Felibien, hierarchy of genres (1667); Marcel Duchamp / the readymade",
     "mechanism": "Native HTML <meter> elements (min/max/low/high/optimum) whose vendor-drawn green/yellow/red fill supplies the aesthetic verdict; zero JavaScript, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-14-everyone-is-an-artist-designmode",
+    "title": "Everyone Is an Artist (designMode)",
+    "year": 2026,
+    "source": "Joseph Beuys, Jeder Mensch ist ein Kunstler / Soziale Plastik (social sculpture); Roland Barthes, The Death of the Author (1967); y-a-v-a, The Death of the Author (2026); Marcel Duchamp / the readymade",
+    "mechanism": "document.designMode='on' grants everyone edit rights over the entire document with zero event handlers and no persistence",
+    "status": "rejected"
   }
 ]

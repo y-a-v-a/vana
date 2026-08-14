@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Everyone Is an Artist</title>
+<style>
+  :root{
+    --paper:#f3f1ea;
+    --ink:#1b1a17;
+    --faint:#8a8577;
+    --caret:#b5321e;
+  }
+  html,body{margin:0;background:var(--paper);color:var(--ink);}
+  body{
+    font-family:Georgia,"Times New Roman",serif;
+    line-height:1.5;
+    caret-color:var(--caret);
+    min-height:100vh;
+    box-sizing:border-box;
+    padding:9vh 7vw;
+    -webkit-text-size-adjust:100%;
+  }
+  main{max-width:40rem;margin:0 auto;}
+  .tag{
+    font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--faint);
+    border:1px solid var(--faint);
+    display:inline-block;
+    padding:.25em .6em;
+    border-radius:2px;
+  }
+  h1{
+    font-size:clamp(2rem,8vw,3.8rem);
+    font-weight:normal;
+    line-height:1.08;
+    margin:.5em 0 .1em;
+  }
+  .de{color:var(--faint);font-style:italic;font-size:1.1rem;margin:0 0 2.2em;}
+  p{margin:0 0 1.15em;}
+  .lede{font-size:1.15rem;}
+  .sig{
+    margin-top:2.4em;
+    font-size:1.7rem;
+    font-style:italic;
+  }
+  .sig small{display:block;font-size:.85rem;font-style:normal;color:var(--faint);margin-top:.3em;}
+  hr{border:none;border-top:1px solid var(--faint);margin:2.6em 0 1.4em;opacity:.5;}
+  .fine{
+    font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-size:.78rem;
+    color:var(--faint);
+    line-height:1.7;
+  }
+  .fine b{color:var(--ink);font-weight:600;}
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">editable — start typing anywhere</span>
+
+  <h1>Everyone Is an Artist.</h1>
+  <p class="de">Jeder Mensch ist ein Künstler.</p>
+
+  <p class="lede">Joseph Beuys said it in the 1970s. The browser had already agreed and
+  shipped it as <code>document.designMode</code>. Here it is, switched on for the whole
+  document.</p>
+
+  <p>Every word on this page is now yours to change. Rewrite this sentence. Correct my
+  grammar. Cross out the parts you dislike. Sign your own name over mine below. Edit the
+  licence. Delete the entire work if that is your gesture — deletion is permitted, and it
+  is still art if you say so.</p>
+
+  <p>There are no scripts listening. Nothing here reacts to you, judges you, or records you.
+  The social sculpture is genuinely collective and completely amnesiac: the moment you
+  reload, every hand's work — yours and mine — is forgotten, equally. An eternal monument
+  with the memory of a goldfish.</p>
+
+  <p class="sig">y-a-v-a
+    <small>after Joseph Beuys, <i>Soziale Plastik</i> (Social Sculpture). Sign over me.</small>
+  </p>
+
+  <hr>
+
+  <p class="fine">
+    <b>Everyone Is an Artist (designMode)</b> — y-a-v-a, 2026, after Joseph Beuys.<br>
+    Medium: <b>the browser's own whole-document edit mode</b>. Pixels on screen.<br>
+    Licence: <b>CC BY-SA 4.0</b> — share alike, so every edit you keep must stay as open as this one.<br>
+    No cookies. No storage. No trackers. No network. Nothing you type ever leaves this device or survives a reload.
+  </p>
+</main>
+
+<script>
+  // The entire mechanism. One line grants everyone edit rights to everything above —
+  // including this label, the licence, and the signature. Nothing is saved.
+  document.designMode = 'on';
+</script>
+</body>
+</html>

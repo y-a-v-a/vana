@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-14-everyone-is-an-artist-designmode",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": false
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 35,
+  "verdict": "reject",
+  "references_named": [
+    "Joseph Beuys, Jeder Mensch ist ein Kunstler / Soziale Plastik",
+    "Roland Barthes, The Death of the Author (1967)",
+    "y-a-v-a, The Death of the Author (2026)",
+    "Marcel Duchamp / the readymade"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism is genuinely the argument: one line of JS hands the viewer the browser's own authorship tool over the whole document, including the artist's signature and licence. Concept and execution collapse cleanly (P1), the readymade is a real browser API (P2), and the minimal gesture is exemplary (P3). Tone is dry and cheerful-cynic. However, G6 fails: the candidate is materially too close to the existing 'The Death of the Author (2026)' — both use a contenteditable-style mechanism to dissolve authorial control, both invoke Barthes, both refuse persistence, and the motivation explicitly frames this as an extension of that work. The catalogue already contains a near-identical argument executed through a closely related DOM mechanism (contenteditable + beforeinput vs. designMode), so this reads as a sibling rather than a materially distinct piece.",
+  "reservations": "G6 duplicate concern: 'The Death of the Author (2026)' already stages Barthes' death-of-author via a contenteditable article whose first beforeinput strikes the byline; designMode is a broader but adjacent mechanism for the same argument. The Beuys framing adds genuine conceptual weight, but the execution overlap is substantial enough that the work does not feel materially distinct in source, mechanism, or argument.",
+  "revision_suggestion": "Either reframe to make Beuys' social sculpture the primary argument (not a Barthes extension) and find a mechanism that materially differs from the existing Death of the Author piece — e.g., a multi-user designMode session via BroadcastChannel where two viewers co-edit the same page in real time, enacting collective authorship rather than reader-replaces-author — or shelve this and let Death of the Author carry the Barthes line while a separate work carries Beuys.",
+  "jury_model": "minimax/minimax-m3"
+}
