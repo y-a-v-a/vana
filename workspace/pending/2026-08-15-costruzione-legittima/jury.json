@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-15-costruzione-legittima",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Leon Battista Alberti, Della Pittura (1435)",
+    "Filippo Brunelleschi, the perspective demonstration (c. 1420)",
+    "the costruzione legittima",
+    "Mel Bochner, Measurement series"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument: CSS perspective + perspective-origin literally enact Alberti's costruzione legittima, with the cursor as the sovereign station point. The double-coding is clean — surface gag of a moving floor, deeper argument that Renaissance perspective's 'truthful' viewpoint is a slider. Restraint is exemplary: one pavimento, two CSS custom properties, a pointer handler, no libraries. The Bochner reference is apt (measurement works as pre-history of perspective-as-measurement). Tone is dry and intelligent, not edgy. Per-visit hue is a small chance gesture on an otherwise pure-order piece, which keeps the chance/order axis legible.",
+  "reservations": "The work is conceptually tight but visually modest — the pavimento is a flat checkerboard, and the 'twist' (cursor moves the vanishing point) is somewhat legible as a demo rather than a fully staged critique. The Bochner reference is named but not deeply dramatized; the connection to the practice's measurement works could be sharper. The per-visit hue is a thin chance gesture on an otherwise pure-order piece — fine, but the chance/order tension could be staged more visibly.",
+  "revision_suggestion": "Consider adding a second layer that makes the 'sovereign eye' critique more theatrical — e.g., a small Renaissance figure (silhouette only) standing at the cursor position, so the viewer literally watches themselves become Alberti's eye, and the floor's convergence visibly answers to a body rather than an abstract point. This would deepen the P7 double-coding without breaking P3 restraint.",
+  "jury_model": "minimax/minimax-m3"
+}

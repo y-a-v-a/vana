@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Costruzione Legittima</title>
+<style>
+  :root{
+    --persp: 700px;      /* the distance of the eye from the picture plane */
+    --vpx: 50%;          /* the vanishing point, horizontally */
+    --vpy: 46%;          /* the horizon */
+  }
+  html,body{margin:0;height:100%;overflow:hidden;background:#e9e2d0;}
+  body{
+    font:400 13px/1.5 Georgia,"Times New Roman",serif;
+    color:#2a2418;
+    -webkit-user-select:none;user-select:none;
+    cursor:crosshair;
+  }
+
+  /* The scene carries the whole argument: perspective + perspective-origin.
+     Move these two values and the world reorganises around one point. */
+  .scene{
+    position:fixed;inset:0;
+    perspective: var(--persp);
+    perspective-origin: var(--vpx) var(--vpy);
+    touch-action:none;
+    background:linear-gradient(#efe8d7 0%,#efe8d7 var(--vpy),#e6dcc4 var(--vpy),#dcd0b3 100%);
+  }
+
+  /* Alberti's pavimento: a square-tiled floor. Flat in itself,
+     it only *recedes* because the browser projects it toward the eye. */
+  .floor{
+    position:absolute;
+    left:50%;bottom:0;
+    width:5000px;height:5000px;
+    margin-left:-2500px;
+    transform-origin:50% 100%;
+    transform:rotateX(82deg);
+    background-color:hsl(var(--h) 34% 80%);
+    background-image:
+      linear-gradient(45deg, hsl(var(--h) 30% 60%) 25%, transparent 25%, transparent 75%, hsl(var(--h) 30% 60%) 75%),
+      linear-gradient(45deg, hsl(var(--h) 30% 60%) 25%, transparent 25%, transparent 75%, hsl(var(--h) 30% 60%) 75%);
+    background-size:160px 160px;
+    background-position:0 0,80px 80px;
+    box-shadow:inset 0 0 400px rgba(60,45,20,.55);
+  }
+
+  /* The horizon and the point everything runs to. */
+  .horizon{
+    position:fixed;left:0;right:0;top:var(--vpy);
+    border-top:1px solid rgba(60,45,20,.35);
+    pointer-events:none;
+  }
+  .vp{
+    position:fixed;top:var(--vpy);left:var(--vpx);
+    width:9px;height:9px;margin:-5px 0 0 -5px;
+    border-radius:50%;
+    background:#3a2c10;box-shadow:0 0 0 4px rgba(233,226,208,.7);
+    pointer-events:none;
+  }
+
+  .label{
+    position:fixed;left:16px;bottom:14px;max-width:min(360px,72vw);
+    background:rgba(233,226,208,.86);padding:12px 14px;
+    border:1px solid rgba(60,45,20,.3);
+    pointer-events:none;
+  }
+  .label h1{margin:0 0 4px;font-size:15px;font-style:italic;font-weight:400;letter-spacing:.2px;}
+  .label p{margin:4px 0;font-size:11.5px;color:#4a4230;}
+  .readout{
+    position:fixed;right:14px;top:12px;
+    font:400 12px/1.5 "Courier New",monospace;color:#3a2c10;
+    background:rgba(233,226,208,.86);padding:8px 10px;
+    border:1px solid rgba(60,45,20,.3);text-align:right;
+    pointer-events:none;
+  }
+  .readout b{font-weight:700;}
+  .hint{position:fixed;left:50%;top:14px;transform:translateX(-50%);
+    font-size:11px;color:#6a5d40;background:rgba(233,226,208,.7);
+    padding:4px 10px;pointer-events:none;transition:opacity 1.2s;}
+</style>
+</head>
+<body>
+  <div class="scene" id="scene">
+    <div class="floor" id="floor"></div>
+  </div>
+  <div class="horizon"></div>
+  <div class="vp"></div>
+
+  <div class="hint" id="hint">move the eye — left/right sets the vanishing point, up/down sets its distance</div>
+
+  <div class="readout" id="readout">
+    perspective: <b id="rP">700px</b><br>
+    perspective-origin: <b id="rO">50% 46%</b>
+  </div>
+
+  <div class="label">
+    <h1>Costruzione Legittima</h1>
+    <p>The picture is an open window. One point governs the whole floor — and you may put it anywhere you like.</p>
+    <p>y-a-v-a, 2026 · after Leon Battista Alberti, <i>Della Pittura</i> (1435), and Filippo Brunelleschi. Medium: the CSS <code>perspective</code> property. CC BY-SA 4.0. No cookies, no tracking.</p>
+  </div>
+
+  <script>
+    // Per-visit hue for the pavement — no two loads share a floor.
+    var h = Math.floor(38 + Math.random()*300) % 360;
+    document.documentElement.style.setProperty('--h', h);
+
+    var root = document.documentElement, scene = document.getElementById('scene');
+    var rP = document.getElementById('rP'), rO = document.getElementById('rO');
+    var hint = document.getElementById('hint');
+
+    // Horizontal pointer  -> where the vanishing point sits (the sovereign eye, slid at will).
+    // Vertical pointer    -> the distance of that eye from the picture plane (CSS perspective px).
+    function place(x, y){
+      var w = window.innerWidth, ht = window.innerHeight;
+      var vx = Math.max(0, Math.min(1, x / w));
+      var vy = Math.max(0.18, Math.min(0.72, y / ht));      // clamp horizon to the canvas
+      // Near the top: the eye is far away, the world flattens (large px).
+      // Near the bottom: the eye leans in, the floor plunges (small px).
+      var persp = Math.round(160 + vy * 2200);
+      root.style.setProperty('--persp', persp + 'px');
+      root.style.setProperty('--vpx', (vx*100).toFixed(1) + '%');
+      root.style.setProperty('--vpy', (vy*100).toFixed(1) + '%');
+      rP.textContent = persp + 'px';
+      rO.textContent = (vx*100).toFixed(0) + '% ' + (vy*100).toFixed(0) + '%';
+    }
+
+    scene.addEventListener('pointermove', function(e){
+      hint.style.opacity = 0;
+      place(e.clientX, e.clientY);
+    });
+    // Touch: also honour a tap.
+    scene.addEventListener('pointerdown', function(e){ place(e.clientX, e.clientY); });
+  </script>
+</body>
+</html>
