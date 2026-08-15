@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-08-15-css-gradient-demonstration",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 2,
+    "nuance": 3,
+    "narrative": 3,
+    "craft": 3,
+    "wit": 2
+  },
+  "weighted_total": 26,
+  "verdict": "reject",
+  "references_named": [
+    "Cory Arcangel, Photoshop Gradient Demonstrations (2007-2010)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "net.art (CSS paint pipeline as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P8"
+  ],
+  "rationale": "The work cleanly enacts P1: the wall label is literally the CSS string that paints the wall, and the recipe/painting collapse into one object. The Arcangel reference is apt and the Benjamin framing (aura evicted from the file, sneaking back through the glass) is the right double-coding. However, the underlying gesture — a random gradient with its CSS shown — is a fairly thin novelty: gradients are the most generic web-native visual primitive, and the catalogue already contains several works that stage 'the recipe is the work' (e.g. Certificate of Authenticity, Suitable for Framing, Cartel). The chance/order axis is named but barely dramatized; the work does not interrogate the browser's paint pipeline so much as use it as a default. Tone is correct, ethics are correct, attribution is correct.",
+  "reservations": "The novelty is modest: a per-visit random gradient with its source shown is a familiar web demo pattern, and the 'recipe = work' move has been done in stronger forms in the existing catalogue. The Benjamin argument is gestured at rather than staged — the 'aura sneaks back through the glass' line is the only real double-coding, and it lives in the wall text rather than in the mechanism. The work does not interrogate the browser (no gamut/display media query, no dithering probe, no per-device variation made visible) — it could have made the aura-return legible through the mechanism itself, which would have lifted both novelty and nuance.",
+  "revision_suggestion": "Make the Benjamin twist structural rather than verbal: read display-gamut / dynamic-range via matchMedia and visibly alter the recipe or the label to attest that the same string renders differently per device (e.g. show the recipe in the device's actual rendered colors, or split the label into 'recipe' and 'as rendered here' with a measured delta). That would convert the wall-text claim into a mechanism-enacted one and distinguish the work from a generic gradient demo.",
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CSS Gradient Demonstration</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { margin: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    background: #111;
+    overflow: hidden;
+  }
+  #painting {
+    position: fixed;
+    inset: 0;
+    /* the entire work is set here, from a string, by the browser's paint engine */
+  }
+  .label {
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
+    max-width: min(560px, calc(100vw - 48px));
+    padding: 16px 18px;
+    background: rgba(250, 250, 248, 0.92);
+    color: #1a1a1a;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    font-size: 12px;
+    line-height: 1.5;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
+  }
+  .label h1 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+  }
+  .recipe {
+    display: block;
+    padding: 9px 10px;
+    margin: 8px 0;
+    background: #1a1a1a;
+    color: #eaeaea;
+    white-space: pre-wrap;
+    word-break: break-all;
+    user-select: all;
+    font-size: 11.5px;
+    border-radius: 2px;
+  }
+  .note { color: #333; }
+  .foot {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0,0,0,0.15);
+    color: #555;
+    font-size: 11px;
+  }
+  .foot a { color: #555; }
+  button {
+    margin-top: 10px;
+    font: inherit;
+    font-size: 11px;
+    padding: 6px 12px;
+    cursor: pointer;
+    background: #1a1a1a;
+    color: #eaeaea;
+    border: none;
+    border-radius: 2px;
+  }
+  button:hover { background: #000; }
+</style>
+</head>
+<body>
+  <div id="painting"></div>
+
+  <div class="label">
+    <h1 id="title">CSS Gradient Demonstration</h1>
+    <span class="recipe" id="recipe">background: …</span>
+    <p class="note">This label <em>is</em> the work. Select the line above; your browser
+    repaints it, exact to its own gamut. There is no original file to steal — only the
+    recipe, and the recipe is free.</p>
+    <button id="again">New demonstration</button>
+    <div class="foot">
+      Medium: <code>linear-gradient()</code>, rendered by the browser's paint engine.
+      After Cory Arcangel, <em>Photoshop Gradient Demonstrations</em> (2007–2010), and
+      Walter Benjamin, <em>The Work of Art in the Age of Mechanical Reproduction</em> (1935).<br>
+      y-a-v-a — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+      No cookies, no trackers, no network.
+    </div>
+  </div>
+
+<script>
+(function () {
+  var painting = document.getElementById("painting");
+  var recipeEl = document.getElementById("recipe");
+  var titleEl  = document.getElementById("title");
+
+  function hex() {
+    var v = (Math.random() * 0x1000000) | 0;
+    return "#" + ("00000" + v.toString(16)).slice(-6);
+  }
+
+  function paint() {
+    // chance: the stops. order: the deterministic paint that follows from them. (P5)
+    var angle = Math.floor(Math.random() * 360);
+    var count = 3 + Math.floor(Math.random() * 3); // 3–5 stops
+    var stops = [], positions = [0];
+    for (var i = 1; i < count - 1; i++) positions.push(Math.floor(Math.random() * 100));
+    positions.push(100);
+    positions.sort(function (a, b) { return a - b; });
+    for (var j = 0; j < count; j++) stops.push(hex() + " " + positions[j] + "%");
+
+    var recipe = "background: linear-gradient(" + angle + "deg, " + stops.join(", ") + ");";
+
+    // the string is applied verbatim — the recipe and the painting are one object (P1)
+    painting.style.background = "";
+    painting.style.cssText = "position:fixed;inset:0;" + recipe;
+    recipeEl.textContent = recipe;
+    titleEl.textContent =
+      "CSS Gradient Demonstration — linear, " + angle + "deg, " + count + " stops, sRGB";
+  }
+
+  document.getElementById("again").addEventListener("click", paint);
+  paint();
+})();
+</script>
+</body>
+</html>
