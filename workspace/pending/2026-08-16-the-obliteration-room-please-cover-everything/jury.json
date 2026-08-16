@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-16-the-obliteration-room-please-cover-everything",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 3,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 3
+  },
+  "weighted_total": 31,
+  "verdict": "borderline",
+  "references_named": [
+    "Yayoi Kusama, The Obliteration Room (2002– )",
+    "Yayoi Kusama, Self-Obliteration (1967)",
+    "CSS checkbox-hack / zero-JavaScript net.craft tradition"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The checkbox-hack is a genuinely web-native mechanism, and the identification of the consent tick with Kusama's sticker is a clean P2 move: anonymous, identical, accruing, individual-but-cancellable. Reload-as-reset makes P4 live and P8 (no storage, no tracking) structural rather than promised. The chance/order axis (P5) is honestly present. Against the catalogue: Kusama is not previously referenced, the zero-JS constraint is unusual, and the mechanism genuinely enacts the idea. However, the work leans heavily on a single visual gag and the 'Self-Obliteration / mass anonymity' reading requires the wall text and motivation to land — the surface (click a box, dot appears) does not by itself carry the P7 double-coding about consent or anonymity; it just feels like a dot-grid. Nuance is therefore middling.",
+  "reservations": "P7 is weak: a casual viewer sees a clickable dot grid; only the motivation.md supplies the consent-checkbox/anonymity/Self-Obliteration argument. The 480 hand-written identical labels are bloated and a code smell relative to P3 (smallest build that completes the thought) — a CSS counter or pseudo-element trick could halve the markup. The nth-child(6n) colour palette is decorative repetition rather than mechanism-as-message. No tie to the twenty-year argument about value/authenticity/markets (P6) or to AI as subject (P10), so narrative placement in the larger catalogue is shallow.",
+  "revision_suggestion": "Compress the markup (one label with CSS-only repetition via grid + pseudo-elements, or a JS-free template instantiator on first paint), and find a way to make the consent/anonymity reading legible from the surface without wall text — e.g. an initial cohort of 'pre-ticked' boxes that arrive already covered, or a visible 'I agree' tooltip on first hover that then disappears, so the erasure of agency is performed, not explained. Anchor it more clearly in the value/fame/AI arc — Kusama is also a market phenomenon — so the narrative gains a prior work to answer.",
+  "jury_model": "minimax/minimax-m3"
+}

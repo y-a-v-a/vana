@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Obliteration Room (Please Cover Everything)</title>
+<!--
+  The Obliteration Room (Please Cover Everything) — y-a-v-a, 2026
+  After Yayoi Kusama, The Obliteration Room (2002– ) and Self-Obliteration (1967).
+  Licence: CC BY-SA 4.0. No JavaScript. No cookies. No trackers. Nothing sent, stored, or recorded.
+-->
+<style>
+  :root{
+    --line: rgba(0,0,0,.05);
+    --cell: 40px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:#fff;
+    color:#111;
+    font:14px/1.5 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    min-height:100vh;
+  }
+
+  /* The room fills the browser. Dimensions variable: your viewport. */
+  .room{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, var(--cell));
+    grid-auto-rows:var(--cell);
+    min-height:100vh;
+    justify-content:center;
+    align-content:start;
+    padding:0;
+  }
+
+  /* Each surface of the white room is a checkbox waiting for a sticker. */
+  .cell{
+    position:relative;
+    display:block;
+    width:var(--cell);
+    height:var(--cell);
+    border:1px solid var(--line);   /* the pristine white tiling */
+    cursor:crosshair;
+  }
+  .cell input{
+    position:absolute;
+    opacity:0;
+    inset:0;
+    margin:0;
+    cursor:crosshair;
+  }
+
+  /* The dot. Every visitor is given the same dot. */
+  .dot{
+    position:absolute;
+    inset:18%;
+    border-radius:50%;
+    transform:scale(0);
+    transition:transform .12s ease-out;
+    pointer-events:none;
+    background:#e5352b;
+  }
+  .cell input:checked ~ .dot{ transform:scale(1); }
+
+  /* Kusama's polychrome: the crowd does not coordinate its colours. */
+  .cell:nth-child(6n+1) .dot{background:#e5352b}
+  .cell:nth-child(6n+2) .dot{background:#1f6fe5}
+  .cell:nth-child(6n+3) .dot{background:#f2c200}
+  .cell:nth-child(6n+4) .dot{background:#159a5b}
+  .cell:nth-child(6n+5) .dot{background:#d63aa8}
+  .cell:nth-child(6n+6) .dot{background:#f27a1a}
+
+  /* Museum tombstone. */
+  .label{
+    position:fixed;
+    left:16px;
+    bottom:16px;
+    max-width:min(90vw, 360px);
+    background:#fff;
+    border:1px solid #111;
+    padding:12px 14px;
+    box-shadow:0 2px 0 #111;
+  }
+  .label b{font-weight:700}
+  .label p{margin:.35em 0}
+  .label .cap{font-size:11px;color:#555}
+  .label a{color:#111}
+
+  .instruction{
+    position:fixed;
+    top:14px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#fff;
+    border:1px solid #111;
+    padding:6px 12px;
+    letter-spacing:.02em;
+    white-space:nowrap;
+    max-width:calc(100vw - 24px);
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+</style>
+</head>
+<body>
+
+  <p class="instruction">The room is white. Please cover everything.</p>
+
+  <main class="room" aria-label="A white room. Click any surface to place a dot.">
+    <!-- 480 identical surfaces. Order (the grid) meets chance (the crowd). -->
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+    <label class="cell"><input type="checkbox"><span class="dot"></span></label>
+  </main>
+
+  <aside class="label">
+    <p><b>The Obliteration Room (Please Cover Everything)</b></p>
+    <p>y-a-v-a, 2026 — <i>after</i> Yayoi Kusama, <i>The Obliteration Room</i> (2002– )</p>
+    <p class="cap">HTML/CSS, no JavaScript &middot; checkboxes on screen &middot; dimensions variable (your viewport)</p>
+    <p class="cap">Every visitor is given the same dot. The white room is re&#8209;whitened on every reload; nothing you place is kept, recorded, or sent. No cookies, no trackers.</p>
+    <p class="cap"><a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY&#8209;SA 4.0</a></p>
+  </aside>
+
+</body>
+</html>
