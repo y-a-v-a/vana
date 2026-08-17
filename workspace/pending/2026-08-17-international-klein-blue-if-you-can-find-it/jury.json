@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-08-17-international-klein-blue-if-you-can-find-it",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Yves Klein, International Klein Blue (IKB)",
+    "Marcel Duchamp, the readymade",
+    "EyeDropper API (WICG)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The EyeDropper API is a near-perfect embodiment of P1: a browser tool whose sole function is to cross the page boundary and appropriate, so the only act that can paint the canvas is literally an act of theft. The Klein/Duchamp double-coding lands without wall text, and the work explicitly differentiates itself from Pure Colour (the OS picker invents) and The Blackest Black (clipboard duplicates) — this one steals. Graceful degradation in non-Chromium browsers is handled thematically (\"Your browser will not let it steal\"), which is restraint, not apology. G6 holds: although Klein appears in the 2026 Zone de Sensibilité work, the mechanism and argument are entirely different (immaterial receipt-burning vs. color appropriation).",
+  "reservations": "The EyeDropper API's current Chromium-only availability limits reach, but the work treats that as content rather than a flaw. The \"Return it\" button is a symbolic gesture (the color was never actually returned to its source), which is conceptually correct but could be misread on a quick pass. Chance is purely contingent on the viewer's screen rather than any generative system, so the P5 placement is honest but thin.",
+  "revision_suggestion": "Consider giving the per-visit label a more concrete provenance trace — even a coarse, RAM-only description like \"sampled from the upper-left quadrant\" or a timestamp of the moment of appropriation — to deepen the chance side of P5 and reward repeat visits. A small visual nod in the label to Pure Colour and The Blackest Black as sibling-but-distinct works would tighten the narrative arc.",
+  "jury_model": "minimax/minimax-m3"
+}

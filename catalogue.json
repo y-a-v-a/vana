@@ -1142,5 +1142,13 @@
     "source": "Yayoi Kusama, The Obliteration Room (2002– ); Yayoi Kusama, Self-Obliteration (1967); the CSS checkbox-hack / zero-JavaScript net.craft tradition",
     "mechanism": "Pure CSS checkbox-hack (:checked on labelled <input type=checkbox>), zero JavaScript; a responsive auto-fill grid is the room and reload is the only reset.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-17-international-klein-blue-if-you-can-find-it",
+    "title": "International Klein Blue (If You Can Find It)",
+    "year": 2026,
+    "source": "Yves Klein, International Klein Blue (IKB); Marcel Duchamp, the readymade; EyeDropper API (WICG) as web-native found object",
+    "mechanism": "The browser's native EyeDropper API, whose sole function is to sample a pixel from anywhere outside the artwork, floods the canvas with appropriated colour; RAM only, no storage or network.",
+    "status": "pending"
   }
 ]

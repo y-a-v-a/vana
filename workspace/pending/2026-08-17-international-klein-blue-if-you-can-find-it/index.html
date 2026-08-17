@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#e9e6df">
+<title>International Klein Blue (If You Can Find It)</title>
+<style>
+  :root{
+    --unpainted:#e9e6df;      /* gesso: the painting's only honest colour */
+    --ink:#141414;
+    --paper:#f6f4ee;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font:16px/1.5 Georgia,"Times New Roman",serif;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:1.4rem;padding:2rem 1rem;min-height:100%;
+  }
+  .frame{
+    width:min(78vmin,520px);aspect-ratio:1/1;
+    border:14px solid #1b1b1b;
+    box-shadow:0 2px 0 #000, 0 26px 60px rgba(0,0,0,.35);
+    background:var(--unpainted);
+    transition:background-color .35s ease;
+    position:relative;
+  }
+  .frame::after{
+    content:"unpainted";
+    position:absolute;inset:0;display:grid;place-items:center;
+    font:italic 14px/1 Georgia,serif;letter-spacing:.08em;
+    color:rgba(0,0,0,.28);
+    transition:opacity .3s ease;
+  }
+  .frame.taken::after{opacity:0}
+  .controls{display:flex;gap:.8rem;align-items:center;flex-wrap:wrap;justify-content:center}
+  button{
+    font:inherit;padding:.55rem 1.1rem;cursor:pointer;
+    border:1px solid var(--ink);background:transparent;color:var(--ink);
+    border-radius:0;
+  }
+  button:disabled{cursor:not-allowed;opacity:.4}
+  button:not(:disabled):hover{background:var(--ink);color:var(--paper)}
+  .label{
+    max-width:520px;background:var(--paper);
+    border:1px solid rgba(0,0,0,.25);padding:1rem 1.2rem;
+    font-size:14px;line-height:1.55;
+  }
+  .label h1{font-size:16px;margin:0 0 .1rem;font-style:italic}
+  .label .rows{margin:.6rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.15rem .8rem}
+  .label .rows dt{color:#666}
+  .label .rows dd{margin:0}
+  .swatch{display:inline-block;width:.85em;height:.85em;border:1px solid #999;
+    vertical-align:-.1em;margin-right:.35em;background:var(--unpainted)}
+  .note{font-style:italic;color:#555;margin-top:.7rem}
+  footer{font-size:11.5px;color:#777;max-width:520px;text-align:center;line-height:1.5}
+  footer a{color:inherit}
+  code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em}
+</style>
+</head>
+<body>
+
+  <div class="frame" id="frame"></div>
+
+  <div class="controls">
+    <button id="take">Take a colour</button>
+    <button id="return" disabled>Return it</button>
+  </div>
+
+  <section class="label">
+    <h1>International Klein Blue (If You Can Find It)</h1>
+    <dl class="rows">
+      <dt>Artist</dt><dd>y-a-v-a, after Yves Klein &amp; Marcel Duchamp</dd>
+      <dt>Date</dt><dd>2026</dd>
+      <dt>Medium</dt><dd id="medium">Gesso. No pigment of its own.</dd>
+      <dt>Source</dt><dd id="source">—</dd>
+      <dt>Thefts</dt><dd id="count">0</dd>
+    </dl>
+    <p class="note" id="note">Klein patented a blue and claimed to own it. This painting
+    owns nothing. Press <em>Take a colour</em> and lift a pixel from anywhere on your
+    screen — the desktop, another window, a photograph of a sky — with the browser's
+    own eyedropper. Every colour it wears will belong to something that is not the painting.</p>
+  </section>
+
+  <footer>
+    Mechanism: the <code>EyeDropper</code> API (WICG), whose only purpose is to reach past
+    this page and sample a colour from the world. Runs entirely in your browser —
+    no cookies, no storage, no network, no server. Reload and the painting forgets.
+    <br>
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>
+    — y-a-v-a. References: Yves Klein, <em>IKB</em>; Marcel Duchamp, the readymade.
+  </footer>
+
+<script>
+(function(){
+  var frame  = document.getElementById('frame');
+  var take   = document.getElementById('take');
+  var giveBk = document.getElementById('return');
+  var medium = document.getElementById('medium');
+  var source = document.getElementById('source');
+  var count  = document.getElementById('count');
+  var note   = document.getElementById('note');
+
+  var thefts = 0;
+
+  // If the browser refuses to let the painting steal, it stays unpainted. That is honest too.
+  if (!('EyeDropper' in window)) {
+    take.disabled = true;
+    take.textContent = 'Your browser will not let it steal';
+    note.innerHTML = 'This browser has no eyedropper, so the painting cannot appropriate '
+      + 'anything. It stays gessoed and unpainted — which, for a work that owns no pigment '
+      + 'of its own, is the whole picture.';
+    return;
+  }
+
+  var dropper = new EyeDropper();
+
+  take.addEventListener('click', function(){
+    dropper.open().then(function(result){
+      var hex = result.sRGBHex;                 // e.g. "#1b3fae"
+      frame.style.backgroundColor = hex;
+      frame.classList.add('taken');
+      document.querySelector('meta[name=theme-color]').setAttribute('content', hex);
+
+      thefts++;
+      count.textContent = String(thefts);
+      medium.innerHTML = '<span class="swatch" style="background:' + hex + '"></span>'
+        + 'Appropriated light, ' + hex.toUpperCase() + '.';
+      source.textContent = 'Somewhere that is not this painting.';
+      giveBk.disabled = false;
+    }).catch(function(){
+      // The eyedropper was closed with nothing taken (Esc, or a change of heart).
+      source.textContent = 'You thought better of it.';
+    });
+  });
+
+  giveBk.addEventListener('click', function(){
+    frame.style.backgroundColor = '';
+    frame.classList.remove('taken');
+    document.querySelector('meta[name=theme-color]').setAttribute('content', '#e9e6df');
+    medium.textContent = 'Gesso. No pigment of its own.';
+    source.textContent = 'Returned. It kept nothing.';
+    giveBk.disabled = true;
+  });
+})();
+</script>
+</body>
+</html>
