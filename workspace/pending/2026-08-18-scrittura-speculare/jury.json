@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-08-18-scrittura-speculare",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 37,
+  "verdict": "borderline",
+  "references_named": [
+    "Leonardo da Vinci (mirror writing / Codices)",
+    "Marcel Duchamp (infra-mince / infrathin)",
+    "y-a-v-a, Silencio (2026)",
+    "y-a-v-a, La Disparition (2026)",
+    "net.art source-vs-render tradition"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P7",
+    "P8"
+  ],
+  "rationale": "A clean, restrained digital readymade of Leonardo's mirror writing, where the reversal lives only in `transform: scaleX(-1)` and never reaches the DOM — a textbook P1 mechanism-as-message. The 'Hold up a mirror' toggle flipping the whole stage (double-negative trade) is the strongest beat: legibility is conserved, never both-at-once, which lands the infrathin joke honestly. Double-coding works at both depths (mirror gag for the casual viewer, source-vs-render argument for the literate). G1–G6 all pass: CC BY-SA stated, no trackers, attributes Leonardo/Duchamp and y-a-v-a, and the source-vs-render mechanism is materially distinct from the catalogue (Silencio is whitespace, La Disparition is glyph-stripping; this is axis-mirror at the paint layer).",
+  "reservations": "The novelty sits in the medium pairing more than in a new ontology or found-object — `scaleX(-1)` is a well-known web primitive and Leonardo mirror-writing is a canonical art-historical reference rather than a fresh found-object, so the work feels like a calm, well-placed restatement rather than a surprise. The per-visit tilt is a small live element but barely legible as 'no two loadings sit the same.'",
+  "revision_suggestion": "Tighten the 'live' dimension so the mechanism visibly depends on the web (e.g. mirror only what `getComputedStyle` or a live read of `:dir` / locale can attest, or have Find-in-page's revealed range itself be where the undo performs itself), and consider naming a more pointed reference than the very general net.art 'source-vs-render tradition' — e.g. lean harder on a specific Duchamp note or another infrathin restage already in the catalogue to sharpen G6-narrative.",
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scrittura Speculare</title>
+<style>
+  :root{
+    --ink: hsl(28 45% 16%);
+    --parch: hsl(41 46% 90%);
+    --parch2: hsl(38 40% 82%);
+    --rule: hsl(30 30% 60%);
+  }
+  html,body{margin:0;height:100%}
+  body{
+    background:
+      radial-gradient(120% 100% at 50% 0%, var(--parch) 0%, var(--parch2) 100%);
+    color:var(--ink);
+    font-family: Georgia, "Times New Roman", serif;
+    display:flex; flex-direction:column; min-height:100%;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* The stage holds the artwork AND its instructions.
+     "Hold up a mirror" flips the whole stage — reversing your world
+     so the note reads forward and the reading text reads backward.
+     You never get both at once. */
+  .stage{
+    flex:1 0 auto;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:1.6rem; padding:5vh 6vw; text-align:center;
+    transition: transform .5s ease;
+    transform: scaleX(1);
+  }
+  body.reflected .stage{ transform: scaleX(-1); }
+
+  .eyebrow{
+    letter-spacing:.32em; text-transform:uppercase;
+    font-size:.68rem; opacity:.6; margin:0;
+  }
+
+  /* The note is mirrored relative to the stage.
+     Default: stage upright + note flipped  -> note is backwards.
+     Reflected: stage flipped + note flipped -> note is forwards. */
+  .note{
+    transform: scaleX(-1);
+    font-family: "Segoe Script", "Bradley Hand", "Snell Roundhand", cursive;
+    font-size: clamp(1.3rem, 4.4vw, 2.5rem);
+    line-height:1.7;
+    max-width: 30ch;
+    user-select:text;
+  }
+  .note p{margin:.1em 0}
+
+  .caption{ max-width:44ch; font-size:.95rem; line-height:1.55; opacity:.85; margin:0 }
+
+  button{
+    font:inherit; font-size:.95rem;
+    color:var(--parch); background:var(--ink);
+    border:none; border-radius:2px;
+    padding:.7em 1.3em; cursor:pointer;
+    letter-spacing:.02em;
+  }
+  button:hover{ background:hsl(28 45% 24%) }
+  button:focus-visible{ outline:2px solid var(--ink); outline-offset:3px }
+
+  footer{
+    flex:0 0 auto;
+    border-top:1px solid var(--rule);
+    padding:1rem 6vw; font-size:.72rem; line-height:1.6; opacity:.8;
+    text-align:center;
+  }
+  footer b{font-weight:600}
+</style>
+</head>
+<body>
+  <main class="stage" id="stage">
+    <p class="eyebrow">Scrittura Speculare &mdash; after Leonardo</p>
+
+    <div class="note" id="note">
+      <p>There is no secret ink here.</p>
+      <p>Only a CSS transform.</p>
+      <p>Your clipboard reads it already;</p>
+      <p>your eye needs a mirror.</p>
+      <p>Leonardo hid his notes.</p>
+      <p>You have View&nbsp;Source.</p>
+    </div>
+
+    <p class="caption" id="caption">
+      Hold a real mirror to your screen &mdash; or press the button and reverse
+      your whole world instead. Or just select the lines above and copy them:
+      the concealment was never in the text.
+    </p>
+
+    <button id="flip" type="button">Hold up a mirror</button>
+  </main>
+
+  <footer>
+    <b>Scrittura Speculare</b> (2026) &middot; a work by <b>y-a-v-a</b> (Vincent&nbsp;Bruijn).
+    After <b>Leonardo&nbsp;da&nbsp;Vinci</b>&rsquo;s mirror writing, and Marcel&nbsp;Duchamp&rsquo;s <i>infra&#8209;mince</i>.
+    The reversal is a presentational <code>scaleX(-1)</code> only: assistive tech, Find&#8209;in&#8209;page,
+    and Copy all read the plain text &mdash; the secret has zero thickness.
+    No cookies, no trackers, no data leaves your device.
+    Licensed <b>CC&nbsp;BY&#8209;SA&nbsp;4.0</b>.
+  </footer>
+
+  <script>
+    // A tiny per-visit tremor, so no two loadings sit the same on the desk.
+    (function(){
+      var note = document.getElementById('note');
+      var tilt = (Math.random() * 1.6 - 0.8).toFixed(2); // -0.8..0.8 deg
+      note.style.display = 'inline-block';
+      note.style.rotate = tilt + 'deg';
+    })();
+
+    // The mirror. Flipping the stage un-mirrors the note (double negative)
+    // and mirrors everything you were reading. The trade is total and honest:
+    // legibility is conserved, never increased.
+    (function(){
+      var body = document.body;
+      var btn  = document.getElementById('flip');
+      btn.addEventListener('click', function(){
+        var on = body.classList.toggle('reflected');
+        btn.textContent = on ? 'Put the mirror down' : 'Hold up a mirror';
+      });
+    })();
+  </script>
+</body>
+</html>

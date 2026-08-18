@@ -1150,5 +1150,13 @@
     "source": "Yves Klein, International Klein Blue (IKB); Marcel Duchamp, the readymade; EyeDropper API (WICG) as web-native found object",
     "mechanism": "The browser's native EyeDropper API, whose sole function is to sample a pixel from anywhere outside the artwork, floods the canvas with appropriated colour; RAM only, no storage or network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-18-scrittura-speculare",
+    "title": "Scrittura Speculare",
+    "year": 2026,
+    "source": "Leonardo da Vinci, mirror writing (the Codices); Marcel Duchamp, infra-mince / infrathin; net.art source-vs-render tradition (y-a-v-a, Silencio; La Disparition)",
+    "mechanism": "CSS transform: scaleX(-1) mirrors the note while the DOM stays plain forward text; a button flips the whole stage so legibility is conserved but never both-at-once, and Copy/Find/screen-readers bypass the mirror entirely.",
+    "status": "pending"
   }
 ]
