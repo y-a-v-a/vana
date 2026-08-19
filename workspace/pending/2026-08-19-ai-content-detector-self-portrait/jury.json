@@ -1,0 +1,41 @@
+{
+  "work_id": "2026-08-19-ai-content-detector-self-portrait",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Alan Turing, Computing Machinery and Intelligence (1950)",
+    "GPTZero / AI-text-detector discourse (2023-)",
+    "Roland Barthes, The Death of the Author (1967)",
+    "Marcel Duchamp / the readymade",
+    "y-a-v-a, Modernipsum (2012)",
+    "y-a-v-a, Artist's Statement (2026)"
+  ],
+  "principles_invoked": [
+    "P10",
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism genuinely enacts the argument: a regex stylometer scans its own rendered textContent, highlights the tells it was baited with, and returns a foregone verdict. Concept and execution are welded (P1), the AI detector is interrogated rather than merely used (P10), and the readymade logic is clean (P2). Double-coding works: surface gag is a detector catching itself; deeper layer is the death-of-the-author argument and the theatre of AI detection. Craft is restrained and the build is minimal (P3).",
+  "reservations": "The novelty is real but the territory is crowded — Modernipsum and Artist's Statement already satirise language toys, and the 'AI detector as readymade' gesture, while sharp, leans on a 2023 discourse that may date quickly. The specimen text is deliberately seeded with tells, which makes the result feel rigged rather than discovered; a slightly more honest version might let the count actually drive the verdict (even if the verdict text is fixed).",
+  "revision_suggestion": "Consider letting the confidence percentage be a function of the actual tell count with a wider spread (e.g. 60-99.9%) so the meter reads as a real measurement of the bait rather than a constant; this would sharpen the P1 claim that the mechanism is the argument.",
+  "jury_model": "minimax/minimax-m3"
+}

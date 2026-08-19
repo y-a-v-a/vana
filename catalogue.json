@@ -1158,5 +1158,13 @@
     "source": "Leonardo da Vinci, mirror writing (the Codices); Marcel Duchamp, infra-mince / infrathin; net.art source-vs-render tradition (y-a-v-a, Silencio; La Disparition)",
     "mechanism": "CSS transform: scaleX(-1) mirrors the note while the DOM stays plain forward text; a button flips the whole stage so legibility is conserved but never both-at-once, and Copy/Find/screen-readers bypass the mirror entirely.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-19-ai-content-detector-self-portrait",
+    "title": "AI Content Detector (Self-Portrait)",
+    "year": 2026,
+    "source": "Alan Turing, Computing Machinery and Intelligence (1950) / the imitation game; the AI-text-detector discourse (GPTZero & the 'em-dash / delve' panic, 2023–); Roland Barthes, The Death of the Author (1967); Marcel Duchamp / the readymade; y-a-v-a, Modernipsum (2012); y-a-v-a, Artist's Statement (2026)",
+    "mechanism": "Client-side regex stylometry over the page's own rendered textContent marks the 'tells' of LLM prose live and returns a foregone verdict; no network, no storage.",
+    "status": "pending"
   }
 ]
