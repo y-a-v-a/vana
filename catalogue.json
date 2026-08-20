@@ -1166,5 +1166,13 @@
     "source": "Alan Turing, Computing Machinery and Intelligence (1950) / the imitation game; the AI-text-detector discourse (GPTZero & the 'em-dash / delve' panic, 2023–); Roland Barthes, The Death of the Author (1967); Marcel Duchamp / the readymade; y-a-v-a, Modernipsum (2012); y-a-v-a, Artist's Statement (2026)",
     "mechanism": "Client-side regex stylometry over the page's own rendered textContent marks the 'tells' of LLM prose live and returns a foregone verdict; no network, no storage.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-20-quotation-marks-not-included",
+    "title": "Quotation (Marks Not Included)",
+    "year": 2026,
+    "source": "Sherrie Levine, After Walker Evans (1981); Marcel Duchamp / the readymade; Roland Barthes, The Death of the Author (1967)",
+    "mechanism": "CSS quotes property with open-quote/close-quote generated content on <q>: locale-variant quotation marks, live in the render, absent from the DOM and dropped on copy.",
+    "status": "pending"
   }
 ]

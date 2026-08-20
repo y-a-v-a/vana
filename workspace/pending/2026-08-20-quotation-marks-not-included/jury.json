@@ -1,0 +1,36 @@
+{
+  "work_id": "2026-08-20-quotation-marks-not-included",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 3,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 3
+  },
+  "weighted_total": 33,
+  "verdict": "borderline",
+  "references_named": [
+    "Sherrie Levine, After Walker Evans (1981)",
+    "Marcel Duchamp / the readymade",
+    "Roland Barthes, The Death of the Author (1967)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The CSS `quotes` property with generated content is a genuinely web-native find: the marks exist only in render, vary by locale, and are stripped on copy, so the mechanism enacts the concept of framing-as-appropriation (P1, P2) — the browser supplies the frame, not the author, and the frame falls off when you try to take the work with you. Double-coding lands at two depths (a self-referential gag about who did the quoting; a Barthesian argument about the tissue of quotations). However, the source-vs-render territory is heavily populated in the 2026 catalogue (Silencio, La Disparition, Scrittura Speculare, An Oak Tree), and while the specific mechanism is clever it does not break new ground. The sentence in the piece is clear but prosaic — it tells the joke rather than performing it — and the readout panel, though it functions as attestation, leans slightly didactic.",
+  "reservations": "The source-vs-render family is well-trodden; this is a solid addition but not a paradigm shift. The piece's central sentence explains the mechanism instead of enacting it, and the footer/wall-text carries more of the conceptual weight than the surface does.",
+  "revision_suggestion": "Replace the declarative sentence with one that performs the appropriation through its own structure — a sentence that is already quoting something, so the generated marks land on a real inner quotation rather than a self-description of the work.",
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Quotation (Marks Not Included)</title>
+<style>
+  :root{
+    --ink:#141414; --ground:#f4f1ea; --faint:#8a857a; --line:#d8d2c4;
+    --accent:#7a1f1f;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--ground); color:var(--ink);
+    font:16px/1.5 Georgia,"Times New Roman",serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh; padding:6vh 22px 40px;
+  }
+  main{max-width:720px; width:100%}
+  .frame{
+    border:1px solid var(--line); background:#fffdf8;
+    padding:44px 40px; box-shadow:0 1px 0 #fff inset;
+  }
+  .piece{
+    font-size:clamp(22px,4.4vw,34px); line-height:1.38;
+    margin:0; letter-spacing:.1px;
+  }
+  /* The marks live here, in generated content — never in the DOM text. */
+  q{ quotes:auto; }
+  [data-loc="en"] q{ quotes:'\201C' '\201D' '\2018' '\2019'; }
+  [data-loc="de"] q{ quotes:'\201E' '\201C' '\201A' '\2018'; }
+  [data-loc="fr"] q{ quotes:'\00AB\00A0' '\00A0\00BB' '\2039\00A0' '\00A0\203A'; }
+  [data-loc="ja"] q{ quotes:'\300C' '\300D' '\300E' '\300F'; }
+  [data-loc="sv"] q{ quotes:'\201D' '\201D' '\2019' '\2019'; }
+  [data-loc="pl"] q{ quotes:'\201E' '\201D' '\00AB' '\00BB'; }
+  q::before{content:open-quote; color:var(--accent)}
+  q::after{content:close-quote; color:var(--accent)}
+
+  .label{
+    margin:26px 0 0; font-size:13px; line-height:1.6; color:var(--faint);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  .label b{color:var(--ink); font-weight:600}
+  .controls{
+    display:flex; flex-wrap:wrap; gap:8px; margin:22px 0 0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  .controls button{
+    font:inherit; font-size:13px; cursor:pointer;
+    background:#fffdf8; border:1px solid var(--line); color:var(--ink);
+    padding:6px 11px; border-radius:2px;
+  }
+  .controls button[aria-pressed="true"]{
+    background:var(--ink); color:var(--ground); border-color:var(--ink);
+  }
+  .readout{
+    margin:22px 0 0; padding:14px 16px; border:1px dashed var(--line);
+    background:#faf7f0;
+    font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    color:#4a463d; white-space:pre-wrap; word-break:break-word;
+  }
+  .readout b{color:var(--accent)}
+  footer{
+    max-width:720px; width:100%; margin:26px 0 0;
+    font:12px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--faint);
+  }
+  footer a{color:var(--faint)}
+</style>
+</head>
+<body>
+<main>
+  <div class="frame" data-loc="en">
+    <p class="piece" id="piece">An ordinary sentence becomes a <q>quotation the moment the browser, <q>not the author</q>, supplies the marks</q>.</p>
+    <p class="label">
+      <b>Quotation (Marks Not Included)</b>, 2026 · y-a-v-a<br>
+      generated content on plain text · dimensions variable · edition of everyone<br>
+      marks supplied by your browser · not for sale
+    </p>
+  </div>
+
+  <div class="controls" id="controls" aria-label="Reading locale">
+    <button data-loc="en" aria-pressed="true">English</button>
+    <button data-loc="de" aria-pressed="false">Deutsch</button>
+    <button data-loc="fr" aria-pressed="false">Français</button>
+    <button data-loc="ja" aria-pressed="false">日本語</button>
+    <button data-loc="sv" aria-pressed="false">Svenska</button>
+    <button data-loc="pl" aria-pressed="false">Polski</button>
+  </div>
+
+  <div class="readout" id="readout"></div>
+</main>
+
+<footer>
+  A found sentence, framed. The quotation marks — the only thing that turns
+  a line into <em>a quotation</em>, i.e. someone else's — are not written in the
+  page. Your browser prints them, in your nation's punctuation, from the CSS
+  <code>quotes</code> property. Select the sentence and copy it: the marks fall
+  off, and you carry away plain, unauthored text. The frame was never yours to keep.
+  <br><br>
+  After Sherrie Levine, <em>After Walker Evans</em> (1981); Marcel Duchamp / the
+  readymade; Roland Barthes, <em>The Death of the Author</em> (1967) —
+  “a tissue of quotations”.
+  <br><br>
+  <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+  · y-a-v-a · no cookies, no tracking, no data leaves your browser.
+</footer>
+
+<script>
+  // The mechanism IS the argument: JS only swaps the reading locale.
+  // It never inserts or removes a single quotation mark — CSS does that,
+  // as generated content that lives outside the DOM text.
+  var frame = document.querySelector('.frame');
+  var piece = document.getElementById('piece');
+  var readout = document.getElementById('readout');
+  var buttons = [].slice.call(document.querySelectorAll('#controls button'));
+
+  var MARKS = /[“”‘’„‚«»‹›「」『』"']/g;
+
+  function report(loc){
+    var source = piece.textContent;              // what the DOM actually holds
+    var visible = getComputedStyle(piece);       // the marks are not here either
+    var inSource = (source.match(MARKS) || []).length;
+    readout.innerHTML =
+      'reading locale        : ' + loc + '\n' +
+      'quotation marks drawn : yes  (::before / ::after, open-quote / close-quote)\n' +
+      'marks in the source   : <b>' + inSource + '</b>\n' +
+      'characters you can copy: ' + source.length + '   (all of them unquoted)\n' +
+      '\n' +
+      '// what you would carry away:\n' +
+      source;
+  }
+
+  function pick(loc){
+    frame.setAttribute('data-loc', loc);
+    buttons.forEach(function(b){
+      b.setAttribute('aria-pressed', String(b.dataset.loc === loc));
+    });
+    report(loc);
+  }
+
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){ pick(b.dataset.loc); });
+  });
+
+  pick('en');
+</script>
+</body>
+</html>
