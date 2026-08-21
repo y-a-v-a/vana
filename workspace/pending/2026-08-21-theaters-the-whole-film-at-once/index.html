@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Theaters (The Whole Film at Once)</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{
+    --ink:#c8c4bb;
+    --dim:#6f6b63;
+    --line:#26241f;
+    --glow:#efe9dc;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#050505;color:var(--ink);
+    font:15px/1.55 ui-serif,Georgia,"Times New Roman",serif}
+  a{color:var(--ink)}
+  .house{max-width:760px;margin:0 auto;padding:34px 20px 60px}
+  h1{font-size:20px;font-weight:400;letter-spacing:.02em;margin:0 0 2px}
+  .sub{color:var(--dim);font-style:italic;margin:0 0 26px}
+
+  /* the auditorium */
+  .screenframe{position:relative;background:#000;border:1px solid var(--line);
+    border-radius:2px;padding:26px;box-shadow:inset 0 0 90px #000}
+  .screenwrap{position:relative;width:100%;aspect-ratio:16/9;
+    background:#000;overflow:hidden;border-radius:1px}
+  #exposure{position:absolute;inset:0;width:100%;height:100%;display:block;
+    filter:saturate(.9)}
+  /* the raw film, playing in the corner, being erased into the exposure */
+  .filmbox{position:absolute;right:12px;bottom:12px;width:26%;min-width:96px;
+    aspect-ratio:16/9;border:1px solid #1b1a17;background:#000;overflow:hidden;
+    box-shadow:0 0 0 1px #000, 0 6px 22px #000}
+  #film{width:100%;height:100%;display:block}
+  .tag{position:absolute;left:0;bottom:-1px;transform:translateY(100%);
+    font:400 10px/1 ui-monospace,monospace;letter-spacing:.14em;
+    color:var(--dim);padding-top:4px;text-transform:uppercase}
+
+  .readout{display:flex;flex-wrap:wrap;gap:4px 26px;margin:20px 2px 0;
+    font:400 12px/1.5 ui-monospace,monospace;color:var(--dim);
+    letter-spacing:.03em}
+  .readout b{color:var(--ink);font-weight:400}
+  .btns{margin:16px 2px 0}
+  button{background:transparent;color:var(--ink);border:1px solid var(--line);
+    font:400 12px/1 ui-monospace,monospace;letter-spacing:.08em;
+    padding:9px 14px;border-radius:2px;cursor:pointer;text-transform:uppercase}
+  button:hover{border-color:var(--dim)}
+
+  /* wall label */
+  .cartel{margin:40px 0 0;border-top:1px solid var(--line);padding-top:18px;
+    color:var(--dim);font-size:13px;max-width:60ch}
+  .cartel p{margin:0 0 11px}
+  .cartel b{color:var(--ink);font-weight:400}
+  .foot{margin-top:22px;font:400 11px/1.6 ui-monospace,monospace;
+    color:#48453f;letter-spacing:.02em}
+  .foot a{color:#6f6b63}
+</style>
+</head>
+<body>
+<main class="house">
+  <h1>Theaters <span style="color:var(--dim)">— the whole film at once</span></h1>
+  <p class="sub">after Hiroshi Sugimoto</p>
+
+  <div class="screenframe">
+    <div class="screenwrap">
+      <canvas id="exposure" width="640" height="360" aria-label="A cinema screen, its projected film integrated into a single glowing rectangle of light."></canvas>
+      <div class="filmbox">
+        <canvas id="film" width="192" height="108" aria-hidden="true"></canvas>
+        <span class="tag">the film</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="readout">
+    <span>exposure&nbsp;<b id="t">0.0 s</b></span>
+    <span>frames&nbsp;<b id="n">0</b></span>
+    <span>screen&nbsp;<b id="lum">—</b></span>
+    <span id="verdict" style="color:var(--dim)">developing…</span>
+  </div>
+  <div class="btns"><button id="rewind" type="button">Rewind &amp; re-shoot</button></div>
+
+  <div class="cartel">
+    <p><b>Theaters (The Whole Film at Once)</b>, 2026. Pixels on screen, single continuous exposure. Running time: as long as you watch. Edition: one per visit, never the same twice.</p>
+    <p>A film is projected onto the screen — every frame a different scene — and the screen keeps <em>all</em> of it, holding the running average of every frame it has ever shown. Sugimoto left the shutter open for an entire feature and the movie erased itself into white. Here the shutter never closes: the more you are shown, the less there is to see. Sit through to the end and the end is a blank.</p>
+  </div>
+
+  <p class="foot">
+    y-a-v-a · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> ·
+    after Hiroshi Sugimoto, <em>Theaters</em> (1978– ) · no cookies, no trackers, no network — the light never leaves your machine.
+  </p>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var exp = document.getElementById('exposure');
+  var film = document.getElementById('film');
+  var ex = exp.getContext('2d');
+  var fx = film.getContext('2d');
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var tEl = document.getElementById('t');
+  var nEl = document.getElementById('n');
+  var lumEl = document.getElementById('lum');
+  var verdict = document.getElementById('verdict');
+
+  var frames = 0, start = 0, running = true, acc = 0;
+  var FPS = reduce ? 6 : 14;            // gentle: no strobing
+  var interval = 1000 / FPS;
+
+  // a small, deterministic-per-visit pseudo film: drifting luminous scenes
+  var scene = [];
+  function reshoot(){
+    frames = 0; start = 0; acc = 0;
+    ex.fillStyle = '#000'; ex.fillRect(0,0,exp.width,exp.height);
+    scene = [];
+    var count = 5 + Math.floor(Math.random()*4);
+    for(var i=0;i<count;i++){
+      scene.push({
+        x: Math.random(), y: Math.random(),
+        vx: (Math.random()-.5)*0.9, vy:(Math.random()-.5)*0.9,
+        r: 0.10 + Math.random()*0.22,
+        hue: 30 + Math.random()*30,          // warm projector light
+        light: 55 + Math.random()*30
+      });
+    }
+    running = true;
+    verdict.textContent = 'developing…';
+    verdict.style.color = 'var(--dim)';
+  }
+
+  // draw one raw frame of "the film" onto an opaque dark ground
+  function drawFilm(){
+    var w = film.width, h = film.height;
+    fx.fillStyle = '#0a0a0b';
+    fx.fillRect(0,0,w,h);
+    for(var i=0;i<scene.length;i++){
+      var s = scene[i];
+      // occasional cut: teleport a shape (chance)
+      if(Math.random() < 0.02){ s.x = Math.random(); s.y = Math.random(); }
+      s.x += s.vx*0.012; s.y += s.vy*0.012;
+      if(s.x<0||s.x>1) s.vx*=-1, s.x=Math.max(0,Math.min(1,s.x));
+      if(s.y<0||s.y>1) s.vy*=-1, s.y=Math.max(0,Math.min(1,s.y));
+      var cx = s.x*w, cy = s.y*h, rad = s.r*h;
+      var g = fx.createRadialGradient(cx,cy,0,cx,cy,rad);
+      g.addColorStop(0,'hsla('+s.hue+',35%,'+s.light+'%,0.95)');
+      g.addColorStop(1,'hsla('+s.hue+',35%,'+s.light+'%,0)');
+      fx.fillStyle = g;
+      fx.fillRect(0,0,w,h);
+    }
+  }
+
+  function tick(now){
+    if(!running){ requestAnimationFrame(tick); return; }
+    if(!start) start = now;
+    acc += interval; // step in fixed increments to keep exposure well-defined
+    if(now - lastPaint >= interval){
+      lastPaint = now;
+      drawFilm();
+      frames++;
+      // the exposure IS a running mean: blend the new frame at alpha 1/n
+      ex.globalAlpha = 1 / frames;
+      ex.drawImage(film, 0, 0, exp.width, exp.height);
+      ex.globalAlpha = 1;
+
+      // readouts
+      var secs = (now - start) / 1000;
+      tEl.textContent = secs.toFixed(1) + ' s';
+      nEl.textContent = frames.toLocaleString();
+      if(frames % 8 === 0) measure(secs);
+    }
+    requestAnimationFrame(tick);
+  }
+  var lastPaint = 0;
+
+  // sample the screen's uniformity: as it converges, variance -> 0
+  function measure(secs){
+    var d, s = 0, s2 = 0, cnt = 0;
+    try{ d = ex.getImageData(exp.width*0.2|0, exp.height*0.2|0,
+                             exp.width*0.6|0, exp.height*0.6|0).data; }
+    catch(e){ return; }
+    for(var i=0;i<d.length;i+=16){ // subsample luminance
+      var l = 0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];
+      s += l; s2 += l*l; cnt++;
+    }
+    var mean = s/cnt, sd = Math.sqrt(Math.max(0, s2/cnt - mean*mean));
+    lumEl.textContent = Math.round(mean/2.55) + '% · σ ' + sd.toFixed(1);
+    if(sd < 6 && secs > 4){
+      verdict.textContent = 'the whole film, at last, in a single glance: a blank.';
+      verdict.style.color = 'var(--ink)';
+    } else {
+      verdict.textContent = 'developing…';
+      verdict.style.color = 'var(--dim)';
+    }
+  }
+
+  document.getElementById('rewind').addEventListener('click', reshoot);
+
+  reshoot();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

@@ -1174,5 +1174,13 @@
     "source": "Sherrie Levine, After Walker Evans (1981); Marcel Duchamp / the readymade; Roland Barthes, The Death of the Author (1967)",
     "mechanism": "CSS quotes property with open-quote/close-quote generated content on <q>: locale-variant quotation marks, live in the render, absent from the DOM and dropped on copy.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-21-theaters-the-whole-film-at-once",
+    "title": "Theaters (The Whole Film at Once)",
+    "year": 2026,
+    "source": "Hiroshi Sugimoto, Theaters (1978– ); On Kawara, Today series; Marcel Duchamp, infrathin",
+    "mechanism": "Canvas running-mean accumulation: each film frame is composited at globalAlpha 1/n (the incremental average) via requestAnimationFrame, converging to a uniform field while getImageData reports the collapsing variance σ.",
+    "status": "pending"
   }
 ]

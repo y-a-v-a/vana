@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-08-21-theaters-the-whole-film-at-once",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 3,
+    "wit": 4
+  },
+  "weighted_total": 39,
+  "verdict": "strong",
+  "references_named": [
+    "Hiroshi Sugimoto, Theaters (1978– )",
+    "On Kawara, Today series",
+    "Marcel Duchamp, infrathin"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P8",
+    "P9"
+  ],
+  "rationale": "A precise, on-DNA translation of Sugimoto's open-shutter theaters into a live running-mean canvas. The mechanism (alpha 1/n compositing, rAF, getImageData variance readout) literally enacts the concept rather than illustrating it, so P1/G3 hold cleanly. The corner 'the film' inset preserves double-coding: a casual viewer sees a movie dissolve to white, a literate viewer reads Sugimoto's exposure paradox and the infrathin residue (σ that asymptotes but never fully closes). Ethics are stated and lived (CC BY 4.0, no network, no storage). Materially distinct from the catalogue — no prior work uses incremental-mean accumulation or stages a Sugimoto translation.",
+  "reservations": "The synthetic 'film' is just 5–8 drifting radial-gradient blobs on black, which is conceptually sufficient but visually thin; the punchline of 'a richer film dissolving' would land harder. The α=1/n integration also accumulates floating-point error over long sessions, so the asymptotic mean drifts slightly from the true mean — fine conceptually, worth a one-line note. The σ subsample stride of 16 is a sensible shortcut but the readout window (60% of frame, center) is undocumented.",
+  "revision_suggestion": "Replace the abstract blob-film with a more cinematic generative sequence (e.g., layered silhouettes, horizon, occasional title-card cuts) so the dissolution reads as a real movie flattening rather than a glow field. Document the sampling window and consider a second σ readout (corner vs. center) to make the 'the whole film at last in a single glance' verdict more demonstrably true.",
+  "jury_model": "minimax/minimax-m3"
+}
