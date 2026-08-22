@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panta Rhei (Read-Only)</title>
+<style>
+  :root{
+    --ink:#141210;
+    --ground:#f3efe6;
+    --red:#c8271d;
+    --line:#c9beac;
+  }
+  html,body{margin:0;height:100%}
+  body{
+    background:#e7e0d3;
+    color:var(--ink);
+    font:15px/1.5 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    display:flex;flex-direction:column;align-items:center;
+    padding:28px 18px 48px;box-sizing:border-box;min-height:100%;
+  }
+  h1{font-size:15px;font-weight:700;letter-spacing:.02em;margin:0 0 2px;text-align:center}
+  .sub{font-size:12px;color:#6a6152;margin:0 0 22px;text-align:center;max-width:52ch}
+  .frame{
+    background:var(--ground);
+    padding:14px;
+    box-shadow:0 1px 0 #fff inset,0 10px 30px rgba(20,18,16,.18);
+    border:1px solid #d8cfbe;
+  }
+  canvas{display:block;width:min(78vw,520px);height:min(78vw,520px);background:var(--ground)}
+  .readout{
+    width:min(78vw,520px);
+    margin:14px 0 0;
+    font-size:12px;color:#4a4438;
+    display:grid;grid-template-columns:auto 1fr;gap:2px 14px;
+  }
+  .readout b{font-weight:700}
+  .readout .num{font-variant-numeric:tabular-nums;color:var(--ink)}
+  .err{color:var(--red);word-break:break-word}
+  .bar{width:min(78vw,520px);margin:16px 0 0;display:flex;gap:10px;flex-wrap:wrap}
+  button{
+    font:inherit;font-size:13px;cursor:pointer;
+    background:var(--ink);color:#f3efe6;border:0;padding:9px 16px;
+  }
+  button:active{transform:translateY(1px)}
+  .shake{animation:sh .28s}
+  @keyframes sh{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+  .label{
+    width:min(78vw,520px);margin:26px 0 0;font-size:12px;color:#5c5445;line-height:1.7;
+  }
+  .label p{margin:0 0 10px}
+  .label .quote{color:var(--ink)}
+  .foot{margin-top:6px;font-size:11px;color:#8a8172;max-width:60ch;text-align:center}
+  .foot a{color:#8a8172}
+  @media (prefers-reduced-motion:reduce){.shake{animation:none}}
+</style>
+</head>
+<body>
+  <h1>PANTA RHEI (READ-ONLY)</h1>
+  <p class="sub">&ldquo;There is no art piece, only change.&rdquo; &mdash; then <code>Object.freeze()</code>.</p>
+
+  <div class="frame">
+    <canvas id="c" width="1040" height="1040" aria-label="A dynamic composition of lines of force that never moves."></canvas>
+  </div>
+
+  <div class="readout">
+    <b>engine (frames elapsed)</b><span class="num" id="frames">0</span>
+    <b>state.t (frozen)</b><span class="num" id="t">0</span>
+    <b>mutations refused</b><span class="num" id="refused">0</span>
+    <b>runtime says</b><span class="err" id="err">&mdash;</span>
+  </div>
+
+  <div class="bar">
+    <button id="change">CHANGE IT</button>
+  </div>
+
+  <div class="label">
+    <p><span class="quote">A JavaScript engine runs behind this picture at full speed, sixty times a second, trying to advance it. Every attempt to write a single value is rejected by the runtime. The counter above proves time is passing; the picture proves nothing is.</span></p>
+    <p>Marinetti's Futurism (1909) held that a roaring motor is more beautiful than any static marble &mdash; that art must move or die. Heraclitus said everything flows; Parmenides answered that change is illusion and only the unchanging One is real. Here the loop is Heraclitus, <code>Object.freeze</code> is Parmenides, and Parmenides wins on every frame. The maker's own motto, printed above, is declared <code>read-only</code> and then disobeyed by its own maxim.</p>
+    <p>The one change permitted is a reload: each visit mints a different composition from <code>Math.random</code>, freezes it solid, and lets the motor howl against it. Change survives only between works, never within one.</p>
+  </div>
+
+  <p class="foot">
+    <strong>Panta Rhei (Read-Only)</strong> &middot; y-a-v-a, 2026 &middot; after F.&nbsp;T.&nbsp;Marinetti &amp; the Futurist Manifesto (1909), Giacomo Balla's <em>lines of force</em>, Heraclitus &amp; Parmenides, and the y-a-v-a manifesto (&ldquo;only change&rdquo;).<br>
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>. Runs entirely in your browser: no cookies, no tracking, no network requests.
+  </p>
+
+<script>
+'use strict';
+(function(){
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  var R = Math.random;
+
+  // deep-freeze: the whole work becomes read-only, not just its surface.
+  function freeze(o){
+    if (o && typeof o === 'object' && !Object.isFrozen(o)){
+      Object.freeze(o);
+      for (var k in o){ if (Object.prototype.hasOwnProperty.call(o,k)) freeze(o[k]); }
+    }
+    return o;
+  }
+
+  // Per-visit composition: Balla-esque lines of force + a speeding wedge + one red spark.
+  function mint(){
+    var lines = [];
+    var ox = 0.12 + R()*0.2, oy = 0.72 + R()*0.16;   // a shared origin, low-left, like a takeoff
+    var base = -0.9 - R()*0.5;                         // fan angle, upward-right
+    var n = 9 + (R()*7|0);
+    for (var i=0;i<n;i++){
+      var a = base + (i/n)*(0.9+R()*0.5);
+      var len = 0.5 + R()*0.5;
+      lines.push({a:a, len:len, w:1 + R()*7, ox:ox, oy:oy});
+    }
+    var wedge = { x:0.2+R()*0.4, y:0.35+R()*0.3, s:0.16+R()*0.16, a:base+0.2 };
+    var spark = { x:0.55+R()*0.35, y:0.2+R()*0.4, r:0.03+R()*0.06 };
+    return { t:0, angle:0, lines:lines, wedge:wedge, spark:spark };
+  }
+
+  var state = freeze(mint());   // <-- the artwork is now immutable.
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#f3efe6';
+    ctx.fillRect(0,0,W,H);
+
+    // lines of force
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#141210';
+    var L = state.lines;
+    for (var i=0;i<L.length;i++){
+      var ln = L[i];
+      var x0 = ln.ox*W, y0 = ln.oy*H;
+      var x1 = x0 + Math.cos(ln.a)*ln.len*W;
+      var y1 = y0 + Math.sin(ln.a)*ln.len*H;
+      ctx.lineWidth = ln.w * (W/1040) * 2;
+      ctx.beginPath();
+      ctx.moveTo(x0,y0); ctx.lineTo(x1,y1); ctx.stroke();
+    }
+
+    // speeding wedge (a body caught mid-flight)
+    var wd = state.wedge, wx = wd.x*W, wy = wd.y*H, ws = wd.s*W;
+    ctx.save();
+    ctx.translate(wx,wy); ctx.rotate(wd.a);
+    ctx.fillStyle = '#141210';
+    ctx.beginPath();
+    ctx.moveTo(0,0); ctx.lineTo(-ws*1.6,-ws*0.42); ctx.lineTo(-ws*1.6,ws*0.42);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+
+    // the red spark: Marinetti's roaring engine, stalled
+    var sp = state.spark;
+    ctx.fillStyle = '#c8271d';
+    ctx.beginPath();
+    ctx.arc(sp.x*W, sp.y*H, sp.r*W, 0, Math.PI*2);
+    ctx.fill();
+  }
+  draw();
+
+  var framesEl = document.getElementById('frames');
+  var tEl = document.getElementById('t');
+  var refusedEl = document.getElementById('refused');
+  var errEl = document.getElementById('err');
+  var frames = 0, refused = 0;
+
+  function tryChange(now){
+    // The engine WANTS to move the picture. The runtime forbids it.
+    try {
+      state.t = now;          // assigning to a frozen property throws in strict mode
+      state.angle += 0.01;    // never reached
+    } catch (e) {
+      refused++;
+      errEl.textContent = e.message || String(e);
+      return false;
+    }
+    return true;
+  }
+
+  function loop(now){
+    frames++;
+    tryChange(now);           // fails, every single frame
+    draw();                   // redraws the frozen state: identical pixels forever
+    framesEl.textContent = frames.toLocaleString();
+    tEl.textContent = state.t;              // stays 0
+    refusedEl.textContent = refused.toLocaleString();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  // Give the viewer the same doomed agency.
+  var btn = document.getElementById('change');
+  btn.addEventListener('click', function(){
+    try {
+      state.angle = state.angle + Math.PI/6;   // "rotate the composition"
+      state.spark.r = 0.2;                      // "make the spark blaze"
+    } catch (e) {
+      errEl.textContent = e.message || String(e);
+      var frame = document.querySelector('.frame');
+      frame.classList.remove('shake');
+      void frame.offsetWidth;                   // reflow so the animation can retrigger
+      frame.classList.add('shake');
+    }
+  });
+})();
+</script>
+</body>
+</html>

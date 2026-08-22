@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-08-22-panta-rhei-read-only",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "F. T. Marinetti, Futurist Manifesto (1909)",
+    "Giacomo Balla, lines of force",
+    "Heraclitus (panta rhei)",
+    "Parmenides",
+    "y-a-v-a manifesto ('There is no art piece, only change')"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism is the argument: a recursive Object.freeze plus a strict-mode rAF loop whose per-frame mutation throws TypeErrors that are caught and displayed as the wall label. Concept and execution collapse cleanly (P1). The double-coding works — a casual viewer sees a frozen Balla-esque composition with a racing counter; a literate viewer reads the Heraclitus/Parmenides quarrel and the self-undermining of the y-a-v-a manifesto. Restraint is strong (P3): one frozen object, one loop, one caught error. The negation of P4 (live, not fixed) is a legitimate move that the motivation handles honestly. Tone is dry and cheerful-cynic, not edgy. CC BY-SA stated, no trackers, attribution present. Materially distinct from the catalogue: no prior work stages a runtime-enforced immutability against a live render loop, and the Futurist/Balla reference is new to the corpus.",
+  "reservations": "The Futurist/Balla visual vocabulary is somewhat generic — the 'lines of force' rendering is competent but not particularly striking, and the wedge/spark composition reads as a stock 'speed' diagram. The CHANGE IT button is a small flourish that doesn't add much; the work would be tighter without it. The Heraclitus/Parmenides framing, while apt, is a well-trodden philosophical pairing and the piece doesn't push it past the obvious.",
+  "revision_suggestion": "Consider letting the per-visit composition be more visually distinctive — vary the Balla vocabulary more aggressively (e.g., occasional Futurist typography fragments, or a Boccioni-esque figure) so the frozen image itself earns its keep rather than serving as a generic backdrop for the runtime gag. The CHANGE IT button could be cut or replaced with something that deepens the being/becoming argument rather than just repeating it.",
+  "jury_model": "minimax/minimax-m3"
+}
