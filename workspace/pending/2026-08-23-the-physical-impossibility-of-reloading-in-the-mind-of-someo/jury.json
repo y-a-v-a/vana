@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-23-the-physical-impossibility-of-reloading-in-the-mind-of-someo",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 5,
+    "nuance": 4,
+    "narrative": 5,
+    "craft": 4,
+    "wit": 5
+  },
+  "weighted_total": 46,
+  "verdict": "strong",
+  "references_named": [
+    "Damien Hirst, The Physical Impossibility of Death in the Mind of Someone Living (1991)",
+    "Damien Hirst, the 2006 replacement of the decomposed original shark",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The bfcache is genuinely the work's medium: the mechanism enacts preservation rather than illustrating it, and the reload path enacts the 2006 replacement scandal as a button. The Hirst détournement is precise, the wall label and SOLD dot carry the market critique, and the live readout honestly reports when the browser refuses to bfcache. Double-coding lands at both depths. Distinct from the catalogue: no prior work uses bfcache/freeze/resume as the literal preservation apparatus, and the Hirst reference is new to the corpus.",
+  "reservations": "The shark drawing is competent but slightly illustrative rather than fully enacted; the canvas animation is decorative ballast around the real argument (the bfcache). The 'Preserved for' counter is a wall-text flourish rather than a mechanism. Craft is solid but not the smallest possible build — a pure pageshow/freeze/resume demo with no canvas would arguably be more restrained (P3).",
+  "revision_suggestion": "Consider whether the shark itself is necessary, or whether the vitrine, label, and live state readout alone — with the bfcache as the only 'image' — would be more in the spirit of P3 minimal gesture. The canvas could be reduced to a single static silhouette whose only motion is the bob, making the suspension more legible.",
+  "jury_model": "minimax/minimax-m3"
+}

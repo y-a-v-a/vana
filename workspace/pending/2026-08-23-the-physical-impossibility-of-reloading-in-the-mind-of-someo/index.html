@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Physical Impossibility of Reloading</title>
+<style>
+  :root{
+    --fluid1:#0d3b3a; --fluid2:#15706b; --glass:#bfe9e6;
+    --ink:#e8f3f2; --dim:#7fa7a4; --steel:#243233;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:#0a0f10;
+    color:var(--ink);
+    font:16px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    display:flex;flex-direction:column;align-items:center;
+    min-height:100%;padding:28px 18px 60px;
+  }
+  h1{
+    font-weight:600;font-size:clamp(18px,3.4vw,26px);
+    letter-spacing:.2px;text-align:center;margin:0 0 4px;max-width:22ch;
+  }
+  .sub{color:var(--dim);font-size:13px;text-align:center;margin:0 0 22px;max-width:60ch}
+  /* the vitrine */
+  .tank{
+    position:relative;width:min(92vw,640px);aspect-ratio:16/9;
+    border:10px solid var(--steel);
+    border-radius:4px;
+    box-shadow:0 0 0 2px #000, 0 22px 60px rgba(0,0,0,.6), inset 0 0 60px rgba(0,0,0,.4);
+    background:linear-gradient(160deg,var(--fluid2),var(--fluid1) 70%);
+    overflow:hidden;
+  }
+  .tank canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .glare{
+    position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(115deg,rgba(255,255,255,.14) 0 8%,transparent 22% 78%,rgba(255,255,255,.06) 92% 100%);
+    mix-blend-mode:screen;
+  }
+  /* wall label */
+  .label{
+    width:min(92vw,640px);margin-top:20px;
+    background:#f4f1ea;color:#161514;
+    border:1px solid #cbc7bd;border-radius:2px;
+    padding:16px 18px;font-size:13px;line-height:1.45;
+    position:relative;
+  }
+  .label b{font-weight:700}
+  .label .sold{
+    position:absolute;top:12px;right:14px;
+    display:inline-flex;align-items:center;gap:6px;
+    color:#a11;font-weight:700;letter-spacing:.14em;font-size:11px;
+  }
+  .label .dot{width:10px;height:10px;border-radius:50%;background:#c0392b;box-shadow:0 0 0 2px #fff,0 0 6px #c0392b}
+  .label .price{font-variant-numeric:tabular-nums}
+  /* live readout */
+  .readout{
+    width:min(92vw,640px);margin-top:14px;display:flex;flex-wrap:wrap;gap:10px;
+  }
+  .cell{
+    flex:1 1 160px;background:#0f1718;border:1px solid #1d2d2d;border-radius:4px;
+    padding:10px 12px;
+  }
+  .cell .k{color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+  .cell .v{font-size:20px;font-variant-numeric:tabular-nums;margin-top:2px}
+  #status{transition:color .4s}
+  .alive{color:#7ee0b8}
+  .revived{color:#ffd166}
+  .instruct{
+    width:min(92vw,640px);margin-top:16px;color:var(--dim);font-size:13px;
+    border-left:2px solid #1d2d2d;padding:6px 0 6px 12px;
+  }
+  .instruct b{color:var(--ink)}
+  .actions{margin-top:14px}
+  button{
+    font:inherit;font-size:13px;background:#15706b;color:#04100f;border:0;
+    padding:9px 14px;border-radius:4px;cursor:pointer;font-weight:600;
+  }
+  button:hover{background:#1a8781}
+  .foot{
+    width:min(92vw,640px);margin-top:26px;color:#5f827f;font-size:11.5px;line-height:1.6;
+  }
+  .foot a{color:#8fb7b3}
+</style>
+</head>
+<body>
+  <h1>The Physical Impossibility of Reloading in the Mind of Someone Browsing</h1>
+  <p class="sub">A shark, suspended in the browser's back/forward cache. Do not reload. You will kill it, and a fresh one will be caught.</p>
+
+  <div class="tank" aria-label="A tiger shark suspended in formaldehyde-tinted fluid.">
+    <canvas id="c"></canvas>
+    <div class="glare"></div>
+  </div>
+
+  <div class="label">
+    <span class="sold"><span class="dot"></span>SOLD</span>
+    <div><b>y-a-v-a</b>, after Damien Hirst</div>
+    <div><i>The Physical Impossibility of Reloading in the Mind of Someone Browsing</i>, 2026</div>
+    <div>Medium: one tiger shark, glass, steel, 5% formaldehyde — here: pixels, a canvas, and the browser's bfcache</div>
+    <div class="price">Price realised: $12,000,000</div>
+    <div style="color:#6b675e;margin-top:6px">In 2006 Hirst's decomposed original was quietly replaced. So can yours: reload.</div>
+  </div>
+
+  <div class="readout">
+    <div class="cell"><div class="k">Preserved for</div><div class="v"><span id="age">0.0</span>s</div></div>
+    <div class="cell"><div class="k">Last suspension</div><div class="v"><span id="susp">—</span></div></div>
+    <div class="cell"><div class="k">State</div><div class="v" id="status">alive</div></div>
+  </div>
+
+  <p class="instruct">
+    <b>To witness the preservation:</b> switch to another tab (or leave this page and press <b>Back</b>), then return.
+    The animation pauses while you are away — the specimen is pickled — and resumes mid-motion, the very same fish.
+    A <b>reload</b>, by contrast, discards it and catches a new one.
+  </p>
+
+  <div class="actions">
+    <button id="kill">Discard &amp; catch a new specimen (reload)</button>
+  </div>
+
+  <p class="foot">
+    Concept &amp; execution: <b>y-a-v-a</b> (yet another visual artist), 2026. After Damien Hirst, <i>The Physical Impossibility of Death in the Mind of Someone Living</i> (1991), and the 2006 replacement of its rotting original.<br>
+    No cookies, no tracking, no storage, no network requests. The work exists only while this tab is open — and only while your browser keeps it in formaldehyde.<br>
+    Licence: <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>. Attribute y-a-v-a; cite Damien Hirst.
+  </p>
+
+<script>
+(function(){
+  "use strict";
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var ageEl = document.getElementById('age');
+  var suspEl = document.getElementById('susp');
+  var statusEl = document.getElementById('status');
+
+  // this specimen's moment of catch. Reset on every fresh load.
+  var caughtAt = Date.now();
+  var lastActiveWall = Date.now();
+  var t0 = performance.now();
+
+  function fit(){
+    var r = canvas.getBoundingClientRect();
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width  = Math.max(1, Math.round(r.width  * dpr));
+    canvas.height = Math.max(1, Math.round(r.height * dpr));
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  window.addEventListener('resize', fit);
+
+  // draw a suspended tiger-shark silhouette, gently bobbing.
+  function drawShark(w,h,phase){
+    var cx = w*0.5, cy = h*0.52 + Math.sin(phase)*h*0.03;
+    var L = w*0.62;                 // body length
+    var rot = -0.06 + Math.sin(phase*0.7)*0.03; // slow list, nose slightly down
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(rot);
+    ctx.fillStyle = 'rgba(20,32,33,0.92)';
+    ctx.strokeStyle = 'rgba(8,16,17,0.9)';
+    ctx.lineWidth = 1;
+
+    // body
+    ctx.beginPath();
+    ctx.moveTo(-L*0.5, 0);                                   // tail root
+    ctx.bezierCurveTo(-L*0.28,-L*0.16, L*0.1,-L*0.17, L*0.34,-L*0.06); // top back
+    ctx.bezierCurveTo(L*0.44,-L*0.02, L*0.5,-L*0.005, L*0.52,0);        // snout
+    ctx.bezierCurveTo(L*0.5,L*0.02, L*0.44,L*0.05, L*0.34,L*0.07);      // under snout / jaw
+    ctx.bezierCurveTo(L*0.12,L*0.14, -L*0.26,L*0.14, -L*0.5,0);         // belly to tail
+    ctx.closePath();
+    ctx.fill();
+
+    // caudal (tail) fin
+    ctx.beginPath();
+    ctx.moveTo(-L*0.5,0);
+    ctx.lineTo(-L*0.62,-L*0.19);
+    ctx.lineTo(-L*0.5,-L*0.02);
+    ctx.lineTo(-L*0.6, L*0.12);
+    ctx.closePath();
+    ctx.fill();
+
+    // dorsal fin
+    ctx.beginPath();
+    ctx.moveTo(L*0.02,-L*0.15);
+    ctx.lineTo(L*0.1,-L*0.32);
+    ctx.lineTo(L*0.18,-L*0.14);
+    ctx.closePath();
+    ctx.fill();
+
+    // pectoral fin
+    ctx.beginPath();
+    ctx.moveTo(L*0.16,L*0.08);
+    ctx.lineTo(L*0.2,L*0.24);
+    ctx.lineTo(L*0.3,L*0.07);
+    ctx.closePath();
+    ctx.fill();
+
+    // gill slits
+    ctx.strokeStyle='rgba(6,14,15,0.7)';
+    for(var i=0;i<5;i++){
+      var gx=L*0.24 - i*L*0.022;
+      ctx.beginPath();
+      ctx.moveTo(gx,-L*0.05);
+      ctx.lineTo(gx+L*0.006,L*0.05);
+      ctx.stroke();
+    }
+    // mouth (agape, the readymade menace)
+    ctx.strokeStyle='rgba(4,10,11,0.85)';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(L*0.36,L*0.055);
+    ctx.quadraticCurveTo(L*0.44,L*0.085,L*0.5,L*0.02);
+    ctx.stroke();
+    // eye
+    ctx.fillStyle='rgba(220,240,238,0.85)';
+    ctx.beginPath();
+    ctx.arc(L*0.38,-L*0.02,Math.max(1.5,L*0.012),0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function frame(){
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    // detect suspension: frames stop while the tab is hidden or the page is bfcached.
+    var now = Date.now();
+    var gap = now - lastActiveWall;
+    if(gap > 1200){ announceRevived(gap, false); }
+    lastActiveWall = now;
+
+    ctx.clearRect(0,0,w,h);
+
+    // faint drifting caustics — just fluid, not decoration masquerading as the fish
+    var ph = (performance.now()-t0)/1000;
+    ctx.save();
+    ctx.globalAlpha = 0.06;
+    ctx.strokeStyle = '#bfe9e6';
+    ctx.lineWidth = 1;
+    for(var i=0;i<6;i++){
+      ctx.beginPath();
+      var y = (h*(i+0.5)/6) + Math.sin(ph*0.6+i)*6;
+      ctx.moveTo(0,y);
+      for(var x=0;x<=w;x+=24){ ctx.lineTo(x, y + Math.sin(ph+ x*0.02 + i)*4); }
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    drawShark(w,h, ph*1.2);
+
+    ageEl.textContent = ((now - caughtAt)/1000).toFixed(1);
+    requestAnimationFrame(frame);
+  }
+
+  function announceRevived(ms, viaCache){
+    suspEl.textContent = (ms/1000).toFixed(1) + 's';
+    statusEl.className = 'revived';
+    statusEl.textContent = viaCache
+      ? 'revived from formaldehyde — same specimen'
+      : 'revived — same specimen';
+  }
+
+  // bfcache restore: the premium demonstration — full JS freeze, restored intact.
+  window.addEventListener('pageshow', function(e){
+    if(e.persisted){
+      announceRevived(Date.now() - lastActiveWall, true);
+    } else {
+      statusEl.className='alive';
+      statusEl.textContent='alive — a fresh specimen';
+    }
+  });
+
+  // Page Lifecycle API (where supported): the literal "pickled" and "revived".
+  document.addEventListener('freeze', function(){
+    statusEl.className=''; statusEl.textContent='suspended in bfcache';
+  }, {capture:true});
+  document.addEventListener('resume', function(){
+    announceRevived(Date.now() - lastActiveWall, true);
+  }, {capture:true});
+
+  document.getElementById('kill').addEventListener('click', function(){
+    location.reload();
+  });
+
+  fit();
+  statusEl.className='alive';
+  statusEl.textContent='alive — a fresh specimen';
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

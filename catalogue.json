@@ -1190,5 +1190,13 @@
     "source": "F. T. Marinetti, Futurist Manifesto (1909); Giacomo Balla, lines of force; Heraclitus (panta rhei) and Parmenides (being vs becoming); y-a-v-a manifesto ('There is no art piece, only change')",
     "mechanism": "Deep Object.freeze plus a strict-mode requestAnimationFrame loop whose per-frame mutation attempts throw TypeErrors, caught and displayed live while a frame counter proves time passes and the pixels do not.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-23-the-physical-impossibility-of-reloading-in-the-mind-of-someo",
+    "title": "The Physical Impossibility of Reloading in the Mind of Someone Browsing",
+    "year": 2026,
+    "source": "Damien Hirst, The Physical Impossibility of Death in the Mind of Someone Living (1991); Damien Hirst, the 2006 replacement of the decomposed original shark; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "bfcache + Page Lifecycle freeze/resume + pageshow.persisted pause and restore a live canvas render, framed as a formaldehyde vitrine; reload resets the specimen.",
+    "status": "pending"
   }
 ]
