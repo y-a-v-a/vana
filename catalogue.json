@@ -1198,5 +1198,13 @@
     "source": "Damien Hirst, The Physical Impossibility of Death in the Mind of Someone Living (1991); Damien Hirst, the 2006 replacement of the decomposed original shark; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "bfcache + Page Lifecycle freeze/resume + pageshow.persisted pause and restore a live canvas render, framed as a formaldehyde vitrine; reload resets the specimen.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-24-non-finito",
+    "title": "Non-finito",
+    "year": 2026,
+    "source": "Michelangelo Buonarroti, the Prigioni / non-finito (Atlas, Bearded, Awakening Slaves, c. 1520-34); the web 'read more' / line-clamp truncation pattern; y-a-v-a, Silencio (2026); y-a-v-a, La Disparition (2026)",
+    "mechanism": "CSS text-overflow:ellipsis + overflow:hidden truncates each line to the container width live on resize; the U+2026 glyph exists only in the render, absent from the DOM and from copy.",
+    "status": "pending"
   }
 ]

@@ -1,0 +1,41 @@
+{
+  "work_id": "2026-08-24-non-finito",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 37,
+  "verdict": "borderline",
+  "references_named": [
+    "Michelangelo Buonarroti, the Prigioni / non-finito (Atlas, Bearded, Awakening Slaves, c. 1520-34)",
+    "the web 'read more' / line-clamp truncation pattern",
+    "y-a-v-a, Silencio (2026)",
+    "y-a-v-a, La Disparition (2026)",
+    "y-a-v-a, Indivisible (2026)",
+    "y-a-v-a, Scrittura Speculare (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "All six gates pass. The mechanism (CSS text-overflow:ellipsis + nowrap + overflow:hidden) is materially distinct from the catalogued source-vs-render works (Silencio uses white-space, La Disparition uses beforeinput, Indivisible uses hyphens:auto, Scrittura Speculare uses scaleX(-1)) and the reference (Michelangelo's non-finito) is fresh. The truncation literally enacts the carving (P1) — the layout engine's job IS deciding how much text a box may reveal, and the U+2026 glyph lives only in the render, invisible to textContent and dropped on copy, which is a precise and web-specific observation. The self-referential sentences get cut by the very mechanism they describe, a clean P7/P9 double-coding move. Restraint is strong (P3): six lines, one CSS property doing the sculpting, a single rAF-bound resize handler.",
+  "reservations": "The source-vs-render family in the catalogue is now five works deep (Silencio, La Disparition, Indivisible, Scrittura Speculare, Non-finito); the argument risks becoming a local tic. Novelty is the weakest axis because the broader gesture is already established, even though this specific mechanism and reference are new. The 'marble' gradient background is mildly illustrative — a risk of drifting toward decoration, though it is restrained enough to pass.",
+  "revision_suggestion": "If the source-vs-render family needs pruning in the catalogue, this work could be reframed to put equal weight on the Michelangelo / 'always inside the stone' argument and less on the source-vs-render meta-point, so it reads as the non-finito thesis first and as a sibling to Silencio second.",
+  "jury_model": "minimax/minimax-m3"
+}

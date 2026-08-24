@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Non-finito</title>
+<style>
+  :root{
+    --stone:#dcd7cc;
+    --stone-dk:#c3bcaf;
+    --vein:#b7ae9e;
+    --carved:#4a453c;
+    --ink:#2a2721;
+    --whisper:#8b8373;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:#1c1a16;
+    color:var(--ink);
+    font-family:Georgia,"Times New Roman",serif;
+    line-height:1.5;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:4vh 4vw;
+    gap:22px;
+  }
+  header{max-width:70ch;width:100%;text-align:center;color:var(--stone)}
+  h1{font-size:clamp(2rem,7vw,3.4rem);margin:0;letter-spacing:.02em;font-weight:400;font-style:italic}
+  header p{margin:.4em 0 0;color:var(--whisper);font-size:.95rem}
+
+  /* the block of marble */
+  .marble{
+    width:100%;
+    max-width:70ch;
+    background:
+      linear-gradient(115deg,transparent 0 38%,var(--vein) 38.2% 38.6%,transparent 38.8% 62%,var(--vein) 62.2% 62.5%,transparent 62.7%),
+      linear-gradient(160deg,var(--stone) 0%,var(--stone-dk) 100%);
+    background-blend-mode:soft-light,normal;
+    border-radius:3px;
+    padding:26px 28px;
+    box-shadow:0 1px 0 #efeae0 inset,0 -2px 8px rgba(0,0,0,.25) inset,0 14px 40px rgba(0,0,0,.5);
+  }
+
+  /* each Prisoner: a full sentence that the layout engine
+     is allowed to release only as far as the marble is wide */
+  .figure{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    font-size:clamp(1rem,2.6vw,1.35rem);
+    color:var(--carved);
+    text-shadow:0 1px 0 #efeae0, 0 -1px 0 rgba(0,0,0,.12);
+    padding:7px 0;
+    border-bottom:1px solid rgba(0,0,0,.06);
+    cursor:text;
+  }
+  .figure:last-child{border-bottom:none}
+  .figure.free{color:var(--ink)}
+  .figure::selection,.figure ::selection{background:#b7ae9e;color:#1c1a16}
+
+  .readout{
+    max-width:70ch;width:100%;
+    color:var(--whisper);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.82rem;
+    line-height:1.7;
+    text-align:center;
+  }
+  .readout b{color:var(--stone);font-weight:600}
+
+  .label{
+    max-width:70ch;width:100%;
+    color:var(--whisper);
+    font-size:.82rem;
+    line-height:1.6;
+    border-top:1px solid #2f2b24;
+    padding-top:16px;
+    text-align:center;
+  }
+  .label .t{color:var(--stone);font-style:italic}
+  a{color:var(--whisper)}
+  @media (prefers-reduced-motion:no-preference){
+    .figure{transition:color .5s ease}
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Non-finito</h1>
+    <p>after Michelangelo's <span style="font-style:italic">Prigioni</span> — figures the sculptor left inside the stone</p>
+  </header>
+
+  <main class="marble" id="marble" aria-label="A block of marble containing six unfinished figures">
+    <p class="figure">The figure was always inside the stone; the sculptor removes only what was never the figure, and leaves the rest.</p>
+    <p class="figure">Every statement about art is a block the reader is asked to finish, because the machine releases exactly as much as fits.</p>
+    <p class="figure">Non-finito is not a failure of the hand but a wager that the work is most alive at the instant it decides to stop.</p>
+    <p class="figure">You are reading the width of your own screen, not my sentence, since the browser carved this line to the marble you brought.</p>
+    <p class="figure">The mark at the edge is the browser's chisel: it belongs to no author, appears in no source, and vanishes when you copy.</p>
+    <p class="figure">Widen the window and more of me emerges; narrow it and I return to the stone, half-born, awaiting a viewport that finishes.</p>
+  </main>
+
+  <p class="readout" id="readout">measuring the stone…</p>
+
+  <section class="label">
+    <p><span class="t">Non-finito</span> · pixels on screen · dimensions variable, set by your viewport · not for sale, not for finishing</p>
+    <p>The whole of every figure is present in the source and in your selection. Only the render is unfinished: the layout engine's
+       <code>text-overflow: ellipsis</code> inserts the “…” — a glyph in no author's DOM. Resize to re-carve. Select a line to free the trapped figure.</p>
+    <p>An answer to Michelangelo Buonarroti, <em>Atlas / the Bearded / Awakening Slave</em> (c. 1520–34, Accademia, Florence), and to the web's own “read more”.<br>
+       <span style="font-style:italic">y-a-v-a</span> — CC BY-SA 4.0. No cookies, no tracking, no network, nothing stored.</p>
+  </section>
+
+<script>
+(function(){
+  var figs = Array.prototype.slice.call(document.querySelectorAll('.figure'));
+  var out = document.getElementById('readout');
+
+  function carve(){
+    var freed = 0, trapped = 0, releasedChars = 0, totalChars = 0;
+    figs.forEach(function(el){
+      var full = el.textContent;
+      totalChars += full.length;
+      // a figure is "trapped" when the engine had to cut it to fit the marble
+      var cut = el.scrollWidth > el.clientWidth + 1;
+      el.classList.toggle('free', !cut);
+      if(cut){ trapped++; } else { freed++; releasedChars += full.length; }
+      // estimate glyphs the stone releases on this line (approx, by width ratio)
+      if(cut){
+        var ratio = el.clientWidth / el.scrollWidth;
+        releasedChars += Math.max(0, Math.floor(full.length * ratio) - 1); // -1 for the chisel-mark
+      }
+    });
+    out.innerHTML =
+      '<b>' + freed + '</b> of ' + figs.length + ' figures fully emerged · ' +
+      '<b>' + trapped + '</b> still in the stone · ' +
+      '≈<b>' + releasedChars + '</b> of ' + totalChars + ' letters released · ' +
+      'the “…” belongs to none of them.';
+  }
+
+  carve();
+  var raf;
+  addEventListener('resize', function(){
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(carve);
+  }, {passive:true});
+})();
+</script>
+</body>
+</html>
