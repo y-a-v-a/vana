@@ -1206,5 +1206,13 @@
     "source": "Michelangelo Buonarroti, the Prigioni / non-finito (Atlas, Bearded, Awakening Slaves, c. 1520-34); the web 'read more' / line-clamp truncation pattern; y-a-v-a, Silencio (2026); y-a-v-a, La Disparition (2026)",
     "mechanism": "CSS text-overflow:ellipsis + overflow:hidden truncates each line to the container width live on resize; the U+2026 glyph exists only in the render, absent from the DOM and from copy.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-25-all-rights-reserved",
+    "title": "All Rights Reserved",
+    "year": 2026,
+    "source": "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); net.art / the Web 1.0 'no right-click' image-protection script; Olia Lialina & Dragan Espenschied, One Terabyte of Kilobyte Age; Marcel Duchamp / the readymade",
+    "mechanism": "contextmenu preventDefault() is a real, functioning lock that blocks only the browser menu; a live ledger counts intercepted right-clicks while Reproductions-prevented stays frozen at 0.",
+    "status": "pending"
   }
 ]

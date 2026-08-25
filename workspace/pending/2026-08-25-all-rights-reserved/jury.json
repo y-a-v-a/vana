@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-08-25-all-rights-reserved",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 37,
+  "verdict": "borderline",
+  "references_named": [
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "net.art / the Web 1.0 'no right-click' image-protection script",
+    "Olia Lialina & Dragan Espenschied, One Terabyte of Kilobyte Age",
+    "Marcel Duchamp / the readymade"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism (contextmenu preventDefault) genuinely enacts the argument: a real lock that locks only a menu while the picture, source, and licence sit in plain view. The 'Reproductions prevented: 0' counter is a clean, deadpan double-coding device that lands the Benjamin point without wall text. Tone is dry and cheerful-cynic, ethics are honored (CC BY-SA stated, no storage/network), and the work is materially distinct from the catalogue — it answers The Original and Untitled (Copy) from a new angle but is not a duplicate. The found object (the Web 1.0 no-right-click script) is well-chosen and the restraint (one listener, no build) is exemplary.",
+  "reservations": "The novelty ceiling is modest: the 'futile DRM' gag is well-trodden internet territory, and the per-visit colour field is the thinnest possible 'live' gesture. The work leans heavily on Benjamin rather than staging a fresh art-historical argument of its own; the readymade lineage is invoked more than embodied. A slightly stronger found object or a second mechanism (e.g., the lock visibly failing in a more surprising way) would push it from good to strong.",
+  "revision_suggestion": "Consider giving the lock a second, more pointed failure mode — e.g., a key combo or long-press that visibly bypasses it with a flourish, or a live readout of how many bytes of the 'protected' work are already in the viewer's clipboard/cache — to deepen the Benjamin argument beyond the single counter and lift novelty.",
+  "jury_model": "minimax/minimax-m3"
+}

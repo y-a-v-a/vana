@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All Rights Reserved</title>
+<style>
+  :root { --ink:#111; --paper:#f4f2ec; --line:#c9c4b8; --alarm:#a11; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--paper); color: var(--ink);
+    font: 15px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    -webkit-font-smoothing: antialiased;
+    padding: 6vh 6vw; max-width: 760px; margin: 0 auto;
+  }
+  h1 { font-size: 1.5rem; letter-spacing: .02em; margin: 0 0 .2rem; }
+  .sub { color:#666; margin: 0 0 2rem; font-size: .8rem; }
+
+  /* The protected masterpiece */
+  figure { margin: 0 0 1.4rem; }
+  .work {
+    position: relative; height: 220px; border: 1px solid var(--line);
+    display: grid; place-items: center; overflow: hidden;
+    background: var(--field, #888);
+  }
+  .work small {
+    position:absolute; bottom:8px; right:10px;
+    color: rgba(0,0,0,.45); font-size:.7rem; letter-spacing:.03em;
+  }
+  figcaption { font-size:.78rem; color:#555; margin-top:.5rem; }
+
+  /* The (utterly real, utterly futile) protection notice */
+  #notice {
+    position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 140%);
+    background:#fff; color:var(--alarm); border:2px outset #ddd;
+    padding: 10px 16px; font-size:.82rem; max-width:90vw;
+    box-shadow: 3px 3px 0 rgba(0,0,0,.25);
+    transition: transform .25s ease;
+  }
+  #notice.show { transform: translate(-50%, 0); }
+  #notice b { text-transform: uppercase; letter-spacing:.05em; }
+
+  .ledger { border:1px solid var(--line); padding: 1rem 1.2rem; margin: 1.6rem 0; }
+  .ledger h2 { font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:#666; margin:0 0 .8rem; }
+  .row { display:flex; justify-content:space-between; gap:1rem; padding:.15rem 0; border-bottom:1px dotted var(--line); }
+  .row:last-child { border-bottom:0; }
+  .row .v { color: var(--alarm); }
+  .open .v { color:#0a0; }
+  .big { font-size:1.6rem; }
+
+  footer { font-size:.72rem; color:#777; line-height:1.6; margin-top:2.4rem; border-top:1px solid var(--line); padding-top:1rem; }
+  footer a { color:#555; }
+
+  @media (prefers-reduced-motion: reduce) { #notice { transition: none; } }
+</style>
+</head>
+<body>
+
+  <h1>All Rights Reserved</h1>
+  <p class="sub">Untitled (masterpiece) &middot; pixels on screen &middot; y&#8209;a&#8209;v&#8209;a</p>
+
+  <figure>
+    <div class="work" id="work">
+      <small id="mark"></small>
+    </div>
+    <figcaption>The artwork above is protected. Right-click has been disabled to prevent unauthorised reproduction.</figcaption>
+  </figure>
+
+  <div class="ledger">
+    <h2>Security ledger</h2>
+    <div class="row"><span>Right-clicks intercepted</span><span class="v big" id="count">0</span></div>
+    <div class="row"><span>Reproductions this prevented</span><span class="v" id="prevented">0</span></div>
+  </div>
+
+  <div class="ledger">
+    <h2>Ways you may still take this work &mdash; all permitted</h2>
+    <div class="row open"><span>View Source (the whole thing is right here)</span><span class="v" id="bytes">&mdash;</span></div>
+    <div class="row open"><span>Screenshot</span><span class="v">&#8734;</span></div>
+    <div class="row open"><span>Save Page As&hellip; (Ctrl / Cmd + S)</span><span class="v">&#8734;</span></div>
+    <div class="row open"><span>Select this text and copy it</span><span class="v">&#8734;</span></div>
+    <div class="row open"><span>Re-type it by hand</span><span class="v">&#8734;</span></div>
+  </div>
+
+  <p class="sub">Protected: the menu. Unprotected: the picture, the source, the idea.</p>
+
+  <div id="notice" role="status" aria-live="polite">
+    <b>&#9888; Protected</b> &mdash; right-click has been disabled to protect the artwork.
+  </div>
+
+  <footer>
+    <p><strong>All Rights Reserved</strong> is released under
+       <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons&nbsp;BY&#8209;SA&nbsp;4.0</a>.
+       You are free to copy, share and remix it &mdash; the licence says so on the same page the title denies it.
+       The right-click lock is genuine and enforces nothing.</p>
+    <p>By <strong>y&#8209;a&#8209;v&#8209;a</strong>. After Walter Benjamin, <em>The Work of Art in the Age of Mechanical
+       Reproduction</em> (1935), and the Web&nbsp;1.0 &ldquo;no right-click&rdquo; image-protection script (see
+       Lialina &amp; Espenschied, <em>One Terabyte of Kilobyte Age</em>). A readymade after Duchamp.</p>
+    <p>No cookies, no trackers, no storage, no network. AI-generated, DNA-validated, confirmed by Vincent Bruijn.</p>
+  </footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // Per-visit "masterpiece": one deadpan colour field. Live, never the same twice.
+  var hue = Math.floor(Math.random() * 360);
+  var field = "hsl(" + hue + " 42% 55%)";
+  document.getElementById("work").style.setProperty("--field", field);
+  document.getElementById("mark").textContent = field;
+
+  // Honestly report how much of the "protected" work is sitting in plain view.
+  var bytes = document.documentElement.outerHTML.length;
+  document.getElementById("bytes").textContent = bytes.toLocaleString() + " chars, yours";
+
+  // The lock. It is real. It works. It protects nothing.
+  var count = 0;
+  var countEl = document.getElementById("count");
+  var notice = document.getElementById("notice");
+  var hideTimer = null;
+
+  document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();               // the entire security apparatus
+    count += 1;
+    countEl.textContent = count;      // "prevented" stays 0 forever, on purpose
+    notice.classList.add("show");
+    if (hideTimer) clearTimeout(hideTimer);
+    hideTimer = setTimeout(function () { notice.classList.remove("show"); }, 2200);
+  });
+})();
+</script>
+</body>
+</html>
