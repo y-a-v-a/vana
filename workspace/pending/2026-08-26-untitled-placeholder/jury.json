@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-26-untitled-placeholder",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 38,
+  "verdict": "strong",
+  "references_named": [
+    "Rirkrit Tiravanija, Untitled (Free) (1992)",
+    "Nicolas Bourriaud, Relational Aesthetics (1998)",
+    "Marcel Duchamp / the readymade",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The CSS ::placeholder pseudo-element is a strong, genuinely web-native material: present only in absence, unselectable, unauthored in the DOM, and restored by emptying the field. The mechanism enacts the argument cleanly (P1) — typing destroys the work, which inverts relational aesthetics with a cheerful-cynic punch and gives the casual viewer an immediate surface gag while offering the literate viewer a layered read on authorship, reproducibility, and the AI-prompt-box trope. Restraint is exemplary (P3): one textarea, one pseudo-element, a dozen lines of script, a status line that updates live. The mechanism is materially distinct from the catalogue's other input-relation pieces (La Disparition, I Am Still Alive, I Do Not Wish to Add Any More, The Death of the Author) — none use the placeholder's specific shown-only-when-empty contract.",
+  "reservations": "The narrative connection to the twenty-year argument is the weakest link: the work sits in the readymade/critique tradition but does not name a prior y-a-v-a work it answers, and the chance↔order axis is barely legible (per-visit accent hue is the only chance). The Benjamin 'aura restored' claim is a stretch — placeholder text being uncopyable is unhittable UI, not really aura; the argument works better as a riff on reproducibility than as a serious Benjamin inversion. Double-coding is uneven: the relational-aesthetics inversion surfaces immediately, but the authorship/aura layers require the motivation text.",
+  "revision_suggestion": "Anchor the work in the catalogue by explicitly naming a prior piece it answers (e.g., l-h-o-o-q.org's perpetual loading state, But is it art?'s one-word affirmation, or @_hashtag_god's totality-through-form) — this would sharpen narrative. Either strengthen the aura argument with a more precise Benjamin inversion (e.g., the placeholder is the 'infrathin' between hint and content) or let it go. A tiny bit more legible chance (a per-visit wording variant on the placeholder, or a randomized per-visit frame) would put the work more clearly on the chance/order axis.",
+  "jury_model": "minimax/minimax-m3"
+}

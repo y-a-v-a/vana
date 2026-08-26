@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Untitled (Placeholder)</title>
+<meta name="robots" content="index,follow">
+<style>
+  :root{
+    --ink:#141414;
+    --paper:#f7f6f2;
+    --ghost:#9a978e;
+    --accent:#8a8a8a;
+    --line:#dedbd2;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    display:flex;
+    flex-direction:column;
+    min-height:100%;
+  }
+  main{
+    flex:1 0 auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:1.1rem;
+    padding:6vh 5vw;
+  }
+  .frame{
+    width:min(680px,92vw);
+    border:1px solid var(--line);
+    background:#fff;
+    box-shadow:0 1px 0 rgba(0,0,0,.03), 0 18px 40px -34px rgba(0,0,0,.5);
+  }
+  textarea{
+    display:block;
+    width:100%;
+    min-height:min(46vh,340px);
+    resize:none;
+    border:0;
+    outline:0;
+    background:transparent;
+    padding:clamp(18px,4vw,34px);
+    color:var(--ink);
+    font:inherit;
+    font-size:clamp(16px,2.6vw,21px);
+    line-height:1.6;
+    caret-color:var(--accent);
+  }
+  /* The work lives here: present only in the absence of a value, uncopyable, unauthored. */
+  textarea::placeholder{color:var(--ghost);opacity:1;white-space:pre-line}
+  textarea::-webkit-input-placeholder{color:var(--ghost);opacity:1;white-space:pre-line}
+  textarea:-ms-input-placeholder{color:var(--ghost)}
+  .status{
+    font-size:.82rem;
+    letter-spacing:.02em;
+    color:var(--ghost);
+    min-height:1.2em;
+    text-align:center;
+  }
+  body.destroyed .status{color:var(--accent)}
+  body.destroyed .frame{border-color:var(--accent)}
+  footer{
+    flex-shrink:0;
+    border-top:1px solid var(--line);
+    padding:1.1rem 5vw 1.4rem;
+    color:#6d6a63;
+    font-size:.72rem;
+    line-height:1.5;
+  }
+  footer b{color:var(--ink);font-weight:600}
+  footer .cartel{max-width:680px;margin:0 auto}
+  footer a{color:inherit}
+</style>
+</head>
+<body>
+<main>
+  <div class="frame">
+    <textarea aria-label="The work" spellcheck="false" autocomplete="off" placeholder="This is the work.
+It is here only while you add nothing to it.
+Type anything and you replace it with your own.
+You cannot select or copy this text — it is not content, only an invitation.
+Empty the field and the work returns."></textarea>
+  </div>
+  <p class="status" aria-live="polite">The work is intact.</p>
+</main>
+
+<footer>
+  <div class="cartel">
+    <b>Untitled (Placeholder)</b>, y-a-v-a, 2026.
+    Pixels on screen; medium: the CSS <code>::placeholder</code> pseudo-element.
+    After Rirkrit Tiravanija, <i>Untitled (Free)</i> (1992) and Nicolas Bourriaud, <i>Relational Aesthetics</i> (1998);
+    the readymade after Marcel Duchamp. The invitation is the artwork; your participation deletes it.
+    <br>
+    Licence <b>CC BY-SA 4.0</b>. No cookies, no tracking, no storage — nothing you type ever leaves this page or survives a reload.
+  </div>
+</footer>
+
+<script>
+  // Per-visit accent, held in RAM only — no seed stored, no network.
+  document.documentElement.style.setProperty('--accent',
+    'hsl(' + Math.floor(Math.random()*360) + ' 62% 46%)');
+
+  var t = document.querySelector('textarea');
+  var s = document.querySelector('.status');
+  function update(){
+    var n = t.value.length;
+    document.body.classList.toggle('destroyed', n > 0);
+    s.textContent = n === 0
+      ? 'The work is intact.'
+      : 'You have replaced the work with ' + n + ' character' + (n === 1 ? '' : 's') + ' of your own.';
+  }
+  t.addEventListener('input', update);
+  update();
+</script>
+</body>
+</html>

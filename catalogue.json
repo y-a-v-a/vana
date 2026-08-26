@@ -1214,5 +1214,13 @@
     "source": "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); net.art / the Web 1.0 'no right-click' image-protection script; Olia Lialina & Dragan Espenschied, One Terabyte of Kilobyte Age; Marcel Duchamp / the readymade",
     "mechanism": "contextmenu preventDefault() is a real, functioning lock that blocks only the browser menu; a live ledger counts intercepted right-clicks while Reproductions-prevented stays frozen at 0.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-26-untitled-placeholder",
+    "title": "Untitled (Placeholder)",
+    "year": 2026,
+    "source": "Rirkrit Tiravanija, Untitled (Free) (1992); Nicolas Bourriaud, Relational Aesthetics (1998); Marcel Duchamp / the readymade; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "The CSS ::placeholder pseudo-element: text shown only in the absence of a value, uncopyable and unauthored in the DOM, erased on first input and restored when emptied.",
+    "status": "pending"
   }
 ]
