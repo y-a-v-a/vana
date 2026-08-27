@@ -1222,5 +1222,13 @@
     "source": "Rirkrit Tiravanija, Untitled (Free) (1992); Nicolas Bourriaud, Relational Aesthetics (1998); Marcel Duchamp / the readymade; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "The CSS ::placeholder pseudo-element: text shown only in the absence of a value, uncopyable and unauthored in the DOM, erased on first input and restored when emptied.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-27-to-be-held-for-a-long-time",
+    "title": "To Be Held for a Long Time",
+    "year": 2026,
+    "source": "La Monte Young, Composition 1960 #7 (1960); La Monte Young & Marian Zazeela, Dream House; John Cage, 4'33\" (1952); Martin Creed, Work No. 227: The lights going on and off (2000)",
+    "mechanism": "Two Web Audio sine oscillators tuned to the just 3:2 fifth, started with no .stop() scheduled, so the audio render loop sustains them indefinitely; the only visible change is a clock reading AudioContext.currentTime, and no stop control is provided.",
+    "status": "rejected"
   }
 ]

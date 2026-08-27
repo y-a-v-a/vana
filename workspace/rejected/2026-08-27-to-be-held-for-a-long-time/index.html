@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>To Be Held for a Long Time — y-a-v-a</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{
+    /* Dream House magenta — after Marian Zazeela's light environment */
+    --field:#3a0022;
+    --ink:#ffb3dd;
+    --faint:#a8557f;
+    --line:#c76ba0;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--field);
+    color:var(--ink);
+    font:16px/1.55 Georgia,"Times New Roman",serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:100dvh;
+    padding:6vh 6vw;
+    text-align:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  main{max-width:40rem}
+  h1{
+    font-weight:400;
+    font-size:clamp(1.4rem,4.5vw,2.1rem);
+    letter-spacing:.01em;
+    margin:0 0 .2em;
+  }
+  .attrib{color:var(--faint);font-style:italic;margin:0 0 2.2em;font-size:.95rem}
+  /* the score */
+  svg{width:min(20rem,80vw);height:auto;display:block;margin:0 auto 1.2em}
+  .instr{
+    font-style:italic;
+    color:var(--ink);
+    font-size:clamp(1rem,3vw,1.25rem);
+    margin:0 0 2em;
+  }
+  button{
+    font:inherit;
+    font-style:italic;
+    color:var(--field);
+    background:var(--ink);
+    border:0;
+    padding:.65em 1.6em;
+    border-radius:2em;
+    cursor:pointer;
+    letter-spacing:.02em;
+  }
+  button:hover{background:#fff}
+  button:disabled{display:none}
+  #stage{min-height:9.5em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9em}
+  #clock{
+    font-variant-numeric:tabular-nums;
+    font-size:clamp(2rem,10vw,3.4rem);
+    letter-spacing:.04em;
+    margin:0;
+    display:none;
+  }
+  #held{display:none;color:var(--faint);font-style:italic;max-width:30rem;margin:0 auto}
+  .note{color:var(--faint);font-size:.8rem;font-style:italic;margin-top:.4em}
+  footer{
+    margin-top:auto;
+    padding-top:3em;
+    color:var(--faint);
+    font-size:.72rem;
+    line-height:1.6;
+    font-family:ui-monospace,Menlo,Consolas,monospace;
+    font-style:normal;
+  }
+  footer a{color:var(--line)}
+</style>
+</head>
+<body>
+<main>
+  <h1>To Be Held for a Long Time</h1>
+  <p class="attrib">after La Monte Young, <span>Composition 1960 #7</span></p>
+
+  <!-- the score: two whole notes, a perfect fifth -->
+  <svg viewBox="0 0 260 110" role="img" aria-label="A musical staff bearing two whole notes, B and F sharp — a perfect fifth — with the instruction: to be held for a long time.">
+    <g stroke="var(--line)" stroke-width="1.4">
+      <line x1="20" y1="35" x2="240" y2="35"/>
+      <line x1="20" y1="47" x2="240" y2="47"/>
+      <line x1="20" y1="59" x2="240" y2="59"/>
+      <line x1="20" y1="71" x2="240" y2="71"/>
+      <line x1="20" y1="83" x2="240" y2="83"/>
+    </g>
+    <!-- B (middle line) and F#, a fifth above -->
+    <ellipse cx="120" cy="59" rx="9" ry="6.5" fill="none" stroke="var(--ink)" stroke-width="2.2"/>
+    <ellipse cx="168" cy="41" rx="9" ry="6.5" fill="none" stroke="var(--ink)" stroke-width="2.2"/>
+    <text x="112" y="103" fill="var(--faint)" font-family="Georgia,serif" font-style="italic" font-size="12">B</text>
+    <text x="160" y="103" fill="var(--faint)" font-family="Georgia,serif" font-style="italic" font-size="12">F&#9839; &#183; 3:2</text>
+  </svg>
+
+  <p class="instr">&ldquo;to be held for a long time&rdquo;</p>
+
+  <div id="stage">
+    <button id="begin" type="button">begin the performance</button>
+    <p id="clock" aria-live="off">0:00</p>
+    <p id="held">
+      A just perfect fifth &mdash; the fifth tuned to the exact ratio 3:2, so the
+      two sine tones beat against nothing. It does not fade and there is no stop:
+      the score gives none. Silence it by leaving the room &mdash; close or mute
+      the tab. Nothing is stored; the next performance begins again at zero.
+    </p>
+  </div>
+  <p class="note" id="hint">Sound. Begins only when you ask it to.</p>
+
+  <footer>
+    <div>y-a-v-a &mdash; <em>yet another visual artist</em>. Realised after La Monte Young,
+    <em>Composition 1960 #7</em> (1960), and the eternal-drone / light environment of
+    La Monte Young &amp; Marian Zazeela, <em>Dream House</em>.</div>
+    <div>Two oscillators, one gain, no server, no cookies, no storage, no network. The tone lives only in the audio render loop of your browser.</div>
+    <div>Licensed <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a>. Score &copy; the estate of the composer; this is a homage, not the work.</div>
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var begin = document.getElementById("begin");
+  var clock = document.getElementById("clock");
+  var held  = document.getElementById("held");
+  var hint  = document.getElementById("hint");
+
+  var ctx = null;
+  var started = false;
+
+  // B3 in equal temperament; the fifth is tuned to the JUST ratio 3:2.
+  var B = 246.9417;
+  var FIFTH = B * 3 / 2;   // 370.41... Hz — beatless against B
+
+  function two(sec){ return (sec < 10 ? "0" : "") + Math.floor(sec); }
+  function fmt(t){
+    var s = Math.floor(t);
+    var h = Math.floor(s/3600), m = Math.floor((s%3600)/60), ss = s%60;
+    return h > 0 ? (h + ":" + two(m) + ":" + two(ss)) : (m + ":" + two(ss));
+  }
+
+  function perform(){
+    if (started) return;
+    started = true;
+
+    var AC = window.AudioContext || window.webkitAudioContext;
+    ctx = new AC();
+    if (ctx.state === "suspended" && ctx.resume) ctx.resume();
+
+    var master = ctx.createGain();
+    var t0 = ctx.currentTime;
+    // a soft attack — the only envelope. There is no release.
+    master.gain.setValueAtTime(0.0001, t0);
+    master.gain.linearRampToValueAtTime(0.14, t0 + 3);
+    master.connect(ctx.destination);
+
+    [B, FIFTH].forEach(function(freq){
+      var osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, t0);
+      osc.connect(master);
+      osc.start();          // no osc.stop() is ever scheduled
+    });
+
+    begin.disabled = true;
+    hint.style.display = "none";
+    clock.style.display = "block";
+    held.style.display = "block";
+
+    // the audio clock is the only thing that changes — "only change"
+    setInterval(function(){
+      clock.textContent = fmt(ctx.currentTime);
+    }, 1000);
+  }
+
+  begin.addEventListener("click", perform);
+})();
+</script>
+</body>
+</html>

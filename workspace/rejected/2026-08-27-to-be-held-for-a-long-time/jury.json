@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-27-to-be-held-for-a-long-time",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": false
+  },
+  "scores": {
+    "novelty": 2,
+    "nuance": 3,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 2
+  },
+  "weighted_total": 27,
+  "verdict": "reject",
+  "references_named": [
+    "La Monte Young, Composition 1960 #7 (1960)",
+    "La Monte Young & Marian Zazeela, Dream House",
+    "John Cage, 4'33\" (1952)",
+    "Martin Creed, Work No. 227: The lights going on and off (2000)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism-as-argument is clean: two oscillators with no .stop() literally enact 'to be held for a long time,' and the deliberate withholding of a stop control is a real conceptual gesture. The just 3:2 fifth gives the literate viewer a precise reading the casual one misses, and the CC BY-NC license plus no-network/no-storage delivery satisfy the ethic. However, the work is materially too close to the existing catalogue: it is explicitly framed as the inverse of '4′33″ (We Do Not Listen)' (2026) and as a sibling to 'The webpage going on and off' (2023) — both already occupy the 'sound-as-duration / page-as-instruction' slot. The candidate does not add a new ontology or found-object; it re-stages an existing one with a different composer, which fails G6's demand for material distinctness in source, mechanism, or argument.",
+  "reservations": "G6 fails: the work is a deliberate counter-node to two existing catalogue entries (4′33″ and The webpage going on and off) and does not introduce a new mechanism, source, or argument beyond swapping La Monte Young for John Cage/Martin Creed. Novelty is correspondingly low — the 'held forever' gesture is a known move in this catalogue. The wit is also thin: the only surface gag is the missing stop button, which is more conceptual than funny.",
+  "revision_suggestion": "Find a genuinely new mechanism or found-object rather than mirroring existing catalogue entries. Possibilities: a sound work whose duration is governed by a browser fact no other work uses (e.g., battery level, network state, idle time, or a Web Audio parameter the catalogue has not touched); or a piece that stages Young's just intonation against a non-musical web primitive (e.g., a CSS color interpolation held in 3:2 ratio, or a canvas whose two channels beat against each other). The current piece needs a new location, not a new composer.",
+  "jury_model": "minimax/minimax-m3"
+}
