@@ -1,0 +1,41 @@
+{
+  "work_id": "2026-08-27-rivers",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 3
+  },
+  "weighted_total": 36,
+  "verdict": "borderline",
+  "references_named": [
+    "Johannes Gutenberg, 42-line Bible (c. 1455)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "Robert Bringhurst, The Elements of Typographic Style (1992)",
+    "y-a-v-a, Silencio (2026)",
+    "y-a-v-a, Non-finito (2026)",
+    "y-a-v-a, Indivisible (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism genuinely enacts the argument: the browser's invisible inter-word spacing is the labour, and the rivers are its visible by-product. Concept and execution collapse cleanly (P1), and the source-vs-render lineage (Silencio, Non-finito, Indivisible) is acknowledged and extended with a distinct mechanism — not collapse, not truncation, not hyphenation, but variable-space insertion. The chance/order axis is honestly staged via the justify/ragged toggle. Restraint is good (P3). The Gutenberg/Benjamin/Bringhurst frame is precise and the work answers a real prior piece in the catalogue.",
+  "reservations": "Novelty is moderate: the source-vs-render vein is now well-populated in the catalogue (Silencio, Non-finito, Indivisible, La Disparition, Scrittura Speculare), and 'rivers' as a phenomenon is a familiar typographic observation rather than a fresh found-object. The surface gag (pale channels) is gentle and may not land instantly for casual viewers without the wall text — the motivation is doing real work to make the rivers legible as the point. The 'reflows' counter is a small wit beat but the work overall is quieter than the catalogue's typical double-coded punch.",
+  "revision_suggestion": "Consider a more aggressive visual amplification of the rivers themselves — e.g., a hover/inspect mode that briefly highlights the inter-word gaps so the invisible labour becomes briefly visible, or a side-by-side diff between the DOM text and a measured render that exposes the inserted widths as a typographic receipt. This would sharpen the surface gag for casual viewers and push the work further along the P7 double-coding axis without breaking its restraint.",
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1230,5 +1230,13 @@
     "source": "La Monte Young, Composition 1960 #7 (1960); La Monte Young & Marian Zazeela, Dream House; John Cage, 4'33\" (1952); Martin Creed, Work No. 227: The lights going on and off (2000)",
     "mechanism": "Two Web Audio sine oscillators tuned to the just 3:2 fifth, started with no .stop() scheduled, so the audio render loop sustains them indefinitely; the only visible change is a clock reading AudioContext.currentTime, and no stop control is provided.",
     "status": "rejected"
+  },
+  {
+    "id": "2026-08-27-rivers",
+    "title": "Rivers",
+    "year": 2026,
+    "source": "Johannes Gutenberg, 42-line Bible (c. 1455); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Robert Bringhurst, The Elements of Typographic Style (1992) — 'rivers'; net.art source-vs-render tradition (y-a-v-a: Silencio, Non-finito, Indivisible)",
+    "mechanism": "CSS text-align:justify with hyphens:none — the layout engine inserts variable inter-word space (absent from the DOM, dropped on copy) and re-throws it live on every width change, producing chance 'rivers'.",
+    "status": "pending"
   }
 ]

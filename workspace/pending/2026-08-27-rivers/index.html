@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rivers</title>
+<style>
+  :root { --measure: 34ch; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: #f4f1ea;          /* the paper. the rivers are this colour showing through. */
+    color: #17150f;
+    font: 400 clamp(16px, 2.4vw, 20px)/1.62 Georgia, "Times New Roman", Times, serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6vh 5vw 3vh;
+  }
+  header { max-width: 60ch; text-align: center; margin-bottom: 2.2rem; }
+  h1 { font-size: 1.5rem; letter-spacing: .02em; margin: 0 0 .2rem; font-weight: 400; }
+  .sub { font-size: .8rem; color: #6a6252; font-style: italic; margin: 0; }
+
+  /* THE WORK: the block is set flush to both margins.
+     The browser buys those even margins by widening inter-word space —
+     never authored, never in the DOM, never copied. hyphens:none forces
+     it to stretch the spaces wider, so the rivers run deeper. */
+  .column {
+    width: var(--measure);
+    max-width: 100%;
+    text-align: justify;
+    text-justify: inter-word;
+    hyphens: none;
+    -webkit-hyphens: none;
+    word-spacing: normal;
+  }
+  .column.ragged { text-align: left; }   /* no invisible labour, no rivers */
+  .column p { margin: 0 0 1em; }
+  .column p:last-child { margin-bottom: 0; }
+  .drop { font-size: 1.05em; }
+
+  .panel {
+    margin-top: 2.4rem;
+    width: var(--measure);
+    max-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem 1.1rem;
+    align-items: center;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: .72rem;
+    color: #6a6252;
+    border-top: 1px solid #d8d1c2;
+    padding-top: 1rem;
+  }
+  .panel label { display: flex; align-items: center; gap: .5rem; flex: 1 1 14rem; }
+  input[type=range] { flex: 1; accent-color: #17150f; }
+  button {
+    font: inherit; color: #17150f; background: #f4f1ea;
+    border: 1px solid #17150f; padding: .35rem .7rem; cursor: pointer;
+  }
+  button:hover { background: #17150f; color: #f4f1ea; }
+  .read { white-space: nowrap; }
+  .read b { color: #17150f; font-weight: 400; }
+
+  footer {
+    margin-top: 3rem; max-width: 60ch; text-align: center;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: .66rem; line-height: 1.7; color: #8b8474;
+  }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Rivers</h1>
+    <p class="sub">after Johannes Gutenberg · text-align: justify</p>
+  </header>
+
+  <article class="column" id="col">
+    <p class="drop">This column is set flush to both margins. To square the right
+    edge your browser widens the spaces between the words — never the letters,
+    never the words themselves, only the air. It does this in silence, and it
+    does it again the instant the column changes width. The even block you are
+    reading is an accomplishment of the layout engine; the pale channels
+    drifting down through it are the invoice.</p>
+
+    <p>Typographers call those channels rivers and spend whole careers draining
+    them. They are not in the source. Select this paragraph and copy it: every
+    widened gap collapses back to one plain space, because not one of them was
+    ever really there. Drag the handle below and watch the rivers migrate,
+    silt up, dry out. Gutenberg squared his margins by hand — with abbreviations
+    and a drawer of special ligatures. You square yours by declaring two words
+    of style and letting the machine improvise the rest, differently, forever.</p>
+  </article>
+
+  <div class="panel">
+    <label>measure
+      <input type="range" id="w" min="16" max="82" value="34" step="1" aria-label="column width">
+    </label>
+    <button id="mode" type="button">set ragged (left)</button>
+    <span class="read">width <b id="px">–</b>px · reflows <b id="n">0</b></span>
+  </div>
+
+  <footer>
+    “There is no art piece, only change. The pixels are the message.”<br>
+    CC BY-SA 4.0 · y-a-v-a (yet another visual artist), 2026 ·
+    after Gutenberg’s 42-line Bible (c. 1455); rivers per Bringhurst;
+    reproduction per Walter Benjamin (1935).<br>
+    No cookies · no tracking · no web fonts · no network.
+  </footer>
+
+<script>
+  // The whitespace the browser inserts to justify is never stored, sent, or
+  // authored. This script only nudges the column's width and counts the
+  // re-justifications; the rivers are computed by the layout engine, not here.
+  var col = document.getElementById('col');
+  var w   = document.getElementById('w');
+  var px  = document.getElementById('px');
+  var nEl = document.getElementById('n');
+  var mode = document.getElementById('mode');
+  var n = 0;
+
+  function report() {
+    px.textContent = Math.round(col.getBoundingClientRect().width);
+    nEl.textContent = ++n;
+  }
+  function setWidth() {
+    document.documentElement.style.setProperty('--measure', w.value + 'ch');
+    report();
+  }
+  w.addEventListener('input', setWidth);
+  window.addEventListener('resize', report);
+  mode.addEventListener('click', function () {
+    var ragged = col.classList.toggle('ragged');
+    mode.textContent = ragged ? 'set justified (both)' : 'set ragged (left)';
+    report();
+  });
+  setWidth();
+</script>
+</body>
+</html>
