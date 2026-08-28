@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wrapped (Closed Shadow) — after Christo and Jeanne-Claude</title>
+<style>
+  :root{ color-scheme: light; }
+  html,body{ margin:0; background:#e9e6df; color:#1c1a16;
+    font:16px/1.5 Georgia, "Times New Roman", serif; }
+  main{ max-width:720px; margin:0 auto; padding:40px 22px 64px; }
+  header h1{ font-size:1.5rem; margin:0 0 .1em; letter-spacing:.01em; }
+  header p.by{ margin:.1em 0 1.6em; font-style:italic; color:#5b564d; }
+  .lede{ font-size:1.05rem; margin:0 0 1.8em; }
+
+  /* The host: this is the only handle the document has on the sealed work. */
+  wrapped-work{ display:block; max-width:100%; margin:0 auto; }
+
+  /* Proof of encapsulation: this rule targets everything *inside* the work
+     and will do NOTHING — the closed shadow boundary refuses it. */
+  wrapped-work *{ outline:4px dashed crimson !important; opacity:.15 !important; }
+
+  section.cartel{ margin:1.8em 0 0; padding:14px 16px; background:#f4f2ec;
+    border:1px solid #d7d2c6; font-family: "Courier New", monospace;
+    font-size:.82rem; line-height:1.55; }
+  section.cartel h2{ font:inherit; font-weight:bold; margin:0 0 .6em;
+    text-transform:uppercase; letter-spacing:.06em; }
+  section.cartel dl{ margin:0; display:grid; grid-template-columns:auto 1fr; gap:.15em .8em; }
+  section.cartel dt{ color:#6b665c; }
+  section.cartel dd{ margin:0; }
+  section.cartel dd b{ color:#8a1414; }
+
+  button{ font:inherit; font-family:"Courier New",monospace; font-size:.82rem;
+    margin-top:1em; padding:.55em 1em; background:#1c1a16; color:#e9e6df;
+    border:0; cursor:pointer; }
+  button:hover{ background:#3a352c; }
+
+  .note{ font-size:.8rem; color:#5b564d; margin-top:1.6em; font-style:italic; }
+  footer{ margin-top:2.4em; padding-top:1.2em; border-top:1px solid #d7d2c6;
+    font-size:.76rem; color:#5b564d; line-height:1.6; }
+  footer a{ color:inherit; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Wrapped <span style="font-weight:normal">(Closed Shadow)</span></h1>
+    <p class="by">after Christo and Jeanne-Claude, 1961&ndash;</p>
+  </header>
+
+  <p class="lede">The wrapping is the work. It is also the only part you are permitted to have.</p>
+
+  <!-- The whole piece lives behind a mode:'closed' shadow boundary.
+       You can see it. The page cannot reach it. -->
+  <wrapped-work></wrapped-work>
+
+  <section class="cartel">
+    <h2>Try to unwrap it</h2>
+    <dl id="probe">
+      <dt>document.querySelector('canvas')</dt><dd id="p-canvas">&hellip;</dd>
+      <dt>host.shadowRoot</dt><dd id="p-root">&hellip;</dd>
+      <dt>getComputedStyle(inner).fill</dt><dd id="p-style">&hellip;</dd>
+      <dt>elements the document can reach inside</dt><dd id="p-count">&hellip;</dd>
+      <dt>elements actually inside the fabric</dt><dd id="p-truth">&hellip;</dd>
+    </dl>
+    <button id="btn" type="button">Pull the fabric</button>
+    <p class="note" id="verdict"></p>
+  </section>
+
+  <p class="note">
+    A <code>mode:&#39;closed&#39;</code> shadow root seals this region from the page&#39;s own
+    JavaScript and CSS. The dashed-crimson rule above tries to gut everything inside it and
+    is quietly ignored. Only the browser itself &mdash; through its developer tools &mdash; may
+    still lift the cloth. Christo would have understood: the authorities always keep a key.
+  </p>
+
+  <footer>
+    <strong>Wrapped (Closed Shadow)</strong>, 2026. Pixels on screen; a closed Shadow DOM.
+    Wrapped monument after Christo and Jeanne-Claude
+    (<em>The Pont Neuf Wrapped</em>, 1985; <em>Wrapped Reichstag</em>, 1995;
+    <em>L&#39;Arc de Triomphe, Wrapped</em>, 2021). A digital readymade by
+    <strong>y-a-v-a</strong> (yet another visual artist).<br>
+    Licensed <strong>CC BY-NC 4.0</strong>. No cookies, no trackers, no storage;
+    nothing leaves your browser. The drape is re-cut by chance on every visit and kept
+    only in memory &mdash; like the real ones, it comes down and is never the same twice.
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---- The sealed work: a wrapped monument behind a CLOSED shadow root. ----
+  class WrappedWork extends HTMLElement {
+    constructor(){
+      super();
+      // mode:'closed' => this.shadowRoot stays null forever, for everyone.
+      var root = this.attachShadow({ mode: "closed" });
+
+      var style = document.createElement("style");
+      style.textContent =
+        ":host{display:block}" +
+        "canvas{display:block;width:100%;height:auto;background:#e9e6df}";
+      root.appendChild(style);
+
+      var c = document.createElement("canvas");
+      c.width = 640; c.height = 460;
+      root.appendChild(c);
+
+      drape(c.getContext("2d"), c.width, c.height);
+    }
+  }
+  customElements.define("wrapped-work", WrappedWork);
+
+  // ---- Draw a wrapped bulk: silvery fabric, cinched with blue rope. ----
+  function drape(g, W, H){
+    var R = Math.random;
+    // sky / plaza
+    var sky = g.createLinearGradient(0,0,0,H);
+    sky.addColorStop(0,"#cdd4da"); sky.addColorStop(1,"#eef0f1");
+    g.fillStyle = sky; g.fillRect(0,0,W,H);
+    g.fillStyle = "#c7c1b5"; g.fillRect(0,H-70,W,70);
+
+    var baseY = H-70, left = 120, right = W-120, peak = 110;
+
+    // silhouette of the draped mass (jittered folds along the top)
+    g.beginPath();
+    g.moveTo(left, baseY);
+    var pts = 9;
+    for (var i=0;i<=pts;i++){
+      var t = i/pts;
+      var x = left + t*(right-left);
+      var arch = Math.sin(t*Math.PI);                 // rounded mound
+      var y = baseY - arch*(H-baseY-peak) - (R()*26-13);
+      var cx = x - (right-left)/(pts*2);
+      g.quadraticCurveTo(cx, y+(R()*30-15), x, y);
+    }
+    g.lineTo(right, baseY);
+    g.closePath();
+
+    var fab = g.createLinearGradient(left,0,right,0);
+    fab.addColorStop(0,"#a9a396"); fab.addColorStop(.5,"#dcd7cb"); fab.addColorStop(1,"#b3ac9f");
+    g.fillStyle = fab; g.fill();
+    g.clip();  // keep folds & ropes on the fabric
+
+    // vertical folds (chance-placed)
+    for (var f=0; f<26; f++){
+      var fx = left + R()*(right-left);
+      g.beginPath();
+      g.moveTo(fx, peak + R()*60);
+      g.quadraticCurveTo(fx + (R()*40-20), (baseY+peak)/2, fx + (R()*30-15), baseY);
+      g.lineWidth = .5 + R()*2.2;
+      g.strokeStyle = R()<.5 ? "rgba(70,66,58,0.30)" : "rgba(255,255,255,0.30)";
+      g.stroke();
+    }
+
+    // three cinching ropes (Christo blue)
+    for (var r=0; r<3; r++){
+      var ry = baseY - (r+1)*((baseY-peak)/4);
+      g.beginPath();
+      g.moveTo(left, ry);
+      g.quadraticCurveTo(W/2, ry + 22, right, ry);
+      g.lineWidth = 5; g.strokeStyle = "#28477a"; g.stroke();
+      g.lineWidth = 1.6; g.strokeStyle = "rgba(160,190,235,0.8)"; g.stroke();
+    }
+  }
+
+  // ---- The inspection panel: prove the document cannot get in. ----
+  var host = document.querySelector("wrapped-work");
+  function fail(el){ el.innerHTML = el.textContent.replace(/^/, "") ; }
+
+  function probe(){
+    var canvas = document.querySelector("canvas");           // in shadow -> null
+    var root   = host.shadowRoot;                            // closed     -> null
+    var inner  = document.querySelectorAll("wrapped-work *"); // shadow hidden -> 0
+
+    set("p-canvas", canvas ? "found (!)" : "null", !canvas);
+    set("p-root",   root === null ? "null (sealed)" : "exposed (!)", root===null);
+    // outer CSS/JS cannot compute styles for something it cannot select:
+    set("p-style",  "unreachable", true);
+    set("p-count",  String(inner.length), inner.length === 0);
+    set("p-truth",  "the document cannot say. neither can this script.", true);
+
+    document.getElementById("verdict").textContent =
+      (!canvas && root===null && inner.length===0)
+        ? "The work is right there. Every attempt to open it returns nothing. The wrapping holds."
+        : "Encapsulation breached — your browser is unusually generous.";
+  }
+  function set(id, text, sealed){
+    var dd = document.getElementById(id);
+    dd.textContent = text;
+    if (!sealed){ dd.innerHTML = "<b>" + dd.textContent + "</b>"; }
+  }
+
+  document.getElementById("btn").addEventListener("click", probe);
+  probe();
+})();
+</script>
+</body>
+</html>

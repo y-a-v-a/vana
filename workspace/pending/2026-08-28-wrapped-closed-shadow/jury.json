@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-08-28-wrapped-closed-shadow",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 38,
+  "verdict": "strong",
+  "references_named": [
+    "Christo and Jeanne-Claude",
+    "The Pont Neuf Wrapped (1985)",
+    "Wrapped Reichstag (1995)",
+    "L'Arc de Triomphe, Wrapped (2021)",
+    "Marcel Duchamp / the readymade",
+    "net.art (Shadow DOM encapsulation as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The mechanism does the conceptual work cleanly: a mode:'closed' Shadow DOM is the wrapping, the rendered canvas is the form, and the probe panel that returns nulls is the demonstration that the page itself cannot unwrap its own work. The Christo reference is fresh in this catalogue and is well-staged — visibility-through-concealment maps precisely onto browser encapsulation, and the closing note that only the browser's own dev tools may lift the cloth is a clean cheerful-cynic punchline that double-codes the work (P7). Restraint is honored (P3): one custom element, one canvas, one probe, minimal markup. Per-visit chance drape keeps it on the order/chance axis (P4).",
+  "reservations": "Narrative is solid but not maximally dense: the work sits clearly in the readymade + web-as-material line yet does not name a specific y-a-v-a prior work it answers, and the chance/order axis is present but lightly drawn. The closed Shadow DOM, while a real web mechanism, is a relatively familiar platform feature to net.art audiences, which nudges novelty down from a 5. Visually the draped silhouette is competent but simple — sufficient for the argument, unremarkable as a picture.",
+  "revision_suggestion": "Consider adding one explicit cross-reference to a prior y-a-v-a work that the closed-shadow conceit answers (e.g., naming l-h-o-o-q.org's perpetual loading as the prior statement about web-as-revealing-mechanism, and this as its counter-statement about web-as-concealing). The fold/rope drawing could be lightly enhanced with a small chance-driven signature (a stitched serial number on the fabric, Christo-style) to make the per-visit chance operation legible on the surface itself, not only in the footer text.",
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1238,5 +1238,13 @@
     "source": "Johannes Gutenberg, 42-line Bible (c. 1455); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Robert Bringhurst, The Elements of Typographic Style (1992) — 'rivers'; net.art source-vs-render tradition (y-a-v-a: Silencio, Non-finito, Indivisible)",
     "mechanism": "CSS text-align:justify with hyphens:none — the layout engine inserts variable inter-word space (absent from the DOM, dropped on copy) and re-throws it live on every width change, producing chance 'rivers'.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-28-wrapped-closed-shadow",
+    "title": "Wrapped (Closed Shadow)",
+    "year": 2026,
+    "source": "Christo and Jeanne-Claude; The Pont Neuf Wrapped (1985); Wrapped Reichstag (1995); L'Arc de Triomphe, Wrapped (2021); Marcel Duchamp / the readymade; net.art (Shadow DOM encapsulation as material)",
+    "mechanism": "A custom element attaches a mode:'closed' Shadow DOM; the visible wrapped-monument canvas is sealed from the document — querySelector, getComputedStyle, light-DOM CSS and .shadowRoot all return nothing while the work stays rendered; only the browser's own dev tools may unwrap it.",
+    "status": "pending"
   }
 ]
