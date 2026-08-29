@@ -1,0 +1,40 @@
+{
+  "work_id": "2026-08-29-0-30000000000000004",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Duchamp, infra-mince / infrathin (c. 1935)",
+    "Mel Bochner, Measurement series (1968-69)",
+    "0.30000000000000004.com (Erik Wiffin)",
+    "IEEE 754 double-precision floating point (1985)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The mechanism IS the argument: IEEE 754 double-precision arithmetic cannot store 1/3, 1/7, or 1/10 exactly, and the residue of summing N parts back to the unit is produced by the computation rather than illustrated by it. The found object — 0.30000000000000004.com — is a genuinely web-native readymade, and the Duchamp infra-mince / Bochner Measurement lineage is invoked with precision. The chance/order axis is engaged via an inversion worth naming: pure deterministic order (no Math.random) manufactures apparent entropy, because which N yields a closing sum is unpredictable to the eye. Build is minimal, license and attribution are clean, voice is dry-cynic throughout.",
+  "reservations": "The mechanism is somewhat modest — a slider, a divided bar, and a four-row ledger — and the deeper argument (measurement, infra-mince) is well-trodden DNA territory already mapped by Infra-mince (Enforced), 3 Standard Stoppages, and Measurement: Viewport. P4 is satisfied weakly: the per-visit regeneration is trivial because the arithmetic is deterministic and identical in every conforming browser, so the 'live' aspect is closer to a calculator than to Maleglitch's infinite stream. The surface gag (\"computers can't add tenths\") is familiar to any developer, so P7's casual-viewer landing carries less surprise than the strongest works in the catalogue.",
+  "revision_suggestion": null,
+  "jury_model": "minimax/minimax-m3"
+}

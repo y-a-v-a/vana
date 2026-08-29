@@ -1246,5 +1246,13 @@
     "source": "Christo and Jeanne-Claude; The Pont Neuf Wrapped (1985); Wrapped Reichstag (1995); L'Arc de Triomphe, Wrapped (2021); Marcel Duchamp / the readymade; net.art (Shadow DOM encapsulation as material)",
     "mechanism": "A custom element attaches a mode:'closed' Shadow DOM; the visible wrapped-monument canvas is sealed from the document — querySelector, getComputedStyle, light-DOM CSS and .shadowRoot all return nothing while the work stays rendered; only the browser's own dev tools may unwrap it.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-29-0-30000000000000004",
+    "title": "0.30000000000000004",
+    "year": 2026,
+    "source": "Marcel Duchamp, infra-mince / infrathin (c. 1935); Mel Bochner, Measurement series (1968-69); 0.30000000000000004.com (Erik Wiffin); IEEE 754 double-precision floating point (1985)",
+    "mechanism": "Live IEEE 754 double-precision arithmetic sums 1/N N times client-side; the rounding residue (sum minus 1) is the artwork, sub-pixel on the bar but exact in the ledger.",
+    "status": "pending"
   }
 ]

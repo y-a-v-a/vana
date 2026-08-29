@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>0.30000000000000004</title>
+<style>
+  :root{
+    --paper:#f4f1ea;
+    --ink:#141414;
+    --faint:#8d857a;
+    --line:#141414;
+    --residue:#c11414;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink)}
+  body{
+    font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:clamp(20px,5vw,64px);
+    max-width:760px;margin:0 auto;
+  }
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
+  h1{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-weight:600;
+    font-size:clamp(22px,6vw,40px);
+    letter-spacing:-.01em;
+    margin:0 0 .1em;
+    word-break:break-all;
+  }
+  .sub{color:var(--faint);margin:0 0 2.4em;font-style:italic}
+  .epigraph{
+    border-left:2px solid var(--ink);
+    padding:.2em 0 .2em 1em;
+    margin:0 0 2.6em;
+  }
+  .epigraph .eq{font-size:clamp(15px,4vw,20px);word-break:break-all}
+  .epigraph .gloss{color:var(--faint);font-size:.9em;margin-top:.3em}
+  .false{color:var(--residue)}
+
+  section{margin:0 0 2.4em}
+  .ask{margin:0 0 1.1em}
+  .ask b{font-weight:600}
+  label{display:block;color:var(--faint);font-size:.85em;margin:0 0 .3em}
+  input[type=range]{width:100%;accent-color:var(--ink)}
+  .presets{display:flex;gap:.4em;margin:.7em 0 0;flex-wrap:wrap}
+  .presets button{
+    font:inherit;font-size:.85em;
+    background:transparent;border:1px solid var(--ink);color:var(--ink);
+    padding:.15em .7em;cursor:pointer;border-radius:0;
+  }
+  .presets button:hover{background:var(--ink);color:var(--paper)}
+
+  /* the whole, drawn as a measured bar */
+  .measure{margin:1.8em 0 .5em}
+  .bar{
+    display:flex;height:34px;border:1.5px solid var(--line);
+    background:transparent;
+  }
+  .bar span{flex:1 1 0;border-right:1px solid var(--line)}
+  .bar span:last-child{border-right:0}
+  .caliper{
+    display:flex;justify-content:space-between;
+    color:var(--faint);font-size:.78em;margin-top:.35em;
+  }
+
+  .ledger{
+    border-top:1px solid var(--ink);
+    margin-top:1.6em;
+  }
+  .row{
+    display:flex;justify-content:space-between;gap:1em;
+    padding:.55em 0;border-bottom:1px solid rgba(20,20,20,.14);
+  }
+  .row .k{color:var(--faint);flex:0 0 auto}
+  .row .v{text-align:right;word-break:break-all}
+  .verdict{font-weight:600}
+  .closes{color:var(--faint)}
+  .fails{color:var(--residue)}
+
+  .gap-note{
+    margin:1.4em 0 0;color:var(--faint);font-size:.9em;
+  }
+  .gap-note .residue{color:var(--residue)}
+
+  footer{
+    margin-top:3em;padding-top:1.2em;border-top:1px solid var(--ink);
+    color:var(--faint);font-size:.78em;line-height:1.7;
+  }
+  footer a{color:inherit}
+</style>
+</head>
+<body>
+
+  <h1 id="title">0.30000000000000004</h1>
+  <p class="sub">The machine was asked to divide the whole into equal parts and give it back.</p>
+
+  <div class="epigraph">
+    <div class="eq mono">0.1 + 0.2 = <span id="canon"></span></div>
+    <div class="gloss">and <span class="mono">(0.1 + 0.2)&nbsp;===&nbsp;0.3</span> is <span class="false mono" id="canon-eq"></span>. This is not a third.</div>
+  </div>
+
+  <section>
+    <p class="ask">Divide the whole (<span class="mono">1</span>) into <b class="mono" id="n-echo">3</b> equal parts and add them back.</p>
+    <label for="n">parts — drag</label>
+    <input type="range" id="n" min="2" max="144" value="3">
+    <div class="presets">
+      <button data-n="3">3</button>
+      <button data-n="7">7</button>
+      <button data-n="10">10</button>
+      <button data-n="49">49</button>
+      <button data-n="100">100</button>
+    </div>
+
+    <div class="measure">
+      <div class="bar" id="bar"></div>
+      <div class="caliper mono"><span>0</span><span>1 (asked)</span></div>
+    </div>
+
+    <div class="ledger mono">
+      <div class="row"><span class="k">one part, stored as</span><span class="v" id="part"></span></div>
+      <div class="row"><span class="k">the machine returns</span><span class="v" id="sum"></span></div>
+      <div class="row"><span class="k">residue (return &minus; 1)</span><span class="v" id="res"></span></div>
+      <div class="row"><span class="k">verdict</span><span class="v verdict" id="verdict"></span></div>
+    </div>
+
+    <p class="gap-note">
+      On the bar above, the gap measures <span class="residue mono" id="gap-px">0</span> px.
+      Your display rounds it to nothing. The number does not.
+    </p>
+  </section>
+
+  <footer>
+    <strong>0.30000000000000004</strong> — a whole that will not reassemble. Pixels on screen; IEEE&nbsp;754 double‑precision arithmetic.<br>
+    y‑a‑v‑a (Vincent Bruijn), 2026. After Marcel Duchamp, <em>infra‑mince</em> (c.&nbsp;1935); Mel Bochner, <em>Measurement</em> (1968–69); and the web‑native readymade <em>0.30000000000000004.com</em> (Erik Wiffin).<br>
+    Licensed <strong>CC&nbsp;BY‑SA&nbsp;4.0</strong>. No cookies, no trackers, no network — every digit computed on your own machine.
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // The canonical readymade: the machine's honest wrong answer.
+  var canon = 0.1 + 0.2;
+  document.getElementById("canon").textContent = canon.toString();
+  document.getElementById("canon-eq").textContent = (canon === 0.3) ? "true" : "false";
+
+  var nEl     = document.getElementById("n");
+  var nEcho   = document.getElementById("n-echo");
+  var bar     = document.getElementById("bar");
+  var partEl  = document.getElementById("part");
+  var sumEl   = document.getElementById("sum");
+  var resEl   = document.getElementById("res");
+  var verdict = document.getElementById("verdict");
+  var gapPx   = document.getElementById("gap-px");
+
+  var lastResidue = 0;
+
+  function fmt(x){
+    // shortest round-tripping decimal — the machine's own honest rendering
+    if (x === 0) return "0";
+    return x.toString();
+  }
+
+  function draw(){
+    var N = parseInt(nEl.value, 10);
+    nEcho.textContent = N;
+
+    // divide the unit into N parts and add them back, one at a time
+    var part = 1 / N;
+    var sum = 0;
+    for (var i = 0; i < N; i++) sum += part;
+    var residue = sum - 1;           // the difference the machine cannot shed
+    lastResidue = residue;
+
+    partEl.textContent = fmt(part);
+    sumEl.textContent  = fmt(sum);
+    resEl.textContent  = fmt(residue);
+
+    if (residue === 0) {
+      verdict.textContent = "closes — this time.";
+      verdict.className = "v verdict closes";
+    } else {
+      verdict.textContent = "does not close.";
+      verdict.className = "v verdict fails";
+    }
+
+    // redraw the bar: N segments that LOOK exact
+    var cells = "";
+    for (var j = 0; j < N; j++) cells += "<span></span>";
+    bar.innerHTML = cells;
+
+    updateGap();
+  }
+
+  function updateGap(){
+    // the residue is a fraction of the whole; the whole is the bar's width
+    var w = bar.getBoundingClientRect().width || 0;
+    var px = Math.abs(lastResidue) * w;
+    gapPx.textContent = px === 0 ? "exactly 0" : px.toExponential(2);
+  }
+
+  nEl.addEventListener("input", draw);
+
+  var btns = document.querySelectorAll(".presets button");
+  for (var k = 0; k < btns.length; k++){
+    btns[k].addEventListener("click", function(){
+      nEl.value = this.getAttribute("data-n");
+      draw();
+    });
+  }
+
+  window.addEventListener("resize", updateGap);
+
+  draw();
+})();
+</script>
+</body>
+</html>
