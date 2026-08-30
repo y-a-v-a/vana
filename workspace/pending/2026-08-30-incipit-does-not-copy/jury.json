@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-08-30-incipit-does-not-copy",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 5
+  },
+  "weighted_total": 45,
+  "verdict": "strong",
+  "references_named": [
+    "Illuminated manuscripts / medieval scriptorium",
+    "Historiated initial (versal)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The mechanism is the argument: a CSS ::first-letter / initial-letter pseudo-element can style the opening glyph extravagantly but, by specification, adds no character to the document — so when the text is copied, the gold is omitted and Benjamin's thesis is enacted as a live browser fact rather than a wall text. Concept and execution are the same object (P1), the work is double-coded for casual and literate viewers (P7), and the 'pixels on screen (gold not included)' header plus the 'Show me what leaves this page' button that dumps textContent are exactly the dry, cheerful-cynic staging the DNA prizes. It is materially distinct from the catalogue: the medieval versal is a fresh reference, the pseudo-element that refuses to copy is a fresh web-native mechanism, and while Benjamin has been invoked elsewhere the staging here is new.",
+  "reservations": "The chance arm of the chance/order axis is somewhat thin: hue-rotate over a fixed diamond lattice is charming but closer to a tint than a true Arp-style chance operation, and the per-visit palette is a single integer rather than a structural recomposition. Benjamin is densely populated in the catalogue, so the lineage point is correct but the family resemblance is strong; future variants in this line should reach for a less-trodden anchor.",
+  "revision_suggestion": "If a revision is ever considered, deepen the chance side: let crypto.getRandomValues drive not just hue but which element of an interlace rule-set is applied (knot, lattice, bezant, fleuron) and which drops of gilt-shadow fall where, so the 'one-off original' claim is structurally earned rather than chromatically tinted. Otherwise the work is ready as-is.",
+  "jury_model": "minimax/minimax-m3"
+}

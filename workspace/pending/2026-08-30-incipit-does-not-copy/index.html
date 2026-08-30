@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Incipit (Does Not Copy)</title>
+<meta name="referrer" content="no-referrer">
+<style>
+  :root{
+    --hue: 0deg;
+    --parchment: #efe6d0;
+    --ink: #2c2213;
+  }
+  html,body{margin:0;background:var(--parchment);color:var(--ink);}
+  body{
+    font-family: Georgia, "Times New Roman", "Iowan Old Style", serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(120% 80% at 50% -10%, rgba(255,255,255,.35), transparent 60%),
+      radial-gradient(100% 60% at 50% 120%, rgba(120,90,40,.14), transparent 60%);
+  }
+  .frame{
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: clamp(1.4rem, 5vw, 3.2rem) clamp(1.2rem, 5vw, 2.6rem) 2.4rem;
+  }
+  .head{
+    font-variant: small-caps;
+    letter-spacing:.08em;
+    font-size:.82rem;
+    color:#7a6640;
+    border-bottom:1px solid rgba(120,90,40,.35);
+    padding-bottom:.5rem;
+    margin-bottom:1.6rem;
+    display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+  }
+
+  /* The manuscript. Its opening glyph is illuminated by a pseudo-element,
+     which can style the letter but cannot add a single character to the
+     document. The gold therefore exists only in the render. */
+  p.manuscript{
+    font-size: clamp(1.06rem, 1rem + 1vw, 1.36rem);
+    margin: 0 0 1.4rem;
+    text-align: justify;
+    hyphens: none;
+  }
+  p.manuscript::first-letter{
+    initial-letter: 3 3;                 /* proper sinking where supported */
+    float: left;                          /* fallback for the rest */
+    font-weight: 700;
+    font-size: 3.6em;
+    line-height: .72;
+    margin: .02em .14em 0 0;
+    padding: .10em .16em;
+    color: #3a2708;
+    background:
+      url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%3E%3Cpath%20d='M0%208%20L8%200%20L16%208%20L8%2016%20Z'%20fill='none'%20stroke='%23ffffff'%20stroke-opacity='.38'/%3E%3C/svg%3E") repeat,
+      linear-gradient(135deg, #fbe490 0%, #e0ad2c 46%, #9a6613 100%);
+    background-size: 14px 14px, auto;
+    border: 2px solid #6b3f0e;
+    box-shadow:
+      0 2px 7px rgba(0,0,0,.42),
+      inset 0 0 0 3px rgba(255,255,255,.28),
+      inset 0 0 14px rgba(120,70,10,.35);
+    filter: hue-rotate(var(--hue));
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  .note{
+    font-size:.9rem;
+    color:#6c5a38;
+    border-left:3px solid rgba(120,90,40,.4);
+    padding-left:.9rem;
+    margin:1.6rem 0;
+  }
+  button{
+    font: inherit;
+    font-size:.9rem;
+    background:#e5d8b6;
+    color:#3a2b12;
+    border:1px solid #8a6c3a;
+    border-radius:2px;
+    padding:.4rem .8rem;
+    cursor:pointer;
+  }
+  button:hover{background:#dccaa0;}
+  pre.reveal{
+    display:none;
+    white-space:pre-wrap;
+    background:#fff;
+    color:#111;
+    border:1px dashed #9a7c4a;
+    padding:.9rem;
+    margin:.9rem 0 0;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size:.9rem;
+    line-height:1.5;
+  }
+  pre.reveal.on{display:block;}
+  .cartel{
+    margin-top:2.6rem;
+    padding-top:1rem;
+    border-top:1px solid rgba(120,90,40,.35);
+    font-size:.8rem;
+    color:#7a6640;
+  }
+  .cartel b{color:#4a3a1c;}
+  .cartel a{color:#6b4a12;}
+</style>
+</head>
+<body>
+  <main class="frame">
+    <div class="head">
+      <span>y-a-v-a &middot; incipit</span>
+      <span>pixels on screen (gold not included)</span>
+    </div>
+
+    <p class="manuscript">Here begins the page. The letter that opens it was gilded for you alone, ground from chance and light, and it will not survive the copying. Take the words if you like &mdash; they are everyone&rsquo;s, and always the same. The gold stays on the glass.</p>
+
+    <p class="note">
+      Select this text, copy it, paste it anywhere. The words arrive; the
+      illumination does not. A pseudo-element may <em>dress</em> the first
+      glyph but cannot add a single character to the document &mdash; so the
+      capital lives only in the render, never in the copy. Its colour was
+      minted for this visit from <code>crypto.getRandomValues</code>, held in
+      memory, saved nowhere. Reload and this exact original is gone.
+    </p>
+
+    <button id="revealBtn" type="button" aria-controls="reveal" aria-expanded="false">
+      Show me what leaves this page
+    </button>
+    <pre class="reveal" id="reveal" aria-live="polite"></pre>
+
+    <div class="cartel">
+      <p><b>Incipit (Does Not Copy)</b>, 2026 &middot; y-a-v-a &middot;
+      after the illuminated manuscript and the medieval scriptorium, answering
+      Walter Benjamin, <i>The Work of Art in the Age of Mechanical
+      Reproduction</i> (1935). Medium: CSS <code>::first-letter</code> /
+      <code>initial-letter</code>. Edition: one per page-load, unrepeatable,
+      untransmissible.</p>
+      <p>License: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+      No cookies, no storage, no trackers, no network requests. The gold is
+      not for sale; it is not even for copy.</p>
+    </div>
+  </main>
+
+<script>
+  // Chance palette, per visit, held only in RAM. The illuminated capital is a
+  // genuine one-off; the text it opens is a perfect, aura-less reproduction.
+  (function(){
+    var b = new Uint16Array(1);
+    (self.crypto || self.msCrypto).getRandomValues(b);
+    var hue = b[0] % 360;
+    document.documentElement.style.setProperty('--hue', hue + 'deg');
+
+    // Prove Benjamin's point: what copies is the plain text, the gold omitted.
+    var btn = document.getElementById('revealBtn');
+    var out = document.getElementById('reveal');
+    var man = document.querySelector('p.manuscript');
+    btn.addEventListener('click', function(){
+      var on = out.classList.toggle('on');
+      btn.setAttribute('aria-expanded', String(on));
+      if (on) {
+        // .textContent is exactly what a copy carries: letters, no illumination.
+        out.textContent = man.textContent.trim();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
