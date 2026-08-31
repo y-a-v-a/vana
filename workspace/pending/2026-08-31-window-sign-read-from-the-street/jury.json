@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-08-31-window-sign-read-from-the-street",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 37,
+  "verdict": "borderline",
+  "references_named": [
+    "Bruce Nauman (neon window/spiral signs, The True Artist Helps the World by Revealing Mystic Truths, 1967)",
+    "Unicode Bidirectional Algorithm (UAX #9)",
+    "Trojan Source reversal attack (Boucher & Anderson, 2021)",
+    "y-a-v-a, Scrittura Speculare (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The mechanism is the argument (P1): CSS bidi-override over a reversed DOM string literally stages the front-of-glass/back-of-glass split the piece is about, and the small find-box makes the divergence demonstrable rather than asserted. The Nauman reference is precise, and the deliberate inversion of Scrittura Speculare is an elegant way to claim a coherent lineage without duplication — the two works are presented as the two sides of the same pane. Voice is dry, intelligent, restrained; ethics (CC BY-SA, no network, no tracking) are explicit and non-negotiable. The work passes every gate.",
+  "reservations": "Novelty sits below the other scores: unicode-bidi reversal is a long-known web trick, and Trojan Source (2021) is a well-publicized reading of exactly this gap. The piece's originality is almost entirely in the Nauman framing and the inverse-Scrittura pairing rather than in the mechanism itself, so the catalogue gains a smart execution more than a new ontology. A literal print of just the front text would already convey the idea to a willing reader; the medium dependency is real but thin compared to, say, the API-driven or canvas-paint exemplars in the catalogue.",
+  "revision_suggestion": "To lift novelty toward the strong threshold, give the work more web-mechanism load: e.g. drive the marquee through actual bidi interaction (live LRM/RLM embedding characters that the engine must parse), make a screen-reader path demonstrably read the reversed string while a visible 'as read aloud' line crawls under the neon, or have the page compare a fetched search-engine-style snippet of its own URL against the rendered text. Any of these would make the mechanism do more work than the framing currently does.",
+  "jury_model": "minimax/minimax-m3"
+}

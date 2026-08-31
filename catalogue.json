@@ -1262,5 +1262,13 @@
     "source": "Illuminated manuscripts / the medieval scriptorium; The historiated initial (versal); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "CSS ::first-letter / initial-letter illuminates the opening glyph but adds no character to the document; per-visit crypto.getRandomValues palette held only in RAM, so the copy carries plain letters and the aura stays on the glass.",
     "status": "pending"
+  },
+  {
+    "id": "2026-08-31-window-sign-read-from-the-street",
+    "title": "Window Sign (Read from the Street)",
+    "year": 2026,
+    "source": "Bruce Nauman, neon window/spiral signs incl. The True Artist Helps the World by Revealing Mystic Truths (1967); Unicode Bidirectional Algorithm (UAX #9); Trojan Source reversal attack (Boucher & Anderson, 2021); y-a-v-a, Scrittura Speculare (2026)",
+    "mechanism": "CSS unicode-bidi:bidi-override + direction:rtl renders a DOM string stored in reverse, so render, clipboard, Find-in-page and screen readers diverge.",
+    "status": "pending"
   }
 ]

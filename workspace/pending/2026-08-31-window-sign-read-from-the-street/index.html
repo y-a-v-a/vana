@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Window Sign (Read from the Street)</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{ --ink:#0a0a0f; --dim:#5a6070; --cyan:#54f4ff; --pink:#ff5ea8; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; }
+  body{
+    background:
+      radial-gradient(120% 80% at 50% -10%, #14141c 0%, #0a0a0f 60%, #050507 100%);
+    color:#c9cdd8;
+    font:16px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    min-height:100%; padding:6vh 20px; gap:26px; text-align:center;
+  }
+  /* the storefront glass */
+  .window{
+    border:1px solid #23252e;
+    border-radius:6px;
+    background:linear-gradient(180deg,#101018,#0b0b12);
+    box-shadow: inset 0 0 60px rgba(84,244,255,.05), 0 24px 80px rgba(0,0,0,.6);
+    padding:48px 34px; max-width:760px; width:100%;
+  }
+  /* the neon: the DOM holds it reversed; the glass turns it to face you */
+  .glass{
+    direction:rtl;
+    unicode-bidi:bidi-override;
+    display:inline-block;
+    font-weight:700;
+    font-size:clamp(20px,4.4vw,40px);
+    letter-spacing:.06em;
+    color:#eaffff;
+    text-shadow:
+      0 0 6px var(--cyan), 0 0 18px var(--cyan),
+      0 0 42px rgba(84,244,255,.55), 0 0 2px var(--pink);
+  }
+  .caption{ color:var(--dim); font-size:13px; margin-top:22px; }
+  .street{ max-width:760px; width:100%; }
+  .street h2{
+    font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--pink); margin:0 0 8px; font-weight:700;
+  }
+  .back{
+    border:1px dashed #2a2d38; border-radius:6px; background:#07070b;
+    padding:16px 14px; color:#8b90a0; word-break:break-word;
+    /* shown as the machine stores it: plain, unglazed, mirrored */
+    direction:ltr; unicode-bidi:normal;
+  }
+  .find{ max-width:760px; width:100%; }
+  .find input{
+    width:100%; padding:11px 12px; background:#07070b; color:#c9cdd8;
+    border:1px solid #2a2d38; border-radius:6px; font:inherit; text-align:center;
+  }
+  .find input:focus{ outline:none; border-color:var(--cyan); }
+  .verdict{ margin-top:8px; font-size:13px; min-height:1.4em; color:var(--dim); }
+  .hit{ color:var(--cyan); }
+  .miss{ color:var(--pink); }
+  .label{
+    max-width:760px; width:100%; border-top:1px solid #1c1e26; padding-top:16px;
+    color:#6b7080; font-size:11.5px; line-height:1.7; text-align:left;
+  }
+  .label b{ color:#9aa0b0; font-weight:600; }
+  a{ color:#7a8090; }
+</style>
+</head>
+<body>
+
+  <div class="window">
+    <span class="glass" id="neon">the neon is dark. switch on the script.</span>
+    <div class="caption">You are inside. The sign faces you.</div>
+  </div>
+
+  <section class="street">
+    <h2>The back of the glass — what the machine reads</h2>
+    <div class="back" id="back">—</div>
+  </section>
+
+  <section class="find">
+    <input id="q" type="text" placeholder="Search the sign the way a machine does…" autocomplete="off" spellcheck="false">
+    <div class="verdict" id="verdict">The engine searches the source, not the glass. Type the words you can read.</div>
+  </section>
+
+  <div class="label">
+    <b>Window Sign (Read from the Street)</b> — y-a-v-a, 2026. After <b>Bruce Nauman</b>,
+    neon window/spiral signs (e.g. <i>The True Artist Helps the World by Revealing Mystic Truths</i>, 1967),
+    read forward from inside and backward from the street.
+    Mechanism: the marquee is stored in the DOM reversed; CSS <i>unicode-bidi: bidi-override; direction: rtl</i>
+    turns it to face your eye, while the clipboard, Find-in-page, crawlers and screen readers get the raw
+    source — the reversed back of the glass. See also the Unicode Bidirectional Algorithm and the
+    <i>Trojan Source</i> reversal attack (Boucher &amp; Anderson, 2021); and, inverted, y-a-v-a
+    <i>Scrittura Speculare</i> (2026), where the eye sees the mirror and the machine reads it straight.
+    Medium: pixels on glass. No cookies, no trackers, no network. Licensed <b>CC BY-SA 4.0</b>.
+  </div>
+
+<script>
+  // Authored forward — honest in view-source. The glass reverses it back to you.
+  var MESSAGE = "YOU READ IT FORWARD · THE MACHINE READS IT BACK";
+
+  // The DOM must hold the reversed string; bidi-override then displays it forward.
+  var reversed = Array.from(MESSAGE).reverse().join("");
+  var neon = document.getElementById("neon");
+  neon.textContent = reversed;               // what the machine will ever see
+  document.getElementById("back").textContent = reversed;
+
+  // A find that behaves like the engine: it searches the source, not the render.
+  var q = document.getElementById("q");
+  var verdict = document.getElementById("verdict");
+  q.addEventListener("input", function () {
+    var term = q.value.trim();
+    if (!term) {
+      verdict.className = "verdict";
+      verdict.textContent = "The engine searches the source, not the glass. Type the words you can read.";
+      return;
+    }
+    var hit = neon.textContent.toLowerCase().indexOf(term.toLowerCase()) !== -1;
+    if (hit) {
+      verdict.className = "verdict hit";
+      verdict.textContent = "Found — you spelled it the machine's way (backwards).";
+    } else {
+      verdict.className = "verdict miss";
+      verdict.textContent = "Not found. You read it off the glass; the machine only keeps the back.";
+    }
+  });
+</script>
+</body>
+</html>
