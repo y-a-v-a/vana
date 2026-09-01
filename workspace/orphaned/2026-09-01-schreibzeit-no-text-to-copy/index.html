@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schreibzeit (No Text to Copy) — y-a-v-a</title>
+<style>
+  :root{ --paper:#f4f1e8; --ink:#26241f; --faint:#8a8474; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; background:var(--paper); color:var(--ink);
+    font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace; }
+  .sheet{ max-width:860px; margin:0 auto; padding:40px 22px 64px; }
+
+  header h1{ font-size:1.15rem; font-weight:600; margin:0 0 .15em; letter-spacing:.02em; }
+  header .after{ color:var(--faint); font-size:.82rem; margin:0 0 14px; }
+  /* Darboven's indexical ~~~ writing-stroke, drawn, never typed */
+  .stroke{ height:12px; margin:0 0 20px;
+    background:
+      repeating-linear-gradient(90deg,
+        transparent 0 3px, var(--faint) 3px 5px, transparent 5px 11px);
+    -webkit-mask:linear-gradient(90deg,#000 0 78%,transparent);
+            mask:linear-gradient(90deg,#000 0 78%,transparent);
+    opacity:.55; }
+
+  /* THE WORK: every cell is empty. The numbers are counter() generated
+     content — present in the render layer, absent from the document text. */
+  .field{ counter-reset:n 0;
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(48px,1fr));
+    gap:2px 10px; font-size:.86rem; line-height:1.5;
+    border-top:1px solid var(--faint); border-bottom:1px solid var(--faint);
+    padding:14px 0; }
+  .field i{ counter-increment:n; font-style:normal;
+    color:var(--ink); text-align:right; user-select:text; }
+  .field i::before{ content:counter(n); }
+  .field i:nth-child(10n)::before{ color:var(--faint); } /* faint decade rules */
+
+  footer{ margin-top:26px; font-size:.78rem; color:var(--faint); line-height:1.7; }
+  footer b{ color:var(--ink); font-weight:600; }
+  .attest{ margin:14px 0; padding:12px 14px; border:1px dashed var(--faint); }
+  .attest span{ color:var(--ink); font-weight:600; }
+  a{ color:inherit; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <header>
+    <h1>Schreibzeit (No Text to Copy)</h1>
+    <p class="after">after Hanne Darboven — a construction the machine wrote in no time, and cannot let you copy</p>
+    <div class="stroke" aria-hidden="true"></div>
+  </header>
+
+  <!-- 500 empty cells. Nothing here is text. -->
+  <section class="field" aria-label="A field of ascending numbers, none of which are document text.">
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+  </section>
+
+  <div class="attest">
+    <p>Select the whole page and copy it, then paste. You paste nothing:
+       these cells hold no text.</p>
+    <p>Characters of text in the construction above:
+       <span id="chars">—</span>.
+       The first cell renders <span id="first">—</span>, but only its <code>::before</code> knows it.</p>
+  </div>
+
+  <footer>
+    <p><b>Schreibzeit (No Text to Copy)</b>, 2026. Medium: counter() generated content on screen.
+       After <b>Hanne Darboven</b>, <i>Schreibzeit</i> (1975–1981) and the date-sum <i>Konstruktionen</i>.
+       With a nod to Walter Benjamin, <i>The Work of Art in the Age of Mechanical Reproduction</i> (1935).</p>
+    <p>The browser wrote her lifetime of numbers in one layout pass and spent no time doing it —
+       so there is no <i>Schreibzeit</i> to reproduce, and no text to carry away.</p>
+    <p><b>y-a-v-a</b> · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+       · no cookies, no trackers, no external requests. The artwork above is pure CSS;
+       the two figures below the rule are the only script, and attest rather than perform.</p>
+  </footer>
+</div>
+
+<script>
+  // The script does not make the work. It only testifies against it.
+  var field = document.querySelector('.field');
+  document.getElementById('chars').textContent =
+    field.textContent.replace(/\s+/g, '').length;               // -> 0
+  var first = field.querySelector('i');
+  document.getElementById('first').textContent =
+    getComputedStyle(first, '::before').content.replace(/["']/g, '');
+</script>
+</body>
+</html>
