@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-09-02-le-grand-verre-nothing-of-its-own",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Duchamp, The Bride Stripped Bare by Her Bachelors, Even (The Large Glass), 1915-1923",
+    "Duchamp's 'delay in glass' note",
+    "the 1927 accidental cracking, kept as completion 'by chance'",
+    "net.art (browser compositing as material)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The mechanism is the argument: backdrop-filter is a literal pass-through that owns nothing, and removing the room behind it proves the panes held no image. This is a clean P1 collapse — the Large Glass's 'delay in glass' ontology is rebuilt from one CSS property plus a toggle. The chance/order axis is staged (rule-drawn apparatus behind, crypto.getRandomValues cracks on top), and the surface gag (wipe the room, glass empties) lands without wall text while the literate reading (Duchamp's readymade logic, the 1927 cracks as completion) sits underneath. Build is minimal, license and attribution are stated, no network or storage. Distinct from the catalogue: no prior work uses backdrop-filter as the medium itself, and the Duchamp reference is the Large Glass rather than the readymades already covered (Fountain, L.H.O.O.Q., infrathin).",
+  "reservations": "The apparatus SVG is a schematic stand-in rather than a precise Duchampian diagram; a viewer expecting the actual Large Glass iconography may find it reductive. Backdrop-filter support is uneven (Firefox only recent, Safari needs -webkit- prefix) — the work degrades to 'the glass shows nothing,' which the candidate acknowledges but which slightly weakens the surface gag on unsupported browsers. The cracks are decorative rather than load-bearing for the argument.",
+  "revision_suggestion": "Consider making the apparatus behind the glass more recognisably Duchampian (the actual nine malic moulds row, the grinder's specific geometry) so the readymade is tighter. Add a small fallback for browsers without backdrop-filter that still stages the 'nothing of its own' point — e.g., a CSS gradient that visibly disappears when the room is removed, so the proof works everywhere.",
+  "jury_model": "minimax/minimax-m3"
+}

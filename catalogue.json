@@ -1278,5 +1278,13 @@
     "source": "Hanne Darboven, Schreibzeit (1975–1981); Hanne Darboven, the date-sum Konstruktionen / Ein Jahrhundert; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); CSS Lists and Counters Module",
     "mechanism": "CSS counter-increment / counter() generated content: the digits live only in the ::before render layer, absent from the DOM text and dropped on copy; a tiny JS line attests textContent.length === 0.",
     "status": "orphaned"
+  },
+  {
+    "id": "2026-09-02-le-grand-verre-nothing-of-its-own",
+    "title": "Le Grand Verre (Nothing of Its Own)",
+    "year": 2026,
+    "source": "Marcel Duchamp, The Bride Stripped Bare by Her Bachelors, Even (The Large Glass), 1915-1923; Duchamp's 'delay in glass' note; the 1927 accidental cracking, kept as completion 'by chance'; net.art (browser compositing as material)",
+    "mechanism": "CSS backdrop-filter on background-transparent panes (attested via getComputedStyle) whose only pixels are the layer behind, plus per-visit crypto.getRandomValues crack generation; toggling the backdrop layer empties the glass.",
+    "status": "pending"
   }
 ]
