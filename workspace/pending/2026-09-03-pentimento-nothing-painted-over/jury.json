@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-09-03-pentimento-nothing-painted-over",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 37,
+  "verdict": "borderline",
+  "references_named": [
+    "pentimento (art-historical term)",
+    "Lillian Hellman, Pentimento (1973)",
+    "Robert Rauschenberg, Erased de Kooning Drawing (1953)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "y-a-v-a, Erased (No Undo) (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P7"
+  ],
+  "rationale": "The mechanism is genuinely the argument: the user-agent stylesheet's default rendering of <del>/<ins> is the pentimento, and the clipboard carrying the struck-through text is the X-ray. Concept and execution collapse cleanly (P1), the build is minimal (P3), and the inversion of Rauschenberg's erasure is a precise narrative move that answers a specific prior work. Double-coding works at both depths (P7). The piece is restrained, dry, and intelligent in tone. G6 holds: it is materially distinct from Erased (No Undo) — that work withholds undo and persists erasure to localStorage; this one refuses erasure entirely and smuggles the correction through the clipboard.",
+  "reservations": "Novelty is moderate rather than high: the <del>/<ins> default rendering is a well-known web-native behavior, and the 'clipboard carries what the eye doesn't' move echoes several existing source-vs-render works in the catalogue (Silencio, Non-finito, Schreibzeit, Incipit). The piece is closer to a clean, well-executed riff on that family than a fully new ontology. The self-deflating artist's statement is witty but slightly thin as a surface — the joke is small and the depth is real, which is correct, but the surface could carry more.",
+  "revision_suggestion": "To strengthen novelty, consider adding a second web-native mechanism that is genuinely new to the catalogue — e.g., a per-visit <del> count that is itself a <del>/<ins> pair (the ledger self-correcting on reload), or a CSS :visited-style history of past corrections that the browser alone can read. Even a small additional axis would lift this from a strong riff to a standalone node.",
+  "jury_model": "minimax/minimax-m3"
+}

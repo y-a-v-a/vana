@@ -1286,5 +1286,13 @@
     "source": "Marcel Duchamp, The Bride Stripped Bare by Her Bachelors, Even (The Large Glass), 1915-1923; Duchamp's 'delay in glass' note; the 1927 accidental cracking, kept as completion 'by chance'; net.art (browser compositing as material)",
     "mechanism": "CSS backdrop-filter on background-transparent panes (attested via getComputedStyle) whose only pixels are the layer behind, plus per-visit crypto.getRandomValues crack generation; toggling the backdrop layer empties the glass.",
     "status": "pending"
+  },
+  {
+    "id": "2026-09-03-pentimento-nothing-painted-over",
+    "title": "Pentimento (Nothing Painted Over)",
+    "year": 2026,
+    "source": "pentimento (art-historical term); Lillian Hellman, Pentimento (1973); Robert Rauschenberg, Erased de Kooning Drawing (1953); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "HTML <del>/<ins> semantic edit elements rendered by the user-agent stylesheet: the deleted words stay in the DOM (display:none toggles the 'finished' reading) and ride along in textContent, so every clipboard copy carries the correction.",
+    "status": "pending"
   }
 ]

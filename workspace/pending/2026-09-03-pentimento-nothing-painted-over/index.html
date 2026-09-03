@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pentimento (Nothing Painted Over)</title>
+<style>
+  :root { color-scheme: light dark; }
+  html, body { margin: 0; }
+  body {
+    background: #12100e;
+    color: #d8d2c8;
+    font: 16px/1.7 Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 8vmin 6vw;
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.05rem;
+    font-weight: normal;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #8f877a;
+    margin: 0 0 2.4rem;
+  }
+
+  /* The whole work is the browser's own default rendering of <del> and <ins>.
+     A pentimento (Italian: repentance) is a correction the painter buried under
+     new paint, visible only later, by age or X-ray. The web does the opposite:
+     the user-agent stylesheet already strikes <del> through and underlines <ins>,
+     and keeps BOTH in the document. The repentance is worn on the surface. */
+  #statement {
+    font-size: clamp(1.4rem, 4.5vw, 2rem);
+    line-height: 1.55;
+  }
+  del {
+    color: #a8563f;
+    text-decoration-thickness: from-font;
+  }
+  ins {
+    text-decoration: none;               /* keep it quiet; the argument is del staying */
+    color: #efe9df;
+  }
+
+  /* The only fork in the whole piece: hide the repentance to see the "finished"
+     picture. Both readings come from ONE unchanged source — nothing is fetched,
+     nothing is overwritten. The deleted words are merely display:none, still there. */
+  body.finished del { display: none; }
+
+  .ledger {
+    margin-top: 3.2rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid #2c2823;
+    font: 12.5px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color: #8f877a;
+  }
+  .ledger b { color: #c9c1b4; font-weight: 600; }
+  .row { display: flex; justify-content: space-between; gap: 1rem; }
+  .actions { margin-top: 1.4rem; display: flex; flex-wrap: wrap; gap: .6rem; }
+  button {
+    font: inherit;
+    color: #d8d2c8;
+    background: #211d18;
+    border: 1px solid #3a342c;
+    padding: .55em .9em;
+    cursor: pointer;
+  }
+  button:hover { border-color: #6a6153; }
+  #note { margin-top: 1rem; min-height: 1.6em; color: #a8563f; }
+  footer {
+    margin-top: 3rem;
+    font: 11.5px/1.7 ui-monospace, Menlo, monospace;
+    color: #6a6153;
+  }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+  <h1>Pentimento — nothing painted over</h1>
+
+  <p id="statement">I <del>will paint</del> <ins>painted</ins> a <del>masterpiece</del> <ins>picture</ins>. <del>It will hang in the Louvre.</del> <ins>It hangs on your screen.</ins> <del>Every</del> <ins>No</ins> brushstroke <del>hides</del> <ins>hid</ins> the <del>one before</del> <ins>mistake</ins>. On <del>canvas</del> <ins>the web</ins> the <del>repentance</del> <ins>correction</ins> <del>is buried</del> <ins>stays</ins>.</p>
+
+  <div class="ledger">
+    <div class="row"><span>words struck (<del>still in the source</del>)</span><b id="struck">—</b></div>
+    <div class="row"><span>words kept as the correction</span><b id="kept">—</b></div>
+    <div class="row"><span>words actually discarded</span><b id="gone">0</b></div>
+    <div class="row"><span>what your eye reads / what the clipboard carries</span><b id="chars">—</b></div>
+
+    <div class="actions">
+      <button id="toggle">Show the finished picture</button>
+      <button id="repro">Copy the statement (take the X-ray with you)</button>
+    </div>
+    <div id="note">The corrections are default browser chrome: <code>&lt;del&gt;</code> struck, <code>&lt;ins&gt;</code> kept. No CSS asked for that.</div>
+  </div>
+
+  <footer>
+    <strong>Pentimento (Nothing Painted Over)</strong> — y-a-v-a (Vincent Bruijn), 2026.<br>
+    After the art-historical <em>pentimento</em> and Lillian Hellman, <em>Pentimento</em> (1973); the exact inverse of Robert Rauschenberg, <em>Erased de Kooning Drawing</em> (1953); Walter Benjamin, <em>The Work of Art in the Age of Mechanical Reproduction</em> (1935).<br>
+    Licence: <a href="https://creativecommons.org/licenses/by/4.0/">CC&nbsp;BY&nbsp;4.0</a>. No cookies, no trackers, no network, no storage.
+  </footer>
+
+<script>
+(function () {
+  var statement = document.getElementById('statement');
+  var body = document.body;
+
+  function words(nodes) {
+    var n = 0;
+    nodes.forEach(function (el) {
+      var t = el.textContent.trim();
+      if (t) n += t.split(/\s+/).length;
+    });
+    return n;
+  }
+
+  var struck = words([].slice.call(statement.querySelectorAll('del')));
+  var kept   = words([].slice.call(statement.querySelectorAll('ins')));
+
+  document.getElementById('struck').textContent = struck;
+  document.getElementById('kept').textContent = kept;
+
+  // What the eye reads (finished, del removed) vs what textContent — and therefore
+  // the clipboard — actually carries. The correction travels with every copy.
+  function surfaceLen() {
+    // finished reading: strip the deleted words, collapse whitespace
+    var clone = statement.cloneNode(true);
+    [].slice.call(clone.querySelectorAll('del')).forEach(function (d) { d.remove(); });
+    return clone.textContent.replace(/\s+/g, ' ').trim().length;
+  }
+  function fullLen() {
+    return statement.textContent.replace(/\s+/g, ' ').trim().length;
+  }
+  document.getElementById('chars').textContent = surfaceLen() + ' / ' + fullLen() + ' chars';
+
+  var toggle = document.getElementById('toggle');
+  toggle.addEventListener('click', function () {
+    var finished = body.classList.toggle('finished');
+    toggle.textContent = finished ? 'Show the repentance' : 'Show the finished picture';
+  });
+
+  var note = document.getElementById('note');
+  var repro = document.getElementById('repro');
+  repro.addEventListener('click', function () {
+    var full = statement.textContent.replace(/\s+/g, ' ').trim(); // includes the struck words
+    var done = function () {
+      note.textContent = 'Copied ' + full.length + ' characters — paste anywhere. The struck-through second thoughts came along. X-ray, for free.';
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(full).then(done, select);
+    } else {
+      select();
+    }
+    function select() {
+      var r = document.createRange();
+      r.selectNodeContents(statement);
+      var s = window.getSelection();
+      s.removeAllRanges(); s.addRange(r);
+      note.textContent = 'Selected the statement — copy it. Whatever you paste keeps the deletions; the surface never had the whole truth.';
+    }
+  });
+})();
+</script>
+</body>
+</html>
