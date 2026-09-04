@@ -6,7 +6,8 @@ import type { JuryVerdict } from "./jury.ts";
 /** URL to the approval dashboard entry for a candidate (Phase 7 serves this). */
 export function dashboardUrl(cfg: Config, id: string): string {
   const host = cfg.dashboard.tailnetHost || "localhost";
-  return `http://${host}:${cfg.dashboard.port}/candidate/${id}`;
+  const base = cfg.dashboard.baseUrl?.replace(/\/+$/, "") || `http://${host}:${cfg.dashboard.port}`;
+  return `${base}/candidate/${id}`;
 }
 
 export interface Email {

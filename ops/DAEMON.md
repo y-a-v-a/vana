@@ -1,7 +1,8 @@
 # The daemon — going autonomous
 
 `src/daemon.ts` is the long-running process. It:
-- serves the approval dashboard continuously (`http://the-machine.taile14d0c.ts.net:4737`)
+- serves the approval dashboard continuously (`http://the-machine.taile14d0c.ts.net:4737`,
+  fronted by HTTPS at `https://the-machine.taile14d0c.ts.net` — see below)
 - wakes every `interval` (default 6h) → generate → jury → (on pass) email you
 - is bounded each wake by the work-budget (20 min) and the $ fuse ($5/wake, $20/day)
 
@@ -50,3 +51,22 @@ npm run daemon:stop
 - Logs: `logs/daemon.out.log` / `logs/daemon.err.log` (gitignored).
 - A single manual cycle without launchd: `npm run once` (bounded by the same
   budget/fuse). For one attempt only: `VANA_MAX_ATTEMPTS=1 npm run once`.
+
+## HTTPS for the dashboard
+
+The dashboard itself speaks plain HTTP on `:4737`. Safari refuses to send the
+approval form over that, so Tailscale terminates TLS in front of it with a real
+Let's Encrypt cert (auto-renewed by `tailscaled`, tailnet-only — this is
+`serve`, **not** `funnel`, so nothing is exposed to the public internet):
+
+```sh
+TS=/Applications/Tailscale.app/Contents/MacOS/Tailscale   # CLI is not on $PATH
+$TS serve --bg --https=443 http://127.0.0.1:4737          # persists across reboots
+$TS serve status                                          # inspect
+$TS serve --https=443 off                                 # undo
+```
+
+Requires MagicDNS + "HTTPS Certificates" enabled for the tailnet. The approval
+emails link to whatever `dashboard.baseUrl` is in `vana.config.json`
+(`https://the-machine.taile14d0c.ts.net`); drop that key to fall back to
+`http://<tailnetHost>:<port>`.

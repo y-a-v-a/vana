@@ -37,6 +37,9 @@ const ConfigSchema = z.object({
   dashboard: z.object({
     port: z.number().int().positive(),
     tailnetHost: z.string(),
+    // Public origin the approval links point at, e.g. the HTTPS one `tailscale serve`
+    // terminates for us. Falls back to http://tailnetHost:port when unset.
+    baseUrl: z.string().url().optional(),
   }),
   email: z.object({ to: z.string().email() }),
   git: z.object({ remote: z.string(), branch: z.string(), push: z.boolean().default(true) }),

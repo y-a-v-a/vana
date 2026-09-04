@@ -1,8 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildEmail } from "./notify.ts";
+import { buildEmail, dashboardUrl } from "./notify.ts";
 import type { GeneratedMeta } from "./generator.ts";
 import type { JuryVerdict } from "./jury.ts";
+import type { Config } from "./config.ts";
 
 const meta: GeneratedMeta = {
   title: "The Original",
@@ -45,4 +46,19 @@ test("body carries title, summary, rationale, scores, and dashboard url", () => 
 test("body shows 'none' when there are no reservations", () => {
   const { body } = buildEmail("id", meta, verdict, "http://x");
   assert.match(body, /Reservations: none/);
+});
+
+const cfgWith = (dashboard: Config["dashboard"]) => ({ dashboard }) as Config;
+
+test("dashboardUrl falls back to http://host:port when no baseUrl is configured", () => {
+  const url = dashboardUrl(cfgWith({ port: 4737, tailnetHost: "the-machine.ts.net" }), "w1");
+  assert.equal(url, "http://the-machine.ts.net:4737/candidate/w1");
+});
+
+test("dashboardUrl prefers a configured baseUrl and trims its trailing slashes", () => {
+  const url = dashboardUrl(
+    cfgWith({ port: 4737, tailnetHost: "the-machine.ts.net", baseUrl: "https://the-machine.ts.net//" }),
+    "w1",
+  );
+  assert.equal(url, "https://the-machine.ts.net/candidate/w1");
 });
