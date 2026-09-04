@@ -3,7 +3,7 @@
 `src/daemon.ts` is the long-running process. It:
 - serves the approval dashboard continuously (`http://the-machine.taile14d0c.ts.net:4737`,
   fronted by HTTPS at `https://the-machine.taile14d0c.ts.net` — see below)
-- wakes every `interval` (default 6h) → generate → jury → (on pass) email you
+- wakes on the configured schedule → generate → jury → (on pass) email you
 - is bounded each wake by the work-budget (20 min) and the $ fuse ($5/wake, $20/day)
 
 Run it under launchd so it survives crashes and reboots.
@@ -29,8 +29,29 @@ npm run daemon:start
 npm run daemon:logs
 ```
 
-By default the first wake is one interval (6h) away. Use `npm run once` to test
-a single cycle immediately without waiting for the schedule.
+Use `npm run once` to test a single cycle immediately without waiting for the
+schedule; `VANA_WAKE_ON_START=1` makes the daemon wake the moment it boots.
+
+## When it wakes
+
+`vana.config.json` takes either form. A `schedule` block wins when present:
+
+```json
+"schedule": { "days": ["mon", "thu", "sat"], "hour": 12, "minute": 0 }
+```
+
+Days are `sun`…`sat`; the time is **local wall clock** (Europe/Amsterdam), so a
+wake stays at 12:00 across DST. Drop `schedule` to fall back to plain
+`"interval": { "hours": N }`, which counts from when the previous wake
+*finished* and therefore drifts a few minutes later each cycle.
+
+Either way a restart re-arms from now, so the daemon logs the next wake on
+startup — check it with `npm run daemon:logs`:
+
+```
+[daemon] … up. wakes=mon,thu,sat at 12:00 …
+[daemon] … next wake at 2026-09-05T10:00:00.000Z (Sat Sep 05 2026 12:00:00 GMT+0200)
+```
 
 ## After a change
 - **Code** change (`src/*.ts`): `npm run daemon:restart` (re-reads source).

@@ -1,5 +1,6 @@
 {
   "interval": { "hours": 24 },
+  "schedule": { "days": ["mon", "thu", "sat"], "hour": 12, "minute": 0 },
   "workBudget": { "minutes": 20 },
   "costFuse": { "perWakeUsd": 5, "perDayUsd": 20 },
   "models": {

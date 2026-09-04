@@ -5,10 +5,12 @@ import { runWake, type AcceptedContext } from "./loop.ts";
 import { sendCandidateEmail } from "./notify.ts";
 import { startDashboard } from "./dashboard.ts";
 import { withLock } from "./lock.ts";
+import { nextWakeAt, describeSchedule } from "./schedule.ts";
 
 // The long-running process: serves the approval dashboard continuously AND
-// wakes on the configured interval to generate → jury → email. Designed to run
-// under launchd (RunAtLoad + KeepAlive). See ops/DAEMON.md.
+// wakes on the configured schedule (weekly days+time, or a plain interval) to
+// generate → jury → email. Designed to run under launchd (RunAtLoad +
+// KeepAlive). See ops/DAEMON.md.
 
 const ts = (): string => new Date().toISOString();
 
@@ -51,21 +53,33 @@ function main(): void {
   startDashboard();
 
   const intervalMs = cfg.interval.hours * 3_600_000;
+  const cadence = cfg.schedule ? describeSchedule(cfg.schedule) : `every ${cfg.interval.hours}h`;
   console.log(
-    `[daemon] ${ts()} up. interval=${cfg.interval.hours}h work-budget=${cfg.workBudget.minutes}min ` +
+    `[daemon] ${ts()} up. wakes=${cadence} work-budget=${cfg.workBudget.minutes}min ` +
       `fuse=$${cfg.costFuse.perWakeUsd}/wake $${cfg.costFuse.perDayUsd}/day generator=${cfg.models.generator} jury=${cfg.models.jury}`,
   );
 
-  const scheduleNext = (ms: number): void => {
-    setTimeout(() => void wake().finally(() => scheduleNext(intervalMs)), ms);
+  // Timers are re-armed in short ticks rather than one long setTimeout: a machine
+  // that sleeps (or a clock/DST change) would otherwise fire late and silently
+  // drift. Each tick just re-checks the wall clock against the due moment.
+  const TICK_MS = 3_600_000;
+
+  const scheduleNext = (): void => {
+    const due = cfg.schedule ? nextWakeAt(cfg.schedule, new Date()) : new Date(Date.now() + intervalMs);
+    console.log(`[daemon] ${ts()} next wake at ${due.toISOString()} (${due.toString()})`);
+    const tick = (): void => {
+      const remaining = due.getTime() - Date.now();
+      if (remaining <= 0) return void wake().finally(scheduleNext);
+      setTimeout(tick, Math.min(remaining, TICK_MS));
+    };
+    tick();
   };
 
   if (process.env.VANA_WAKE_ON_START) {
     console.log(`[daemon] ${ts()} VANA_WAKE_ON_START set — waking now`);
-    void wake().finally(() => scheduleNext(intervalMs));
+    void wake().finally(scheduleNext);
   } else {
-    console.log(`[daemon] ${ts()} first wake in ${cfg.interval.hours}h`);
-    scheduleNext(intervalMs);
+    scheduleNext();
   }
 
   for (const sig of ["SIGTERM", "SIGINT"] as const) {

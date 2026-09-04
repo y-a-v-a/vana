@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { config as loadDotenv } from "dotenv";
 import { z } from "zod";
+import { DAY_NAMES } from "./schedule.ts";
 
 // Repo root = parent of src/. All config paths resolve relative to it.
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -11,6 +12,15 @@ loadDotenv({ path: resolve(ROOT, ".env") });
 
 const ConfigSchema = z.object({
   interval: z.object({ hours: z.number().positive() }),
+  // Weekly wake schedule. When present it replaces `interval`, which stays as
+  // the fallback for anyone who wants plain "every N hours".
+  schedule: z
+    .object({
+      days: z.array(z.enum(DAY_NAMES)).min(1),
+      hour: z.number().int().min(0).max(23),
+      minute: z.number().int().min(0).max(59).default(0),
+    })
+    .optional(),
   workBudget: z.object({ minutes: z.number().positive() }),
   costFuse: z.object({
     perWakeUsd: z.number().positive(),
