@@ -49,12 +49,17 @@ function fixtureConfig(root: string): Config {
       dna: join(root, "DNA.md"),
       catalogue: join(root, "catalogue.json"),
     },
+    dashboard: { port: 4737, tailnetHost: "the-machine.ts.net" },
   } as unknown as Config;
 }
 
-async function request(cfg: Config, url: string): Promise<MockRes> {
+async function request(
+  cfg: Config,
+  url: string,
+  headers: Record<string, string> = {},
+): Promise<MockRes> {
   const res = mockRes();
-  const req = { method: "GET", url } as unknown as IncomingMessage;
+  const req = { method: "GET", url, headers } as unknown as IncomingMessage;
   await handle(req, res as unknown as ServerResponse, cfg);
   return res;
 }
@@ -64,7 +69,12 @@ function postReq(url: string, body: string): IncomingMessage {
     yield body;
   }
   const it = gen();
-  return { method: "POST", url, [Symbol.asyncIterator]: () => it } as unknown as IncomingMessage;
+  return {
+    method: "POST",
+    url,
+    headers: {},
+    [Symbol.asyncIterator]: () => it,
+  } as unknown as IncomingMessage;
 }
 
 test("dashboard handler: routes, CSP, sandbox, traversal", async (t) => {
@@ -249,4 +259,22 @@ test("dashboard handler: routes, CSP, sandbox, traversal", async (t) => {
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+test("dashboard handler: plain-HTTP hits on the tailnet name 301 to the HTTPS origin", async (t) => {
+  const root = mkdtempSync(join(tmpdir(), "vana-redirect-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const cfg = { ...fixtureConfig(root) };
+  cfg.dashboard = { ...cfg.dashboard, baseUrl: "https://the-machine.ts.net" };
+
+  const stale = await request(cfg, "/candidate/w1", { host: "the-machine.ts.net:4737" });
+  assert.equal(stale.statusCode, 301);
+  assert.equal(stale.headers.location, "https://the-machine.ts.net/candidate/w1");
+
+  // Through `tailscale serve` the same request must be handled, not bounced.
+  const proxied = await request(cfg, "/", {
+    host: "the-machine.ts.net",
+    "x-forwarded-proto": "https",
+  });
+  assert.equal(proxied.statusCode, 200);
 });

@@ -8,12 +8,14 @@ import {
   renderResolved,
   renderNotFound,
   renderOrphan,
+  httpsRedirectTarget,
   type PendingItem,
 } from "./dashboard.ts";
 import type { OrphanItem } from "./orphans.ts";
 import { statusFor } from "./promote.ts";
 import type { GeneratedMeta } from "./generator.ts";
 import type { JuryVerdict } from "./jury.ts";
+import type { Config } from "./config.ts";
 
 const meta: GeneratedMeta = {
   title: "The <Original>",
@@ -173,4 +175,56 @@ test("renderOrphan tolerates a missing orphan record", () => {
   const html = renderOrphan(orphan.id, meta, null, "");
   assert.match(html, /stranded \(no record\)/);
   assert.match(html, /action="\/orphan\/2026-07-27-stranded\/rejury"/);
+});
+
+// --- HTTPS redirect for stale plain-HTTP links -------------------------------
+
+const redirCfg = (baseUrl?: string) =>
+  ({ dashboard: { port: 4737, tailnetHost: "the-machine.ts.net", baseUrl } }) as Config;
+
+test("httpsRedirectTarget sends a stale tailnet http:// link to the HTTPS origin", () => {
+  const target = httpsRedirectTarget(redirCfg("https://the-machine.ts.net"), {
+    method: "GET",
+    url: "/candidate/w1",
+    headers: { host: "the-machine.ts.net:4737" },
+  });
+  assert.equal(target, "https://the-machine.ts.net/candidate/w1");
+});
+
+test("httpsRedirectTarget passes proxied requests through, so serve does not loop", () => {
+  const target = httpsRedirectTarget(redirCfg("https://the-machine.ts.net"), {
+    method: "GET",
+    url: "/",
+    headers: { host: "the-machine.ts.net", "x-forwarded-proto": "https" },
+  });
+  assert.equal(target, null);
+});
+
+test("httpsRedirectTarget leaves loopback alone so local tooling still sees 200", () => {
+  for (const host of ["localhost:4737", "127.0.0.1:4737"]) {
+    const target = httpsRedirectTarget(redirCfg("https://the-machine.ts.net"), {
+      method: "GET",
+      url: "/",
+      headers: { host },
+    });
+    assert.equal(target, null, host);
+  }
+});
+
+test("httpsRedirectTarget never redirects a POST, which would drop the approval body", () => {
+  const target = httpsRedirectTarget(redirCfg("https://the-machine.ts.net"), {
+    method: "POST",
+    url: "/candidate/w1/approve",
+    headers: { host: "the-machine.ts.net:4737" },
+  });
+  assert.equal(target, null);
+});
+
+test("httpsRedirectTarget is inert when no baseUrl is configured", () => {
+  const target = httpsRedirectTarget(redirCfg(), {
+    method: "GET",
+    url: "/",
+    headers: { host: "the-machine.ts.net:4737" },
+  });
+  assert.equal(target, null);
 });

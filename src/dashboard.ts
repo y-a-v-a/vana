@@ -300,7 +300,35 @@ async function readBody(req: IncomingMessage, limit = 64 * 1024): Promise<string
   return data;
 }
 
+/**
+ * Stale links (Safari history, old emails) still point at `http://<tailnetHost>:4737`,
+ * which Safari won't submit a form over. When `dashboard.baseUrl` is configured, send
+ * those to the HTTPS origin `tailscale serve` terminates for us.
+ *
+ * Requests arriving *through* that proxy carry `x-forwarded-proto: https` and must pass
+ * through untouched, or we'd loop. Loopback hosts are left alone too, so local tooling
+ * (ops/status.sh, health checks) keeps seeing a plain 200.
+ */
+export function httpsRedirectTarget(
+  cfg: Config,
+  req: Pick<IncomingMessage, "method" | "url" | "headers">,
+): string | null {
+  const base = cfg.dashboard.baseUrl?.replace(/\/+$/, "");
+  if (!base) return null;
+  if (req.method !== "GET" && req.method !== "HEAD") return null;
+  if (req.headers["x-forwarded-proto"]) return null;
+  const host = (req.headers.host ?? "").replace(/:\d+$/, "").replace(/^\[|\]$/g, "");
+  if (!host || host === "localhost" || host === "127.0.0.1" || host === "::1") return null;
+  return `${base}${req.url ?? "/"}`;
+}
+
 export async function handle(req: IncomingMessage, res: ServerResponse, cfg: Config): Promise<void> {
+  const redirect = httpsRedirectTarget(cfg, req);
+  if (redirect) {
+    res.writeHead(301, { location: redirect });
+    return void res.end();
+  }
+
   const url = new URL(req.url ?? "/", "http://localhost");
   const parts = url.pathname.split("/").filter(Boolean); // e.g. ["candidate","<id>","work"]
 
