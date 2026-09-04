@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>In Situ (8.7 cm)</title>
+<style>
+  :root{
+    --c:#1746c8;          /* the one colour, alternating with white */
+    --band:8.7cm;         /* Buren's exact measure: the outil visuel */
+    --ink:#111;
+    --paper:#f4f4f1;
+  }
+  html,body{margin:0;background:var(--paper);color:var(--ink);
+    font:16px/1.5 ui-serif,Georgia,"Times New Roman",serif}
+  main{max-width:70ch;margin:0 auto;padding:5vh 1.25rem 12vh}
+  h1{font-size:1.5rem;font-weight:600;margin:0 0 .2em;letter-spacing:.01em}
+  .sub{font-style:italic;color:#555;margin:0 0 2rem}
+  p{margin:0 0 1rem}
+  .note{font-size:.85rem;color:#555}
+
+  /* ---- the site: a resizable frame that is a query container ---- */
+  .site{
+    container-type:inline-size;        /* THE mechanism: the frame is queried, not the viewport */
+    container-name:site;
+    height:150px;
+    margin:1.4rem 0 .4rem;
+    overflow:hidden;
+    resize:horizontal;                  /* drag the right edge: you are choosing the site */
+    border:1px solid #999;
+    background:#fff;
+    position:relative;
+    min-width:6ch;
+  }
+  .site::after{                          /* a hint that the frame is yours to move */
+    content:"↔ resize";
+    position:absolute;right:2px;bottom:1px;
+    font:11px/1 ui-sans-serif,system-ui,sans-serif;color:#aaa;
+    pointer-events:none;
+  }
+
+  /* ---- the work: BYTE-IDENTICAL markup inside every frame ---- */
+  .tool{
+    height:100%;
+    background:repeating-linear-gradient(90deg,
+      #fff 0 var(--band), var(--c) var(--band) calc(var(--band) * 2));
+    position:relative;
+  }
+  .cat{
+    position:absolute;left:0;right:0;bottom:0;
+    margin:0;padding:.15em .5em;
+    background:rgba(255,255,255,.82);
+    font:600 .8rem/1.4 ui-sans-serif,system-ui,sans-serif;
+    letter-spacing:.03em;
+  }
+  /* the site assigns the category — pure @container, no script */
+  .cat b{display:none}
+  .cat .ligne{display:inline}              /* narrow site → merely a line */
+  @container site (min-width:17.4cm){       /* ≥ 2 bands → an awning (Buren's origin) */
+    .cat .ligne{display:none}
+    .cat .store{display:inline}
+  }
+  @container site (min-width:34.8cm){       /* ≥ 4 bands → a painting */
+    .cat .store{display:none}
+    .cat .peinture{display:inline}
+  }
+
+  footer{margin-top:3rem;border-top:1px solid #ccc;padding-top:1rem;
+    font-size:.8rem;color:#555}
+  footer a{color:#555}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em}
+</style>
+</head>
+<body>
+<main>
+  <h1>In Situ (8.7&nbsp;cm)</h1>
+  <p class="sub">after Daniel Buren — the same stripes, never the same work</p>
+
+  <p>Below are three frames. The striped element inside each one is
+  <em>byte-for-byte identical</em>: the same fixed 8.7&nbsp;cm bands, the
+  same one colour and white. Nothing about the work changes. Only the frame
+  changes — and the frame decides what the work <em>is</em>.</p>
+
+  <section aria-label="a narrow site">
+    <div class="site" style="width:12ch">
+      <div class="tool"><p class="cat">This is
+        <b class="ligne">a line.</b><b class="store">an awning.</b><b class="peinture">a painting.</b></p></div>
+    </div>
+  </section>
+
+  <section aria-label="a medium site">
+    <div class="site" style="width:24cm">
+      <div class="tool"><p class="cat">This is
+        <b class="ligne">a line.</b><b class="store">an awning.</b><b class="peinture">a painting.</b></p></div>
+    </div>
+  </section>
+
+  <section aria-label="a wide site">
+    <div class="site" style="width:40cm">
+      <div class="tool"><p class="cat">This is
+        <b class="ligne">a line.</b><b class="store">an awning.</b><b class="peinture">a painting.</b></p></div>
+    </div>
+  </section>
+
+  <p class="note">Drag the right edge of any frame. Under ~17.4&nbsp;cm the work
+  admits it is only a line; widen it into an awning; widen it further and it is
+  suddenly a painting. The stripes never moved. The category is issued by the
+  browser's layout engine reading the size of the container — not the viewport,
+  not the image. Site specificity, computed live.</p>
+
+  <p class="note">Buren lifted his 8.7&nbsp;cm stripe straight from the awning
+  fabric of Parisian shopfronts: an anti-composition, a neutral tool with
+  nothing to say, so that whatever it says is said by the wall it hangs on.
+  Here the wall is a <code>@container</code>.</p>
+
+  <footer>
+    <p><strong>In Situ (8.7 cm)</strong>, 2026. Medium: CSS container queries;
+    pixels on screen. No JavaScript, no cookies, no tracking, no network.</p>
+    <p>y-a-v-a (<em>yet another visual artist</em>), after Daniel Buren,
+    <em>outil visuel</em> / 8.7&nbsp;cm striped works (in&nbsp;situ, 1965– ) and
+    the Parisian awning readymade. Nods to the eternal question
+    “but&nbsp;is&nbsp;it&nbsp;art?” — answer: <em>depends where you hang it.</em></p>
+    <p>Licence: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+    Validated by Vincent Bruijn. AI-generated, DNA-validated.</p>
+  </footer>
+</main>
+</body>
+</html>

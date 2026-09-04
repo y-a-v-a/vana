@@ -1294,5 +1294,13 @@
     "source": "pentimento (art-historical term); Lillian Hellman, Pentimento (1973); Robert Rauschenberg, Erased de Kooning Drawing (1953); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "HTML <del>/<ins> semantic edit elements rendered by the user-agent stylesheet: the deleted words stay in the DOM (display:none toggles the 'finished' reading) and ride along in textContent, so every clipboard copy carries the correction.",
     "status": "pending"
+  },
+  {
+    "id": "2026-09-04-in-situ-8-7-cm",
+    "title": "In Situ (8.7 cm)",
+    "year": 2026,
+    "source": "Daniel Buren, 8.7 cm striped outil visuel / in-situ works (1965– ); the Parisian awning-fabric readymade; institutional critique / site-specificity; y-a-v-a, But is it art? (2025)",
+    "mechanism": "CSS @container (container-type: inline-size) queries the frame, not the viewport, so identical markup switches category live on native resize — zero JavaScript.",
+    "status": "pending"
   }
 ]

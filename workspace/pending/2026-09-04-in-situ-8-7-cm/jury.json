@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-09-04-in-situ-8-7-cm",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Daniel Buren, 8.7 cm striped outil visuel / in-situ works (1965-)",
+    "the Parisian awning-fabric readymade",
+    "institutional critique / site-specificity",
+    "y-a-v-a, But is it art? (2025)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7"
+  ],
+  "rationale": "The work is a precise, well-targeted mapping of Buren's site-specificity thesis onto CSS container queries: the same byte-identical striped element is reclassified as line / awning / painting based purely on the size of the frame it sits in, computed live by the layout engine with zero JavaScript. Concept and execution collapse into one object (P1), the awning-fabric readymade is recontextualized through a genuinely web-native mechanism (P2), and the build is admirably minimal (P3). The narrative is well-positioned: it explicitly answers But is it art? (2025) with 'depends where you hang it,' and continues the lineage of mechanism-as-message works (la-trahison-des-images, Hierarchy of Genres, Measurement: Viewport) using a distinct primitive (container queries rather than viewport/media queries). The thresholds (17.4 cm = 2 bands, 34.8 cm = 4 bands) are mathematically tied to the band unit, which is exactly the kind of restraint the DNA rewards.",
+  "reservations": "Materially distinct from the catalogue (closest neighbors are la-trahison-des-images and Hierarchy of Genres, but those use viewport queries for different conceptual targets). The three pre-set frames do slightly illustrate rather than purely enact — the concept could land in a single resizable frame — but the triptych makes the byte-identical claim immediately legible without requiring user action, which is a reasonable trade. Container-query support is broad but not universal; a fallback note or feature query would harden the work, though this is a minor craft concern rather than a gate issue.",
+  "revision_suggestion": "Consider presenting a single resizable frame as the primary surface (true to P3 minimal-gesture), with the triptych either demoted to a footnote or kept as the entry state. Optionally add a `@supports not (container-type: inline-size)` fallback so the work degrades gracefully on older engines while remaining an honest Buren homage.",
+  "jury_model": "minimax/minimax-m3"
+}
