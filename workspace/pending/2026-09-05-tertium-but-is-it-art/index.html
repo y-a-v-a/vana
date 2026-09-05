@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tertium (But Is It Art?)</title>
+<style>
+  :root{
+    --ink:#141414;
+    --paper:#f4f2ec;
+    --dim:#6c675d;
+    --rule:#d9d4c8;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font:16px/1.5 ui-serif, Georgia, "Times New Roman", serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:6vmin;
+    text-align:center;
+  }
+  main{max-width:34rem}
+  h1{
+    font-size:clamp(1.4rem,4.5vw,2.2rem);
+    font-weight:400;
+    letter-spacing:.01em;
+    margin:0 0 2.2rem;
+  }
+  /* The whole work: one native checkbox, its third state script-set. */
+  .subject{
+    display:inline-flex;
+    align-items:center;
+    gap:1rem;
+    cursor:pointer;
+    user-select:none;
+  }
+  input[type=checkbox]{
+    /* keep it native — the browser vendor draws the dash, the tick, the void */
+    width:64px;
+    height:64px;
+    cursor:pointer;
+    accent-color:var(--ink);
+  }
+  .subject span{
+    font-size:clamp(1.1rem,3.5vw,1.6rem);
+    font-style:italic;
+  }
+  .verdict{
+    margin-top:1.4rem;
+    min-height:1.5rem;
+    color:var(--dim);
+    font-style:italic;
+  }
+  .ledger{
+    margin:2.6rem auto 0;
+    border-top:1px solid var(--rule);
+    padding-top:1rem;
+    font:12px/1.7 ui-monospace, "SFMono-Regular", Menlo, monospace;
+    color:var(--dim);
+    letter-spacing:.02em;
+  }
+  .ledger b{color:var(--ink);font-weight:600}
+  .glyph{font-size:1.1em}
+  .label{
+    margin-top:2.6rem;
+    border-top:1px solid var(--rule);
+    padding-top:1rem;
+    font:11px/1.6 ui-monospace, Menlo, monospace;
+    color:var(--dim);
+    max-width:34rem;
+  }
+  .label a{color:inherit}
+</style>
+</head>
+<body>
+<main>
+  <h1>Tertium</h1>
+
+  <label class="subject" for="q">
+    <input type="checkbox" id="q" aria-describedby="verdict">
+    <span>But is it art?</span>
+  </label>
+
+  <p class="verdict" id="verdict"></p>
+
+  <p class="ledger" id="ledger"></p>
+
+  <p class="label">
+    <b>Tertium (But Is It Art?)</b> — y-a-v-a, 2026.<br>
+    A native checkbox held by script in its third, <span class="glyph">—</span>, state:
+    neither yes nor no. Only the machine can set it; your hand can only end it.
+    One click collapses the question into a verdict, and there is no click back —
+    a fresh visit is the only way to un-decide. Medium: one HTML input, pixels on screen.
+    No cookies, no tracking, no data leaves this page.<br>
+    Answers y-a-v-a, <i>But is it art?</i> (2025) — the page that already said YES.
+    After John Cage, <i>Indeterminacy</i> (1958–59); the excluded middle
+    (<i>tertium non datur</i>); Marcel Duchamp, the readymade.<br>
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+  </p>
+</main>
+
+<script>
+  (function(){
+    var box = document.getElementById('q');
+    var verdict = document.getElementById('verdict');
+    var ledger = document.getElementById('ledger');
+
+    // The third state exists, but only script may grant it.
+    box.indeterminate = true;
+    var collapsed = false;
+
+    function state(){
+      if (box.indeterminate) return {g:'—', word:'undecided'};   // —
+      return box.checked ? {g:'YES', word:'yes'} : {g:'NO', word:'no'};
+    }
+
+    function render(){
+      var s = state();
+      ledger.innerHTML =
+        'input.indeterminate = <b>' + box.indeterminate + '</b><br>' +
+        'input.checked&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = <b>' + box.checked + '</b><br>' +
+        'reads as &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <b class="glyph">' + s.g + '</b>';
+      if (!collapsed) {
+        verdict.textContent = 'The question is open. Do not touch it to keep it art.';
+      }
+    }
+
+    // Clicking a native checkbox always clears indeterminate — you cannot reach it.
+    box.addEventListener('change', function(){
+      if (!collapsed) {
+        collapsed = true;
+        verdict.textContent = 'You decided. It is no longer a question. Reload to un-decide.';
+      }
+      render();
+    });
+
+    render();
+  })();
+</script>
+</body>
+</html>

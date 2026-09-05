@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-09-05-tertium-but-is-it-art",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 3
+  },
+  "weighted_total": 39,
+  "verdict": "strong",
+  "references_named": [
+    "y-a-v-a, But is it art? (2025)",
+    "John Cage, Indeterminacy (1958-59)",
+    "tertium non datur / law of the excluded middle",
+    "Marcel Duchamp, the readymade"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The indeterminate checkbox is a genuinely under-mined web mechanism, and the work uses it with textbook P1 discipline: the browser's script-only third state, which the user cannot reach or restore, enacts tertium non datur at the interaction layer. It directly answers y-a-v-a's own 'But is it art?' (2025) by rewinding the page from its confident YES to the still-open question, naming its position on the chance/order axis and the prior node it replies to. The build is the smallest possible, attribution and license are stated, and the live ledger reading the two booleans back turns the collapse into something attested rather than merely felt.",
+  "reservations": "The Cage reference is more decorative than substantive — Cage's indeterminacy concerns chance operations in composition, not a third logical value, so the nod to Indeterminacy is a tonal wink rather than a deep lineage. Double-coding (P7) is present but lighter than the strongest catalogue entries: the surface gag (a shrug you break by clicking) lands cleanly, but the literate layer is thinner than, say, But is it art?'s stark YES or Tragedian's material disappearance.",
+  "revision_suggestion": null,
+  "jury_model": "minimax/minimax-m3"
+}

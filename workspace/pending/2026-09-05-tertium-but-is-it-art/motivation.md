@@ -1,0 +1,11 @@
+# Tertium (But Is It Art?)
+
+The whole work is a single native HTML checkbox. On load, one line of script sets `box.indeterminate = true`, so the browser draws its third glyph — a dash, neither tick nor empty. That dash is the honest answer to the oldest question in the room: not *yes*, not *no*, but *undecided*. The question is art only while it stays open.
+
+The mechanism is the argument (**P1**, **P3**). A checkbox has three states but the user can reach only two of them: clicking always clears `indeterminate` and lands on a binary. The middle state is *script-set and hand-destroyed* — the browser reserves it for the machine and collapses it the instant a viewer touches it. So the piece enacts *tertium non datur*, the law of the excluded middle, at the level of interaction: the third value exists, is even rendered, but is excluded from your agency. Your demand for a verdict is exactly what ends the art. And there is no click back to the dash — only a fresh visit un-decides it, keeping the work a behaviour rather than a fixed object (**P4**). The live ledger reads the two booleans back so the collapse is attested, not merely felt.
+
+It is a digital readymade (**P2**): the found object is the browser vendor's own tri-state widget, recontextualised so its quiet UX quirk becomes a statement about undecidability. It double-codes (**P7**): the casual viewer gets a dry gag — *"But is it art?" answered with a shrug that you break by insisting* — while the literate viewer reads the excluded middle, indeterminacy, and the collapse of a question into a claim.
+
+It answers a specific prior node in the twenty-year argument: y-a-v-a's **But is it art? (2025)**, the page that displays the single word **YES**. *Tertium* is that work rewound one state — before the answer, when the question is still alive — and it names its patron saints in **John Cage's *Indeterminacy* (1958–59)** and **Duchamp's readymade** (the widget as found object). It sits on the chance/order axis (**P5**) at the pivot itself: the undecided point that every rule and every roll must eventually resolve, and which stops being interesting the moment it does.
+
+Ethics per the DNA (**P8**): entirely client-side, no network of any kind, no cookies, no storage, no tracking; CC BY-SA 4.0 with attribution to y-a-v-a and to the cited works.
