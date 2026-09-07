@@ -1,0 +1,39 @@
+{
+  "work_id": "2026-09-07-esse-est-percipi-rendered-on-sight",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 3,
+    "wit": 4
+  },
+  "weighted_total": 39,
+  "verdict": "strong",
+  "references_named": [
+    "George Berkeley, A Treatise Concerning the Principles of Human Knowledge (1710)",
+    "Ronald Knox, the 'tree in the quad' limerick",
+    "CSS Containment Module Level 2 — content-visibility (W3C)",
+    "y-a-v-a, The Creative Act (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "Strong in-DNA candidate. The browser-native CSS containment property is genuinely appropriated as readymade (P2) and its literal skip-render behavior enacts Berkeley's esse est percipi at the rendering layer (P1). The mechanism-as-argument is clean: the JavaScript only takes attendance; existence is delegated to a performance heuristic. Double-coding works at both depths (P7), the limerick rebuttal lands, and the chance/order axis (P5) is legible (numbered grid × thrown rectangles). The anti-pattern fallback (naive realist) is a witty second beat. Narrative placement is strong — it explicitly answers The Creative Act as a simpler, vendor-enforced counterpart.",
+  "reservations": "Craft has a minor smell — the 'supported' detection is hand-wavy (it || true-falls through regardless of actual event support, so the JS claims to attach a handler that may never fire on engines lacking the event but reporting CSS support; effectively the support path may not behave as documented on every browser). Also, the painted compositions are visually thin — single-hue ground plus 1–3 rectangles is the absolute minimum to be a 'painting,' and P3's 'smallest build' arguably slides toward decorative-generative here without the visual specificity of a real art-historical referent. Nuance/Novelty still pass but the chance compositions don't earn their keep the way Maleglitch's format artifacts do.",
+  "revision_suggestion": "Either deepen the per-canvas composition to borrow a more specific visual idiom (e.g., a named art-historical gesture re-thrown) so the chance side has bite, or honestly detect contentvisibilityautostatechange support (typeof fig.addEventListener check + a fallback census based on IntersectionObserver) so the mechanism's metaphysical claim isn't softened by a fudged feature-test.",
+  "jury_model": "minimax/minimax-m3"
+}

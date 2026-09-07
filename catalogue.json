@@ -1310,5 +1310,13 @@
     "source": "y-a-v-a, But is it art? (2025); John Cage, Indeterminacy (1958-59); tertium non datur / the law of the excluded middle; Marcel Duchamp, the readymade",
     "mechanism": "input.indeterminate=true renders the browser's script-only third state; a native checkbox click always clears it, so the excluded middle is unreachable by the user and destroyed on touch.",
     "status": "pending"
+  },
+  {
+    "id": "2026-09-07-esse-est-percipi-rendered-on-sight",
+    "title": "Esse Est Percipi (Rendered on Sight)",
+    "year": 2026,
+    "source": "George Berkeley, A Treatise Concerning the Principles of Human Knowledge (1710); Ronald Knox, the 'tree in the quad' limerick; CSS Containment Module Level 2 — content-visibility (W3C); y-a-v-a, The Creative Act (2026)",
+    "mechanism": "CSS content-visibility:auto (Containment L2) skips layout/paint for off-viewport panels; contentvisibilityautostatechange mints a per-perception crypto-random canvas and ceases it when unperceived; a live census counts what exists.",
+    "status": "pending"
   }
 ]
