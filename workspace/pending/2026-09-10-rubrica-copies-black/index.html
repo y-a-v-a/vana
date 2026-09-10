@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rubrica (Copies Black)</title>
+<style>
+  :root{
+    --parchment:#f4ecd8;
+    --ink:#1b1712;
+    --rubric:#b3122a;      /* vermilion — the rubricator's red ochre */
+    --faint:#8a7f66;
+  }
+  html,body{margin:0;background:var(--parchment);color:var(--ink);}
+  body{
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  main{max-width:38rem;margin:0 auto;padding:8vh 1.4rem 4rem;}
+  h1{font-size:1.15rem;font-weight:600;letter-spacing:.02em;margin:0 0 .2rem;}
+  h1 .r{color:var(--rubric);}
+  .sub{color:var(--faint);font-style:italic;font-size:.95rem;margin:0 0 2.4rem;}
+
+  #passage{
+    font-size:1.32rem;
+    line-height:1.72;
+    text-align:justify;
+    hyphens:auto;
+    margin:0 0 1.8rem;
+    /* highlights are painted over these letters; the letters themselves stay black */
+  }
+  /* THE RUBRICATOR. These marks exist only as JS Range objects registered in
+     CSS.highlights — never in the DOM, never in textContent, never on the clipboard. */
+  ::highlight(rubrica){
+    color:var(--rubric);
+  }
+
+  .panel{
+    border-top:1px solid #d9cfb4;
+    margin-top:2.4rem;padding-top:1.4rem;
+    font-size:.92rem;color:#4a4335;
+  }
+  .attest{font-variant-numeric:tabular-nums;margin:0 0 1rem;}
+  .attest b{color:var(--ink);font-weight:600;}
+  .attest .zero{color:var(--rubric);font-weight:700;}
+  label{display:block;font-size:.85rem;color:var(--faint);margin:0 0 .35rem;}
+  textarea{
+    width:100%;box-sizing:border-box;min-height:6.5rem;resize:vertical;
+    background:#fbf6e9;border:1px solid #d9cfb4;border-radius:2px;
+    color:var(--ink);font:inherit;font-size:1.02rem;line-height:1.6;padding:.7rem .8rem;
+  }
+  textarea::placeholder{color:#b6ac90;font-style:italic;}
+  .live{margin:.7rem 0 0;min-height:1.2em;color:var(--faint);font-size:.85rem;}
+  .live b{color:var(--rubric);}
+
+  footer{
+    max-width:38rem;margin:0 auto;padding:0 1.4rem 5rem;
+    font-size:.75rem;line-height:1.6;color:#9a8f76;
+  }
+  footer a{color:inherit;}
+  .nosupport{display:none;background:#fbf6e9;border:1px solid #d9cfb4;
+    padding:.9rem 1rem;border-radius:2px;color:#4a4335;font-size:.9rem;margin:0 0 2rem;}
+</style>
+</head>
+<body>
+<main>
+  <h1><span class="r">Rubrica</span> (Copies Black)</h1>
+  <p class="sub">pixels on screen · the rubricator is your browser</p>
+
+  <div class="nosupport" id="nosupport">
+    Your browser owns no rubricator (the CSS Custom Highlight API is missing).
+    The passage below is entirely black — which is, in the end, the whole point.
+  </div>
+
+  <p id="passage"></p>
+
+  <div class="panel">
+    <p class="attest">
+      Letters the scribe set, present in the DOM: <b id="nchars">0</b>.<br>
+      Letters the rubricator added to the DOM: <span class="zero" id="nmarks">0</span>.<br>
+      Letters your copy will carry: <b id="ncopy">0</b> — every one of them black.
+    </p>
+    <label for="paste">Select the passage, copy it, and paste it here. The red stays behind.</label>
+    <textarea id="paste" placeholder="paste the sacred text…"></textarea>
+    <p class="live" id="live"></p>
+  </div>
+</main>
+
+<footer>
+  <strong>Rubrica (Copies Black)</strong>, y-a-v-a, 2026.
+  After the medieval <em>rubricator</em> and the red letters added by hand to the black
+  columns of a printed book — Gutenberg's 42-line Bible (c.&nbsp;1455) left the spaces
+  blank for them. Answers Walter Benjamin, <em>The Work of Art in the Age of Mechanical
+  Reproduction</em> (1935): the aura is the part reproduction cannot carry.
+  Mechanism: the CSS Custom Highlight API paints the rubric as pure render — no cookies,
+  no trackers, no network, no storage.
+  Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var TEXT =
+    "This is the text. The scribe set down every black letter you are able to copy. " +
+    "The rubricator came after, in red, and marked the words that matter — the feast, " +
+    "the initial, the name of value. See how the important words turn red. Now select " +
+    "this passage, copy it, and paste it into the box below. The red will not follow. " +
+    "It was never in the text. It lives only on the glass, painted by your browser over " +
+    "letters it did not add. Reproduction carries the scribe's black work, entire and " +
+    "equal and cheap. What it cannot carry is the mark that whispered: this one matters. " +
+    "The aura, it turns out, was a highlight.";
+
+  var passage = document.getElementById("passage");
+  // Set as a single text node so Range offsets map straight onto textContent.
+  passage.textContent = TEXT;
+  var node = passage.firstChild;
+
+  document.getElementById("nchars").textContent = TEXT.length;
+
+  var supported = ("highlights" in CSS) && (typeof Highlight === "function");
+  if(!supported){
+    document.getElementById("nosupport").style.display = "block";
+  } else {
+    // The order rule, legible on purpose: rubricate a small canon of words that
+    // "matter", plus the opening word of every sentence — as a rubricator would.
+    var canon = ["red","rubricator","matter","matters","feast","initial","value",
+                 "important","aura","halo","highlight","mark","marked","glass","name","sacred"];
+    var reWord = new RegExp("\\b(" + canon.join("|") + ")\\b","gi");
+    var reOpen = /(^|[.!?—]\s+)([A-Za-z]+)/g;
+
+    var hl = new Highlight();
+    function add(start,end){
+      var r = document.createRange();
+      r.setStart(node,start); r.setEnd(node,end);
+      hl.add(r);
+    }
+    var m;
+    while((m = reWord.exec(TEXT))){ add(m.index, m.index + m[0].length); }
+    while((m = reOpen.exec(TEXT))){
+      var s = m.index + m[1].length;
+      add(s, s + m[2].length);
+    }
+    CSS.highlights.set("rubrica", hl);
+  }
+
+  // Proof, live: the reds are not elements. The passage has zero child nodes but text.
+  document.getElementById("nmarks").textContent = passage.children.length; // 0
+
+  // A copy carries only the selection's plain string — the rubric never travels.
+  var live = document.getElementById("live");
+  document.addEventListener("copy", function(){
+    var sel = (document.getSelection() || "").toString();
+    document.getElementById("ncopy").textContent = sel.length;
+    live.innerHTML = "You copied " + sel.length + " characters. Red among them: <b>0</b>.";
+  });
+
+  document.getElementById("paste").addEventListener("input", function(e){
+    var n = e.target.value.length;
+    document.getElementById("ncopy").textContent = n;
+    live.innerHTML = n
+      ? "Pasted " + n + " characters, all black. The rubricator's hand did not reproduce."
+      : "";
+  });
+})();
+</script>
+</body>
+</html>

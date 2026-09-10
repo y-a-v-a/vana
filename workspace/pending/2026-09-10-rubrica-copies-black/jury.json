@@ -1,0 +1,37 @@
+{
+  "work_id": "2026-09-10-rubrica-copies-black",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 5,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "weighted_total": 44,
+  "verdict": "strong",
+  "references_named": [
+    "Rubrication / the medieval rubricator",
+    "Johannes Gutenberg, 42-line Bible (c. 1455)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The CSS Custom Highlight API is a genuinely novel web-native mechanism that perfectly enacts the concept: marks that exist only in the render layer, absent from DOM, textContent, and clipboard. The rubrication/Benjamin pairing is precise and historically literate, and the live attestation panel (nchars/nmarks/ncopy) makes the argument demonstrable in the reader's own hands. Concept and execution collapse into one object (P1) — the highlight's literal property IS the thesis about aura and reproduction. Tone is dry, witty, and restrained; the closing line ('the aura, it turns out, was a highlight') lands as both joke and argument. Distinct from the catalogue's other source-vs-render works (Silencio, Rivers, Incipit, A Humument, Non-finito, Schreibzeit, Window Sign, Scrittura Speculare) by mechanism (Highlight API vs. CSS generated content / transforms / bidi) and by argument (rubrication and the mark of value vs. whitespace, rivers, initials, etc.).",
+  "reservations": "The Highlight API is still relatively new and not universally supported (the nosupport fallback is honest about this, which is good). Novelty is high but not maximal — the source-vs-render vein is well-trodden in this catalogue, though this is a fresh mechanism within it. The 'canon' of rubricated words is somewhat arbitrary; a stricter rule (e.g., only sentence-openers, or only a single named term) might tighten the gesture.",
+  "revision_suggestion": "Consider tightening the rubrication rule to a single, legible principle (e.g., only sentence-initial words, or only one recurring term like 'aura'/'matter') so the canon feels less like a keyword list and more like a scriptorium convention. Otherwise the work is strong as-is.",
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1318,5 +1318,13 @@
     "source": "George Berkeley, A Treatise Concerning the Principles of Human Knowledge (1710); Ronald Knox, the 'tree in the quad' limerick; CSS Containment Module Level 2 — content-visibility (W3C); y-a-v-a, The Creative Act (2026)",
     "mechanism": "CSS content-visibility:auto (Containment L2) skips layout/paint for off-viewport panels; contentvisibilityautostatechange mints a per-perception crypto-random canvas and ceases it when unperceived; a live census counts what exists.",
     "status": "pending"
+  },
+  {
+    "id": "2026-09-10-rubrica-copies-black",
+    "title": "Rubrica (Copies Black)",
+    "year": 2026,
+    "source": "Rubrication / the medieval rubricator; Johannes Gutenberg, 42-line Bible (c. 1455) — spaces left blank for hand-added rubrics; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "CSS Custom Highlight API paints render-only Range highlights that are absent from the DOM, textContent and the clipboard.",
+    "status": "pending"
   }
 ]
