@@ -1326,5 +1326,13 @@
     "source": "Rubrication / the medieval rubricator; Johannes Gutenberg, 42-line Bible (c. 1455) — spaces left blank for hand-added rubrics; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "CSS Custom Highlight API paints render-only Range highlights that are absent from the DOM, textContent and the clipboard.",
     "status": "pending"
+  },
+  {
+    "id": "2026-09-12-the-ambassadors-you-cannot-see-both",
+    "title": "The Ambassadors (You Cannot See Both)",
+    "year": 2026,
+    "source": "Hans Holbein the Younger, The Ambassadors (1533); Jean-Francois Niceron, La Perspective curieuse (1638); the vanitas / memento mori tradition; y-a-v-a, Costruzione Legittima (2026)",
+    "mechanism": "CSS perspective + rotateX foreshortening compresses a vertically pre-stretched canvas skull into true proportion only at the grazing angle where the face-on figures collapse, making the two readings geometrically mutually exclusive.",
+    "status": "pending"
   }
 ]

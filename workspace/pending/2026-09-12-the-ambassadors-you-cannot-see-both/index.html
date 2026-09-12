@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Ambassadors (You Cannot See Both)</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body {
+    margin: 0;
+    background: #0b0f0e;
+    color: #cfd8d2;
+    font-family: Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.1rem;
+    padding: 2rem 1rem 3rem;
+    box-sizing: border-box;
+  }
+  /* The stage holds the vanishing point; the panel is the painting we tilt. */
+  .stage {
+    perspective: 1400px;
+    perspective-origin: 50% 42%;
+    width: min(92vw, 800px);
+    touch-action: none;
+    user-select: none;
+  }
+  .panel {
+    transform-origin: 50% 100%;
+    transform: rotateX(0deg);
+    will-change: transform;
+    line-height: 0;
+    box-shadow: 0 30px 60px rgba(0,0,0,.6);
+  }
+  canvas { width: 100%; height: auto; display: block; }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    width: min(92vw, 800px);
+    font: 400 .85rem/1.4 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    color: #8ea79b;
+  }
+  .controls label { white-space: nowrap; letter-spacing: .04em; }
+  input[type=range] { flex: 1; accent-color: #b7c3ba; }
+  .read {
+    min-width: 15ch;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .read.seen { color: #e7d9b0; }
+
+  .label {
+    max-width: min(92vw, 800px);
+    font-size: .8rem;
+    line-height: 1.55;
+    color: #7f8b84;
+    text-align: center;
+  }
+  .label b { color: #b7c3ba; font-weight: 400; font-style: italic; }
+  .label .lic { display: block; margin-top: .5rem; color: #5c6763; font-size: .72rem; }
+  h1 {
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: .02em;
+    margin: 0;
+    color: #b7c3ba;
+    text-align: center;
+  }
+  h1 span { color: #6f7a74; font-style: italic; }
+</style>
+</head>
+<body>
+<main>
+  <h1>The Ambassadors <span>— you cannot see both</span></h1>
+
+  <div class="stage" id="stage" title="Tilt the panel">
+    <div class="panel" id="panel">
+      <canvas id="c" width="800" height="520"></canvas>
+    </div>
+  </div>
+
+  <div class="controls">
+    <label for="a">face&nbsp;on</label>
+    <input id="a" type="range" min="0" max="80" step="1" value="0" aria-label="viewing angle">
+    <label for="a">oblique</label>
+    <span class="read" id="read" aria-live="polite">angle 0°</span>
+  </div>
+
+  <p class="label">
+    Two ambassadors, their globe and their instruments, painted to be read from
+    straight ahead. The grey streak across the floor is nothing — until you tilt
+    the panel to a grazing angle, where it foreshortens into a skull and the men
+    dissolve. The browser's own 3-D projection cannot render both truths at once:
+    to look at <b>death</b> you must look at everything else <b>wrong</b>.
+    <span class="lic">
+      y-a-v-a (Vincent Bruijn), after Hans Holbein the Younger, <i>The Ambassadors</i> (1533),
+      and the anamorphosis of Jean-François Nicéron. Licensed
+      <a href="#" onclick="return false" style="color:#7f8b84">CC BY 4.0</a>.
+      No cookies, no trackers, no external requests. The picture is drawn from code.
+    </span>
+  </p>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var cv = document.getElementById("c");
+  var ctx = cv.getContext("2d");
+  var W = 800, H = 520;
+
+  // --- render the panel once (it is fixed; only our angle onto it changes) ---
+  function draw() {
+    var dpr = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
+    cv.width = W * dpr; cv.height = H * dpr;
+    cv.style.aspectRatio = W + " / " + H;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    // green damask ground
+    var g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, "#26463d");
+    g.addColorStop(1, "#12261f");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+
+    // faint brocade
+    ctx.strokeStyle = "rgba(120,150,130,.06)";
+    ctx.lineWidth = 1;
+    for (var x = -H; x < W; x += 34) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + H, H); ctx.stroke();
+    }
+
+    // Cosmati floor
+    ctx.fillStyle = "#0e1f1a";
+    ctx.fillRect(0, 430, W, H - 430);
+    ctx.strokeStyle = "rgba(180,150,90,.18)";
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(0, 430); ctx.lineTo(W, 430); ctx.stroke();
+
+    // the two-tier table between them
+    ctx.fillStyle = "#3a2c1c";
+    ctx.fillRect(300, 250, 200, 16);
+    ctx.fillRect(300, 330, 200, 16);
+    ctx.fillStyle = "#2a2013";
+    ctx.fillRect(316, 266, 12, 64); ctx.fillRect(472, 266, 12, 64);
+    // globe + book on the shelves
+    ctx.fillStyle = "#7c6a3f";
+    ctx.beginPath(); ctx.arc(360, 236, 18, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#4a3f22"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(360, 236, 18, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(360, 236, 7, 18, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.fillStyle = "#8a2e2a";
+    ctx.fillRect(430, 226, 40, 20);
+
+    figure(170, "#4a1420", "#c9b89a");   // left ambassador, robe crimson
+    figure(630, "#141414", "#c9b89a");   // right ambassador, robe black
+
+    // --- the anamorphic skull: drawn true, then stretched 3x vertically, so a
+    //     grazing tilt (~72 deg) compresses it back to correct proportions ---
+    ctx.save();
+    ctx.translate(W / 2, 262);
+    ctx.scale(1.55, 3.0);
+    ctx.rotate(-0.06);
+    skull(ctx);
+    ctx.restore();
+  }
+
+  function figure(cx, robe, skin) {
+    // robe
+    ctx.fillStyle = robe;
+    ctx.beginPath();
+    ctx.moveTo(cx - 62, 430);
+    ctx.lineTo(cx - 46, 150);
+    ctx.quadraticCurveTo(cx, 120, cx + 46, 150);
+    ctx.lineTo(cx + 62, 430);
+    ctx.closePath();
+    ctx.fill();
+    // fur collar
+    ctx.fillStyle = "rgba(210,205,190,.85)";
+    ctx.beginPath();
+    ctx.moveTo(cx - 46, 150);
+    ctx.quadraticCurveTo(cx, 176, cx + 46, 150);
+    ctx.quadraticCurveTo(cx, 208, cx - 46, 150);
+    ctx.fill();
+    // face
+    ctx.fillStyle = skin;
+    ctx.beginPath(); ctx.ellipse(cx, 118, 22, 27, 0, 0, Math.PI * 2); ctx.fill();
+    // hat
+    ctx.fillStyle = "#0c0c0c";
+    ctx.beginPath();
+    ctx.ellipse(cx, 96, 30, 12, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillRect(cx - 24, 74, 48, 22);
+  }
+
+  function skull(c) {
+    var w = 150, h = 120;
+    c.fillStyle = "rgba(228,224,210,.62)";
+    // cranium + cheeks
+    c.beginPath();
+    c.moveTo(-w * 0.5, -h * 0.05);
+    c.bezierCurveTo(-w * 0.58, -h * 0.75, w * 0.58, -h * 0.75, w * 0.5, -h * 0.05);
+    c.bezierCurveTo(w * 0.5, h * 0.18, w * 0.34, h * 0.24, w * 0.26, h * 0.34);
+    c.lineTo(-w * 0.26, h * 0.34);
+    c.bezierCurveTo(-w * 0.34, h * 0.24, -w * 0.5, h * 0.18, -w * 0.5, -h * 0.05);
+    c.closePath();
+    c.fill();
+    // jaw
+    c.beginPath();
+    c.moveTo(-w * 0.26, h * 0.34);
+    c.quadraticCurveTo(0, h * 0.62, w * 0.26, h * 0.34);
+    c.quadraticCurveTo(w * 0.16, h * 0.5, 0, h * 0.5);
+    c.quadraticCurveTo(-w * 0.16, h * 0.5, -w * 0.26, h * 0.34);
+    c.fill();
+    // eye sockets
+    c.fillStyle = "rgba(20,26,22,.92)";
+    c.beginPath(); c.ellipse(-w * 0.24, -h * 0.12, w * 0.16, h * 0.16, 0, 0, Math.PI * 2); c.fill();
+    c.beginPath(); c.ellipse(w * 0.24, -h * 0.12, w * 0.16, h * 0.16, 0, 0, Math.PI * 2); c.fill();
+    // nasal cavity
+    c.beginPath();
+    c.moveTo(0, -h * 0.02);
+    c.lineTo(-w * 0.07, h * 0.2);
+    c.lineTo(w * 0.07, h * 0.2);
+    c.closePath();
+    c.fill();
+    // teeth
+    c.fillStyle = "rgba(228,224,210,.62)";
+    c.fillRect(-w * 0.2, h * 0.34, w * 0.4, h * 0.1);
+    c.fillStyle = "rgba(20,26,22,.55)";
+    for (var i = -3; i <= 3; i++) {
+      c.fillRect(i * w * 0.055 - 1, h * 0.34, 2, h * 0.1);
+    }
+  }
+
+  // --- the tilt: user chooses the angle; geometry does the revealing ---
+  var panel = document.getElementById("panel");
+  var slider = document.getElementById("a");
+  var read = document.getElementById("read");
+
+  function setAngle(a) {
+    a = Math.max(0, Math.min(80, a));
+    slider.value = a;
+    panel.style.transform = "rotateX(" + a + "deg)";
+    var seen = a >= 66 && a <= 76;
+    read.textContent = seen ? "memento mori · the men are gone" : ("angle " + Math.round(a) + "°");
+    read.classList.toggle("seen", seen);
+  }
+
+  slider.addEventListener("input", function () { setAngle(+slider.value); });
+
+  // dragging the panel itself tilts it, so the gesture is the act of looking askance
+  var stage = document.getElementById("stage");
+  var dragging = false, startY = 0, startA = 0;
+  stage.addEventListener("pointerdown", function (e) {
+    dragging = true; startY = e.clientY; startA = +slider.value;
+    stage.setPointerCapture(e.pointerId);
+  });
+  stage.addEventListener("pointermove", function (e) {
+    if (!dragging) return;
+    setAngle(startA + (e.clientY - startY) * 0.35);
+  });
+  function stop() { dragging = false; }
+  stage.addEventListener("pointerup", stop);
+  stage.addEventListener("pointercancel", stop);
+
+  draw();
+  window.addEventListener("resize", draw);
+  setAngle(0);
+})();
+</script>
+</body>
+</html>

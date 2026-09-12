@@ -1,0 +1,38 @@
+{
+  "work_id": "2026-09-12-the-ambassadors-you-cannot-see-both",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 3,
+    "wit": 3
+  },
+  "weighted_total": 35,
+  "verdict": "borderline",
+  "references_named": [
+    "Hans Holbein the Younger, The Ambassadors (1533)",
+    "Jean-Francois Niceron, La Perspective curieuse (1638)",
+    "the vanitas / memento mori tradition",
+    "y-a-v-a, Costruzione Legittima (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism genuinely enacts the idea: a vertically pre-stretched skull is foreshortened by the browser's own CSS perspective+rotateX back to true proportion only at a grazing angle, and the figures necessarily collapse at that same angle. This is P1 in good faith. The readymade framing of Holbein is well-targeted, and the explicit inversion of Costruzione Legittima (Albertian coherence vs. anamorphic incoherence) gives it a clear narrative place. CC license and attribution are present; the build is small.",
+  "reservations": "Novelty is moderate rather than high: CSS 3-D transform tilt is a well-trodden web-native mechanism (cf. Cardboard, tilt galleries, countless demos), and the anamorphosis-as-vanitas argument has been staged before in net.art and browser toys. The 'mutual exclusivity' claim is also slightly overstated — a continuous slider lets you sweep between readings, which weakens the binary the title and motivation sell. The figures are abstracted to silhouettes, so the casual viewer may read 'two stick figures' rather than ambassadors, and the skull reveal window (66–76°) is fairly wide — the geometry will look approximate rather than crisp at intermediate tilts. The readout line ('memento mori · the men are gone') is the closest the piece gets to wit; one wishes for a touch more.",
+  "revision_suggestion": "Tighten the anamorphic math so the skull snaps into recognisable proportion only at a single discrete angle (and the figures are illegible only inside a narrow band around it), strengthening the 'you cannot see both' claim. Consider one named-artist gesture in the figure rendering so the ambassadors read as Holbein's subjects, not generic robes, lifting surface gag and depth at once. Could also expose the angle as a discrete two-position control rather than a continuous slider to honour the binary the argument demands.",
+  "jury_model": "minimax/minimax-m3"
+}
