@@ -1334,5 +1334,13 @@
     "source": "Hans Holbein the Younger, The Ambassadors (1533); Jean-Francois Niceron, La Perspective curieuse (1638); the vanitas / memento mori tradition; y-a-v-a, Costruzione Legittima (2026)",
     "mechanism": "CSS perspective + rotateX foreshortening compresses a vertically pre-stretched canvas skull into true proportion only at the grazing angle where the face-on figures collapse, making the two readings geometrically mutually exclusive.",
     "status": "pending"
+  },
+  {
+    "id": "2026-09-14-manufactures-of-metal-present-to-customs",
+    "title": "Manufactures of Metal (Present to Customs)",
+    "year": 2026,
+    "source": "Constantin Brancusi, Bird in Space (L'Oiseau dans l'espace, 1926); Brancusi v. United States (U.S. Customs Court, 1928); Marcel Duchamp / the readymade; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "Constraint Validation API: setCustomValidity() + reportValidity() raise the un-styleable, vendor-drawn native validation bubble as the customs ruling; the Appeal button clears validity to admit the unchanged object.",
+    "status": "pending"
   }
 ]

@@ -1,0 +1,42 @@
+{
+  "work_id": "2026-09-14-manufactures-of-metal-present-to-customs",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Constantin Brancusi, Bird in Space (1926)",
+    "Brancusi v. United States (1928)",
+    "Marcel Duchamp / the readymade",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "y-a-v-a, Art is Money (2013)",
+    "y-a-v-a, Hammer Price (2026)",
+    "y-a-v-a, But is it art? (2025)",
+    "y-a-v-a, Tertium (But Is It Art?) (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P6",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The Constraint Validation API is a genuinely apt mechanism: the native, un-styleable validation bubble is the customs official's verdict, delivered in an authority's voice the viewer cannot reword. Concept and execution collapse cleanly (P1): art-status is enacted as a classification imposed from outside, exactly as on the 1926 pier. The Brancusi reference is precise and double-coded (P7) — the casual viewer gets the deadpan joke, the literate viewer knows the bronze never changed. The Appeal button enacts the 1928 ruling rather than narrating it. Distinct from the catalogue: it shares the value/authenticity axis with Hammer Price and Art is Money but uses a mechanism none of them touch, and it answers the 'but is it art' line with a historical case rather than a one-word verdict.",
+  "reservations": "The SVG of Bird in Space is decorative rather than load-bearing — the work would function identically without it, which slightly weakens the P1 claim that mechanism enacts idea. The Constraint Validation API is also a relatively well-trodden net.art mechanism (cf. native form validation pieces), so novelty sits at the lower end of strong.",
+  "revision_suggestion": "Consider making the bronze itself the validation target — e.g. an SVG whose geometry is computed from the user's declared description, so the object literally cannot be admitted until the law relents, tightening P1 further.",
+  "jury_model": "minimax/minimax-m3"
+}

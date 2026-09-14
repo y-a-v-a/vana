@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manufactures of Metal (Present to Customs)</title>
+<style>
+  :root{ --ink:#1a1712; --paper:#f2ead6; --stamp:#a01810; --rule:#c9bd9a; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; height:100%; }
+  body{
+    background:
+      radial-gradient(120% 90% at 50% -10%, #fbf6e6 0%, var(--paper) 55%, #e6dcc0 100%);
+    color:var(--ink);
+    font:16px/1.55 Georgia, "Times New Roman", serif;
+    display:flex; align-items:center; justify-content:center;
+    padding:28px;
+  }
+  main{
+    width:min(620px,100%);
+    background:#fbf7ea;
+    border:1px solid var(--rule);
+    box-shadow:0 1px 0 #fff inset, 0 18px 40px rgba(40,30,10,.14);
+    padding:30px 34px 24px;
+  }
+  header{ text-align:center; border-bottom:2px solid var(--ink); padding-bottom:10px; margin-bottom:20px; }
+  header .dept{ font-size:11px; letter-spacing:.32em; text-transform:uppercase; color:#6b5f45; }
+  header h1{ font-size:20px; margin:.35em 0 .1em; letter-spacing:.02em; }
+  header .sub{ font-size:12px; font-style:italic; color:#6b5f45; }
+  figure{ margin:22px auto; text-align:center; }
+  svg{ display:block; margin:0 auto; filter:drop-shadow(0 10px 14px rgba(60,45,10,.25)); }
+  figcaption{ font-size:12px; font-style:italic; color:#6b5f45; margin-top:8px; }
+  form{ margin:6px 0 4px; }
+  label{ display:block; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#6b5f45; margin-bottom:6px; }
+  .row{ display:flex; gap:10px; flex-wrap:wrap; }
+  input[type=text]{
+    flex:1 1 240px; min-width:0;
+    font:16px Georgia, serif; color:var(--ink);
+    background:#fffdf6; border:1px solid #b9ac86; padding:11px 12px;
+  }
+  input[type=text]:focus{ outline:2px solid #8a7a4e; outline-offset:1px; }
+  button{
+    font:13px Georgia, serif; letter-spacing:.06em; cursor:pointer;
+    background:var(--ink); color:var(--paper); border:1px solid var(--ink);
+    padding:11px 16px;
+  }
+  button.ghost{ background:transparent; color:var(--ink); }
+  button:active{ transform:translateY(1px); }
+  .ledger{ margin-top:20px; border-top:1px solid var(--rule); padding-top:12px; font-size:13px; color:#4a412e; }
+  .ledger b{ font-variant-numeric:tabular-nums; }
+  .ruling{
+    display:none; margin-top:16px; padding:12px 14px; border:1px dashed var(--stamp);
+    color:var(--stamp); font-style:italic;
+  }
+  .ruling.show{ display:block; }
+  .stamp{
+    display:none; position:relative; margin:14px auto 0; width:max-content;
+    color:var(--stamp); border:3px double var(--stamp); padding:6px 14px;
+    font-size:15px; letter-spacing:.22em; text-transform:uppercase;
+    transform:rotate(-6deg); opacity:.9;
+  }
+  .stamp.show{ display:block; }
+  footer{ margin-top:22px; border-top:1px solid var(--rule); padding-top:10px;
+    font-size:11px; line-height:1.5; color:#7a6e52; }
+  footer a{ color:#5a4f38; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="dept">Treasury Department &middot; United States Customs</div>
+    <h1>Declaration of Imported Merchandise</h1>
+    <div class="sub">Port of New York &middot; Entry &numero; 1926/Steichen</div>
+  </header>
+
+  <figure aria-label="A tall, polished bronze form tapering to a point, resting on a stone base.">
+    <svg width="120" height="300" viewBox="0 0 120 300" role="img"
+         aria-label="Polished bronze form, Bird in Space">
+      <defs>
+        <linearGradient id="bronze" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#6b4d18"/>
+          <stop offset=".28" stop-color="#c99a2e"/>
+          <stop offset=".5" stop-color="#f6e2a0"/>
+          <stop offset=".72" stop-color="#b9832a"/>
+          <stop offset="1" stop-color="#5c3f13"/>
+        </linearGradient>
+        <linearGradient id="stone" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#7d746a"/>
+          <stop offset=".5" stop-color="#cfc7bb"/>
+          <stop offset="1" stop-color="#6a6158"/>
+        </linearGradient>
+      </defs>
+      <!-- stone base -->
+      <path d="M42 300 L78 300 L74 250 L46 250 Z" fill="url(#stone)"/>
+      <ellipse cx="60" cy="250" rx="14" ry="4" fill="#efe8db"/>
+      <!-- the bronze: a leaning, tapering blade -->
+      <path d="M60 250
+               C 46 210, 44 150, 55 92
+               C 60 66, 68 40, 70 12
+               C 71 4, 66 2, 63 9
+               C 55 44, 50 72, 48 108
+               C 46 162, 50 214, 60 250 Z"
+            fill="url(#bronze)"/>
+      <path d="M60 250 C 50 210, 49 150, 57 96 C 61 70, 68 44, 70 14"
+            fill="none" stroke="#fff6da" stroke-width="1.4" opacity=".55"/>
+    </svg>
+    <figcaption>Item, one (1): polished bronze, height 54&nbsp;in., value declared $600.</figcaption>
+  </figure>
+
+  <form id="entry" novalidate>
+    <label for="decl">State the nature of this object for classification</label>
+    <div class="row">
+      <input id="decl" name="decl" type="text" required
+             autocomplete="off" spellcheck="false"
+             placeholder="e.g. sculpture, work of art, bird&hellip;">
+      <button type="submit">Present to Customs</button>
+      <button type="button" class="ghost" id="appeal">Appeal to the Court</button>
+    </div>
+  </form>
+
+  <div class="stamp" id="stamp">Admitted &mdash; Free of Duty</div>
+
+  <div class="ledger">
+    Rulings issued this session: <b id="count">0</b><br>
+    Standing assessment: Tariff Act of 1922, &para;399 &mdash; <i>manufactures of metal</i>,
+    <b>40%</b> ad valorem = <b>$240.00</b> due.
+  </div>
+
+  <div class="ruling" id="ruling">
+    <b>Brancusi v. United States, T.D. 43063 (Cust. Ct. 1928).</b>
+    The court finds the object beautiful, symmetrical, and ornamental, and admits it,
+    free of duty, as a work of art. The bronze has not changed. Only the ruling has.
+  </div>
+
+  <footer>
+    <b>Manufactures of Metal (Present to Customs)</b> &mdash; the customs official is the
+    browser: whatever you declare, its own Constraint Validation returns the classification,
+    in a bubble you cannot restyle, refuse, or reword. After <i>Constantin Br&acirc;ncu&#537;i,
+    Bird in Space</i> (L&rsquo;Oiseau dans l&rsquo;espace, 1926) and <i>Brancusi v. United
+    States</i> (1928). By <a href="https://y-a-v-a.org">y-a-v-a</a>.
+    Licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC&nbsp;BY&nbsp;4.0</a>.
+    No cookies, no trackers, no network. Nothing leaves your machine.
+  </footer>
+</main>
+
+<script>
+(function(){
+  var form  = document.getElementById('entry');
+  var decl  = document.getElementById('decl');
+  var count = document.getElementById('count');
+  var ruling= document.getElementById('ruling');
+  var stamp = document.getElementById('stamp');
+  var appeal= document.getElementById('appeal');
+  var n = 0;
+
+  // The customs desk reclassifies every honest declaration as base metal.
+  function verdict(said){
+    var s = (said || '').trim();
+    return 'Declared: “' + s + '”.\n' +
+           'Reclassified under Tariff Act §399 as a manufacture of metal ' +
+           '(kitchen utensils and hospital supplies). Not a work of art. ' +
+           'Duty: 40% — $240.00. Not admitted.';
+  }
+
+  // Typing withdraws any prior ruling; the field is invalid again by intent.
+  decl.addEventListener('input', function(){ decl.setCustomValidity(''); });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (decl.value.trim() === ''){
+      // Empty entry: the browser answers in its own factory voice.
+      decl.setCustomValidity('');
+    } else {
+      decl.setCustomValidity(verdict(decl.value));
+    }
+    // The native bubble is drawn by the OS/vendor. It is the ruling.
+    decl.reportValidity();
+    n++; count.textContent = n;
+    ruling.classList.remove('show');
+    stamp.classList.remove('show');
+  });
+
+  // 1928: the court, not the object, grants the exemption.
+  appeal.addEventListener('click', function(){
+    decl.setCustomValidity('');      // the object was always valid; the law relents
+    ruling.classList.add('show');
+    stamp.classList.add('show');
+    decl.focus();
+  });
+})();
+</script>
+</body>
+</html>
