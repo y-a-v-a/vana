@@ -24,6 +24,13 @@ test("renderCatalogueIndex lists works with escaped titles and links", () => {
   assert.match(html, /Creative Commons/);
 });
 
+test("renderCatalogueIndex credits Vincent Bruijn in header and footer, linking y-a-v-a.org", () => {
+  const html = renderCatalogueIndex([]);
+  const credit = /&copy; 2026 Vincent Bruijn &middot; <a href="https:\/\/www\.y-a-v-a\.org">y-a-v-a\.org<\/a>/;
+  assert.match(html.slice(html.indexOf("<header>"), html.indexOf("</header>")), credit);
+  assert.match(html.slice(html.indexOf("<footer>"), html.indexOf("</footer>")), credit);
+});
+
 test("renderCatalogueIndex handles an empty catalogue", () => {
   assert.match(renderCatalogueIndex([]), /catalogue is empty/);
 });

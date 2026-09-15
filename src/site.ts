@@ -67,7 +67,9 @@ export function renderCatalogueIndex(works: PublishedWork[]): string {
   body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 Georgia,serif}
   main{max-width:46rem;margin:0 auto;padding:3rem 1.5rem 5rem}
   h1{font-weight:400;font-size:1.6rem;margin:0 0 .2rem}
+  .byline{color:var(--muted);font-size:.9rem;margin:0 0 .8rem}
   .lede{color:var(--muted);margin:0 0 2.5rem}
+  a{color:var(--accent)}
   ul{list-style:none;margin:0;padding:0}
   li{padding:1.1rem 0;border-top:1px solid var(--line)}
   li a{color:var(--accent);text-decoration:none;font-size:1.15rem}
@@ -79,14 +81,18 @@ export function renderCatalogueIndex(works: PublishedWork[]): string {
 </head>
 <body>
 <main>
-  <h1>y-a-v-a · machine works</h1>
-  <p class="lede">Works drawn from the y-a-v-a DNA by an autonomous agent, judged by an independent AI jury, and confirmed by Vincent Bruijn before publication.</p>
+  <header>
+    <h1>y-a-v-a · machine works</h1>
+    <p class="byline">&copy; 2026 Vincent Bruijn &middot; <a href="https://www.y-a-v-a.org">y-a-v-a.org</a></p>
+    <p class="lede">Works drawn from the y-a-v-a DNA by an autonomous agent, judged by an independent AI jury, and confirmed by Vincent Bruijn before publication.</p>
+  </header>
   <ul>
 ${items}
   </ul>
   <footer>
     AI-generated, DNA-validated, validated by Vincent Bruijn. y-a-v-a (and ax710 where relevant).
     Creative Commons. No cookies, no tracking.
+    <p>&copy; 2026 Vincent Bruijn &middot; <a href="https://www.y-a-v-a.org">y-a-v-a.org</a></p>
   </footer>
 </main>
 </body>
