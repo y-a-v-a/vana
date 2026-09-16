@@ -261,7 +261,7 @@
     "year": 2026,
     "source": "Piero Manzoni, Linea (1959–60); Piero Manzoni, Linea m 7,200 (Herning, 1960); Marcel Duchamp / infrathin",
     "mechanism": "Per-visit JS generates a real normalised polyline of the labelled length but never renders it to DOM or canvas; the console attests it, no surface shows it.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-18-one-and-three-chairs-http",
