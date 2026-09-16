@@ -6,6 +6,7 @@ import {
   deriveVerdict,
   assembleVerdict,
   extractJson,
+  repairJsonQuotes,
   parseJuryModelResponse,
   buildJuryTask,
   digestForJury,
@@ -165,4 +166,26 @@ test("digestForJury drops the work's own catalogue entry (refine / re-jury must 
   const digest = digestForJury("2026-06-16-the-original", entries);
   assert.doesNotMatch(digest, /The Original/);
   assert.match(digest, /Other/);
+});
+
+test("repairJsonQuotes escapes a bare inner quote but leaves real terminators alone", () => {
+  const raw = `{"a":"Cage's 4'33" and more","b":"x" , "c":["y"],"d":{"e":"f"}}`;
+  assert.deepEqual(JSON.parse(repairJsonQuotes(raw)), { a: `Cage's 4'33" and more`, b: "x", c: ["y"], d: { e: "f" } });
+});
+
+test("repairJsonQuotes leaves already-escaped quotes and valid JSON untouched", () => {
+  const valid = JSON.stringify({ a: 'say "hi"', b: 1, c: [true, null] });
+  assert.equal(repairJsonQuotes(valid), valid);
+});
+
+test("extractJson falls back to quote repair on a model reply with an unescaped inner quote", () => {
+  const reply = `{"gates":{"G1":true},"score_notes":{"novelty":"A fresh found-object (Cage's 4'33") and a mechanism."},"scores":{"novelty":4}}`;
+  assert.throws(() => JSON.parse(reply));
+  const parsed = extractJson(reply) as { score_notes: { novelty: string }; scores: { novelty: number } };
+  assert.equal(parsed.score_notes.novelty, `A fresh found-object (Cage's 4'33") and a mechanism.`);
+  assert.equal(parsed.scores.novelty, 4);
+});
+
+test("extractJson still throws the original error when repair cannot help", () => {
+  assert.throws(() => extractJson("{not json at all}"));
 });

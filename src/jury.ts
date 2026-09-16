@@ -137,6 +137,14 @@ export function buildJurySystemAppend(dna: string): string {
 // discriminates in prose but collapses to "4" when it emits a number. These
 // anchors, plus the note-before-number output order in buildJuryTask, make the
 // number follow the reasoning. The harness still does all the arithmetic.
+//
+// Calibration history (12-work re-jury sample, `npm run jury:sample -- 12`):
+// - these anchors: mean 39.8 → 38.0, novelty/craft spread out, 4 of 12 still
+//   4/4/4/4/4, four works slipped strong → borderline.
+// - a stricter variant (3 = "the DNA default", 4 = beyond it): mean fell to
+//   the high 20s / low 30s and approved, published works rejected. Too harsh
+//   for the §8.3 thresholds; reverted. Move the thresholds before trying it
+//   again, and expect ±4 run-to-run noise on a single work even at temp 0.2.
 export const SCORING_ANCHORS = `SCORING ANCHORS (apply per criterion; 3 is the ordinary score for a competent work)
 General: 0 absent · 1 weak · 2 below the catalogue's standard · 3 competent, what the DNA expects by default · 4 clearly better than the catalogue median — you can name the exact feature that earns the extra point · 5 exceptional, a best-in-catalogue example; rare.
 
@@ -170,7 +178,7 @@ Return ONLY a JSON object (no prose, no markdown fences) with exactly these keys
   "revision_suggestion": string | null
 }
 
-Apply the hard gates (§8.1) first; a single gate failure means the work fails regardless of score. Then, for each criterion, write its score_note against the anchors above and only then pick the number the note describes. Do NOT compute a total or verdict — only provide gates, notes, scores, and remarks.
+Inside JSON strings use single or typographic quotes (‘ ’ “ ” ″), never a bare double quote. Apply the hard gates (§8.1) first; a single gate failure means the work fails regardless of score. Then, for each criterion, write its score_note against the anchors above and only then pick the number the note describes. Do NOT compute a total or verdict — only provide gates, notes, scores, and remarks.
 
 The work must be materially distinct (G6) from every catalogued work:
 ${digest}
@@ -186,6 +194,45 @@ ${files.html}`;
 }
 
 // ── JSON extraction (pure, testable) ─────────────────────────────────────────
+/**
+ * Escape a double quote that the model left bare inside a JSON string (it
+ * quotes titles and lines from the work: `4'33"`, `"Edition 1 of 1"`). Walks
+ * the text tracking string state; a `"` inside a string is a real terminator
+ * only if the next non-blank character is a JSON delimiter (, } ] :). Anything
+ * else is an inner quote and gets escaped.
+ */
+export function repairJsonQuotes(json: string): string {
+  let out = "";
+  let inString = false;
+  for (let i = 0; i < json.length; i++) {
+    const ch = json[i]!;
+    if (!inString) {
+      if (ch === '"') inString = true;
+      out += ch;
+      continue;
+    }
+    if (ch === "\\") {
+      out += ch + (json[i + 1] ?? "");
+      i++;
+      continue;
+    }
+    if (ch === '"') {
+      let j = i + 1;
+      while (j < json.length && /\s/.test(json[j]!)) j++;
+      const next = json[j];
+      if (next === undefined || next === "," || next === "}" || next === "]" || next === ":") {
+        inString = false;
+        out += ch;
+      } else {
+        out += '\\"';
+      }
+      continue;
+    }
+    out += ch;
+  }
+  return out;
+}
+
 /** Strip markdown fences / surrounding prose and parse the first JSON object. */
 export function extractJson(text: string): unknown {
   const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
@@ -195,7 +242,16 @@ export function extractJson(text: string): unknown {
   if (start === -1 || end === -1 || end < start) {
     throw new Error("No JSON object found in jury response");
   }
-  return JSON.parse(candidate.slice(start, end + 1));
+  const slice = candidate.slice(start, end + 1);
+  try {
+    return JSON.parse(slice);
+  } catch (err) {
+    try {
+      return JSON.parse(repairJsonQuotes(slice));
+    } catch {
+      throw err;
+    }
+  }
 }
 
 export function parseJuryModelResponse(text: string): JuryModelResponse {

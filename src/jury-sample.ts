@@ -25,7 +25,13 @@ const after: number[] = [];
 for (const dir of sample) {
   const id = dir.split("/").pop()!;
   const old = oldById.get(id);
-  const { verdict } = await juryCandidate(id, readGeneratedFiles(dir));
+  let verdict;
+  try {
+    ({ verdict } = await juryCandidate(id, readGeneratedFiles(dir)));
+  } catch (err) {
+    console.log(`${id.padEnd(62)} ${String(old?.weighted_total ?? "?").padStart(2)} → FAILED  ${(err as Error).message.slice(0, 120)}`);
+    continue;
+  }
   const s = verdict.scores;
   before.push(old?.weighted_total ?? -1);
   after.push(verdict.weighted_total);
