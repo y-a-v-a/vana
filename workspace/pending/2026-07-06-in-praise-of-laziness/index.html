@@ -40,7 +40,7 @@
 <body>
   <header>
     <h1>In Praise of Laziness</h1>
-    <p class="sub">A painting made only while you do nothing.</p>
+    <p class="sub">A painting made only while you hold still.</p>
   </header>
 
   <div class="stage">
@@ -53,8 +53,8 @@
     <div><span class="k">idle offered, this moment</span><b id="tick">—</b></div>
     <div><span class="k">idleness accumulated</span><b id="total">0.0 s</b></div>
     <div><span class="k">field painted</span><b id="pct">0.0%</b></div>
-    <div><span class="k">moments of stillness</span><b id="ticks">0</b></div>
-    <div><span class="k">moments you kept it working</span><b id="busy">0</b></div>
+    <div><span class="k">moments you held still</span><b id="ticks">0</b></div>
+    <div><span class="k">moments you stirred</span><b id="busy">0</b></div>
     <div><span class="k">state</span><b id="state">waiting</b></div>
   </div>
 
@@ -64,8 +64,10 @@
     &ldquo;There is no art without laziness.&rdquo; With a nod to Lee Lozano, <i>General Strike Piece</i>
     (1969), and to Marcel Duchamp, who preferred breathing to working. Each stroke is exactly as long as a
     stretch of time your browser confessed it had nothing to do; the scheduler built to harvest your spare
-    cycles for productivity is left to make a picture out of unproductivity instead. Scroll, click or type
-    and the machine is put back to work — the painting starves. Leave it alone and it grows. Nothing is
+    cycles for productivity is left to make a picture out of unproductivity instead. But the stroke is only
+    laid down while <b>you</b> lie still too: move the mouse, scroll or type and you break the stillness —
+    the painting stops. Sit perfectly still and it grows. Idleness at both ends of the glass, machine and
+    hand, is the only thing that paints. Nothing is
     stored, sent, or counted anywhere but here; reload wipes the field. No cookies, no trackers.
     <b>Licence:</b> <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
   </label>
@@ -98,8 +100,16 @@
   var PXPERMS = 1.0;            // 1 ms of confessed idleness -> 1 px of ink
   var x = PAD, y = PAD;
   var rowRight = W - PAD;
-  var totalIdleMs = 0, idleTicks = 0, busyTicks = 0, done = false;
+  var totalIdleMs = 0, stillTicks = 0, stirTicks = 0, done = false;
   var totalInk = 0, capacity = (Math.floor((H - 2*PAD) / ROW)) * (W - 2*PAD);
+
+  // The viewer's own laziness: the mouse must lie untouched and still to paint.
+  var STILL_MS = 400;            // how long the hand must rest before it counts as still
+  var lastStir = -Infinity;      // when the viewer last moved; -Infinity = still from the start
+  function nowMs(){ return performance.now(); }
+  function stir(){ lastStir = nowMs(); }
+  ["mousemove","pointermove","pointerdown","mousedown","wheel","scroll","touchstart","touchmove","keydown"]
+    .forEach(function(t){ window.addEventListener(t, stir, {passive:true, capture:true}); });
 
   function two(n){ return (Math.round(n*10)/10).toFixed(1); }
 
@@ -121,45 +131,54 @@
     }
   }
 
-  function update(offeredMs, busy){
-    document.getElementById("tick").textContent  = busy ? "0 ms (working)" : two(offeredMs)+" ms";
+  function update(offeredMs, phase){
+    document.getElementById("tick").textContent  =
+      phase === "paint" ? two(offeredMs)+" ms" :
+      phase === "moving" ? "0 ms (moving)" : "0 ms (busy)";
     document.getElementById("total").textContent = two(totalIdleMs/1000)+" s";
     document.getElementById("pct").textContent   = two(Math.min(100,100*totalInk/capacity))+"%";
-    document.getElementById("ticks").textContent = idleTicks.toLocaleString();
-    document.getElementById("busy").textContent  = busyTicks.toLocaleString();
+    document.getElementById("ticks").textContent = stillTicks.toLocaleString();
+    document.getElementById("busy").textContent  = stirTicks.toLocaleString();
     if (done){
       statusEl.className = "status idle";
-      statusEl.textContent = "Finished. It was painted entirely by your leaving it alone.";
+      statusEl.textContent = "Finished. It was painted entirely by your holding still.";
       stateEl.textContent = "finished";
       return;
     }
-    if (busy){
+    if (phase === "moving"){
       statusEl.className = "status busy";
-      statusEl.textContent = "You are keeping it working — no idle time, no paint.";
+      statusEl.textContent = "You are moving — hold still and the painting resumes.";
+      stateEl.textContent = "stirred (you moved)";
+    } else if (phase === "machinebusy"){
+      statusEl.className = "status busy";
+      statusEl.textContent = "You are still — but the machine is busy; no idle time to paint.";
       stateEl.textContent = "starved (busy)";
     } else {
       statusEl.className = "status idle";
-      statusEl.textContent = "Doing nothing. The painting is being made.";
-      stateEl.textContent = "painting (idle)";
+      statusEl.textContent = "You are doing nothing. The painting is being made.";
+      stateEl.textContent = "painting (still)";
     }
   }
 
   function loop(deadline){
-    if (done){ update(0,false); return; }
-    if (deadline.didTimeout){
-      // Forced to run with no idle budget: the machine was made to work. No paint.
-      busyTicks++;
-      update(0, true);
+    if (done){ update(0,"finished"); return; }
+    var still = (nowMs() - lastStir) >= STILL_MS;
+    if (!still){
+      // The hand is moving. The viewer is not being lazy; the painting waits.
+      stirTicks++;
+      update(0, "moving");
+    } else if (deadline.didTimeout){
+      // Still, but forced to run with no idle budget: the machine was made to work. No paint.
+      update(0, "machinebusy");
     } else {
       var ms = deadline.timeRemaining();   // the idleness the browser is willing to give
       if (ms > 0.05){
-        idleTicks++;
+        stillTicks++;
         totalIdleMs += ms;
         paint(ms);
-        update(ms, false);
+        update(ms, "paint");
       } else {
-        busyTicks++;
-        update(0, true);
+        update(0, "machinebusy");
       }
     }
     ric(loop, {timeout: 900});

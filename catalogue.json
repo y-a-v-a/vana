@@ -844,7 +844,7 @@
     "title": "In Praise of Laziness",
     "year": 2026,
     "source": "Mladen Stilinovic, In Praise of Laziness (1993); Lee Lozano, General Strike Piece (1969); Marcel Duchamp / the readymade",
-    "mechanism": "requestIdleCallback paints a stroke as long as deadline.timeRemaining(); didTimeout ticks (busy main thread) add no paint, so interaction starves the work.",
+    "mechanism": "requestIdleCallback paints a stroke as long as deadline.timeRemaining(), but only while the viewer is still: mousemove/scroll/keydown listeners mark the hand as stirring, and paint is withheld until it has lain untouched for 400 ms. Move the mouse and the painting stops; hold still and it resumes.",
     "status": "pending"
   },
   {

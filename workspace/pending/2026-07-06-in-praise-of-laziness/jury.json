@@ -15,12 +15,22 @@
     "craft": 4,
     "wit": 4
   },
+  "score_notes": {
+    "novelty": "requestIdleCallback as a paint source — browser's confessed idle time becomes the length of every stroke — is a fresh web-native found-object the catalogue has never touched, paired with a dual-gate (CPU-idle AND hand-still) the mechanism cannot exist without.",
+    "nuance": "concept = execution cleanly (the painting can only be made by idleness at both ends of the glass) and the surface gag lands without the wall text; the literate reading (attention economy inversion, Stilinović's lazy aesthetics, Duchamp's withdrawal) is carried by the status messages and data plate and only modestly amplified by the label.",
+    "narrative": "explicitly answers y-a-v-a's own 1000 Hours of Staring and The Artist Is Present by inverting their attention-as-medium logic into its absence, sits legibly on the chance/order axis (non-deterministic idle timing vs strict row-by-row strokes), and stakes the Stilinović/Lozano/Duchamp lineage for the current attention moment.",
+    "craft": "single file, no frameworks, no assets, no requests; feature-detection for unsupported browsers is honest and graceful; the data plate, status strings and wall label all carry weight and nothing is decorative.",
+    "wit": "'You are doing nothing. The painting is being made.' and the 'Laziness, here, is unavailable' fallback line are deadpan gems; the joke lands on the surface and re-lands when you notice the productivity scheduler has been quietly repurposed to waste time beautifully."
+  },
   "weighted_total": 40,
   "verdict": "strong",
   "references_named": [
     "Mladen Stilinović, In Praise of Laziness (1993)",
     "Lee Lozano, General Strike Piece (1969)",
-    "Marcel Duchamp / the readymade"
+    "Marcel Duchamp / the readymade",
+    "y-a-v-a, 1000 Hours of Staring (2026)",
+    "y-a-v-a, The Artist Is Present (2026)",
+    "Hans Haacke (data-plate tradition)"
   ],
   "principles_invoked": [
     "P1",
@@ -32,8 +42,8 @@
     "P8",
     "P9"
   ],
-  "rationale": "The mechanism enacts the idea with real precision: requestIdleCallback is the readymade, and the painting literally grows only when the browser confesses idle time. Concept and execution collapse cleanly (P1), the chance/order axis is legible (timing handed to the scheduler, layout strictly row-by-row), and the double-coding works — surface gag for the casual viewer, attention-economy critique for the literate one. The graceful fallback for browsers that refuse to admit idleness is a strong tonal move that turns a technical limitation into a conceptual statement. The work is materially distinct from the catalogue's attention-measurement pieces (1000 Hours of Staring, The Artist Is Present) by inverting the argument: it measures the absence of attention via CPU scheduling rather than presence via visibility/focus events.",
-  "reservations": "The data plate with six metrics borders on over-building for P3's minimal-gesture mandate, though it serves the Haacke-style confession well. The theme of attention/idleness as medium has been visited in the catalogue, so the novelty sits in the specific mechanism (requestIdleCallback) rather than the territory.",
-  "revision_suggestion": "Consider trimming the data plate to three or four metrics to tighten the minimal-gesture discipline, or make the plate itself subject to the same idle-gating so it only updates when the painting is being made.",
+  "rationale": "A coherent and well-executed piece that takes Mladen Stilinović's claim literally at both the CPU and the viewer's hand: requestIdleCallback's timeRemaining() becomes stroke length while a stillness gate withholds paint until the hand has lain untouched for 400ms. The mechanism enacts the idea (P1), the chance/order axis is legible in the timing-vs-rows split (P5), and the ethical defaults are honored (P8). It extends the y-a-v-a thread on attention-as-medium by inverting it into its absence, answering 1000 Hours of Staring and The Artist Is Present from the catalogue.",
+  "reservations": "The wall text runs long for a piece that should prize minimal gesture (P3); a stricter cut could let the data plate and status strings carry more of the literate reading.",
+  "revision_suggestion": "Slim the wall label to the Stilinović quote, the licence and one short sentence; let the 'moments you held still / moments you stirred' counter do the arguing about attention rather than spelling it out.",
   "jury_model": "minimax/minimax-m3"
 }
