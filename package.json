@@ -25,7 +25,9 @@
     "typecheck": "tsc",
     "check": "npm run typecheck && npm test && npm run build:site",
     "test:live": "node --import tsx --test src/jury.live.ts",
-    "verify:deploy": "bash ops/verify-deploy.sh"
+    "verify:deploy": "bash ops/verify-deploy.sh",
+    "jury:stats": "tsx src/jury-stats.ts",
+    "jury:sample": "tsx src/jury-sample.ts"
   },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.3.178",

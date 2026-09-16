@@ -8,6 +8,7 @@ import {
   extractJson,
   parseJuryModelResponse,
   buildJuryTask,
+  SCORING_ANCHORS,
   MAX_WEIGHTED,
   type JuryModelResponse,
 } from "./jury.ts";
@@ -92,6 +93,30 @@ test("parseJuryModelResponse validates a full model reply", () => {
   assert.equal(parsed.scores.novelty, 5);
 });
 
+test("parseJuryModelResponse accepts and preserves score_notes", () => {
+  const notes = {
+    novelty: "new found-object",
+    nuance: "double-coded",
+    narrative: "answers Anastasi",
+    craft: "smallest build",
+    wit: "lands twice",
+  };
+  const parsed = parseJuryModelResponse(JSON.stringify({ ...model(), score_notes: notes }));
+  assert.deepEqual(parsed.score_notes, notes);
+  const v = assembleVerdict("id", parsed, "m", TH);
+  assert.deepEqual(v.score_notes, notes);
+});
+
+test("parseJuryModelResponse rejects score_notes missing a criterion", () => {
+  const bad = JSON.stringify({ ...model(), score_notes: { novelty: "only one" } });
+  assert.throws(() => parseJuryModelResponse(bad));
+});
+
+test("assembleVerdict omits score_notes when the model gave none (old jury.json shape)", () => {
+  const v = assembleVerdict("id", model(), "m", TH);
+  assert.equal("score_notes" in v, false);
+});
+
 test("parseJuryModelResponse rejects out-of-range scores", () => {
   const bad = JSON.stringify(model({ scores: { novelty: 9, nuance: 0, narrative: 0, craft: 0, wit: 0 } }));
   assert.throws(() => parseJuryModelResponse(bad));
@@ -115,4 +140,18 @@ test("buildJuryTask embeds candidate html, motivation, and meta", () => {
   assert.match(task, /UNIQUE_MARKER_MOTIVATION/);
   assert.match(task, /A Catalogued Work/);
   assert.match(task, /"G1"/);
+});
+
+test("buildJuryTask embeds the scoring anchors and asks for notes before numbers", () => {
+  const files = {
+    html: "<p>x</p>",
+    motivation: "m",
+    meta: { title: "T", summary: "s", mechanism: "m", principles: ["P1"], references: ["R"], license: "CC BY-SA 4.0" },
+  };
+  const task = buildJuryTask(files, "- A");
+  assert.ok(task.includes(SCORING_ANCHORS));
+  assert.match(SCORING_ANCHORS, /Do not default to 4/);
+  const notesAt = task.indexOf('"score_notes"');
+  const scoresAt = task.indexOf('"scores"');
+  assert.ok(notesAt > -1 && scoresAt > -1 && notesAt < scoresAt, "score_notes must precede scores");
 });

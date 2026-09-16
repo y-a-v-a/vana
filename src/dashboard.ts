@@ -163,6 +163,16 @@ export function renderOrphan(
   return shell(`vana · ${meta.title}`, body);
 }
 
+/** Per-criterion notes (present on verdicts juried with scoring anchors). */
+function scoreNotes(verdict: JuryVerdict): string {
+  const n = verdict.score_notes;
+  if (!n) return "";
+  const items = (["novelty", "nuance", "narrative", "craft", "wit"] as const)
+    .map((k) => `<li><strong>${k} ${verdict.scores[k]}</strong> — ${escapeHtml(n[k])}</li>`)
+    .join("");
+  return `<ul class="muted" style="font-size:13px">${items}</ul>`;
+}
+
 /** The work iframe + jury card, shared by the pending and resolved views. */
 function workAndJury(id: string, meta: GeneratedMeta, verdict: JuryVerdict): string {
   const s = verdict.scores;
@@ -170,6 +180,7 @@ function workAndJury(id: string, meta: GeneratedMeta, verdict: JuryVerdict): str
   <iframe src="/candidate/${encodeURIComponent(id)}/work" title="work" sandbox="allow-scripts allow-downloads" referrerpolicy="no-referrer"></iframe>
   <div class="card">
     <div class="scores">novelty ${s.novelty} · nuance ${s.nuance} · narrative ${s.narrative} · craft ${s.craft} · wit ${s.wit}</div>
+    ${scoreNotes(verdict)}
     <p><strong>Jury:</strong> ${escapeHtml(verdict.rationale)}</p>
     ${verdict.reservations ? `<p class="muted"><strong>Reservations:</strong> ${escapeHtml(verdict.reservations)}</p>` : ""}
     <p class="muted">Principles: ${escapeHtml(verdict.principles_invoked.join(", "))} · License: ${escapeHtml(meta.license)} · Jury: ${escapeHtml(verdict.jury_model)}</p>
