@@ -228,3 +228,21 @@ test("httpsRedirectTarget is inert when no baseUrl is configured", () => {
   });
   assert.equal(target, null);
 });
+
+test("gateway theme: dark scheme is scoped to the shell, the work iframe stays light and opaque", () => {
+  const html = renderIndex([]);
+  assert.match(html, /<meta name="color-scheme" content="light dark">/);
+  assert.match(html, /@media \(prefers-color-scheme: dark\)/);
+  // the artwork is a separate document; its frame must not inherit the theme
+  assert.match(html, /iframe\{[^}]*background:#fff;color-scheme:light[^}]*\}/);
+});
+
+test("gateway theme: mobile viewports scale the root font by 20%", () => {
+  const html = renderIndex([]);
+  assert.match(html, /html\{font-size:16px\}/);
+  assert.match(html, /@media \(max-width:640px\)\{html\{font-size:19\.2px\}\}/);
+  // every fixed size must be rem-based so the root bump reaches it
+  const style = html.slice(html.indexOf("<style>"), html.indexOf("</style>"));
+  const pxFonts = style.match(/font(?:-size)?:[^;}]*\b\d+px/g) ?? [];
+  assert.deepEqual(pxFonts, ["font-size:16px", "font-size:19.2px"]);
+});

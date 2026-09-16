@@ -63,35 +63,55 @@ export function parseFormBody(raw: string): Record<string, string> {
 }
 
 const STYLE = `
-  :root{--ink:#1a1a1a;--muted:#6b6b6b;--line:#e3e0d8;--paper:#f4f1e9;--accent:#002fa7}
+  :root{
+    --ink:#1a1a1a;--muted:#4a4a4a;--line:#d6d2c6;--paper:#f4f1e9;--card:#fff;--well:#faf8f2;
+    --accent:#002fa7;--on-accent:#fff;
+    --ok:#166b32;--warn:#7a5a06;--bad:#9a1f1f;--neutral:#3d3d3d;--on-badge:#fff;
+    --btn-bg:#fff;--btn-ink:var(--ink);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ink:#ece8dc;--muted:#b9b3a4;--line:#3b3930;--paper:#161511;--card:#1f1e18;--well:#181712;
+      --accent:#8fb0ff;--on-accent:#0c1230;
+      --ok:#3fae62;--warn:#d9a52a;--bad:#e06060;--neutral:#8a8a8a;--on-badge:#111;
+      --btn-bg:#1f1e18;--btn-ink:var(--ink);
+    }
+  }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 Georgia,serif}
+  html{font-size:16px}
+  @media (max-width:640px){html{font-size:19.2px}}
+  body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.5 Georgia,serif}
   header{padding:1.2rem 1.5rem;border-bottom:1px solid var(--line)}
-  header a{color:var(--accent);text-decoration:none}
+  a{color:var(--accent)}
+  header a{text-decoration:none}
   main{max-width:60rem;margin:0 auto;padding:1.5rem}
-  .badge{display:inline-block;padding:.1rem .5rem;border-radius:.2rem;font:600 13px/1.4 monospace;color:#fff}
-  .strong{background:#1a7a3a}.borderline{background:#b8860b}.reject{background:#a02020}
-  .card{border:1px solid var(--line);border-radius:.4rem;padding:1rem 1.2rem;margin:1rem 0;background:#fff}
+  .badge{display:inline-block;padding:.1rem .5rem;border-radius:.2rem;font:600 .8125rem/1.4 monospace;color:var(--on-badge)}
+  .strong{background:var(--ok)}.borderline{background:var(--warn)}.reject{background:var(--bad)}
+  .card{border:1px solid var(--line);border-radius:.4rem;padding:1rem 1.2rem;margin:1rem 0;background:var(--card)}
   .muted{color:var(--muted)}
-  .scores{font:13px/1.6 monospace}
-  iframe{width:100%;height:60vh;border:1px solid var(--line);border-radius:.4rem;background:#fff}
-  pre{white-space:pre-wrap;font:14px/1.55 Georgia,serif;background:#faf8f2;padding:1rem;border-radius:.3rem}
+  .scores{font:.8125rem/1.6 monospace}
+  .notes{font-size:.8125rem;padding-left:1.2rem}
+  /* The work is a separate document; keep its frame light and opaque so the
+     gateway's dark theme never leaks into (or shows through) the artwork. */
+  iframe{width:100%;height:60vh;border:1px solid var(--line);border-radius:.4rem;background:#fff;color-scheme:light}
+  pre{white-space:pre-wrap;font:.875rem/1.55 Georgia,serif;background:var(--well);padding:1rem;border-radius:.3rem}
   form{display:inline}
-  button{font:600 15px/1 Georgia,serif;padding:.6rem 1.4rem;border-radius:.3rem;border:1px solid var(--line);cursor:pointer}
-  .approve{background:#1a7a3a;color:#fff;border-color:#1a7a3a}
-  .rejectbtn{background:#fff;color:#a02020;border-color:#a02020;margin-left:.5rem}
-  label{display:block;font:600 14px/1.4 Georgia,serif;margin-bottom:.35rem}
-  textarea{width:100%;font:14px/1.5 Georgia,serif;padding:.6rem;border:1px solid var(--line);border-radius:.3rem;margin-bottom:.6rem;resize:vertical}
-  .refinebtn{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .orphan{background:#4a4a4a}
-  .rejurybtn{background:#4a4a4a;color:#fff;border-color:#4a4a4a}
-  .err{font:13px/1.5 monospace;color:#a02020;word-break:break-word}
+  button{font:600 .9375rem/1 Georgia,serif;padding:.6rem 1.4rem;border-radius:.3rem;border:1px solid var(--line);cursor:pointer;background:var(--btn-bg);color:var(--btn-ink)}
+  .approve{background:var(--ok);color:var(--on-badge);border-color:var(--ok)}
+  .rejectbtn{background:var(--btn-bg);color:var(--bad);border-color:var(--bad);margin-left:.5rem}
+  label{display:block;font:600 .875rem/1.4 Georgia,serif;margin-bottom:.35rem}
+  textarea{width:100%;font:.875rem/1.5 Georgia,serif;padding:.6rem;border:1px solid var(--line);border-radius:.3rem;margin-bottom:.6rem;resize:vertical;background:var(--card);color:var(--ink)}
+  .refinebtn{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+  .orphan{background:var(--neutral)}
+  .rejurybtn{background:var(--neutral);color:var(--on-badge);border-color:var(--neutral)}
+  .err{font:.8125rem/1.5 monospace;color:var(--bad);word-break:break-word}
   h2.section{margin-top:2.5rem;border-top:1px solid var(--line);padding-top:1.5rem}
 `;
 
 function shell(title: string, body: string): string {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>${escapeHtml(title)}</title><style>${STYLE}</style></head>
 <body><header><a href="/">vana</a> · approval gateway</header><main>${body}</main></body></html>`;
 }
@@ -170,7 +190,7 @@ function scoreNotes(verdict: JuryVerdict): string {
   const items = (["novelty", "nuance", "narrative", "craft", "wit"] as const)
     .map((k) => `<li><strong>${k} ${verdict.scores[k]}</strong> — ${escapeHtml(n[k])}</li>`)
     .join("");
-  return `<ul class="muted" style="font-size:13px">${items}</ul>`;
+  return `<ul class="muted notes">${items}</ul>`;
 }
 
 /** The work iframe + jury card, shared by the pending and resolved views. */
