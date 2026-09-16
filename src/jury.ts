@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { loadConfig } from "./config.ts";
 import { loadDna } from "./dna.ts";
-import { catalogueDigest } from "./catalogue.ts";
+import { catalogueDigest, loadCatalogue, type CatalogueEntry } from "./catalogue.ts";
 import type { GeneratedFiles } from "./generator.ts";
 
 // ── DNA §8.2 scoring weights (max weighted = 5×(3+3+2+1+1) = 50) ─────────────
@@ -255,6 +255,16 @@ async function callOpenRouter(
   };
 }
 
+/**
+ * The G6 digest for judging `workId`: the catalogue minus the work itself. A
+ * fresh candidate is not yet in the catalogue, but a refine or orphan re-jury
+ * (and `jury:sample`) grades a work that was upserted earlier — without this it
+ * is flagged as a duplicate of its own entry.
+ */
+export function digestForJury(workId: string, entries: CatalogueEntry[] = loadCatalogue()): string {
+  return catalogueDigest(entries.filter((e) => e.id !== workId));
+}
+
 /** Grade a candidate. Returns the §8.4 verdict plus token usage for the fuse. */
 export async function juryCandidate(
   workId: string,
@@ -263,7 +273,7 @@ export async function juryCandidate(
   const cfg = loadConfig();
   const { content, usage } = await callOpenRouter(
     buildJurySystemAppend(loadDna()),
-    buildJuryTask(files, catalogueDigest()),
+    buildJuryTask(files, digestForJury(workId)),
     cfg.models.jury,
   );
   const model = parseJuryModelResponse(content);

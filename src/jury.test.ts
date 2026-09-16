@@ -8,6 +8,7 @@ import {
   extractJson,
   parseJuryModelResponse,
   buildJuryTask,
+  digestForJury,
   SCORING_ANCHORS,
   MAX_WEIGHTED,
   type JuryModelResponse,
@@ -154,4 +155,14 @@ test("buildJuryTask embeds the scoring anchors and asks for notes before numbers
   const notesAt = task.indexOf('"score_notes"');
   const scoresAt = task.indexOf('"scores"');
   assert.ok(notesAt > -1 && scoresAt > -1 && notesAt < scoresAt, "score_notes must precede scores");
+});
+
+test("digestForJury drops the work's own catalogue entry (refine / re-jury must not self-duplicate)", () => {
+  const entries = [
+    { id: "2026-06-16-the-original", title: "The Original", year: 2026, source: "Benjamin", mechanism: "blob", status: "published" as const },
+    { id: "other", title: "Other", year: 2026, source: "s", mechanism: "m", status: "pending" as const },
+  ];
+  const digest = digestForJury("2026-06-16-the-original", entries);
+  assert.doesNotMatch(digest, /The Original/);
+  assert.match(digest, /Other/);
 });
