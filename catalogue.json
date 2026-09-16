@@ -765,7 +765,7 @@
     "year": 2026,
     "source": "Lygia Clark, Bicho (1960); Neo-Concrete Manifesto / Ferreira Gullar (1959); Marcel Duchamp, The Creative Act (1957); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "A forward-kinematic linkage driven solely by pointer events (no rAF, no autoplay, no storage); motion exists only during manipulation, and each load re-mints a random, unrepeatable animal.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-07-04-round-as-giotto-s-o",
