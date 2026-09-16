@@ -685,7 +685,7 @@
     "year": 2026,
     "source": "Tom Phillips, A Humument (1966– ); W. H. Mallock, A Human Document (1892); erasure / found poetry; Marcel Duchamp / the readymade; net.art (Selection API as material)",
     "mechanism": "The Selection API (selectionchange + suppressed ::selection): selected words survive as ink, all others recede into a per-visit ground; nothing stored, no network.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-07-01-never-seen-whole",
