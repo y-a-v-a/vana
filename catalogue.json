@@ -509,7 +509,7 @@
     "year": 2026,
     "source": "Aleksandr Rodchenko, Pure Red Colour / Pure Yellow Colour / Pure Blue Colour (1921); the monochrome / end-of-painting tradition; net.art (browser & OS chrome as material)",
     "mechanism": "A live <input type=\"color\"> IS the painting; clicking it summons the operating system's native colour dialog, which floods the viewport and theme-color with a single chosen monochrome.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-25-afterimage-not-on-this-page",
