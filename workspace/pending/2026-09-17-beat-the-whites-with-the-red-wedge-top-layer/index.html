@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f5f2">
+<title>Beat the Whites with the Red Wedge (Top Layer)</title>
+<style>
+  :root { --paper:#f6f5f2; --ink:#111; --red:#d81a12; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 15px/1.5 "Helvetica Neue", Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 18px 60px;
+  }
+  header { max-width: 620px; width: 100%; }
+  h1 { font-size: 20px; letter-spacing:.01em; margin:0 0 2px; }
+  .after { color:#555; margin:0 0 18px; font-size:13px; }
+
+  /* the field on which the wedge stands, inside the document */
+  #stage {
+    position: relative;
+    width: min(86vw, 520px);
+    aspect-ratio: 1 / 1;
+    background: #fff;
+    border: 1px solid #e4e2dc;
+    z-index: 1;               /* an honest, ordinary document stacking */
+  }
+  #stage svg, #top svg { width:100%; height:100%; display:block; }
+
+  /* the WHITES: translucent sheets raised over the whole viewport,
+     at the largest integer CSS will accept for z-index. */
+  .white {
+    position: fixed; inset: 0;
+    background: rgba(249,249,247,0.40);
+    z-index: 2147483647;
+    pointer-events: none;     /* so the controls stay operable beneath the haze */
+  }
+
+  /* the RED WEDGE, once affirmed, lives in the browser's top layer.
+     the top layer sits above every z-index and every white sheet,
+     and it does not read z-index at all. */
+  [popover] {
+    inset: 0;
+    margin: auto;
+    width: min(86vw, 520px);
+    height: min(86vw, 520px);
+    max-width: none; max-height: none;
+    padding: 0; border: 0; background: transparent; overflow: visible;
+  }
+
+  .controls { max-width:620px; width:100%; margin:22px 0 0; display:flex; flex-wrap:wrap; gap:10px; }
+  button {
+    font: inherit; padding:9px 14px; cursor:pointer;
+    background:#fff; color:var(--ink); border:1px solid var(--ink);
+  }
+  button:hover { background:var(--ink); color:#fff; }
+  button:disabled { opacity:.4; cursor:not-allowed; }
+  .read { max-width:620px; width:100%; margin:16px 0 0; font-size:13px; color:#333; min-height:2.6em; }
+  .read b { color:var(--red); }
+  footer { max-width:620px; width:100%; margin-top:34px; font-size:12px; color:#666; line-height:1.6; }
+  footer a { color:#666; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Beat the Whites with the Red Wedge</h1>
+    <p class="after">after El Lissitzky, 1919 — in the top layer</p>
+  </header>
+
+  <div id="stage" aria-label="A red wedge driving into a white circle"></div>
+
+  <!-- the same form, ready to leave the document for the top layer -->
+  <div id="top" popover="manual" aria-hidden="true"></div>
+
+  <div class="controls">
+    <button id="raise" type="button">Raise a white</button>
+    <button id="affirm" type="button">Affirm to the top layer</button>
+    <button id="reset" type="button">Lower the whites</button>
+  </div>
+
+  <p class="read" id="read"></p>
+
+  <footer>
+    <p><strong>Beat the Whites with the Red Wedge (Top Layer)</strong> — pixels on screen: HTML Popover API, the CSS top layer, inline SVG. No cookies, no tracking, no network requests; the composition is re-thrown on every visit and kept only in memory.</p>
+    <p>A y-a-v-a work, after El Lissitzky, <em>Beat the Whites with the Red Wedge</em> (1919) and the <em>Proun</em> series (1919–1927); after Kazimir Malevich / Suprematism. Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>. Attribute: y-a-v-a.</p>
+  </footer>
+
+<script>
+(function () {
+  "use strict";
+  var R = function (a, b) { return a + Math.random() * (b - a); };
+
+  // Build one Proun-ish composition: a red wedge driving into a white circle,
+  // with a Constructivist beam and a small Suprematist square. Rule-based,
+  // varied per visit (chance within order).
+  function buildProun() {
+    var cx = R(58, 68), cy = R(46, 56), r = R(20, 26);
+    var base = R(11, 15);               // half-height of the wedge base
+    var tipX = cx - r * 0.15;           // the point drives just inside the circle
+    var left = R(5, 8);
+    var wedgeAng = R(-14, 14);
+    var beamAng = R(20, 70);
+    var sq = R(7, 11);
+
+    return '' +
+      '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img">' +
+      // the WHITE fortress: an outlined white circle
+      '<circle cx="' + cx.toFixed(1) + '" cy="' + cy.toFixed(1) + '" r="' + r.toFixed(1) + '" fill="#ffffff" stroke="#111" stroke-width="1.1"/>' +
+      // a black Constructivist beam
+      '<g transform="rotate(' + beamAng.toFixed(1) + ' 50 50)">' +
+        '<rect x="8" y="49" width="84" height="2.4" fill="#111"/>' +
+      '</g>' +
+      // the RED WEDGE
+      '<g transform="rotate(' + wedgeAng.toFixed(1) + ' ' + tipX.toFixed(1) + ' ' + cy.toFixed(1) + ')">' +
+        '<polygon points="' +
+          tipX.toFixed(1) + ',' + cy.toFixed(1) + ' ' +
+          left.toFixed(1) + ',' + (cy - base).toFixed(1) + ' ' +
+          left.toFixed(1) + ',' + (cy + base).toFixed(1) +
+        '" fill="#d81a12"/>' +
+      '</g>' +
+      // a small black square, Suprematist ballast
+      '<rect x="' + R(72, 80).toFixed(1) + '" y="' + R(74, 82).toFixed(1) + '" width="' + sq.toFixed(1) + '" height="' + sq.toFixed(1) + '" fill="#111"/>' +
+      // a thin line, thrown
+      '<line x1="' + R(6, 18).toFixed(1) + '" y1="' + R(10, 22).toFixed(1) + '" x2="' + R(40, 60).toFixed(1) + '" y2="' + R(30, 46).toFixed(1) + '" stroke="#111" stroke-width="0.7"/>' +
+      '</svg>';
+  }
+
+  var art   = buildProun();
+  var stage = document.getElementById("stage");
+  var top   = document.getElementById("top");
+  stage.innerHTML = art;
+  top.innerHTML   = art;
+
+  var raiseBtn  = document.getElementById("raise");
+  var affirmBtn = document.getElementById("affirm");
+  var resetBtn  = document.getElementById("reset");
+  var read      = document.getElementById("read");
+
+  var Z = 2147483647;                    // the largest integer CSS will accept
+  var whites = 0, MAX = 5, affirmed = false;
+
+  var support = (typeof HTMLElement !== "undefined") && ("showPopover" in HTMLElement.prototype);
+
+  function update() {
+    var where = affirmed
+      ? "The wedge is in the <b>top layer</b>. No white in the document can reach it — the top layer does not read z-index."
+      : (whites === 0
+          ? "The wedge stands in the document. Raise the whites over it."
+          : "The wedge is in the document, under " + whites + " white" + (whites === 1 ? "" : "s") +
+            " at z-index " + Z.toLocaleString("en") + " — the largest integer CSS will accept.");
+    read.innerHTML = where;
+    affirmBtn.textContent = affirmed ? "Return to the document" : "Affirm to the top layer";
+    raiseBtn.disabled = whites >= MAX;
+    resetBtn.disabled = whites === 0;
+    top.setAttribute("aria-hidden", affirmed ? "false" : "true");
+  }
+
+  raiseBtn.addEventListener("click", function () {
+    if (whites >= MAX) return;
+    whites++;
+    var s = document.createElement("div");
+    s.className = "white";
+    document.body.appendChild(s);
+    update();
+  });
+
+  resetBtn.addEventListener("click", function () {
+    var sheets = document.querySelectorAll(".white");
+    for (var i = 0; i < sheets.length; i++) sheets[i].remove();
+    whites = 0;
+    update();
+  });
+
+  affirmBtn.addEventListener("click", function () {
+    if (!support) return;
+    affirmed = !affirmed;
+    if (affirmed) { stage.style.visibility = "hidden"; top.showPopover(); }
+    else { top.hidePopover(); stage.style.visibility = ""; }
+    update();
+  });
+
+  if (!support) {
+    affirmBtn.disabled = true;
+    affirmBtn.title = "Your browser predates the top layer.";
+    read.innerHTML = "Your browser predates the top layer; the New cannot yet be affirmed here. Raise the whites and watch them win.";
+  } else {
+    update();
+  }
+
+  // The wedge keeps its own counsel in the console.
+  try {
+    console.log("%cBeat the Whites with the Red Wedge — after El Lissitzky, 1919.", "color:#d81a12");
+    console.log("The whites stand at z-index " + Z + ", the largest integer CSS will accept.");
+    console.log("The top layer does not read z-index. Affirm the wedge and it wins.");
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

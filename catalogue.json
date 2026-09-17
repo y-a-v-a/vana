@@ -1342,5 +1342,13 @@
     "source": "Constantin Brancusi, Bird in Space (L'Oiseau dans l'espace, 1926); Brancusi v. United States (U.S. Customs Court, 1928); Marcel Duchamp / the readymade; Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "Constraint Validation API: setCustomValidity() + reportValidity() raise the un-styleable, vendor-drawn native validation bubble as the customs ruling; the Appeal button clears validity to admit the unchanged object.",
     "status": "pending"
+  },
+  {
+    "id": "2026-09-17-beat-the-whites-with-the-red-wedge-top-layer",
+    "title": "Beat the Whites with the Red Wedge (Top Layer)",
+    "year": 2026,
+    "source": "El Lissitzky, Beat the Whites with the Red Wedge (1919); El Lissitzky, Proun series (1919-1927); Kazimir Malevich / Suprematism; HTML Popover API / CSS top layer (net.art: browser stacking as material)",
+    "mechanism": "HTML Popover API / CSS top layer versus z-index:2147483647 full-viewport overlays, with per-visit rule-based inline-SVG geometry.",
+    "status": "pending"
   }
 ]

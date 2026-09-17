@@ -1,0 +1,45 @@
+{
+  "work_id": "2026-09-17-beat-the-whites-with-the-red-wedge-top-layer",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "The HTML Popover API / top layer is a genuinely fresh web-platform mechanism the catalogue has not touched; pairing it with Lissitzky's slogan as a literal CSS-stacking demonstration is a new found-object + mechanism pairing only the web could do.",
+    "nuance": "Concept and execution collapse cleanly: the top layer's literal property (ignoring z-index) IS the slogan. Surface gag (red wedge beats whites) and literate reading (Constructivist propaganda as browser stacking) both land without wall text; restraint is good though not every element carries both readings (the Suprematist square is ballast, not load-bearing).",
+    "narrative": "Names Lissitzky and, behind him, Malevich; sits on the chance/order axis via per-visit rule-based Proun geometry; answers the catalogue's Malevich/Suprematist orbit and the 'browser chrome as material' thread (scrollbar-as-zip, favicon-as-Mondrian) with a mechanism none of them use.",
+    "craft": "Smallest build that completes the thought: one SVG generator, a stack of divs, one showPopover call; clean, no decoration, feature-detected fallback for older browsers.",
+    "wit": "The joke lands on the surface (red beats white) and again on re-reading (CSS stacking politics); the dry 'raise a white / affirm to the top layer' button copy carries the Constructivist register without overplaying it."
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "El Lissitzky, Beat the Whites with the Red Wedge (1919)",
+    "El Lissitzky, Proun series (1919-1927)",
+    "Kazimir Malevich / Suprematism",
+    "HTML Popover API / CSS top layer"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "A clean, well-built Lissitzky readymade that uses the HTML Popover API's top layer — a real, recent browser construct that ignores z-index — as the literal mechanism of the slogan. Concept and execution are the same object (P1), the per-visit rule-based Proun composition sits on the chance/order axis (P5), and the work extends the catalogue's browser-chrome-as-material thread with a mechanism none of the existing works use. Attribution, license, and ethics are all in order.",
+  "reservations": "The Suprematist black square is decorative ballast rather than load-bearing; the work would be tighter without it. The 'Lower the whites' reset is a small convenience that slightly undercuts the irreversibility the slogan implies, though it is defensible as a Constructivist re-throw.",
+  "revision_suggestion": "Consider dropping the black square (or making it functionally part of the wedge's escape) and letting 'Lower the whites' be a per-visit re-throw rather than a literal reset, so the Constructivist slogan stays fully irreversible.",
+  "jury_model": "minimax/minimax-m3"
+}
