@@ -1350,5 +1350,13 @@
     "source": "El Lissitzky, Beat the Whites with the Red Wedge (1919); El Lissitzky, Proun series (1919-1927); Kazimir Malevich / Suprematism; HTML Popover API / CSS top layer (net.art: browser stacking as material)",
     "mechanism": "HTML Popover API / CSS top layer versus z-index:2147483647 full-viewport overlays, with per-visit rule-based inline-SVG geometry.",
     "status": "pending"
+  },
+  {
+    "id": "2026-09-19-le-vide-reserved-unused",
+    "title": "Le Vide (Reserved, Unused)",
+    "year": 2026,
+    "source": "Yves Klein, Le Vide (Galerie Iris Clert, 1958); Robert Barry, During the exhibition the gallery will be closed (1969); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); browser StorageManager quota (net.art)",
+    "mechanism": "navigator.storage.estimate() reads the origin's live storage quota vs. usage; a to-scale bar renders the vast reserved space against a near-zero (honestly nothing-stored) fill.",
+    "status": "pending"
   }
 ]

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Vide (Reserved, Unused)</title>
+<style>
+  :root{
+    --void:#f4f2ec;      /* the whitewashed gallery */
+    --ink:#1b1a17;
+    --faint:#a8a49a;
+    --line:#d8d4ca;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:var(--void);
+    color:var(--ink);
+    font:16px/1.5 ui-serif, Georgia, "Times New Roman", serif;
+    display:flex;
+    flex-direction:column;
+    min-height:100%;
+  }
+  .frame{
+    flex:1 1 auto;
+    margin:clamp(14px,4vw,56px);
+    border:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:clamp(18px,4vw,54px);
+  }
+  header{max-width:42ch}
+  h1{
+    font-weight:400;
+    font-size:clamp(20px,3.4vw,34px);
+    margin:0 0 .4em;
+    letter-spacing:.01em;
+  }
+  h1 em{color:var(--faint);font-style:italic}
+  p.lede{margin:0;color:#57534b}
+
+  /* the void, drawn to scale */
+  .vide{
+    align-self:center;
+    width:100%;
+    max-width:900px;
+    margin:clamp(28px,7vw,90px) 0;
+  }
+  .bar{
+    position:relative;
+    height:clamp(120px,26vh,240px);
+    border:1px solid var(--ink);
+    background:var(--void);
+    overflow:hidden;
+  }
+  /* the used portion — a hairline of something in an ocean of nothing */
+  .used{
+    position:absolute;left:0;top:0;bottom:0;
+    background:var(--ink);
+    width:0;                 /* set live, to scale */
+    min-width:0;
+  }
+  .used.hair{width:1px}      /* so a non-zero-but-invisible usage is still honest */
+  .scale{
+    display:flex;justify-content:space-between;
+    font-size:13px;color:var(--faint);
+    margin-top:.6em;
+  }
+
+  .plate{
+    max-width:52ch;
+    font-size:14px;
+    color:#57534b;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:.15em 1.4em;
+    margin:0 0 clamp(18px,4vw,36px);
+  }
+  .plate dt{color:var(--faint)}
+  .plate dd{margin:0;font-variant-numeric:tabular-nums}
+  .plate dd b{font-weight:600;color:var(--ink)}
+
+  button{
+    font:inherit;font-size:14px;
+    background:transparent;color:var(--ink);
+    border:1px solid var(--ink);
+    padding:.5em 1.1em;cursor:pointer;
+  }
+  button:hover{background:var(--ink);color:var(--void)}
+
+  footer{
+    font-size:12px;color:var(--faint);
+    max-width:60ch;line-height:1.55;
+  }
+  footer a{color:var(--faint)}
+  .note{color:#57534b}
+</style>
+</head>
+<body>
+  <div class="frame">
+    <header>
+      <h1>Le&nbsp;Vide <em>— reserved, unused</em></h1>
+      <p class="lede">The browser sets aside a room on your device for this artwork.
+      The work keeps it empty. The dimensions of that emptiness are the piece.</p>
+    </header>
+
+    <section class="vide" aria-label="the reserved space, drawn to scale">
+      <div class="bar"><div id="used" class="used" title="in use by this artwork"></div></div>
+      <div class="scale">
+        <span>used ▮ <span id="usedTxt">measuring…</span></span>
+        <span id="quotaTxt">reserved ▯ …</span>
+      </div>
+    </section>
+
+    <dl class="plate">
+      <dt>Reserved for this origin</dt><dd id="quotaBytes"><b>—</b></dd>
+      <dt>In use by the artwork</dt><dd id="usedBytes"><b>—</b></dd>
+      <dt>Proportion filled</dt><dd id="pct"><b>—</b></dd>
+      <dt>Cookies · localStorage · caches</dt><dd><b>0 · 0 · 0</b></dd>
+    </dl>
+
+    <div>
+      <button id="remeasure" type="button">re-measure the void</button>
+      <p class="note" id="verdict" style="margin:.9em 0 0;max-width:52ch"></p>
+    </div>
+
+    <footer>
+      <p><strong>Le Vide (Reserved, Unused)</strong> — y-a-v-a, 2026.
+      After Yves Klein, <em>La spécialisation de la sensibilité… Le Vide</em>
+      (Galerie Iris Clert, Paris, 1958). Measured live via the browser's
+      <code>StorageManager.estimate()</code>. No cookies, no storage, no trackers,
+      no network — verifiably: the usage above is what this page has written to
+      your device, and it is nothing.</p>
+      <p>Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+      The pixels are the message.</p>
+    </footer>
+  </div>
+
+<script>
+(function(){
+  var fmt = new Intl.NumberFormat();
+  function human(n){
+    if(n === 0) return "0 bytes";
+    var u = ["bytes","KB","MB","GB","TB"], i = 0, v = n;
+    while(v >= 1024 && i < u.length-1){ v/=1024; i++; }
+    return (i===0 ? fmt.format(n) : v.toFixed(v<10?2:1)) + " " + u[i];
+  }
+
+  var elUsedBar = document.getElementById("used"),
+      elUsedTxt = document.getElementById("usedTxt"),
+      elQuotaTxt= document.getElementById("quotaTxt"),
+      elQuotaB  = document.getElementById("quotaBytes"),
+      elUsedB   = document.getElementById("usedBytes"),
+      elPct     = document.getElementById("pct"),
+      elVerdict = document.getElementById("verdict");
+
+  function paint(quota, usage){
+    var ratio = quota > 0 ? usage/quota : 0;
+    // draw the used sliver to scale; keep a 1px hairline if usage>0 so it stays honest
+    var w = Math.max(0, Math.min(1, ratio)) * 100;
+    if(usage > 0 && w < 0.05){ elUsedBar.className = "used hair"; elUsedBar.style.width = "1px"; }
+    else { elUsedBar.className = "used"; elUsedBar.style.width = w + "%"; }
+
+    elUsedTxt.textContent  = human(usage);
+    elQuotaTxt.textContent = "reserved ▯ " + human(quota);
+    elQuotaB.innerHTML     = "<b>" + fmt.format(quota) + "</b> bytes";
+    elUsedB.innerHTML      = "<b>" + fmt.format(usage) + "</b> bytes";
+
+    var pctNum = ratio * 100;
+    var pctStr = pctNum === 0 ? "0%" : (pctNum < 0.0000001 ? "< 0.0000001%" : pctNum.toFixed(7) + "%");
+    elPct.innerHTML = "<b>" + pctStr + "</b>";
+
+    elVerdict.textContent = usage === 0
+      ? "The room is granted. Nothing hangs in it. That refusal, measured, is the work."
+      : "Your browser reports " + human(usage) + " in use — padding it withholds from you. "
+        + "The artwork still writes nothing; the void is only slightly less honest here.";
+  }
+
+  function measure(){
+    if(!(navigator.storage && navigator.storage.estimate)){
+      elUsedTxt.textContent = elQuotaTxt.textContent = "withheld";
+      elQuotaB.innerHTML = elUsedB.innerHTML = "<b>unmeasurable</b>";
+      elPct.innerHTML = "<b>—</b>";
+      elVerdict.textContent =
+        "Your browser withholds even the measurement of the space it reserves. "
+        + "Then the void is total, and unaccounted for.";
+      return;
+    }
+    navigator.storage.estimate().then(function(est){
+      paint(est.quota || 0, est.usage || 0);
+    }).catch(function(){
+      elVerdict.textContent = "The measurement failed. The emptiness persists regardless.";
+    });
+  }
+
+  document.getElementById("remeasure").addEventListener("click", measure);
+  measure();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "work_id": "2026-09-19-le-vide-reserved-unused",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 3
+  },
+  "score_notes": {
+    "novelty": "The idea of using the browser's storage quota as a reserved-but-unused void is genuinely fresh — the catalogue treats absence extensively (Inert Gas, Unreachable, Zone de Sensibilité) but never as a measured, to-scale bar of bytes the platform itself has set aside for you.",
+    "nuance": "Mechanism and concept collapse cleanly (P1): the bar IS the API report, the 'use nothing' ethic IS the medium, and Klein's void is relocated rather than illustrated; the verdict copy and re-measure button land the literate reading without requiring wall text, though the footer prose borders on explaining the joke.",
+    "narrative": "Sits squarely on the dematerialization / value axis (P6) and answers Klein directly while echoing Barry's gallery-closure and Benjamin's aura — a named prior work, legibly placed, though it does not extend the twenty-year argument with a genuinely new move beyond the found-object itself.",
+    "craft": "One API call, one bar, one plate, one button — the build is nearly the smallest possible, with clean typography and a honest hairline fallback when usage > 0; the verdict copy is the only fat, and even it is small.",
+    "wit": "The dry joke — 'gigabytes reserved, zero used' — lands immediately and again on re-reading as Klein's whitewashed room; not quite as self-cancelling as 'But is it art?' but tonally exact."
+  },
+  "weighted_total": 37,
+  "verdict": "borderline",
+  "references_named": [
+    "Yves Klein, Le Vide (Galerie Iris Clert, 1958)",
+    "Robert Barry, During the exhibition the gallery will be closed (1969)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "browser StorageManager quota (net.art)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "Le Vide (Reserved, Unused) finds a genuinely fresh web-native found object — the StorageManager quota — and turns Klein's dematerialized gallery into a measurable, falsifiable bar drawn from the platform's own bookkeeping. The mechanism enacts the idea (P1) and the delivery ethic (P8) becomes the artwork itself. It is materially distinct from the catalogue: no prior work uses storage estimation as material, and it relocates the void lineage (Klein, Barry, Klein's receipt-burning) onto disk space. The narrative ties to Klein and Barry cleanly but does not push the twenty-year arc further than those names already did, and the verdict copy leans slightly toward wall-text rather than pure double-coding.",
+  "reservations": "The footer paragraph and verdict line explain the joke a touch too explicitly for full P7 restraint — the casual viewer is told what to read, rather than being left to encounter Klein themselves.",
+  "revision_suggestion": "Strip the explanatory footer paragraph (or cut it to one line of attribution + license) and let the bar, the plate, and Klein's name do the work; the re-measure button can stay as the only interactive gesture.",
+  "jury_model": "minimax/minimax-m3"
+}
