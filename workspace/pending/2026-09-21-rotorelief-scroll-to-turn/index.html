@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rotorelief (Scroll to Turn)</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: auto; }
+  body {
+    margin: 0;
+    background: #111;
+    color: #ddd;
+    font: 14px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* The turntable needs travel: the document is tall so there is
+     something for the scroll motor to consume. */
+  .platter { height: 640vh; }
+
+  /* The disc is pinned in view; only its rotation is driven — and it
+     is driven by nothing but the scroll position of the document.
+     No timer, no requestAnimationFrame, no autoplay. */
+  .stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: grid;
+    place-items: center;
+  }
+
+  .disc {
+    width: min(78vmin, 560px);
+    height: min(78vmin, 560px);
+    border-radius: 50%;
+    background: #f4f1ea;
+    color: #111;
+    box-shadow: 0 0 0 2px #000, 0 30px 80px rgba(0,0,0,.6);
+    display: block;
+  }
+  .disc svg { display: block; width: 100%; height: 100%; }
+
+  @keyframes turn { to { transform: rotate(3600deg); } }
+
+  /* This is the whole work. Support the spec, get the depth.
+     Do not support it, get a print. */
+  @supports (animation-timeline: scroll()) {
+    .disc {
+      animation: turn linear both;
+      animation-timeline: scroll(root block);
+      will-change: transform;
+    }
+    .no-motor { display: none; }
+  }
+
+  /* If someone has asked their machine to hold still, honour it:
+     a still Rotorelief is only a drawing, which is the point. */
+  @media (prefers-reduced-motion: reduce) {
+    .disc { animation: none !important; }
+    .reduced { display: block; }
+  }
+  .reduced { display: none; }
+
+  .hud {
+    position: fixed;
+    left: 16px;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    color: #fff;
+  }
+  .hud p { margin: 0; max-width: 46ch; }
+  .hud .right { text-align: right; }
+
+  .label {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    font-size: 12px;
+    color: #9a9a9a;
+    mix-blend-mode: difference;
+  }
+  .label b { color: #cfcfcf; font-weight: 600; }
+  .label .cartel { max-width: 40ch; }
+  .label a { color: inherit; }
+
+  .no-motor, .reduced {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    text-align: center;
+    background: #111;
+    z-index: 5;
+  }
+  .no-motor span, .reduced span { max-width: 34ch; color: #ddd; }
+</style>
+</head>
+<body>
+
+  <div class="hud">
+    <p>Scroll. The disc turns because the document is long, and for
+       no other reason.</p>
+    <p class="right">Stop, and the depth you thought you saw was
+       never in the pixels.</p>
+  </div>
+
+  <div class="platter">
+    <div class="stage">
+      <div class="disc" role="img"
+        aria-label="An eccentric spiral disc that appears to swell and recede only while the page is scrolled.">
+        <svg viewBox="-260 -260 520 520" aria-hidden="true">
+          <circle cx="0" cy="0" r="252" fill="none" stroke="#000" stroke-width="3"></circle>
+          <path id="spiral" fill="none" stroke="#111" stroke-width="8"
+                stroke-linecap="round" stroke-linejoin="round"></path>
+          <circle cx="0" cy="0" r="7" fill="#111"></circle>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shown only when the browser has no scroll-driven-animation motor. -->
+  <div class="no-motor"><span>This browser has no turntable
+    (<code>animation-timeline: scroll()</code> unsupported). What remains
+    is a flat drawing — which is all a Rotorelief ever is when it stops
+    spinning.</span></div>
+
+  <!-- Shown only when the visitor has asked for reduced motion. -->
+  <div class="reduced"><span>You asked your machine to hold still, so it
+    holds the disc still. A motionless Rotorelief is a print. Duchamp
+    agreed with you.</span></div>
+
+  <div class="label">
+    <p class="cartel">
+      <b>Rotorelief (Scroll to Turn)</b>, 2026 &middot; y-a-v-a<br>
+      after Marcel Duchamp, <i>Rotoreliefs (Optical Discs)</i>, 1935; <i>Anémic Cinéma</i>, 1926<br>
+      Medium: scroll position on screen. No motor of its own.
+    </p>
+    <p class="right">
+      CC BY-SA 4.0 &middot; y-a-v-a<br>
+      No cookies. No trackers. No requests.
+    </p>
+  </div>
+
+<script>
+  // The ONLY job of this script is to draw the disc's static geometry
+  // once. It sets no timer and touches no transform: every degree of
+  // rotation is supplied by the CSS scroll-timeline, i.e. by the reader.
+  (function () {
+    var turns = 20, maxR = 248, steps = turns * 90, d = "";
+    for (var i = 0; i <= steps; i++) {
+      var t = i / steps;
+      var theta = t * turns * 2 * Math.PI;
+      var r = t * maxR;
+      var x = (Math.cos(theta) * r).toFixed(2);
+      var y = (Math.sin(theta) * r).toFixed(2);
+      d += (i === 0 ? "M" : "L") + x + " " + y + " ";
+    }
+    document.getElementById("spiral").setAttribute("d", d);
+  })();
+</script>
+</body>
+</html>

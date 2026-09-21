@@ -1358,5 +1358,13 @@
     "source": "Yves Klein, Le Vide (Galerie Iris Clert, 1958); Robert Barry, During the exhibition the gallery will be closed (1969); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); browser StorageManager quota (net.art)",
     "mechanism": "navigator.storage.estimate() reads the origin's live storage quota vs. usage; a to-scale bar renders the vast reserved space against a near-zero (honestly nothing-stored) fill.",
     "status": "pending"
+  },
+  {
+    "id": "2026-09-21-rotorelief-scroll-to-turn",
+    "title": "Rotorelief (Scroll to Turn)",
+    "year": 2026,
+    "source": "Marcel Duchamp, Rotoreliefs (Optical Discs), 1935; Marcel Duchamp, Anemic Cinema, 1926",
+    "mechanism": "Pure-CSS scroll-driven animation (animation-timeline: scroll(root)) binds the disc's rotation to scroll position with no timer or JS motion; @supports and prefers-reduced-motion downgrade it to a still print.",
+    "status": "pending"
   }
 ]

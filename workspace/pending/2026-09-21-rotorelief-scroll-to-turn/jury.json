@@ -1,0 +1,42 @@
+{
+  "work_id": "2026-09-21-rotorelief-scroll-to-turn",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "The Rotoreliefs as found-object and CSS animation-timeline:scroll() as mechanism are both new to the catalogue, and only the web can bind rotation to scroll position without any JS-driven motion.",
+    "nuance": "Double-coded — the surface gag is the swelling 3D spiral, the literate reading is that a motionless Rotorelief is a print; the @supports and prefers-reduced-motion fallbacks enact that point rather than apologise for it.",
+    "narrative": "Enacts Duchamp’s Rotoreliefs (scroll literally IS the turntable) and sits legibly on the order side of the chance/order axis, but the dialogue with Sallie Gardner at a Gallop lives only in the rationale and the work adds no move the twenty-year argument did not already possess.",
+    "craft": "The build is the smallest that completes the thought — one sticky stage, one keyframe, one path-drawing IIFE, two honest fallbacks; the @supports guard is constitutive of the idea, not decoration, though the HUD box-shadow and centre dot carry no conceptual weight.",
+    "wit": "The joke lands twice — first as scroll-to-spin, then as no-motor-no-depth-in-pixels — with the ‘this browser has no turntable’ and ‘Duchamp agreed with you’ lines as sharp secondary landings, though the wit sits on top of the mechanism rather than being identical to it."
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Marcel Duchamp, Rotoreliefs (Optical Discs), 1935",
+    "Marcel Duchamp, Anémic Cinéma, 1926"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P8"
+  ],
+  "rationale": "The work passes every hard gate: the scroll-driven CSS rotation genuinely could not exist as a print (G1), the Duchampian argument about motion-dependent depth is real (G2), the scroll mechanism enacts the turntable rather than illustrating it (G3), the page states CC BY-SA, no cookies, no trackers, no requests (G4), the tone is dry and cheerful-cynic throughout (G5), and it is materially distinct from every catalogued work including the closest neighbour Sallie Gardner at a Gallop, which uses JS canvas frames where this uses pure CSS (G6). All five scored criteria land at 4 with distinct justifications, putting it comfortably in the strong band for human confirmation.",
+  "reservations": "The chance/order axis is touched only on the order side; the dialogue with Sallie Gardner at a Gallop is stated in motivation.md rather than enacted in the page itself.",
+  "revision_suggestion": "Consider an alternate variant in which scroll velocity or a per-visit seeded perturbation perturbs the spiral (a chance counterpart), or add a visible second reading that quotes the no-motor dialogue directly from Sallie Gardner so the within-catalogue conversation is enacted, not only narrated.",
+  "jury_model": "minimax/minimax-m3"
+}
