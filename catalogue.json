@@ -1366,5 +1366,13 @@
     "source": "Marcel Duchamp, Rotoreliefs (Optical Discs), 1935; Marcel Duchamp, Anemic Cinema, 1926",
     "mechanism": "Pure-CSS scroll-driven animation (animation-timeline: scroll(root)) binds the disc's rotation to scroll position with no timer or JS motion; @supports and prefers-reduced-motion downgrade it to a still print.",
     "status": "pending"
+  },
+  {
+    "id": "2026-09-24-copy-link-to-highlight",
+    "title": "Copy Link to Highlight",
+    "year": 2026,
+    "source": "Walter Benjamin, The Arcades Project (Passagen-Werk); Roland Barthes, The Death of the Author (1967); Robert Rauschenberg, This Is a Portrait of Iris Clert If I Say So (1961); WICG Text Fragments / the #:~:text= fragment directive & CSS ::target-text",
+    "mechanism": "The WICG Text Fragments directive #:~:text= plus CSS ::target-text: the browser scrolls to and paints the reader's quotation while stripping the directive from location.hash, so the page's own JS reads a permanent 0.",
+    "status": "pending"
   }
 ]

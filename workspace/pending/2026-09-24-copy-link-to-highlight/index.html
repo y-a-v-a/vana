@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Copy Link to Highlight</title>
+<style>
+  :root{
+    --ink:#1a1712;
+    --paper:#f3efe6;
+    --faint:#8a8478;
+    --cut:#ffe14d;
+  }
+  html,body{margin:0;background:var(--paper);color:var(--ink);}
+  body{
+    font:400 1.05rem/1.65 Georgia,"Times New Roman",serif;
+    max-width:34rem;
+    margin:0 auto;
+    padding:9vh 1.4rem 4rem;
+    -webkit-text-size-adjust:100%;
+  }
+  h1{
+    font-size:1.15rem;
+    font-weight:400;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    color:var(--faint);
+    margin:0 0 2.4rem;
+  }
+  #passage p{margin:0 0 1.15rem;}
+  #passage p:first-child{font-size:1.35rem;line-height:1.4;}
+
+  /* The reader's quotation, painted by the browser — never by this page. */
+  ::target-text{
+    background:var(--cut);
+    color:var(--ink);
+    box-shadow:0 0 0 .12em var(--cut);
+  }
+
+  .panel{
+    margin:2.6rem 0 0;
+    padding:1rem 1.1rem;
+    border:1px solid #d9d3c6;
+    background:#fbf9f4;
+    font:400 .82rem/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    color:#4a463d;
+  }
+  .panel b{color:var(--faint);font-weight:400;letter-spacing:.04em;text-transform:uppercase;font-size:.68rem;}
+  .panel .row{margin:.35rem 0;}
+  .panel .zero{color:#b0392b;}
+
+  .cite{margin:2.2rem 0 0;font:400 .9rem/1.6 Georgia,serif;}
+  .cite h2{font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:400;margin:0 0 .6rem;}
+  .cite a{color:#7a5a12;text-decoration:none;border-bottom:1px solid #e0d8c2;}
+  .cite a:hover{border-bottom-color:#7a5a12;}
+  .cite li{margin:.3rem 0;list-style:none;}
+  .cite ul{padding:0;margin:0;}
+  .cite .glyph{color:var(--faint);}
+
+  .colophon{
+    margin-top:3rem;padding-top:1.2rem;border-top:1px solid #ddd6c8;
+    font:400 .78rem/1.55 ui-monospace,Menlo,monospace;color:var(--faint);
+  }
+  .colophon a{color:var(--faint);}
+  #unsupported{display:none;margin-top:1.2rem;color:#b0392b;font:400 .85rem/1.5 Georgia,serif;}
+</style>
+</head>
+<body>
+
+<h1>Copy Link to Highlight</h1>
+
+<article id="passage">
+  <p>This is a text, and you are about to quote it.</p>
+  <p>Take any sentence. Carry it off. I will not feel the cut, and I will never learn which words you chose — the browser hides your highlight from me on purpose.</p>
+  <p>A quotation is a wound the page cannot feel.</p>
+  <p>Say I said anything at all. If you say so, I said it.</p>
+</article>
+
+<section class="panel" id="blindspot" aria-live="polite">
+  <div class="row"><b>what the work can read of your quote</b></div>
+  <div class="row">location.hash&nbsp;= <span id="hash"></span></div>
+  <div class="row">document.fragmentDirective&nbsp;= <span id="frag"></span></div>
+  <div class="row zero">quotes the work can read: <span id="count">0</span></div>
+</section>
+
+<section class="cite">
+  <h2>Quote me</h2>
+  <p style="margin:0 0 .7rem;color:#4a463d;">
+    Select any passage above, then use your browser's
+    <em>Copy&nbsp;Link&nbsp;to&nbsp;Highlight</em>. Or open one of these — each address
+    carries a <code style="font-family:ui-monospace,monospace;">#:~:text=</code> that
+    tells the browser what to paint. It never tells me.
+  </p>
+  <ul id="links"></ul>
+  <p id="unsupported">Your browser does not support text-fragment highlighting; the quotations below will simply reopen the unmarked text. That, too, is the piece.</p>
+</section>
+
+<div class="colophon">
+  “Copy Link to Highlight” — y-a-v-a, 2026.<br>
+  After Walter Benjamin, <em>The Arcades Project</em> (“Method: literary montage. I needn’t say anything. Merely show.”);
+  Roland Barthes, <em>The Death of the Author</em> (1967) — “a tissue of quotations”;
+  Robert Rauschenberg, <em>This Is a Portrait of Iris Clert If I Say So</em> (1961).<br>
+  Mechanism: the WICG Text Fragments directive <code>#:~:text=</code> &amp; CSS <code>::target-text</code>.<br>
+  No cookies, no trackers, no network, no storage. License:
+  <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> — quotation is, of course, encouraged.
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var supported = ("fragmentDirective" in document);
+
+  // --- The blind-spot readout: what this page can learn about the reader's cut.
+  function refresh(){
+    // The browser strips the text directive from location.hash for privacy,
+    // so however much of the work is glowing on screen, hash stays innocent.
+    document.getElementById("hash").textContent =
+      (location.hash ? JSON.stringify(location.hash) : '"" (empty)');
+
+    document.getElementById("frag").textContent =
+      supported ? "[object FragmentDirective] — present, but exposes no text"
+                : "unsupported";
+
+    // There is no API that returns the highlighted string. The count is a
+    // constant, and its constancy is the artwork.
+    document.getElementById("count").textContent = "0";
+  }
+
+  // --- Hand the reader the scalpel, built from the work's own words.
+  // Each link is a full-document open (target=_blank), the only navigation on
+  // which the browser will honour a text directive — and even in that fresh
+  // tab, its JavaScript will read the same "0".
+  var phrases = [
+    "you are about to quote it",
+    "A quotation is a wound the page cannot feel",
+    "If you say so, I said it"
+  ];
+
+  var ul = document.getElementById("links");
+  phrases.forEach(function(p){
+    var url = location.pathname + "#:~:text=" + encodeURIComponent(p);
+    var li = document.createElement("li");
+    var a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = "“" + p + "”";
+    var g = document.createElement("span");
+    g.className = "glyph";
+    g.textContent = "  ↗";
+    li.appendChild(a);
+    li.appendChild(g);
+    ul.appendChild(li);
+  });
+
+  if (!supported){
+    document.getElementById("unsupported").style.display = "block";
+  }
+
+  refresh();
+  // The work keeps checking, and keeps not knowing.
+  addEventListener("hashchange", refresh);
+  addEventListener("pageshow", refresh);
+  addEventListener("focus", refresh);
+})();
+</script>
+</body>
+</html>

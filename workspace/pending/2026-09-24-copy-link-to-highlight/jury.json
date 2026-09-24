@@ -1,0 +1,44 @@
+{
+  "work_id": "2026-09-24-copy-link-to-highlight",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "Text Fragments directive as found-object with privacy-stripping as mechanism is a fresh pairing the catalogue lacks, though the browser-feature-as-material lineage is well-established.",
+    "nuance": "The page literally cannot perceive its own quotation, enacting the Barthes/Benjamin argument through mechanism rather than illustration; the 'wound the page cannot feel' line is slightly on-the-nose and costs a touch of restraint.",
+    "narrative": "Explicitly answers Rauschenberg's 'If I say so' and inverts A Humument/Rubrica/Cerca Trova; sits legibly on the chance/order axis (reader choice vs. page's permanent 0).",
+    "craft": "Clean, minimal HTML/CSS/JS; the smallest build that completes the thought, with restrained ::target-text styling and a tight refresh function — nothing decorative.",
+    "wit": "The permanent 0 count is both the joke and the mechanism; the Rauschenberg echo lands as a punchline; the unsupported-browser fallback ('That, too, is the piece') is self-aware wit that lands twice."
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Walter Benjamin, The Arcades Project (Passagen-Werk)",
+    "Roland Barthes, The Death of the Author (1967)",
+    "Robert Rauschenberg, This Is a Portrait of Iris Clert If I Say So (1961)",
+    "WICG Text Fragments / the #:~:text= fragment directive & CSS ::target-text"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism enacts the idea: the browser strips the text directive from location.hash for privacy, so the page literally cannot perceive its own quotation. The permanent '0' count is both the joke and the argument. The work answers Rauschenberg's 'If I say so' from the far side — the page says it because it cannot check — and inverts A Humument's Selection-API visibility. Dry, witty, restrained, and materially distinct from the catalogue's other highlight/selection works.",
+  "reservations": "The 'A quotation is a wound the page cannot feel' line is slightly on-the-nose, costing the surface joke some of its restraint. Browser support for Text Fragments is uneven (Firefox lacks it by default), though the fallback is handled gracefully as part of the piece.",
+  "revision_suggestion": null,
+  "jury_model": "minimax/minimax-m3"
+}
