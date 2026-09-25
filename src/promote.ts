@@ -5,6 +5,7 @@ import { loadCatalogue, writeCatalogue, type CatalogueStatus } from "./catalogue
 import { isValidId } from "./ids.ts";
 import { appendGuidance } from "./guidance.ts";
 import { commitAndPush } from "./git.ts";
+import { captureScreenshots } from "./screenshot.ts";
 
 export type Decision = "approve" | "reject";
 
@@ -41,7 +42,7 @@ function setCatalogueStatus(id: string, status: CatalogueStatus): void {
 export async function decide(
   id: string,
   decision: Decision,
-  opts: { push?: boolean; note?: string } = {},
+  opts: { push?: boolean; note?: string; screenshot?: boolean } = {},
 ): Promise<DecisionResult> {
   if (!isValidId(id)) throw new Error(`Invalid candidate id: ${id}`);
   const cfg = loadConfig();
@@ -55,6 +56,17 @@ export async function decide(
 
   renameSync(src, dest);
   setCatalogueStatus(id, status);
+
+  if (decision === "approve" && (opts.screenshot ?? true)) {
+    // Best-effort: a missing/broken Chrome must never block the human gate.
+    // `npm run screenshots` backfills anything that failed here.
+    try {
+      const { failed } = await captureScreenshots(destRoot, [id]);
+      if (failed.length) console.warn(`screenshot failed for ${id}`);
+    } catch (err) {
+      console.warn(`screenshot skipped for ${id}: ${(err as Error).message}`);
+    }
+  }
 
   const paths = ["workspace", "catalogue.json"];
   const note = opts.note?.trim();

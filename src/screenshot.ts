@@ -233,43 +233,62 @@ async function screenshotWork(cdp: Cdp, tmp: string, publishedRoot: string, id: 
   await closeSession(cdp, f);
 }
 
-// CLI: `npm run screenshots [-- --force]`
-if (import.meta.url === `file://${process.argv[1]}`) {
+/**
+ * Capture a framed screenshot for each of `ids` under `publishedRoot`, in one
+ * headless Chrome. Per-work failures are collected, not thrown; a missing
+ * Chrome or a failed launch throws.
+ */
+export async function captureScreenshots(
+  publishedRoot: string,
+  ids: string[],
+  onDone: (id: string, err?: Error) => void = () => {},
+): Promise<{ ok: string[]; failed: string[] }> {
+  const result = { ok: [] as string[], failed: [] as string[] };
+  if (ids.length === 0) return result;
   const chrome = process.env.CHROME_PATH ?? DEFAULT_CHROME;
-  if (!existsSync(chrome)) {
-    console.error(`Chrome not found at ${chrome} — set CHROME_PATH.`);
-    process.exit(1);
-  }
-  const root = loadConfig().abs.published;
-  const ids = worksNeedingScreenshot(root, process.argv.includes("--force"));
-  console.log(`${ids.length} work(s) need a screenshot.`);
-  if (ids.length === 0) process.exit(0);
+  if (!existsSync(chrome)) throw new Error(`Chrome not found at ${chrome} — set CHROME_PATH.`);
 
   const tmp = mkdtempSync(join(tmpdir(), "vana-shots-"));
   const { proc, wsUrl } = await launchChrome(chrome, join(tmp, "profile"));
-  const cdp = await Cdp.connect(wsUrl);
-  // A stray alert()/confirm() would block the page forever; dismiss it.
-  cdp.on((m) => {
-    if (m.method === "Page.javascriptDialogOpening")
-      void cdp.send("Page.handleJavaScriptDialog", { accept: true }, m.sessionId).catch(() => {});
-  });
-  let failed = 0;
   try {
+    const cdp = await Cdp.connect(wsUrl);
+    // A stray alert()/confirm() would block the page forever; dismiss it.
+    cdp.on((m) => {
+      if (m.method === "Page.javascriptDialogOpening")
+        void cdp.send("Page.handleJavaScriptDialog", { accept: true }, m.sessionId).catch(() => {});
+    });
     for (const id of ids) {
       try {
-        await screenshotWork(cdp, tmp, root, id);
-        console.log(`  ✓ ${id}`);
+        await screenshotWork(cdp, tmp, publishedRoot, id);
+        result.ok.push(id);
+        onDone(id);
       } catch (err) {
-        failed++;
-        console.error(`  ✗ ${id}: ${(err as Error).message}`);
+        result.failed.push(id);
+        onDone(id, err as Error);
       }
     }
-  } finally {
     cdp.close();
+  } finally {
     const exited = new Promise((r) => proc.once("exit", r));
     proc.kill();
     await exited;
     rmSync(tmp, { recursive: true, force: true });
   }
-  process.exit(failed ? 1 : 0);
+  return result;
+}
+
+// CLI: `npm run screenshots [-- --force]`
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const root = loadConfig().abs.published;
+  const ids = worksNeedingScreenshot(root, process.argv.includes("--force"));
+  console.log(`${ids.length} work(s) need a screenshot.`);
+  try {
+    const { failed } = await captureScreenshots(root, ids, (id, err) =>
+      err ? console.error(`  ✗ ${id}: ${err.message}`) : console.log(`  ✓ ${id}`),
+    );
+    process.exit(failed.length ? 1 : 0);
+  } catch (err) {
+    console.error((err as Error).message);
+    process.exit(1);
+  }
 }
