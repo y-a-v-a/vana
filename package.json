@@ -15,6 +15,7 @@
     "dashboard": "tsx src/dashboard.ts",
     "orphans": "tsx src/orphans.ts",
     "build:site": "tsx src/site.ts",
+    "screenshots": "tsx src/screenshot.ts",
     "status": "bash ops/status.sh",
     "daemon:install": "cp ops/com.yava.vana.plist \"$HOME/Library/LaunchAgents/\" && echo installed",
     "daemon:start": "launchctl load -w \"$HOME/Library/LaunchAgents/com.yava.vana.plist\" && echo started",
