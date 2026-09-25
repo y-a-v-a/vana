@@ -3,26 +3,49 @@ import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { chromeArgs, worksNeedingScreenshot, SCREENSHOT_FILE } from "./screenshot.ts";
+import { displayUrl, renderBrowserFrame, worksNeedingScreenshot, SCREENSHOT_FILE } from "./screenshot.ts";
 
-test("worksNeedingScreenshot skips works that already have one", () => {
+function fixture(): string {
   const root = mkdtempSync(join(tmpdir(), "vana-shots-"));
   for (const id of ["b-new", "a-done", "c-empty"]) mkdirSync(join(root, id));
   writeFileSync(join(root, "b-new", "index.html"), "<p>");
   writeFileSync(join(root, "a-done", "index.html"), "<p>");
   writeFileSync(join(root, "a-done", SCREENSHOT_FILE), "png");
   writeFileSync(join(root, "stray.txt"), "x");
-  assert.deepEqual(worksNeedingScreenshot(root), ["b-new"]);
+  return root;
+}
+
+test("worksNeedingScreenshot skips works that already have one", () => {
+  assert.deepEqual(worksNeedingScreenshot(fixture()), ["b-new"]);
+});
+
+test("worksNeedingScreenshot with force includes every work with an index.html", () => {
+  assert.deepEqual(worksNeedingScreenshot(fixture(), true), ["a-done", "b-new"]);
 });
 
 test("worksNeedingScreenshot tolerates a missing root", () => {
   assert.deepEqual(worksNeedingScreenshot("/nonexistent/vana"), []);
 });
 
-test("chromeArgs captures a 1280-wide headless window", () => {
-  const args = chromeArgs("file:///w/index.html", "/w/screenshot.png");
-  assert.ok(args.includes("--headless=new"));
-  assert.ok(args.some((a) => a.startsWith("--window-size=1280,")));
-  assert.ok(args.includes("--screenshot=/w/screenshot.png"));
-  assert.equal(args.at(-1), "file:///w/index.html");
+test("displayUrl is the public address without scheme", () => {
+  assert.equal(displayUrl("2026-06-17-x"), "vana.y-a-v-a.org/2026-06-17-x/");
+});
+
+test("renderBrowserFrame shows the page's favicon and escaped title", () => {
+  const html = renderBrowserFrame({
+    title: "Red <&> Blue",
+    iconUrl: "data:image/png;base64,AAA",
+    url: "vana.y-a-v-a.org/w/",
+    shot: "data:image/png;base64,BBB",
+  });
+  assert.match(html, /<img class="fav" src="data:image\/png;base64,AAA"/);
+  assert.match(html, /Red &lt;&amp;&gt; Blue/);
+  assert.match(html, /<span class="host">vana\.y-a-v-a\.org<\/span><span class="path">\/w\/<\/span>/);
+  assert.match(html, /src="data:image\/png;base64,BBB"/);
+});
+
+test("renderBrowserFrame falls back to the default globe without a favicon", () => {
+  const html = renderBrowserFrame({ title: "t", iconUrl: null, url: "h/", shot: "data:," });
+  assert.doesNotMatch(html, /class="fav"/);
+  assert.match(html, /<circle/);
 });
