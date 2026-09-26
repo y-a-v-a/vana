@@ -1045,7 +1045,7 @@
     "year": 2026,
     "source": "Vera Molnár, 1% de Désordre / (Dés)Ordres (1976); Vera Molnár, Interruptions (1968–69); Kenneth Martin, Chance and Order; Piet Mondrian; y-a-v-a, A Chance of Order (2021)",
     "mechanism": "An <input type=range> continuously scales a once-seeded RNG offset field (×0 to ×1) over a rule-generated canvas grid of nested squares, redrawing live; the slider track is the chance↔order axis itself.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-08-08-nude-descending-a-staircase-no-3",
