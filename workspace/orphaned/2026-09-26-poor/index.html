@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Poor</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: #f4f4f2;
+    color: #111;
+    font: 14px/1.4 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    padding: 24px 24px 220px;
+  }
+  /* The composition. Blocks live in normal flow, so when one changes
+     height every block below it jumps — a genuine layout shift. */
+  #work { max-width: 720px; margin: 0 auto; }
+  .bar {
+    height: 60px;
+    margin: 0 0 14px;
+    border: 2px solid #111;
+    transition: none; /* the jump must be instantaneous to register as a shift */
+  }
+  /* The meter is fixed, so it never moves and never inflates the score. */
+  #plate {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: #111; color: #f4f4f2;
+    padding: 14px 18px; border-top: 2px solid #111;
+    display: flex; flex-wrap: wrap; gap: 6px 28px; align-items: baseline;
+  }
+  #plate h1 { font-size: 15px; margin: 0; letter-spacing: .12em; text-transform: uppercase; }
+  #score { font-size: 40px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+  #rating { font-size: 22px; font-weight: 700; letter-spacing: .1em; }
+  #rating.good { color: #0c8; }
+  #rating.mid  { color: #fc0; }
+  #rating.poor { color: #f44; }
+  .dim { opacity: .62; }
+  .meta { flex-basis: 100%; font-size: 11px; }
+  a { color: inherit; }
+  #note { flex-basis: 100%; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<main id="work" aria-hidden="true"></main>
+
+<section id="plate">
+  <h1>Poor</h1>
+  <div>
+    <span id="score">0.000</span>
+    <span id="rating" class="good">GOOD</span>
+    <span class="dim" id="count">0 shifts</span>
+  </div>
+  <div class="dim">Google Core Web Vitals — CLS: <b>Good</b> &le; 0.10 &middot; <b>Needs improvement</b> &le; 0.25 &middot; <b>Poor</b> &gt; 0.25</div>
+  <div id="note" class="dim"></div>
+  <div class="meta dim">
+    &ldquo;There is no &lsquo;art piece&rsquo;, only change.&rdquo; &mdash;
+    <b>Poor</b>, y-a-v-a (2026). After Julio Le Parc (kinetic <i>instabilité</i>) and the W3C Layout Instability API / Google Core Web Vitals (CLS).
+    Medium: layout shift &middot; pixels on screen. No cookies, no trackers, no network.
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+  </div>
+</section>
+
+<script>
+(function () {
+  var work   = document.getElementById('work');
+  var scoreE = document.getElementById('score');
+  var rateE  = document.getElementById('rating');
+  var countE = document.getElementById('count');
+  var noteE  = document.getElementById('note');
+
+  var PALETTE = ['#e4002b', '#0057b8', '#ffd100', '#111', '#f4f4f2'];
+  var N = 8, bars = [];
+  for (var i = 0; i < N; i++) {
+    var b = document.createElement('div');
+    b.className = 'bar';
+    b.style.width = (30 + (i * 53) % 70) + '%';
+    b.style.background = PALETTE[i % PALETTE.length];
+    work.appendChild(b);
+    bars.push(b);
+  }
+
+  var cls = 0, shifts = 0;
+  function band(v) {
+    if (v <= 0.1)  return ['good', 'GOOD'];
+    if (v <= 0.25) return ['mid',  'NEEDS IMPROVEMENT'];
+    return ['poor', 'POOR'];
+  }
+  function render() {
+    scoreE.textContent = cls.toFixed(3);
+    var r = band(cls);
+    rateE.className = r[0];
+    rateE.textContent = r[1];
+    countE.textContent = shifts + (shifts === 1 ? ' shift' : ' shifts');
+  }
+
+  // The instrument built to penalise change becomes the meter of vitality.
+  var supported = false;
+  try {
+    var po = new PerformanceObserver(function (list) {
+      var es = list.getEntries();
+      for (var j = 0; j < es.length; j++) {
+        if (!es[j].hadRecentInput) { cls += es[j].value; shifts++; }
+      }
+      render();
+    });
+    po.observe({ type: 'layout-shift', buffered: true });
+    supported = true;
+  } catch (e) { supported = false; }
+
+  var reduced = false;
+  try { reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+
+  if (!supported) {
+    noteE.textContent = 'Your browser does not expose the Layout Instability API — the work still moves; only its confession is missing.';
+  } else if (reduced) {
+    // The web calls it "Good" only once it has stopped changing — i.e. is dead.
+    noteE.textContent = 'You asked for reduced motion. The work holds still. Note that it is now, and only now, rated GOOD.';
+  } else {
+    var k = 0;
+    // Every jolt resizes one in-flow block, so the blocks below it jump.
+    setInterval(function () {
+      var b = bars[k % bars.length];
+      b.style.height = (24 + Math.floor(Math.random() * 180)) + 'px';
+      if ((k % 3) === 0) b.style.background = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+      k++;
+    }, 850);
+    noteE.textContent = 'This work will change forever, and forever be rated Poor.';
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

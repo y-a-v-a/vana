@@ -1374,5 +1374,13 @@
     "source": "Walter Benjamin, The Arcades Project (Passagen-Werk); Roland Barthes, The Death of the Author (1967); Robert Rauschenberg, This Is a Portrait of Iris Clert If I Say So (1961); WICG Text Fragments / the #:~:text= fragment directive & CSS ::target-text",
     "mechanism": "The WICG Text Fragments directive #:~:text= plus CSS ::target-text: the browser scrolls to and paints the reader's quotation while stripping the directive from location.hash, so the page's own JS reads a permanent 0.",
     "status": "pending"
+  },
+  {
+    "id": "2026-09-26-poor",
+    "title": "Poor",
+    "year": 2026,
+    "source": "Google Core Web Vitals / Cumulative Layout Shift (CLS); W3C Layout Instability API; Julio Le Parc (kinetic instabilite); y-a-v-a manifesto: 'There is no art piece, only change'; y-a-v-a, Panta Rhei (Read-Only) (2026)",
+    "mechanism": "PerformanceObserver on 'layout-shift' (W3C Layout Instability API) sums real CLS from in-flow blocks jolted client-side; prefers-reduced-motion freezes it to score 0 and be rated GOOD.",
+    "status": "orphaned"
   }
 ]

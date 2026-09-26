@@ -1,0 +1,7 @@
+{
+  "id": "2026-09-26-poor",
+  "at": "2026-09-26T10:03:48.472Z",
+  "error": "Expected ',' or '}' after property value in JSON at position 3244 (line 1 column 3245)",
+  "violations": [],
+  "costUsd": 0.7786132499999999
+}
