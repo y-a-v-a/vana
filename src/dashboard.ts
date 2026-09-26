@@ -97,6 +97,12 @@ const STYLE = `
   pre{white-space:pre-wrap;font:.875rem/1.55 Georgia,serif;background:var(--well);padding:1rem;border-radius:.3rem}
   form{display:inline}
   button{font:600 .9375rem/1 Georgia,serif;padding:.6rem 1.4rem;border-radius:.3rem;border:1px solid var(--line);cursor:pointer;background:var(--btn-bg);color:var(--btn-ink)}
+  button:disabled{cursor:not-allowed;opacity:.4;filter:grayscale(.7)}
+  button.busy{cursor:progress;opacity:1;filter:none}
+  button.busy::before{content:"";display:inline-block;width:.8em;height:.8em;margin-right:.5em;vertical-align:-.1em;
+    border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(1turn)}}
+  @media (prefers-reduced-motion:reduce){button.busy::before{animation-duration:2.5s}}
   .approve{background:var(--ok);color:var(--on-badge);border-color:var(--ok)}
   .rejectbtn{background:var(--btn-bg);color:var(--bad);border-color:var(--bad);margin-left:.5rem}
   label{display:block;font:600 .875rem/1.4 Georgia,serif;margin-bottom:.35rem}
@@ -108,11 +114,31 @@ const STYLE = `
   h2.section{margin-top:2.5rem;border-top:1px solid var(--line);padding-top:1.5rem}
 `;
 
+// Submit feedback: once a form submits (after native validation), lock every
+// button so a decision can't be double-sent or contradicted mid-flight, and
+// spin the one that was clicked. Unlocked again on a back-navigation restore.
+const BUSY_SCRIPT = `
+document.addEventListener("submit", (e) => {
+  const btn = e.submitter || e.target.querySelector("button");
+  for (const b of document.querySelectorAll("button")) b.disabled = true;
+  if (btn) { btn.classList.add("busy"); if (btn.dataset.busy) btn.textContent = btn.dataset.busy; }
+});
+addEventListener("pageshow", (e) => {
+  if (!e.persisted) return;
+  for (const b of document.querySelectorAll("button")) {
+    b.disabled = false; b.classList.remove("busy");
+    if (b.dataset.label) b.textContent = b.dataset.label;
+  }
+});
+document.addEventListener("DOMContentLoaded", () => {
+  for (const b of document.querySelectorAll("button")) b.dataset.label = b.textContent;
+});`;
+
 function shell(title: string, body: string): string {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<title>${escapeHtml(title)}</title><style>${STYLE}</style></head>
+<title>${escapeHtml(title)}</title><style>${STYLE}</style><script>${BUSY_SCRIPT}</script></head>
 <body><header><a href="/">vana</a> · approval gateway</header><main>${body}</main></body></html>`;
 }
 
@@ -175,7 +201,7 @@ export function renderOrphan(
   <div class="card">
     <form method="POST" action="/orphan/${enc}/rejury">
       <label>Re-jury — grade it now and send it to pending for your decision</label>
-      <button class="rejurybtn" type="submit">Re-jury →</button>
+      <button class="rejurybtn" type="submit" data-busy="Re-jurying…">Re-jury →</button>
     </form>
   </div>
   <h2>Motivation</h2>
@@ -218,20 +244,20 @@ export function renderCandidate(
   const actions = refining
     ? `<div class="card"><strong>Refining…</strong> the agent is reworking this candidate from your feedback. You'll be emailed when it's ready — reload to check.</div>`
     : `<div class="card">
-    <form method="POST" action="/candidate/${enc}/approve"><button class="approve" type="submit">Approve → publish</button></form>
+    <form method="POST" action="/candidate/${enc}/approve"><button class="approve" type="submit" data-busy="Publishing…">Approve → publish</button></form>
   </div>
   <div class="card">
     <form method="POST" action="/candidate/${enc}/reject">
       <label for="note">Reject — optional note (the agent learns from it next round)</label>
       <textarea id="note" name="note" rows="2" placeholder="e.g. too reverent — I want more bite in the market critique"></textarea>
-      <button class="rejectbtn" type="submit">Reject</button>
+      <button class="rejectbtn" type="submit" data-busy="Rejecting…">Reject</button>
     </form>
   </div>
   <div class="card">
     <form method="POST" action="/candidate/${enc}/refine">
       <label for="feedback">Refine — tell the agent what to change</label>
       <textarea id="feedback" name="feedback" rows="3" required placeholder="e.g. the canvas throws a TypeError on click — fix it; and raise the contrast"></textarea>
-      <button class="refinebtn" type="submit">Refine →</button>
+      <button class="refinebtn" type="submit" data-busy="Sending to the agent…">Refine →</button>
     </form>
   </div>`;
   const body = `

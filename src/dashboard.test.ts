@@ -67,6 +67,15 @@ test("renderCandidate embeds work iframe, scores, rationale, and action forms", 
   assert.match(html, /motivation body/);
 });
 
+test("renderCandidate action buttons show busy feedback on submit", () => {
+  const html = renderCandidate("2026-06-16-x", meta, verdict, "m");
+  assert.match(html, /class="approve"[^>]*data-busy="Publishing…"/);
+  assert.match(html, /class="rejectbtn"[^>]*data-busy="Rejecting…"/);
+  assert.match(html, /class="refinebtn"[^>]*data-busy="[^"]+"/);
+  assert.match(html, /addEventListener\("submit"/); // locks buttons + spins the clicked one
+  assert.match(html, /button\.busy::before/);
+});
+
 test("renderResolved shows published status, work, and no action forms", () => {
   const html = renderResolved("2026-06-16-x", meta, verdict, "published", "motivation body");
   assert.match(html, /Published ✓/);
