@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Here and Now</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0b0b0d; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    color: #d7d4cc;
+    display: grid;
+    place-items: center;
+    min-height: 100%;
+    padding: 4vmin;
+    box-sizing: border-box;
+  }
+  main {
+    width: min(92vw, 640px);
+    text-align: center;
+  }
+  figure { margin: 0; }
+  .frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    margin: 0 auto;
+    max-width: 460px;
+    border: 1px solid #2a2822;
+    box-shadow: 0 2px 40px rgba(0,0,0,.6);
+    background: #111;
+    overflow: hidden;
+  }
+  canvas { display: block; width: 100%; height: 100%; }
+
+  /* the painting is only present when this tab holds the lock */
+  .frame[data-state="waiting"] canvas,
+  .frame[data-state="lost"] canvas { filter: grayscale(1) brightness(.16); }
+
+  .veil {
+    position: absolute; inset: 0;
+    display: none;
+    place-items: center;
+    padding: 8%;
+    box-sizing: border-box;
+    text-align: center;
+    background: rgba(8,8,10,.72);
+    font-size: clamp(13px, 3.4vw, 17px);
+    line-height: 1.5;
+    color: #b8b4aa;
+  }
+  .frame[data-state="waiting"] .veil,
+  .frame[data-state="lost"] .veil { display: grid; }
+  .veil p { margin: 0; }
+  .veil .small { display:block; margin-top: .8em; font-size: .8em; color:#7c7869; }
+
+  figcaption { margin-top: 1.4em; font-size: 14px; line-height: 1.55; }
+  figcaption .t { font-style: italic; }
+  figcaption .m { color: #8f8b80; }
+  .status {
+    margin-top: 1.1em;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: .02em;
+    color: #6f6c62;
+    min-height: 1.4em;
+  }
+  .status b { color: #c9c5ba; font-weight: normal; }
+  footer {
+    margin-top: 2.2em;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 11px;
+    line-height: 1.6;
+    color: #56534b;
+  }
+  footer a { color: #7c7869; }
+</style>
+</head>
+<body>
+<main>
+  <figure>
+    <div class="frame" id="frame" data-state="waiting">
+      <canvas id="c" width="920" height="1150" aria-label="A gold-ground panel: the original."></canvas>
+      <div class="veil">
+        <div>
+          <p id="veilText">Locating the original…</p>
+          <span class="small" id="veilQueue"></span>
+        </div>
+      </div>
+    </div>
+    <figcaption>
+      <span class="t">Here and Now</span> — y-a-v-a, 2026.<br>
+      <span class="m">Web Locks API (exclusive) on pixels. The original is present in exactly one tab.</span>
+    </figcaption>
+  </figure>
+
+  <div class="status" id="status">&nbsp;</div>
+
+  <footer>
+    After Walter Benjamin, <i>The Work of Art in the Age of Mechanical Reproduction</i> (1935) — the aura, the “here and now.”<br>
+    CC BY-SA 4.0 · y-a-v-a. No cookies, no tracking, no network. Open it twice and see.
+  </footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  var LOCK = "here-and-now:the-original";
+  var frame = document.getElementById("frame");
+  var status = document.getElementById("status");
+  var veilText = document.getElementById("veilText");
+  var veilQueue = document.getElementById("veilQueue");
+
+  // ---- the original: a fixed gold-ground panel (the aura, literally behind) ----
+  (function paint() {
+    var cv = document.getElementById("c"), x = cv.getContext("2d");
+    var w = cv.width, h = cv.height;
+    x.fillStyle = "#0d0d0f"; x.fillRect(0, 0, w, h);
+    var cx = w * 0.5, cy = h * 0.42;
+    var g = x.createRadialGradient(cx, cy, 0, cx, cy, h * 0.62);
+    g.addColorStop(0.00, "#f6e6a6");
+    g.addColorStop(0.22, "#d9b24e");
+    g.addColorStop(0.55, "#9c7a26");
+    g.addColorStop(1.00, "#0d0d0f");
+    x.fillStyle = g; x.fillRect(0, 0, w, h);
+    // a single dark presence standing in the gold — the figure that has the aura
+    x.fillStyle = "rgba(10,9,7,0.86)";
+    x.beginPath();
+    x.ellipse(cx, cy + h * 0.02, w * 0.11, h * 0.12, 0, 0, Math.PI * 2); // head
+    x.fill();
+    x.beginPath();
+    x.moveTo(cx - w * 0.19, h * 0.95);
+    x.quadraticCurveTo(cx, cy + h * 0.10, cx + w * 0.19, h * 0.95); // shoulders/body
+    x.closePath();
+    x.fill();
+  })();
+
+  // ---- feature gate ----
+  if (!("locks" in navigator) || !navigator.locks || !navigator.locks.request) {
+    frame.setAttribute("data-state", "lost");
+    veilText.textContent = "This browser has no Web Locks API. Without a lock there is no here and now — only copies.";
+    status.textContent = "no exclusivity available";
+    return;
+  }
+
+  // Live count of tabs contending for the single original (local, no network).
+  function refreshQueue() {
+    if (!navigator.locks.query) return;
+    navigator.locks.query().then(function (state) {
+      var held = (state.held || []).filter(function (l) { return l.name === LOCK; }).length;
+      var pending = (state.pending || []).filter(function (l) { return l.name === LOCK; }).length;
+      var total = held + pending;
+      status.innerHTML = "on view: <b>" + held + "</b> · waiting: <b>" + pending +
+                         "</b> · this browser: <b>" + total + "</b> tab" + (total === 1 ? "" : "s");
+      if (frame.getAttribute("data-state") === "waiting") {
+        veilQueue.textContent = pending > 1
+          ? "You are one of " + pending + " tabs waiting for it."
+          : "You are next.";
+      }
+    }).catch(function () {});
+  }
+  refreshQueue();
+  setInterval(refreshQueue, 1000);
+
+  // Request the ONE exclusive lock. While another tab holds it, we wait — genuinely.
+  // The callback runs only when the original becomes present here; we hold it for the
+  // lifetime of this tab, so no copy of the presence can exist simultaneously.
+  var release;
+  var held = new Promise(function (res) { release = res; });
+
+  veilText.textContent = "The original is on view in another tab.";
+
+  navigator.locks.request(LOCK, { mode: "exclusive" }, function () {
+    frame.setAttribute("data-state", "present");
+    refreshQueue();
+    // Hold until this tab goes away; releasing hands the aura to the next in line.
+    return held;
+  }).catch(function () {
+    frame.setAttribute("data-state", "lost");
+    veilText.textContent = "The lock was refused. The original is elsewhere.";
+  });
+
+  // On leaving, release so a waiting tab receives the here-and-now.
+  window.addEventListener("pagehide", function () { release(); });
+})();
+</script>
+</body>
+</html>

@@ -1382,5 +1382,13 @@
     "source": "Google Core Web Vitals / Cumulative Layout Shift (CLS); W3C Layout Instability API; Julio Le Parc (kinetic instabilite); y-a-v-a manifesto: 'There is no art piece, only change'; y-a-v-a, Panta Rhei (Read-Only) (2026)",
     "mechanism": "PerformanceObserver on 'layout-shift' (W3C Layout Instability API) sums real CLS from in-flow blocks jolted client-side; prefers-reduced-motion freezes it to score 0 and be rated GOOD.",
     "status": "orphaned"
+  },
+  {
+    "id": "2026-09-28-here-and-now",
+    "title": "Here and Now",
+    "year": 2026,
+    "source": "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); W3C Web Locks API",
+    "mechanism": "Web Locks API exclusive lock (navigator.locks.request) bound to the artwork's visibility, held for the tab's lifetime, with a live navigator.locks.query() queue count; no network or storage.",
+    "status": "pending"
   }
 ]

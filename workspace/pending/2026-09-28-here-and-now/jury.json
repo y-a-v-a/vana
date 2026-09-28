@@ -1,0 +1,43 @@
+{
+  "work_id": "2026-09-28-here-and-now",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 5
+  },
+  "score_notes": {
+    "novelty": "Web Locks API (navigator.locks.request exclusive) is a fresh primitive the catalogue has never used, and its literal semantic — mutual exclusion across tabs — is exactly the readymade Benjamin critique has needed; only the web can do this.",
+    "nuance": "Mechanism and concept collapse into one object (the mutex IS the aura), and the work is double-coded without a wall text: a casual viewer sees a picture that vanishes when opened twice, a literate one sees aura reduced to a per-browser mutex — the joke that 'unique existence at the place where it happens to be' turns out to mean your laptop, this tab.",
+    "narrative": "Directly answers The Original (2026) which also took Benjamin as a target, but with a different mechanism (Blob + localStorage edition counter vs. Web Locks mutex); sits firmly on the order pole of the chance/order axis and adds 'concurrency primitives as material' to the twenty-year argument.",
+    "craft": "Lean build: inline canvas, a short script, a feature gate for browsers without the API, a 1Hz queue-refresh interval, a pagehide release; nothing decorative, nothing apologetic, and the gold-ground icon is the minimum the lock has to guard.",
+    "wit": "The joke and the mechanism are the same thing — a webpage you cannot open twice is funny precisely because the web's whole miracle is the costless simultaneous copy; the absurdity is the argument, the dry veil text lands it."
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "W3C Web Locks API"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "All six hard gates pass: the work is web-native and could not exist as a print (G1), carries a real idea about aura and value (G2), makes the mechanism enact the concept (G3), is openly licensed with attribution and zero network or tracking (G4), reads in the cheerful-cynic voice (G5), and is materially distinct from the catalogue — Web Locks API has not been used before, and the only adjacent work (The Original) addresses the same Benjamin theme via a different primitive (G6). The novelty lies in the primitive itself: mutual exclusion across tabs is a genuine web-only affordance the catalogue had not touched, and it is precisely the affordance Benjamin's argument requires.",
+  "reservations": null,
+  "revision_suggestion": null,
+  "jury_model": "minimax/minimax-m3"
+}
