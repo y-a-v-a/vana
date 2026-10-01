@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Il pleut</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: #0b0d12;
+    color: #aeb8c4;
+    font: 16px/1.55 Georgia, "Times New Roman", serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  header {
+    padding: 1rem 1.25rem .35rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  h1 {
+    margin: 0;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1.15rem;
+    letter-spacing: .18em;
+    color: #8ea0b4;
+  }
+  button {
+    font: inherit;
+    font-size: .8rem;
+    letter-spacing: .08em;
+    color: #aeb8c4;
+    background: transparent;
+    border: 1px solid #39465a;
+    border-radius: 2px;
+    padding: .3rem .8rem;
+    cursor: pointer;
+  }
+  button:hover { border-color: #6b7c93; color: #d6dee8; }
+
+  /* The rain. Five plain sentences, flowed vertically by the layout engine. */
+  main {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    gap: clamp(.5rem, 3.5vw, 2.2rem);
+    padding: .75rem 1rem 0;
+    overflow: hidden;
+  }
+  main p {
+    margin: 0;
+    height: 100%;
+    writing-mode: vertical-rl;      /* the whole piece: the browser sets the words as rain */
+    text-orientation: mixed;
+    font-size: clamp(.78rem, 1.9vw, 1.05rem);
+    letter-spacing: .02em;
+    white-space: normal;
+    color: #c3ccd8;
+    text-shadow: 0 0 6px rgba(140,170,210,.12);
+  }
+
+  /* "stop the rain": return the layout engine to prose; the sentences lie flat. */
+  main.stopped {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .6rem;
+    overflow: auto;
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+  main.stopped p {
+    writing-mode: horizontal-tb;
+    height: auto;
+    opacity: 1 !important;
+    letter-spacing: normal;
+    text-align: center;
+    max-width: 40rem;
+    color: #aeb8c4;
+    text-shadow: none;
+  }
+
+  footer {
+    padding: .6rem 1.25rem 1rem;
+    font-size: .72rem;
+    line-height: 1.5;
+    color: #5f6c7e;
+    border-top: 1px solid #1a2130;
+  }
+  footer b { color: #8ea0b4; font-weight: 400; }
+  footer .lic { color: #4e5a6b; }
+  #len { color: #8ea0b4; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Il pleut</h1>
+    <button id="toggle" type="button" aria-pressed="false">stop the rain</button>
+  </header>
+
+  <main id="rain">
+    <p>Il pleut des voix de femmes comme si elles étaient mortes même dans le souvenir</p>
+    <p>c’est vous aussi qu’il pleut merveilleuses rencontres de ma vie ô gouttelettes</p>
+    <p>et ces nuages cabrés se prennent à hennir tout un univers de villes auriculaires</p>
+    <p>écoute s’il pleut tandis que le regret et le dédain pleurent une ancienne musique</p>
+    <p>écoute tomber les liens qui te retiennent en haut et en bas</p>
+  </main>
+
+  <footer>
+    <b>Il pleut</b> — Guillaume Apollinaire, from <i>Calligrammes</i> (1918), public domain.
+    Set vertically by your browser’s layout engine. In the source it is five plain sentences;
+    only the render rains, and it falls exactly as far as your window is tall —
+    <span id="len">0</span> px. Resize the window and the rain lengthens.
+    Select the text, or press <b>stop the rain</b>: it was only ever a sentence.<br>
+    <span class="lic">y-a-v-a (yet another visual artist) · Licensed CC BY-SA 4.0 ·
+    no cookies, no tracking, no requests. The poem belongs to the rain.</span>
+  </footer>
+
+<script>
+  // Chance over order: each ordered stream gets a small per-visit offset and opacity,
+  // so the rain never falls in lockstep. Held in RAM only — reload re-throws it.
+  var streams = document.querySelectorAll('#rain p');
+  for (var i = 0; i < streams.length; i++) {
+    streams[i].style.opacity = (0.55 + Math.random() * 0.42).toFixed(3);
+    streams[i].style.paddingBlockStart = (Math.random() * 2.4).toFixed(2) + 'rem';
+  }
+
+  // The live measure: the rain's length is the viewport's height. No network, no store.
+  var len = document.getElementById('len');
+  function measure() { len.textContent = window.innerHeight; }
+  measure();
+  window.addEventListener('resize', measure);
+
+  // Stop the rain: flip the layout engine back to prose and reveal the sentences.
+  var rain = document.getElementById('rain');
+  var btn = document.getElementById('toggle');
+  btn.addEventListener('click', function () {
+    var stopped = rain.classList.toggle('stopped');
+    btn.textContent = stopped ? 'let it rain' : 'stop the rain';
+    btn.setAttribute('aria-pressed', String(stopped));
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+  "work_id": "2026-10-01-il-pleut",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "A fresh pairing: Apollinaire's calligramme enacted by CSS writing-mode rather than hand-set type, and none of the source-vs-render works in the catalogue (Silencio, Indivisible, Non-finito, Rivers, Schreibzeit) has used writing-mode — the engine's vertical text flow is genuinely untouched material.",
+    "nuance": "The five sentences are horizontal in the DOM and only vertical in the render, and the toggle literalises the 'this was never rain, only a sentence' reading; concept and execution are one object, the page reads at two depths without explanation, and the per-visit opacity/offset is restrained enough to stay in the background.",
+    "narrative": "Names Apollinaire directly and situates itself in the established source-vs-render line (Silencio/Indivisible/Rivers/Non-finito/Schreibzeit/Window Sign), adding a layout-engine-axis member the line had not claimed; the chance/order axis is touched but lightly, and the connection to Mallarmé/concrete poetry is gestured at rather than enacted.",
+    "craft": "One HTML file, no canvas, no network, no storage; the build is the smallest that completes the thought and the footer measurement is a small, honest, on-topic flourish rather than decoration.",
+    "wit": "The toggle is the joke and the argument at once: 'stop the rain' returns the sentences to prose and the second reading lands without a label, exactly as P7 asks."
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Guillaume Apollinaire, Il pleut, from Calligrammes (1918)",
+    "Eugen Gomringer, concrete poetry",
+    "Augusto de Campos, concrete poetry",
+    "Stéphane Mallarmé, Un Coup de Dés (1897)",
+    "y-a-v-a, Silencio (2026)",
+    "y-a-v-a, Indivisible (2026)",
+    "y-a-v-a, Rivers (2026)",
+    "y-a-v-a, Non-finito (2026)",
+    "y-a-v-a, Schreibzeit (2026)",
+    "y-a-v-a, Window Sign (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "The work does what the DNA keeps asking for: the layout engine is the rain (P1), the source-vs-render split is exact and double-coded (P7), the build is the smallest that completes the thought (P3), and it uses a browser primitive (writing-mode) that no catalogued work has yet claimed, giving the source-vs-render line a new axis. Gates all pass: it is web-native and live (G1), there is a real idea about typography and meaning (G2), the mechanism enacts rather than illustrates (G3), the ethics are stated and observed (G4), the voice is dry and on-tone (G5), and it is materially distinct from Silencio/Indivisible/Non-finito/Rivers/Schreibzeit because none of those used writing-mode (G6).",
+  "reservations": "The chance/order axis is asserted in the rationale and the script (per-visit opacity/offset) but is barely legible on the page — the drops still fall in the same five ordered columns, so the 'chance' element is closer to texture than engine, and a stronger reading might let the per-visit chance reshape column count or order. The line to Un Coup de Dés and Mallarmé is name-dropped rather than enacted; either earn it or trim it.",
+  "revision_suggestion": "Give the per-visit chance more weight so the chance/order axis is felt, not footnoted: vary column count, start order, or a left-to-right ordering of the five streams across reloads, so that reloading genuinely re-throws the rainfall and the catalogue's chance↔order signal becomes visible without a wall text.",
+  "jury_model": "minimax/minimax-m3"
+}

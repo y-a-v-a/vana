@@ -1390,5 +1390,13 @@
     "source": "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); W3C Web Locks API",
     "mechanism": "Web Locks API exclusive lock (navigator.locks.request) bound to the artwork's visibility, held for the tab's lifetime, with a live navigator.locks.query() queue count; no network or storage.",
     "status": "pending"
+  },
+  {
+    "id": "2026-10-01-il-pleut",
+    "title": "Il pleut",
+    "year": 2026,
+    "source": "Guillaume Apollinaire, Il pleut, from Calligrammes (1918); Concrete poetry (Eugen Gomringer, Augusto de Campos); Stephane Mallarme, Un Coup de Des (1897)",
+    "mechanism": "CSS writing-mode:vertical-rl flows horizontal source sentences into vertical rain that wraps to — and re-lengthens with — the window's height; a toggle returns the layout engine to prose.",
+    "status": "pending"
   }
 ]
