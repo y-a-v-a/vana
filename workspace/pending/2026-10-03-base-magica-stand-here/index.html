@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Base Magica (Stand Here)</title>
+<style>
+  /* Base Magica (Stand Here) — y-a-v-a, after Piero Manzoni, Base Magica (1961).
+     No script. No network. No cookies. The whole work is one CSS selector: :has().
+     For twenty-five years a container could not be styled by what it held.
+     Now the base can see what stands upon it — and confers art accordingly. */
+
+  :root{
+    --wall:#e7e3dc; --wall2:#ddd8cf;
+    --stone:#f6f3ec; --stone-dark:#d8d2c5; --shadow:rgba(40,34,24,.28);
+    --gold:#b4902f; --ink:#201c15; --dim:#8a8276; --sold:#c0241f; --glow:#fff5cf;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:
+      radial-gradient(120% 90% at 50% 0%, var(--wall) 0%, var(--wall2) 100%);
+    color:var(--ink);
+    font:16px/1.5 ui-serif,Georgia,"Times New Roman",serif;
+    display:flex; align-items:center; justify-content:center;
+    padding:5vmin; -webkit-font-smoothing:antialiased;
+  }
+
+  .gallery{
+    width:min(880px,100%);
+    display:grid; grid-template-columns:1fr; gap:min(7vmin,54px);
+    justify-items:center;
+  }
+  @media(min-width:720px){
+    .gallery{grid-template-columns:1.2fr .8fr; align-items:center; gap:48px}
+  }
+
+  /* ---- the plinth ---------------------------------------------------- */
+  .plinth-wrap{position:relative; display:flex; flex-direction:column; align-items:center}
+  .floor{position:relative; width:260px; max-width:70vw}
+
+  /* occupant: the living sculpture, present only while you stand here */
+  .figure{
+    position:absolute; left:50%; bottom:100%; transform:translateX(-50%) scaleY(.4);
+    transform-origin:bottom center;
+    width:46px; height:120px; border-radius:46px 46px 20px 20px;
+    background:linear-gradient(180deg,var(--glow),#e7c86a);
+    opacity:0; filter:blur(.3px);
+    transition:opacity .45s ease, transform .45s cubic-bezier(.2,.9,.2,1);
+    z-index:3; pointer-events:none;
+  }
+
+  .plinth{
+    position:relative; z-index:2;
+    height:118px;
+    background:linear-gradient(90deg,var(--stone-dark),var(--stone) 18% 82%,var(--stone-dark));
+    border-radius:4px 4px 2px 2px;
+    box-shadow:0 2px 0 rgba(255,255,255,.6) inset, 0 18px 30px -22px var(--shadow);
+    display:flex; align-items:center; justify-content:center;
+    transition:box-shadow .45s ease;
+  }
+  /* the top surface — the place where one stands */
+  .spot{
+    display:block; width:100%; height:100%; cursor:pointer;
+    border-radius:inherit;
+    text-indent:-9999px; overflow:hidden; white-space:nowrap;
+  }
+  .caption{text-indent:0; position:absolute; left:50%; top:50%;
+    transform:translate(-50%,-50%); color:var(--dim);
+    font-size:13px; letter-spacing:.14em; text-transform:uppercase; pointer-events:none}
+
+  /* the halo on the floor the spotlight would throw */
+  .halo{
+    position:absolute; left:50%; top:52%; transform:translate(-50%,-50%) scale(.2);
+    width:360px; height:360px; max-width:150%; border-radius:50%;
+    background:radial-gradient(circle,var(--glow) 0%,rgba(255,245,207,.35) 30%,transparent 62%);
+    opacity:0; z-index:1; pointer-events:none;
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .nameplate{ /* engraved on the base when it becomes art */
+    position:absolute; left:50%; bottom:10px; transform:translateX(-50%);
+    font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold);
+    opacity:0; transition:opacity .45s ease .1s; pointer-events:none; white-space:nowrap;
+  }
+
+  /* visually-hidden but focusable checkbox: the touch / keyboard way to stand on it */
+  .vh{position:absolute; width:1px; height:1px; margin:-1px; padding:0; border:0;
+    clip:rect(0 0 0 0); overflow:hidden; white-space:nowrap}
+
+  /* ---- THE WHOLE ARTWORK: the parent reacts to its child ------------- *
+   * .gallery becomes a shrine the instant someone stands on the base.   */
+  .gallery:has(.spot:hover),
+  .gallery:has(.stand:checked),
+  .gallery:has(.spot:focus-visible){
+    --wall:#efe7d4;
+  }
+  .gallery:has(.spot:hover) .plinth,
+  .gallery:has(.stand:checked) .plinth,
+  .gallery:has(.spot:focus-visible) .plinth{
+    box-shadow:0 0 0 1.5px var(--gold), 0 2px 0 rgba(255,255,255,.6) inset,
+               0 26px 46px -26px var(--shadow), 0 0 60px -6px var(--glow);
+  }
+  .gallery:has(.spot:hover) .figure,
+  .gallery:has(.stand:checked) .figure,
+  .gallery:has(.spot:focus-visible) .figure{opacity:.96; transform:translateX(-50%) scaleY(1)}
+  .gallery:has(.spot:hover) .halo,
+  .gallery:has(.stand:checked) .halo,
+  .gallery:has(.spot:focus-visible) .halo{opacity:.9; transform:translate(-50%,-50%) scale(1)}
+  .gallery:has(.spot:hover) .nameplate,
+  .gallery:has(.stand:checked) .nameplate,
+  .gallery:has(.spot:focus-visible) .nameplate{opacity:1}
+
+  /* ---- wall label ---------------------------------------------------- */
+  .label{
+    max-width:320px; border-left:2px solid var(--stone-dark); padding:2px 0 2px 18px;
+  }
+  .label h1{font-size:19px; margin:0 0 2px; font-weight:600}
+  .label .after{font-style:italic; color:var(--dim); font-size:14px; margin:0 0 14px}
+  .label dl{margin:0; font-size:13.5px}
+  .label dt{color:var(--dim); font-size:11px; letter-spacing:.12em; text-transform:uppercase; margin-top:10px}
+  .label dd{margin:1px 0 0}
+
+  .verdict{
+    display:inline-flex; align-items:center; gap:8px; margin-top:16px;
+    font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim);
+  }
+  .verdict .dot{width:9px; height:9px; border-radius:50%; background:var(--stone-dark)}
+
+  /* default (empty base) vs occupied — toggled by the same :has() */
+  .state-art{display:none}
+  .gallery:has(.spot:hover) .state-empty,
+  .gallery:has(.stand:checked) .state-empty,
+  .gallery:has(.spot:focus-visible) .state-empty{display:none}
+  .gallery:has(.spot:hover) .state-art,
+  .gallery:has(.stand:checked) .state-art,
+  .gallery:has(.spot:focus-visible) .state-art{display:block}
+  .gallery:has(.spot:hover) .verdict,
+  .gallery:has(.stand:checked) .verdict,
+  .gallery:has(.spot:focus-visible) .verdict{color:var(--gold)}
+  .gallery:has(.spot:hover) .verdict .dot,
+  .gallery:has(.stand:checked) .verdict .dot,
+  .gallery:has(.spot:focus-visible) .verdict .dot{background:var(--sold)}
+
+  .hint{font-size:12px; color:var(--dim); margin-top:18px; letter-spacing:.02em}
+
+  .colophon{
+    position:fixed; left:0; right:0; bottom:0; padding:7px 10px;
+    text-align:center; font-size:11px; color:var(--dim); line-height:1.4;
+  }
+  .colophon a{color:inherit}
+
+  /* Pre-:has() browsers were blind to their own contents — say so. */
+  .unsupported{display:none}
+  @supports not (selector(:has(*))){
+    .supported{display:none}
+    .unsupported{display:block; max-width:340px; color:var(--dim); font-style:italic}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    .figure,.halo,.plinth,.nameplate{transition:none}
+  }
+</style>
+</head>
+<body>
+
+  <main class="gallery supported">
+
+    <figure class="plinth-wrap" aria-label="A magic base. Stand on it to become a living sculpture.">
+      <div class="floor">
+        <div class="halo" aria-hidden="true"></div>
+        <div class="figure" aria-hidden="true"></div>
+        <div class="plinth">
+          <input type="checkbox" id="stand" class="stand vh">
+          <label for="stand" class="spot">Stand on the base</label>
+          <span class="caption">stand here</span>
+          <span class="nameplate" aria-hidden="true">P. Manzoni &nbsp;·&nbsp; opus 1961</span>
+        </div>
+      </div>
+    </figure>
+
+    <aside class="label">
+      <h1>Base Magica</h1>
+      <p class="after">after Piero Manzoni, <em>Base Magica — Scultura Vivente</em>, 1961</p>
+
+      <!-- empty: the base holds nothing -->
+      <div class="state-empty">
+        <dl>
+          <dt>On view</dt><dd>Nothing. A base awaiting a body.</dd>
+          <dt>Medium</dt><dd>An empty pedestal</dd>
+        </dl>
+      </div>
+
+      <!-- occupied: whatever stands here is, for now, a work of art -->
+      <div class="state-art">
+        <dl>
+          <dt>Title</dt><dd>Living Sculpture</dd>
+          <dt>Whoever stands here</dt><dd>You, for as long as you remain</dd>
+          <dt>Medium</dt><dd>Attention on pixels, signed by containment</dd>
+          <dt>Value</dt><dd>Incalculable, non-transferable, ends on exit</dd>
+        </dl>
+      </div>
+
+      <span class="verdict"><span class="dot"></span><span class="state-empty">not art</span><span class="state-art">— art —</span></span>
+
+      <p class="hint">Hover the base, tab to it, or tap it. Step off and the title lapses — the base confers nothing it does not currently hold.</p>
+    </aside>
+
+    <p class="unsupported">Your browser cannot style a container by its contents
+      (<code>:has()</code> unsupported). Like every parent selector before 2023,
+      this base is blind to what stands on it — so nothing here can become art.
+      That blindness is, itself, the point.</p>
+
+  </main>
+
+  <footer class="colophon">
+    <strong>Base Magica (Stand Here)</strong> — y-a-v-a, after Piero Manzoni, <em>Base Magica</em> (1961). ·
+    The mechanism is the CSS <code>:has()</code> selector. No scripts, no cookies, no network, no data collected. ·
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>.
+  </footer>
+
+</body>
+</html>

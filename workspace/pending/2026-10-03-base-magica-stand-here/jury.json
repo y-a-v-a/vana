@@ -1,0 +1,45 @@
+{
+  "work_id": "2026-10-03-base-magica-stand-here",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "The :has() relational selector as the literal mechanism of nomination is a fresh found-object the catalogue lacks; only CSS could do it, and the pairing with Manzoni's Base Magica is genuinely new territory for the DNA.",
+    "nuance": "Concept and execution collapse cleanly: the container recognising its occupant IS the conferral of arthood; the surface gag (stand/step off) lands without wall text while the literate reading (parent selector as readymade, O'Doherty's frame) sits underneath — restraint is good though the gold-glow + nameplate + halo + figure stack is slightly more visual furniture than strictly needed.",
+    "narrative": "Names Manzoni, Duchamp and O'Doherty explicitly, sits firmly on the order pole of the chance/order axis, and answers the catalogue's existing Manzoni work (Socle du Monde / <base>) by tackling a different Manzoni piece through a different web primitive — a real move in the twenty-year argument.",
+    "craft": "Zero JavaScript, no network, no storage, single CSS feature carrying the whole argument; the @supports fallback is honest and the reduced-motion guard is present — close to the smallest build that completes the thought, though the figure/halo/nameplate/gold-edge quartet is one element more than the minimum.",
+    "wit": "The joke lands on the surface (stand on it, become art) and again on re-reading (the browser's parent selector as the gallery's nominating authority); the unsupported-browser note that the base's blindness is itself the point is a genuine second-layer laugh."
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Piero Manzoni, Base Magica — Scultura Vivente (1961)",
+    "Marcel Duchamp, the readymade",
+    "Brian O'Doherty, Inside the White Cube (1976)",
+    "CSS Selectors Level 4, the :has() relational pseudo-class"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P6",
+    "P7"
+  ],
+  "rationale": "Base Magica (Stand Here) uses the CSS :has() relational selector — interoperable across browsers only since late 2023 — as the literal mechanism of Manzoni's nomination: the container styles itself by its contents, so the conferral of arthood is the selector's semantics rather than a JavaScript-driven illustration. Concept and execution are the same object (P1), the surface gag lands without wall text while the literate reading (parent selector as readymade, O'Doherty's frame) sits underneath (P7), and the work is materially distinct from the catalogue's existing Manzoni piece (Socle du Monde / <base>) by tackling a different Manzoni work through a different web primitive. Ethics are clean: zero JS, no network, no storage, CC BY-SA stated, attribution present.",
+  "reservations": "The visual furniture (halo + figure + nameplate + gold edge + verdict dot) is one flourish more than the absolute minimum the thought requires; a stricter P3 reading would strip the figure silhouette and let the empty/occupied label toggle do the work alone.",
+  "revision_suggestion": "Consider dropping the .figure silhouette and the .halo so the only visible change on occupation is the wall label, the gold edge and the verdict — the mechanism would then carry even more of the argument and the build would shrink toward the catalogue's smallest-possible-build ideal.",
+  "jury_model": "minimax/minimax-m3"
+}

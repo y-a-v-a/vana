@@ -1398,5 +1398,13 @@
     "source": "Guillaume Apollinaire, Il pleut, from Calligrammes (1918); Concrete poetry (Eugen Gomringer, Augusto de Campos); Stephane Mallarme, Un Coup de Des (1897)",
     "mechanism": "CSS writing-mode:vertical-rl flows horizontal source sentences into vertical rain that wraps to — and re-lengthens with — the window's height; a toggle returns the layout engine to prose.",
     "status": "pending"
+  },
+  {
+    "id": "2026-10-03-base-magica-stand-here",
+    "title": "Base Magica (Stand Here)",
+    "year": 2026,
+    "source": "Piero Manzoni, Base Magica — Scultura Vivente (1961); Marcel Duchamp, the readymade; Brian O'Doherty, Inside the White Cube (1976); CSS Selectors Level 4, the :has() relational pseudo-class",
+    "mechanism": "The CSS :has() relational selector styles the parent gallery by its contents (hover/focus/checked), so the container recognising an occupant is itself the act of nomination — zero JavaScript.",
+    "status": "pending"
   }
 ]
