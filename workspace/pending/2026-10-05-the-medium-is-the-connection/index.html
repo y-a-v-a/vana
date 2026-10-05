@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Medium Is the Connection</title>
+<style>
+  :root{
+    --wall:#13120f;
+    --wall2:#1b1a16;
+    --ink:#e9e6df;
+    --dim:#9a968c;
+    --line:#39352c;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:
+      radial-gradient(130% 90% at 50% 0%, var(--wall2), var(--wall) 70%);
+    color:var(--ink);
+    font:15px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:6vmin 5vmin 7vmin;
+    -webkit-font-smoothing:antialiased;
+  }
+  .gallery{width:min(560px,100%);display:flex;flex-direction:column;align-items:center}
+  figure{margin:0;display:flex;flex-direction:column;align-items:center}
+  .frame{
+    padding:22px;
+    background:linear-gradient(160deg,#cdbf9e,#8f835f);
+    border-radius:2px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.3) inset,
+      0 28px 60px -24px rgba(0,0,0,.8),
+      0 2px 6px rgba(0,0,0,.5);
+  }
+  .matte{padding:16px;background:#f3f1ea;box-shadow:0 1px 3px rgba(0,0,0,.35) inset}
+  canvas{display:block;width:100%;height:auto;background:#fbfaf6}
+  /* wall label / tombstone */
+  figcaption{
+    margin-top:26px;
+    width:min(460px,100%);
+    background:#f6f4ee;
+    color:#17150f;
+    border:1px solid #e2ddcf;
+    border-radius:1px;
+    padding:16px 18px;
+    box-shadow:0 10px 30px -18px rgba(0,0,0,.7);
+    font-size:13px;
+    line-height:1.55;
+  }
+  figcaption .t{font-weight:600;font-style:italic}
+  figcaption .by{color:#5c574a}
+  figcaption dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:12px 0 0}
+  figcaption dt{color:#7a7363;text-transform:uppercase;letter-spacing:.06em;font-size:10.5px;padding-top:2px}
+  figcaption dd{margin:0;font-variant-numeric:tabular-nums}
+  figcaption dd.medium{font-weight:600}
+  .aside{color:#8a8373;font-size:11px;margin-top:10px}
+  .pulse{animation:flash 1.1s ease-out}
+  @keyframes flash{from{background:#fff7d6}to{background:#f6f4ee}}
+  .foot{
+    margin-top:30px;color:var(--dim);font-size:11px;text-align:center;
+    max-width:460px;line-height:1.6;
+  }
+  .foot a{color:var(--dim)}
+  @media (prefers-reduced-motion:reduce){.pulse{animation:none}}
+</style>
+</head>
+<body>
+  <div class="gallery">
+    <figure>
+      <div class="frame"><div class="matte">
+        <canvas id="c" width="480" height="340" role="img"
+          aria-label="A near-white monochrome field, partially delivered"></canvas>
+      </div></div>
+      <figcaption id="label">
+        <div class="t">The Medium Is the Connection</div>
+        <div class="by">y-a-v-a, 2026</div>
+        <dl>
+          <dt>Medium</dt><dd class="medium" id="medium">reading…</dd>
+          <dt>Delivered</dt><dd id="delivered">0 bytes — this page is self-contained</dd>
+          <dt>Served</dt><dd id="served">—</dd>
+        </dl>
+        <div class="aside" id="aside"></div>
+      </figcaption>
+    </figure>
+    <p class="foot">
+      A museum label reads <em>oil on canvas</em>. This one reads your connection,
+      because on the web we have agreed that how a work <em>arrives</em> is what it is
+      <em>made of</em>. The whole painting is already here, in one file. Your bandwidth
+      only decides how much of it you are judged worthy to see.<br><br>
+      CC BY-SA 4.0 · y-a-v-a. After Robert Ryman (the medium as subject),
+      Marshall McLuhan (<em>the medium is the message</em>), and Walter Benjamin.
+      No cookies, no trackers, no requests — nothing was transmitted to make this.
+    </p>
+  </div>
+
+<script>
+(() => {
+  "use strict";
+  const c = document.getElementById("c");
+  const g = c.getContext("2d");
+  const mediumEl = document.getElementById("medium");
+  const servedEl = document.getElementById("served");
+  const asideEl = document.getElementById("aside");
+  const labelEl = document.getElementById("label");
+
+  // One fixed painting. A deterministic sequence of strokes; the connection only
+  // decides how many of them have "arrived". More bandwidth reveals more of the
+  // SAME canvas — the rest has simply not been delivered (though nothing ever is).
+  const TOTAL = 1200;
+  function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+  function render(k){
+    const W=c.width,H=c.height;
+    g.clearRect(0,0,W,H);
+    g.fillStyle="#fbfaf6"; g.fillRect(0,0,W,H);      // the primed ground (always here)
+    const rnd=mulberry32(20260610);                   // fixed seed = one work, not noise
+    g.lineCap="round";
+    for(let i=0;i<k;i++){
+      const x=rnd()*W, y=rnd()*H;
+      const len=6+rnd()*34, ang=(rnd()-0.5)*0.9;
+      const warm=rnd()<0.5;
+      const v=226+Math.floor(rnd()*22);               // near-white greys (Ryman)
+      const r=v, gg=v-(warm?0:3), b=v-(warm?6:1);
+      g.strokeStyle=`rgba(${r},${gg},${b},${0.10+rnd()*0.16})`;
+      g.lineWidth=1+rnd()*3.4;
+      g.beginPath();
+      g.moveTo(x,y);
+      g.lineTo(x+Math.cos(ang)*len, y+Math.sin(ang)*len);
+      g.stroke();
+    }
+  }
+
+  // Map a connection to a served fraction of the one painting.
+  function computeState(){
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if(!conn){
+      return {
+        supported:false,
+        medium:"undisclosed — your browser will not say",
+        frac:0.35, // a default middle delivery
+        aside:"Privacy-respecting browsers (Safari, Firefox) withhold the connection. The medium is unknowable; you are served a default ration."
+      };
+    }
+    const et = conn.effectiveType || "unknown";
+    const dl = (typeof conn.downlink === "number") ? conn.downlink : null;   // Mbps
+    const rtt = (typeof conn.rtt === "number") ? conn.rtt : null;            // ms
+    const save = !!conn.saveData;
+
+    if(save){
+      const parts=[et.toUpperCase()];
+      if(dl!=null) parts.push(dl.toFixed(dl<1?1:0)+" Mbps");
+      return {
+        supported:true,
+        medium:"reduced · Data Saver ("+parts.join(", ")+")",
+        frac:0.04,
+        aside:"You asked the web to economise. The painting is rationed to match — aura billed by the megabyte."
+      };
+    }
+
+    // fraction from downlink when present, else from effectiveType buckets
+    let frac;
+    if(dl!=null){
+      frac = Math.max(0.05, Math.min(1, dl/10));      // spec caps downlink near 10 Mbps
+    } else {
+      frac = ({ "slow-2g":0.06, "2g":0.15, "3g":0.5, "4g":1 })[et] ?? 0.4;
+    }
+
+    const parts=[et.toUpperCase()];
+    if(dl!=null) parts.push("↓ "+dl.toFixed(dl<1?1:0)+" Mbps");
+    if(rtt!=null) parts.push(rtt+" ms");
+    return {
+      supported:true,
+      medium:parts.join(", "),
+      frac,
+      aside:"Faster is richer — yet not one byte was fetched. The whole work shipped in the first file. Bandwidth decides only how much you are shown of what you already hold."
+    };
+  }
+
+  function paint(){
+    const s = computeState();
+    const k = Math.max(0, Math.round(s.frac*TOTAL));
+    render(k);
+    mediumEl.textContent = s.medium;
+    servedEl.textContent = Math.round(s.frac*100)+"%  ("+k+" of "+TOTAL+" strokes)";
+    asideEl.textContent = s.aside;
+    // flash the label when the medium changes under you ("only change")
+    labelEl.classList.remove("pulse"); void labelEl.offsetWidth; labelEl.classList.add("pulse");
+  }
+
+  paint();
+  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  if(conn && conn.addEventListener){
+    conn.addEventListener("change", paint);           // switch wifi↔cellular, (un)plug: the medium changes live
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+{
+  "work_id": "2026-10-05-the-medium-is-the-connection",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 3,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "Network Information API (navigator.connection) as the ‘Medium:’ field of a wall label is a fresh found-object; the catalogue has interrogated battery, eye-dropper, languages and clipboard but not connection-state, and the only-the-web ontology is intact.",
+    "nuance": "Surface gag (your connection is your medium) and literate reading (McLuhan’s claim taken at face value, Benjamin’s aura surviving only as ‘aura billed by the megabyte’) land without the footer needing to explain them; the ‘undisclosed — your browser will not say’ path for Safari/Firefox is a genuinely double-reading touch because the platform’s anti-fingerprinting refusal is itself part of the argument.",
+    "narrative": "Sits legibly on the chance/order axis (deterministic 1,200-stroke seed on the order side, connection-driven revealed fraction on the chance/ambient side), names Ryman, McLuhan and Benjamin as the prior pieces it answers, and extends the browser-API-as-material thread (Vanitas, Cartel, EyeDropper, Narrow Symbol, International Klein Blue) without repeating any of them.",
+    "craft": "Tight HTML/CSS/JS: mulberry32 PRNG, deterministic stroke list, honest fallback to 0.35 default on unsupported browsers, clean museum palette and a per-change repaint; slightly more than the smallest build because the aside paragraph and the footer carry prose that the label could have carried alone.",
+    "wit": "The ‘Delivered: 0 bytes — this page is self-contained’ line lands the gag, ‘undisclosed — your browser will not say’ lands the kicker on re-read, and the wall-label medium field IS the joke rather than illustrating it; the footer is the only place where the joke is restated to be read."
+  },
+  "weighted_total": 39,
+  "verdict": "strong",
+  "references_named": [
+    "Robert Ryman",
+    "Marshall McLuhan",
+    "Walter Benjamin",
+    "Network Information API (W3C)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P6",
+    "P8",
+    "P9"
+  ],
+  "rationale": "A museum tombstone whose Medium line is navigator.connection is a clean P1: the wall label enacts McLuhan instead of illustrating him, and the ‘Delivered: 0 bytes’ counter is the precise Benjaminian punchline that reproduction is already total. The Ryman reference (the medium as the painting’s actual subject) is the strongest artistic anchor and is genuinely fresh for the catalogue. The chance/order staging is honest: order in the seeded 1,200 strokes, chance in the user’s ambient network state, with the ‘undisclosed’ refusal path making the platform’s anti-fingerprinting stance part of the work rather than a workaround. Tone is on-DNA: dry, cheerful-cynic, ‘aura billed by the megabyte.’",
+  "reservations": "The footer paragraph names Ryman, McLuhan and Benjamin by hand and restates the gag, so the page is slightly closer to a wall text than the DNA prefers; the two ‘aside’ lines beneath the label partly duplicate that prose. These keep craft from 4 and pull nuance down from the strongest possible read.",
+  "revision_suggestion": "Drop or compress the footer and the two aside paragraphs; let the ‘Medium:’ line, ‘Delivered: 0 bytes — this page is self-contained’ and ‘undisclosed — your browser will not say’ carry the whole thing on first read and on re-read. The DNA’s P7 forbids wall text for the surface joke, and the surface here is strong enough to stand without commentary.",
+  "jury_model": "minimax/minimax-m3"
+}
