@@ -437,7 +437,7 @@
     "year": 2026,
     "source": "Donald Judd, certificates of authenticity; Dan Flavin, certificates / fabricated multiples; the NFT / blockchain authenticity discourse; Marcel Duchamp, infrathin; W3C Web Crypto API (SubtleCrypto)",
     "mechanism": "Web Crypto API (crypto.subtle SHA-256) hashes document.documentElement.outerHTML per visit and stamps the digest into the page; a re-hash proves the certificate is stale the instant it is issued.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-23-the-death-of-the-author",
