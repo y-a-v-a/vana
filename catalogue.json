@@ -837,7 +837,7 @@
     "year": 2026,
     "source": "Yoko Ono, Grapefruit instruction pieces (1964); Lucy Lippard, Six Years: The Dematerialization of the Art Object (1966-72)",
     "mechanism": "navigator.vibrate performs a crypto-random per-visit score gated behind a user gesture; feature detection decides whether the work exists at all; nothing rendered as the work, no storage, no network.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-07-06-in-praise-of-laziness",
