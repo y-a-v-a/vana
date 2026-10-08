@@ -1414,5 +1414,13 @@
     "source": "Robert Ryman (the medium/support as subject); Marshall McLuhan, Understanding Media: the medium is the message (1964); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Network Information API (W3C / navigator.connection)",
     "mechanism": "navigator.connection (Network Information API: effectiveType, downlink, rtt, saveData) with its change event sets how many of a seeded 1,200-stroke canvas painting render; browsers that withhold the API read 'undisclosed' and serve a default; no network, no storage.",
     "status": "pending"
+  },
+  {
+    "id": "2026-10-08-je-signe",
+    "title": "Je signe (===)",
+    "year": 2026,
+    "source": "Ben Vautier, Je signe / Tout est art (Fluxus); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Marcel Duchamp, R. Mutt signature on Fountain (1917); ECMAScript Symbol() / Symbol.for() (identity vs registry)",
+    "mechanism": "ECMAScript Symbol() unique identity vs Symbol.for() registry copy: forgery === original is always false though the description string reproduces perfectly; held in closure, nothing stored or sent.",
+    "status": "pending"
   }
 ]

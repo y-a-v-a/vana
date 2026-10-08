@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Je signe (===)</title>
+<style>
+  :root{
+    --ink:#f3f0e9;
+    --paper:#111012;
+    --dim:#8c877d;
+    --line:#2a2823;
+    --no:#c7442e;
+    --yes:#6f9a4e;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:ui-serif,Georgia,"Times New Roman",serif}
+  main{max-width:640px;margin:0 auto;padding:7vh 22px 14vh}
+  .sheet{
+    background:#f6f2e8;border-radius:2px;
+    box-shadow:0 1px 0 #fff inset,0 24px 60px rgba(0,0,0,.5);
+    padding:34px 28px 20px;position:relative}
+  svg{display:block;width:100%;height:auto}
+  .sheet .tag{position:absolute;top:10px;right:14px;
+    font:11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#9a9284}
+  h1{font-size:23px;font-weight:600;letter-spacing:.2px;margin:0 0 2px}
+  .sub{color:var(--dim);font-size:14px;margin:0 0 26px}
+  .desc{font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+    color:#2b2823;word-break:break-all;margin:14px 2px 2px}
+  .desc small{color:#8c8577;display:block;margin-bottom:3px;letter-spacing:.3px}
+  .panel{margin-top:30px;border-top:1px solid var(--line);padding-top:22px}
+  label{display:block;font-size:13px;color:var(--dim);margin:0 0 7px}
+  input[type=text]{width:100%;padding:11px 12px;background:#17161a;color:var(--ink);
+    border:1px solid var(--line);border-radius:3px;
+    font:13px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace}
+  input::placeholder{color:#55514a}
+  .row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+  button{flex:1 1 170px;cursor:pointer;padding:11px 14px;border-radius:3px;
+    border:1px solid var(--line);background:#1b1a1e;color:var(--ink);
+    font:14px/1 ui-serif,Georgia,serif;transition:background .15s}
+  button:hover{background:#262429}
+  .verdict{margin-top:20px;min-height:2.6em;font-size:15px;line-height:1.5}
+  .verdict b.no{color:var(--no)}
+  .verdict b.yes{color:var(--yes)}
+  .verdict .fine{display:block;color:var(--dim);font-size:13px;margin-top:5px}
+  .ledger{margin-top:22px;display:grid;grid-template-columns:1fr auto;gap:4px 16px;
+    font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--dim)}
+  .ledger b{color:var(--ink);font-weight:600}
+  .ledger .no{color:var(--no)}
+  footer{margin-top:40px;color:#6b665d;font-size:12px;line-height:1.7}
+  footer a{color:#938d82}
+</style>
+</head>
+<body>
+<main>
+  <h1>Je signe <span style="color:var(--dim)">(===)</span></h1>
+  <p class="sub">A signature you can copy perfectly and never reproduce.</p>
+
+  <div class="sheet">
+    <span class="tag" id="tag">no.&nbsp;—</span>
+    <svg id="glyph" viewBox="0 0 440 180" role="img" aria-label="An original signature, drawn once">
+      <path id="stroke" fill="none" stroke="#1d1b18" stroke-width="2.4"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <p class="desc"><small>THE SIGNATURE, WRITTEN OUT — copy it, it is yours to take:</small>
+      <span id="desc"></span></p>
+  </div>
+
+  <div class="panel">
+    <label for="in">Hold a forgery up to the original. Paste the text above, or type anything:</label>
+    <input id="in" type="text" autocomplete="off" spellcheck="false"
+           placeholder="paste the exact signature text here…">
+    <div class="row">
+      <button id="forge">Forge it — Symbol(text)</button>
+      <button id="registry">Fetch the copy — Symbol.for(text)</button>
+    </div>
+    <div class="verdict" id="verdict" aria-live="polite">
+      The original was signed once, when this page loaded. It is held in memory and
+      written nowhere. Reload and it is gone forever — a different original takes its place.
+    </div>
+
+    <div class="ledger" aria-live="polite">
+      <span>Originals signed this visit</span><b id="orig">1</b>
+      <span>Forgeries presented</span><b id="att">0</b>
+      <span>Forgeries that passed</span><b class="no" id="pass">0</b>
+      <span>Text reproduced exactly</span><b id="text">—</b>
+    </div>
+  </div>
+
+  <footer>
+    <strong>Je signe (===)</strong> — y-a-v-a (yet another visual artist), 2026.
+    After Ben Vautier, <em>Je signe</em> / <em>Tout est art</em> (Fluxus);
+    Walter Benjamin, <em>The Work of Art in the Age of Mechanical Reproduction</em> (1935), on the aura;
+    Marcel Duchamp, the <em>R. Mutt</em> signature on <em>Fountain</em> (1917).
+    The original is a JavaScript <code>Symbol()</code>; the description is its reproducible print.
+    <br>No cookies, no tracking, no storage, no network — the original never leaves this tab.
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC&nbsp;BY-SA&nbsp;4.0</a>.
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  // Unforgeable randomness for an unforgeable hand: no two signings alike.
+  function rnd(){ const a=new Uint32Array(1); crypto.getRandomValues(a); return a[0]/4294967296; }
+
+  // --- draw the signature once (chance in the stroke, order in the baseline) ---
+  function draw(){
+    const W=440,H=180,pad=46,n=6; let x=pad,y=H*0.56,d="M "+x.toFixed(1)+" "+y.toFixed(1);
+    for(let i=0;i<n;i++){
+      const cx=x+rnd()*26+8, cy=y-(rnd()*90-22);
+      x += (W-2*pad)/n;
+      const ey = H*0.40 + rnd()*H*0.30;
+      d += " Q "+cx.toFixed(1)+" "+cy.toFixed(1)+" "+x.toFixed(1)+" "+ey.toFixed(1);
+      y = ey;
+    }
+    d += " M "+pad+" "+(H*0.82).toFixed(1)+
+         " Q "+(W*0.5).toFixed(1)+" "+(H*0.82+rnd()*34-12).toFixed(1)+
+         " "+(W-pad)+" "+(H*0.76).toFixed(1);
+    document.getElementById("stroke").setAttribute("d", d);
+  }
+  draw();
+
+  // --- mint THE original: a unique Symbol, held only in this closure ---
+  var serial = (Math.floor(rnd()*0xffffff)).toString(16).padStart(6,"0").toUpperCase();
+  var description = "y-a-v-a · signed once · " + serial;
+  var original = Symbol(description);          // <- the aura: unique, perishable, un-sent
+  document.getElementById("desc").textContent = description;
+  document.getElementById("tag").innerHTML = "no.&nbsp;" + serial;
+
+  // --- the verdict: text can be reproduced, identity cannot ---
+  var attempts=0, passed=0;
+  var V=document.getElementById("verdict");
+  var elAtt=document.getElementById("att"), elPass=document.getElementById("pass"),
+      elText=document.getElementById("text");
+
+  function judge(kind){
+    var str = document.getElementById("in").value;
+    if(str==="") str = description;            // an empty hand copies what it sees
+    var forgery = (kind==="registry") ? Symbol.for(str) : Symbol(str);
+    var textMatches = (str === description);
+    var identical = (forgery === original);     // always false; that is the whole work
+    attempts++;
+    if(identical) passed++;                     // never happens
+
+    elAtt.textContent = attempts;
+    elPass.textContent = passed;
+    elText.textContent = textMatches ? "yes" : "no";
+    elText.className = textMatches ? "" : "no";
+
+    var how = (kind==="registry")
+      ? "Symbol.for() pulls the copy from the global registry — the edition, the reproduction."
+      : "Symbol() makes a fresh mark — a new hand, not the first hand.";
+    V.innerHTML =
+      "Forgery === original &nbsp;→&nbsp; <b class='no'>false</b>. " +
+      (textMatches
+        ? "The text is <b>identical to the last character</b>, and still it is not the original. "
+        : "The text differs, and even if it did not, ") +
+      "<span class='fine'>" + how +
+      " Identity is not in the letters; it is in the one reference that loaded with this page." +
+      "</span>";
+  }
+
+  document.getElementById("forge").addEventListener("click", function(){ judge("new"); });
+  document.getElementById("registry").addEventListener("click", function(){ judge("registry"); });
+
+  // the console attests what the page cannot be made to admit
+  try{
+    console.log("%cJe signe (===)", "font:600 15px serif");
+    console.log("original:", original.toString());
+    console.log("Symbol(original.description) === original  ->",
+                Symbol(original.description) === original);
+    console.log("Symbol.for(original.description) === original  ->",
+                Symbol.for(original.description) === original);
+    console.log("original === original  ->", original === original,
+                " (the aura equals only itself)");
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

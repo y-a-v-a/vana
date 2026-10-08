@@ -1,0 +1,47 @@
+{
+  "work_id": "2026-10-08-je-signe",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "Symbol() identity vs Symbol.for() registry as the literal mechanism for Benjamin's aura is a fresh found-object (a language primitive) paired with a mechanism the catalogue lacks; only the web/JS could do it.",
+    "nuance": "Concept and execution collapse cleanly: the === operator is the test of authenticity and fails by design; the description string is the print, the Symbol is the aura, and the console attestation adds a third register without explaining the surface gag.",
+    "narrative": "Names Benjamin directly, stages Duchamp's R. Mutt signature and Ben Vautier's Fluxus gesture, and sits legibly on the chance/order axis (random stroke, ordered baseline); it answers the catalogue's recurring value/authenticity thread with a precise new move.",
+    "craft": "Single self-contained HTML file, no unused code, no fallbacks apologising; the build is the smallest that completes the thought and the ledger/console attestation are load-bearing rather than decorative.",
+    "wit": "The gag lands on the surface (you copied it perfectly and it's still a fake) and again on re-reading as a precise staging of aura; the Symbol.for() button adds a second beat that earns its keep."
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Ben Vautier, Je signe / Tout est art (Fluxus)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "Marcel Duchamp, R. Mutt signature on Fountain (1917)",
+    "ECMAScript Symbol() / Symbol.for()"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "Je signe (===) uses JavaScript's Symbol() identity primitive as the literal mechanism for Benjamin's aura: the description string reproduces perfectly while reference-identity cannot, so forgery === original is always false by design. The mechanism enacts the idea (P1), the work is web-native and perishable (P4), and the chance/order axis is legible in the random stroke over an ordered baseline (P5). It answers the catalogue's recurring value/authenticity thread with a precise new move, double-codes cleanly, and ships as a single self-contained file with CC licence and no tracking.",
+  "reservations": "The Ben Vautier reference is named but not deeply enacted beyond the title; the Symbol.for() beat is a nice second punch but the work leans heavily on a single JS primitive, which slightly compresses the conceptual surface.",
+  "revision_suggestion": "Consider a small visual or interactive nod to Vautier's actual gesture (e.g. signing an arbitrary object on the page) so the Fluxus lineage is enacted rather than only cited, and perhaps a third button that exposes the registry collision (two tabs producing the same Symbol.for key) to widen the chance/order staging.",
+  "jury_model": "minimax/minimax-m3"
+}
