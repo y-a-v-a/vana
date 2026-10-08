@@ -9,32 +9,25 @@
     "G6": true
   },
   "scores": {
-    "novelty": 4,
+    "novelty": 3,
     "nuance": 4,
-    "narrative": 4,
-    "craft": 4,
+    "narrative": 3,
+    "craft": 3,
     "wit": 4
   },
   "score_notes": {
-    "novelty": "A fresh pairing: Apollinaire's calligramme enacted by CSS writing-mode rather than hand-set type, and none of the source-vs-render works in the catalogue (Silencio, Indivisible, Non-finito, Rivers, Schreibzeit) has used writing-mode — the engine's vertical text flow is genuinely untouched material.",
-    "nuance": "The five sentences are horizontal in the DOM and only vertical in the render, and the toggle literalises the 'this was never rain, only a sentence' reading; concept and execution are one object, the page reads at two depths without explanation, and the per-visit opacity/offset is restrained enough to stay in the background.",
-    "narrative": "Names Apollinaire directly and situates itself in the established source-vs-render line (Silencio/Indivisible/Rivers/Non-finito/Schreibzeit/Window Sign), adding a layout-engine-axis member the line had not claimed; the chance/order axis is touched but lightly, and the connection to Mallarmé/concrete poetry is gestured at rather than enacted.",
-    "craft": "One HTML file, no canvas, no network, no storage; the build is the smallest that completes the thought and the footer measurement is a small, honest, on-topic flourish rather than decoration.",
-    "wit": "The toggle is the joke and the argument at once: 'stop the rain' returns the sentences to prose and the second reading lands without a label, exactly as P7 asks."
+    "novelty": "writing-mode:vertical-rl + WAAPI seamless-loop rain is a fresh mechanism for this catalogue, but the found-object pairs with the now-crowded source-vs-render DNA (Silencio, Non-finito, Rivers, La Disparition) so the pairing has been seen.",
+    "nuance": "the toggle that returns the layout engine to flat prose is a near-perfect wall-text-killer for the literate reading, and the five-selectable / echo-non-selectable split is precise, but the footer footnote partially explains what the toggle should carry alone.",
+    "narrative": "explicitly inherits from the source-vs-render line (Silencio, Indivisible, Rivers, Non-finito) and articulates order (vertical-rl) vs chance (per-visit speed/phase/line choice) cleanly, yet does not introduce a new move the twenty-year argument lacked.",
+    "craft": "one HTML file, a clean even-units seamless loop, modest per-visit randomisation; the echoed non-selectable fills and resize rebuild add minor machinery beyond the smallest build that completes the thought.",
+    "wit": "the rain is the surface gag and the toggle revealing five plain sentences is the second landing on re-read; the footnote line 'it was only ever a sentence' carries the cheerful-cynic tone well."
   },
-  "weighted_total": 40,
-  "verdict": "strong",
+  "weighted_total": 34,
+  "verdict": "borderline",
   "references_named": [
-    "Guillaume Apollinaire, Il pleut, from Calligrammes (1918)",
-    "Eugen Gomringer, concrete poetry",
-    "Augusto de Campos, concrete poetry",
+    "Guillaume Apollinaire, Il pleut (Calligrammes, 1918)",
     "Stéphane Mallarmé, Un Coup de Dés (1897)",
-    "y-a-v-a, Silencio (2026)",
-    "y-a-v-a, Indivisible (2026)",
-    "y-a-v-a, Rivers (2026)",
-    "y-a-v-a, Non-finito (2026)",
-    "y-a-v-a, Schreibzeit (2026)",
-    "y-a-v-a, Window Sign (2026)"
+    "Eugen Gomringer / Augusto de Campos (concrete poetry)"
   ],
   "principles_invoked": [
     "P1",
@@ -45,8 +38,8 @@
     "P7",
     "P8"
   ],
-  "rationale": "The work does what the DNA keeps asking for: the layout engine is the rain (P1), the source-vs-render split is exact and double-coded (P7), the build is the smallest that completes the thought (P3), and it uses a browser primitive (writing-mode) that no catalogued work has yet claimed, giving the source-vs-render line a new axis. Gates all pass: it is web-native and live (G1), there is a real idea about typography and meaning (G2), the mechanism enacts rather than illustrates (G3), the ethics are stated and observed (G4), the voice is dry and on-tone (G5), and it is materially distinct from Silencio/Indivisible/Non-finito/Rivers/Schreibzeit because none of those used writing-mode (G6).",
-  "reservations": "The chance/order axis is asserted in the rationale and the script (per-visit opacity/offset) but is barely legible on the page — the drops still fall in the same five ordered columns, so the 'chance' element is closer to texture than engine, and a stronger reading might let the per-visit chance reshape column count or order. The line to Un Coup de Dés and Mallarmé is name-dropped rather than enacted; either earn it or trim it.",
-  "revision_suggestion": "Give the per-visit chance more weight so the chance/order axis is felt, not footnoted: vary column count, start order, or a left-to-right ordering of the five streams across reloads, so that reloading genuinely re-throws the rainfall and the catalogue's chance↔order signal becomes visible without a wall text.",
+  "rationale": "Solidly inside the catalogue's source-vs-render line: Apollinaire's 1918 calligrammatic gesture is enacted literally by CSS writing-mode:vertical-rl plus a seamless Web Animations API translation loop, so the layout engine becomes the weather (P1, P4). The stop-the-rain toggle returning the engine to horizontal-tb and exposing five plain prose sentences is a well-built double-reading moment, the five-selectable / echo-non-selectable split keeps the clipboard honest, and the viewport-height measure echoes the measurement tradition. The mechanism is genuinely fresh to this catalogue, but the broader source-vs-render pairing is well-rehearsed.",
+  "reservations": "The catalogue now has many source-vs-render works (Silencio, La Disparition, Non-finito, Rivers, Indivisible, Rubrica, Scrittura Speculare, Schreibzeit, Un Coup de Dés, Window Sign); this is a competent fresh instantiation but does not extend the argument's grammar with a new move. The footer footnote is mildly explanatory where the toggle already carries the literate reading on its own.",
+  "revision_suggestion": "Push the chance further so each reload yields a structurally different rain (which sentences appear, in what order, with what rhythm), and strip or compress the footer so the toggle alone delivers the double-reading — reducing the explanatory residue and sharpening the work's place against its source-vs-render siblings.",
   "jury_model": "minimax/minimax-m3"
 }

@@ -9,12 +9,13 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; }
   body {
-    background: #0b0d12;
+    background: #070a10;
     color: #aeb8c4;
     font: 16px/1.55 Georgia, "Times New Roman", serif;
     display: flex;
     flex-direction: column;
     min-height: 100%;
+    overflow: hidden;
   }
   header {
     padding: 1rem 1.25rem .35rem;
@@ -22,6 +23,8 @@
     flex-wrap: wrap;
     align-items: baseline;
     gap: 1rem;
+    position: relative;
+    z-index: 2;
   }
   h1 {
     margin: 0;
@@ -44,50 +47,85 @@
   }
   button:hover { border-color: #6b7c93; color: #d6dee8; }
 
-  /* The rain. Five plain sentences, flowed vertically by the layout engine. */
-  main {
+  /* The rain. Five plain sentences, set vertically by the layout engine and
+     made to fall by it too: a live downpour of the poem's own words. */
+  main#rain {
     flex: 1 1 auto;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: stretch;
-    gap: clamp(.5rem, 3.5vw, 2.2rem);
-    padding: .75rem 1rem 0;
+    position: relative;
     overflow: hidden;
+    padding: 0;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0, #000 12%, #000 88%, transparent 100%);
   }
-  main p {
-    margin: 0;
-    height: 100%;
-    writing-mode: vertical-rl;      /* the whole piece: the browser sets the words as rain */
+  /* The field is oversized and tilted: rain falls slanting, as Apollinaire's streams did. */
+  .field {
+    position: absolute;
+    inset: -35%;
+    width: 170%;
+    height: 170%;
+    transform: rotate(7deg);
+    transform-origin: center center;
+  }
+  .drop {
+    position: absolute;
+    top: 0;
+    writing-mode: vertical-rl;          /* the whole piece: the browser sets the words as rain */
     text-orientation: mixed;
-    font-size: clamp(.78rem, 1.9vw, 1.05rem);
-    letter-spacing: .02em;
-    white-space: normal;
-    color: #c3ccd8;
-    text-shadow: 0 0 6px rgba(140,170,210,.12);
+    white-space: nowrap;
+    letter-spacing: .06em;
+    font-size: clamp(.7rem, 1.7vw, 1rem);
+    margin: 0;
   }
+  .drop .col { display: block; will-change: transform; }
+  .drop.real { color: #d2dcea; text-shadow: 0 0 7px rgba(150,180,220,.28); }
+  .drop.bg {
+    color: #6f86a6;
+    font-size: clamp(.62rem, 1.5vw, .9rem);
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  /* Echoed drops exist only to keep the rain falling; they never reach the clipboard. */
+  .echo { -webkit-user-select: none; user-select: none; }
 
   /* "stop the rain": return the layout engine to prose; the sentences lie flat. */
-  main.stopped {
+  main#rain.stopped {
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: .6rem;
     overflow: auto;
-    max-width: 44rem;
-    margin: 0 auto;
     padding: 1.5rem;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
-  main.stopped p {
-    writing-mode: horizontal-tb;
+  #rain.stopped .field {
+    position: static;
+    inset: auto;
+    width: 100%;
     height: auto;
+    transform: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .6rem;
+    max-width: 44rem;
+  }
+  #rain.stopped .drop {
+    position: static;
+    writing-mode: horizontal-tb;
+    white-space: normal;
+    left: auto !important;
     opacity: 1 !important;
-    letter-spacing: normal;
-    text-align: center;
     max-width: 40rem;
+    text-align: center;
+    letter-spacing: normal;
+    font-size: 1rem;
     color: #aeb8c4;
     text-shadow: none;
   }
+  #rain.stopped .drop.bg { display: none; }
+  #rain.stopped .drop .echo { display: none; }
+  #rain.stopped .drop .col { display: inline; transform: none !important; }
 
   footer {
     padding: .6rem 1.25rem 1rem;
@@ -95,6 +133,9 @@
     line-height: 1.5;
     color: #5f6c7e;
     border-top: 1px solid #1a2130;
+    position: relative;
+    z-index: 2;
+    background: #070a10;
   }
   footer b { color: #8ea0b4; font-weight: 400; }
   footer .lic { color: #4e5a6b; }
@@ -117,8 +158,8 @@
 
   <footer>
     <b>Il pleut</b> — Guillaume Apollinaire, from <i>Calligrammes</i> (1918), public domain.
-    Set vertically by your browser’s layout engine. In the source it is five plain sentences;
-    only the render rains, and it falls exactly as far as your window is tall —
+    Set vertically by your browser’s layout engine and made to fall by it. In the source it is
+    five plain sentences; only the render rains, and it falls exactly as far as your window is tall —
     <span id="len">0</span> px. Resize the window and the rain lengthens.
     Select the text, or press <b>stop the rain</b>: it was only ever a sentence.<br>
     <span class="lic">y-a-v-a (yet another visual artist) · Licensed CC BY-SA 4.0 ·
@@ -126,28 +167,146 @@
   </footer>
 
 <script>
-  // Chance over order: each ordered stream gets a small per-visit offset and opacity,
-  // so the rain never falls in lockstep. Held in RAM only — reload re-throws it.
-  var streams = document.querySelectorAll('#rain p');
-  for (var i = 0; i < streams.length; i++) {
-    streams[i].style.opacity = (0.55 + Math.random() * 0.42).toFixed(3);
-    streams[i].style.paddingBlockStart = (Math.random() * 2.4).toFixed(2) + 'rem';
+(function () {
+  "use strict";
+  // Spacing between re-fallen copies of a line — a gap between drops. Held in RAM only.
+  var SEP = '    ';
+  var SEPN = 4;
+
+  var main = document.getElementById('rain');
+
+  // The authoritative poem: five plain sentences, read straight from the served HTML.
+  // (view-source still shows exactly these five; everything below is live DOM only.)
+  var originals = [];
+  var ps = main.querySelectorAll('p');
+  for (var i = 0; i < ps.length; i++) {
+    originals.push(ps[i].textContent.replace(/\s+/g, ' ').trim());
   }
+
+  main.textContent = '';
+  var field = document.createElement('div');
+  field.className = 'field';
+  main.appendChild(field);
+
+  var cols = [];   // { col: <span>, speed: px/s }
+  var anims = [];
+
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function repeat(s, n) { var o = ''; for (var j = 0; j < n; j++) { o += s; } return o; }
+
+  // Order (strict layout rule) builds the rain; chance (per-visit speed, opacity, phase,
+  // line choice) keeps the drops from ever falling in lockstep. Both re-thrown on reload.
+  function build() {
+    anims.forEach(function (a) { a.cancel(); });
+    anims = [];
+    cols = [];
+    field.textContent = '';
+
+    var vw = window.innerWidth, vh = window.innerHeight;
+
+    // Measure one character's vertical advance once, to size each column's loop.
+    var sample = document.createElement('div');
+    sample.className = 'drop';
+    sample.style.visibility = 'hidden';
+    var sCol = document.createElement('span');
+    sCol.className = 'col';
+    sCol.textContent = originals[0];
+    sample.appendChild(sCol);
+    field.appendChild(sample);
+    var charPx = (sCol.offsetHeight || originals[0].length * 16) / Math.max(1, originals[0].length);
+    field.removeChild(sample);
+
+    var count = Math.min(60, Math.max(16, Math.round(vw / 32)));
+    var target = vh * 2.3;   // each column must be at least two viewports long to loop seamlessly
+
+    // Five of the columns carry the real, selectable poem, spread evenly through the rain.
+    var realAt = {};
+    for (var k = 0; k < 5; k++) { realAt[Math.round(count * (k + 0.5) / 5)] = k; }
+
+    for (var c = 0; c < count; c++) {
+      var isReal = Object.prototype.hasOwnProperty.call(realAt, c);
+      var sIdx = isReal ? realAt[c] : Math.floor(Math.random() * 5);
+      var sent = originals[sIdx];
+
+      var unitH = (sent.length + SEPN) * charPx;
+      var units = Math.max(4, Math.ceil(target / unitH));
+      if (units % 2) units++;                       // even count → seamless at the 50% mark
+
+      var el = document.createElement(isReal ? 'p' : 'div');
+      el.className = 'drop ' + (isReal ? 'real' : 'bg');
+      var col = document.createElement('span');
+      col.className = 'col';
+
+      if (isReal) {
+        // Exactly one selectable copy of the line; the rest are echoes (user-select:none),
+        // so the clipboard still holds five plain sentences even as they fall forever.
+        var keep = document.createElement('span');
+        keep.textContent = sent;
+        var echo = document.createElement('span');
+        echo.className = 'echo';
+        echo.textContent = SEP + repeat(sent + SEP, units - 1);
+        col.appendChild(keep);
+        col.appendChild(echo);
+      } else {
+        var echoB = document.createElement('span');
+        echoB.className = 'echo';
+        echoB.textContent = repeat(sent + SEP, units);
+        col.appendChild(echoB);
+      }
+
+      el.appendChild(col);
+      el.style.left = ((c + 0.5) / count * 100).toFixed(3) + '%';
+      el.style.opacity = (isReal ? rnd(0.82, 1) : rnd(0.07, 0.32)).toFixed(3);
+
+      field.appendChild(el);
+      cols.push({ col: col, speed: isReal ? rnd(95, 180) : rnd(150, 340) });
+    }
+
+    animate();
+  }
+
+  // The fall: translate each column down by exactly half its length, forever. Because each
+  // column tiles perfectly at 50%, the loop is seamless — a continuous downpour.
+  function animate() {
+    anims.forEach(function (a) { a.cancel(); });
+    anims = [];
+    cols.forEach(function (c) {
+      var move = c.col.offsetHeight / 2;            // intrinsic (transform-free) length
+      if (move < 10) return;
+      var dur = move / c.speed * 1000;
+      var a = c.col.animate(
+        [{ transform: 'translateY(-' + move + 'px)' }, { transform: 'translateY(0px)' }],
+        { duration: dur, iterations: Infinity, easing: 'linear' }
+      );
+      try { a.currentTime = Math.random() * dur; } catch (e) {}   // desync the drops
+      anims.push(a);
+    });
+  }
+
+  build();
 
   // The live measure: the rain's length is the viewport's height. No network, no store.
   var len = document.getElementById('len');
   function measure() { len.textContent = window.innerHeight; }
   measure();
-  window.addEventListener('resize', measure);
 
-  // Stop the rain: flip the layout engine back to prose and reveal the sentences.
-  var rain = document.getElementById('rain');
+  var rt;
+  window.addEventListener('resize', function () {
+    measure();
+    clearTimeout(rt);
+    rt = setTimeout(function () { if (!main.classList.contains('stopped')) build(); }, 220);
+  });
+
+  // Stop the rain: cancel the fall, flip the layout engine back to prose, reveal the sentences.
   var btn = document.getElementById('toggle');
   btn.addEventListener('click', function () {
-    var stopped = rain.classList.toggle('stopped');
+    var stopped = main.classList.toggle('stopped');
     btn.textContent = stopped ? 'let it rain' : 'stop the rain';
     btn.setAttribute('aria-pressed', String(stopped));
+    if (stopped) { anims.forEach(function (a) { a.cancel(); }); anims = []; }
+    else { build(); }
   });
+})();
 </script>
 </body>
 </html>

@@ -1396,7 +1396,7 @@
     "title": "Il pleut",
     "year": 2026,
     "source": "Guillaume Apollinaire, Il pleut, from Calligrammes (1918); Concrete poetry (Eugen Gomringer, Augusto de Campos); Stephane Mallarme, Un Coup de Des (1897)",
-    "mechanism": "CSS writing-mode:vertical-rl flows horizontal source sentences into vertical rain that wraps to — and re-lengthens with — the window's height; a toggle returns the layout engine to prose.",
+    "mechanism": "CSS writing-mode:vertical-rl flows horizontal source sentences into vertical streams that the Web Animations API translates downward forever in a seamless, slanting, per-visit-randomised rain wrapping to the window's height; five streams stay selectable (the rest are user-select:none echoes) and a toggle returns the layout engine to flat prose.",
     "status": "pending"
   },
   {
