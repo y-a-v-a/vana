@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Artist's Reserved Rights (Unlayered)</title>
+<style>
+  /* ---- the cascade, declared as the order of power ----
+     Layers win in the order they are named here, regardless of
+     how specific the rule inside them is. market is named last. */
+  @layer artist, market;
+
+  :root{
+    --paper:#f4f2ec;
+    --ink:#141414;
+    --artist:#d1301a;   /* the colour the artist chose */
+    --sold:#9a9a9a;      /* the colour of having been sold */
+    --line:#cbc7bd;
+  }
+
+  *{box-sizing:border-box}
+
+  html,body{margin:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font:16px/1.55 Georgia, "Times New Roman", serif;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:5vmin 6vmin;
+  }
+
+  main{max-width:46rem;width:100%}
+
+  figure.frame{
+    margin:0 0 1.6rem;
+    border:1px solid var(--line);
+    background:#fff;
+    padding:2.2rem;
+    display:flex;
+    justify-content:center;
+  }
+
+  /* The work. One square. Its colour is contested. */
+  .work{
+    width:min(62vw,20rem);
+    aspect-ratio:1/1;
+    display:grid;
+    place-items:center;
+    color:#fff;
+    font:600 1.1rem/1 Georgia, serif;
+    letter-spacing:.18em;
+  }
+
+  /* ARTIST LAYER — names the work as precisely as possible.
+     Selector specificity: (1,1,1) — id + class + element. */
+  @layer artist{
+    figure.frame .work#piece{
+      background:var(--artist);
+    }
+    figure.frame .work#piece::after{ content:""; }
+  }
+
+  /* MARKET LAYER — says only ".work". Specificity (0,1,0).
+     Far weaker. Wins anyway, because this layer is declared last. */
+  @layer market{
+    .work{ background:var(--sold); }
+    .work::after{ content:"SOLD"; }
+  }
+
+  /* UNLAYERED — outside every layer. In the cascade, a normal
+     unlayered rule outranks every layered one. This is the only
+     place from which the market can be overruled: an instrument
+     from beyond the ordinary order of sale. */
+  #reserve:checked ~ main figure .work{ background:var(--artist); }
+  #reserve:checked ~ main figure .work::after{ content:"RIGHTS RESERVED"; font-size:.72rem; }
+
+  /* the lever */
+  #reserve{ position:absolute; width:1px; height:1px; opacity:0; }
+  .lever{
+    display:inline-block;
+    border:1px solid var(--ink);
+    padding:.55rem .9rem;
+    cursor:pointer;
+    font:500 .9rem/1.2 Georgia, serif;
+    background:#fff;
+    user-select:none;
+  }
+  .lever::before{ content:"\2610\00a0\00a0"; }   /* ballot box */
+  #reserve:checked ~ main .lever::before{ content:"\2611\00a0\00a0"; } /* ticked */
+  #reserve:focus-visible ~ main .lever{ outline:2px solid var(--artist); outline-offset:2px; }
+
+  .ledger{
+    margin-top:1.6rem;
+    border-top:1px solid var(--line);
+    padding-top:1.1rem;
+    font-size:.86rem;
+    color:#3a3a3a;
+  }
+  .ledger p{margin:.55rem 0}
+  .ledger b{font-weight:600}
+  code{font:.82rem/1 ui-monospace,Menlo,Consolas,monospace;background:#eceae3;padding:.05em .35em;border-radius:3px}
+
+  h1{font-size:1.15rem;font-weight:600;margin:0 0 .2rem;letter-spacing:.01em}
+  .sub{font-style:italic;color:#555;margin:0 0 1.4rem;font-size:.9rem}
+
+  footer{
+    margin-top:1.8rem;
+    font-size:.72rem;
+    color:#6a6a6a;
+    line-height:1.5;
+  }
+  footer a{color:inherit}
+</style>
+</head>
+<body>
+
+<!-- the checkbox lives outside <main> so it can precede, and overrule, the work -->
+<input type="checkbox" id="reserve">
+
+<main>
+  <h1>The Artist's Reserved Rights (Unlayered)</h1>
+  <p class="sub">Who has the last word over how the work looks — the artist, or the order of the cascade?</p>
+
+  <figure class="frame">
+    <div class="work" id="piece"></div>
+  </figure>
+
+  <label class="lever" for="reserve">Invoke the Artist's Reserved Rights, 1971</label>
+
+  <section class="ledger">
+    <p>The artist named the work as precisely as the language allows:
+      <code>figure.frame .work#piece</code> — specificity <b>(1,1,1)</b>.
+      The market named it <code>.work</code> — specificity <b>(0,1,0)</b>.</p>
+    <p>By every measure of specificity the artist wins. The square is grey anyway,
+      because the market's rule sits in a layer declared <b>after</b> the artist's,
+      and a later layer beats a more specific rule in an earlier one.
+      Ownership is not specificity. It is order of declaration.</p>
+    <p>Only a rule written <b>outside every layer</b> can overrule the market —
+      an instrument from beyond the ordinary order of sale. In 1971 Seth Siegelaub
+      and Robert Projansky drafted exactly such an instrument. Tick the box to file it.
+      Almost no one ever did.</p>
+  </section>
+
+  <footer>
+    <b>The Artist's Reserved Rights (Unlayered)</b> — y-a-v-a, 2026.<br>
+    After Seth Siegelaub &amp; Robert Projansky, <i>The Artist's Reserved Rights Transfer and Sale Agreement</i> (1971);
+    CSS Cascade and Inheritance Level 5 (<code>@layer</code>).<br>
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+    No JavaScript · no cookies · no tracking · no network requests.
+  </footer>
+</main>
+
+</body>
+</html>

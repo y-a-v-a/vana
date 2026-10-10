@@ -1,0 +1,46 @@
+{
+  "work_id": "2026-10-10-the-artist-s-reserved-rights-unlayered",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 5,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "CSS Cascade Level 5 @layer precedence is a web-native mechanism the catalogue has not touched, paired with the Siegelaub–Projansky 1971 contract — a found object new to the catalogue — and the analogy between declaration order and ownership is genuinely fresh; the catalogue's existing CSS-plumbing works (Socle du Monde, Base Magica, In Situ) all read from other engine features.",
+    "nuance": "The surface gag (SOLD square becomes RIGHTS RESERVED via a ticked ballot box) reads at a glance without the ledger; the ledger then delivers the CSS lesson that specificity (1,1,1) loses to declaration order — a literate reading that is itself the conceptual point; restrained close (\"almost no one ever did\") carries the cheerful-cynic tone without leaning on the wall text.",
+    "narrative": "Names and answers the Siegelaub–Projansky contract precisely, extends the P6 market/fame thread (Art is Money, Hammer Price, Merda d'artista), sits cleanly on the order pole of the chance/order axis, and adds a legal-precedent-as-cascade move the catalogue did not have.",
+    "craft": "Zero JavaScript, ~110 lines of inline CSS+HTML, one checkbox, two layered rules, one unlayered escape; nothing to remove and the code itself is the cascade precedent the work argues for.",
+    "wit": "The ballot-box glyph, the SOLD→RIGHTS RESERVED swap, and the closing line land on first read and sharpen on the cascade lesson — the cascade IS the joke, not its decoration."
+  },
+  "weighted_total": 41,
+  "verdict": "strong",
+  "references_named": [
+    "Seth Siegelaub & Robert Projansky, The Artist's Reserved Rights Transfer and Sale Agreement (1971)",
+    "CSS Cascade and Inheritance Level 5 (@layer)",
+    "y-a-v-a, Art is Money (2013)",
+    "y-a-v-a, Hammer Price (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P5",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism enacts the argument cleanly: a later-declared @layer outranks a more specific selector in an earlier one, so the market's weaker rule beats the artist's stronger one — exactly the post-sale disempowerment the 1971 contract was drafted to fix. The unlayered rule is the only thing in the document that can overrule that, mapping the contract's role onto the cascade without metaphor. All hard gates pass; the work is materially distinct from the existing catalogue in both found object and mechanism, and sits legibly on the order pole of the chance/order axis.",
+  "reservations": null,
+  "revision_suggestion": null,
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1422,5 +1422,13 @@
     "source": "Ben Vautier, Je signe / Tout est art (Fluxus); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); Marcel Duchamp, R. Mutt signature on Fountain (1917); ECMAScript Symbol() / Symbol.for() (identity vs registry)",
     "mechanism": "ECMAScript Symbol() unique identity vs Symbol.for() registry copy: forgery === original is always false though the description string reproduces perfectly; held in closure, nothing stored or sent.",
     "status": "pending"
+  },
+  {
+    "id": "2026-10-10-the-artist-s-reserved-rights-unlayered",
+    "title": "The Artist's Reserved Rights (Unlayered)",
+    "year": 2026,
+    "source": "Seth Siegelaub & Robert Projansky, The Artist's Reserved Rights Transfer and Sale Agreement (1971); CSS Cascade and Inheritance Level 5 (@layer); y-a-v-a, Art is Money (2013); y-a-v-a, Hammer Price (2026)",
+    "mechanism": "CSS Cascade Level 5 @layer precedence (later layer beats higher specificity; unlayered beats all layers) decides who controls the work's appearance, toggled by a zero-JavaScript checkbox-hack.",
+    "status": "pending"
   }
 ]
