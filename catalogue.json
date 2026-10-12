@@ -1430,5 +1430,13 @@
     "source": "Seth Siegelaub & Robert Projansky, The Artist's Reserved Rights Transfer and Sale Agreement (1971); CSS Cascade and Inheritance Level 5 (@layer); y-a-v-a, Art is Money (2013); y-a-v-a, Hammer Price (2026)",
     "mechanism": "CSS Cascade Level 5 @layer precedence (later layer beats higher specificity; unlayered beats all layers) decides who controls the work's appearance, toggled by a zero-JavaScript checkbox-hack.",
     "status": "pending"
+  },
+  {
+    "id": "2026-10-12-the-average-of-two-colours",
+    "title": "The Average of Two Colours",
+    "year": 2026,
+    "source": "Josef Albers, Interaction of Color (1963); Michel-Eugene Chevreul, De la loi du contraste simultane des couleurs (1839); Goethe, Zur Farbenlehre (1810) vs Newton, Opticks (1704); Bjorn Ottosson, OKLab (2020); CSS Color Module Level 4/5, color-mix() (W3C); Marcel Duchamp, infrathin",
+    "mechanism": "CSS color-mix() interpolation across ten named colour spaces (srgb, srgb-linear, lab, oklab, hsl, hwb, lch, oklch, incl. longer-hue arcs), driven live by two <input type=color> through custom properties; client-side only, no network.",
+    "status": "pending"
   }
 ]

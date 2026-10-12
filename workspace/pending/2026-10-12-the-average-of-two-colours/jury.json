@@ -1,0 +1,47 @@
+{
+  "work_id": "2026-10-12-the-average-of-two-colours",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 3,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 3
+  },
+  "score_notes": {
+    "novelty": "Fresh found-object (CSS color-mix() across ten named colour spaces) and fresh argument (the midpoint of two colours is undefined), but the colour-theory territory has been worked in the catalogue (Interaction of Color, 148 Colours, Optical Mixture), so the pairing is not catalog-opening.",
+    "nuance": "Concept and execution collapse cleanly: the ten disagreeing swatches ARE the work, and the lede lands the deeper reading without wall text, but the figcaption micro-labels ('your screen's naïve average', 'mixing light, physically') slightly explain the joke rather than letting the disagreement speak for itself.",
+    "narrative": "Explicitly answers Albers and Chevreul, relocates the relativity from the viewer's eye to the engine's definition of a midpoint, and sits firmly on the order pole of the chance↔order axis with the Goethe/Newton thread as a bonus, naming Optical Mixture, 148 Colours and Interaction of Color as the works it answers.",
+    "craft": "The build is genuinely the smallest that completes the thought: two native colour pickers, ten one-line color-mix() declarations, and three lines of JS — nothing decorative, the smooth picker transition earns its keep.",
+    "wit": "The deadpan lede 'Blue and yellow make green. Also grey. Also this.' lands once and cleanly in the catalogue's cheerful-cynic register, and the 'long way' captions on the longer-hue swatches are quietly pointed, but the humour doesn't double back on re-reading."
+  },
+  "weighted_total": 33,
+  "verdict": "borderline",
+  "references_named": [
+    "Josef Albers, Interaction of Color (1963)",
+    "Michel-Eugène Chevreul, De la loi du contraste simultané des couleurs (1839)",
+    "Goethe, Zur Farbenlehre (1810)",
+    "Newton, Opticks (1704)",
+    "Björn Ottosson, OKLab (2020)",
+    "CSS Color Module Level 4/5 (W3C)",
+    "Marcel Duchamp, infrathin"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P5",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The Average of Two Colours passes all hard gates: it is web-native through and through (the live, multi-space color-mix() computation could not exist as a print), it has a clear conceptual point about the relativity of averaging, and the mechanism enacts the idea without illustration — the ten disagreeing swatches ARE the work. The piece sits firmly on the order pole of the chance↔order axis and explicitly answers Albers and Chevreul, relocating the relativity of colour from the viewer's eye to the machine's definition of a midpoint — a new argument delivered through a new mechanism, even though the colour-theory territory has been touched before. The deadpan lede is characteristic cheerful-cynic voice, and the build is the smallest that completes the thought.",
+  "reservations": "The brief figcaption explanations ('your screen's naïve average', 'mixing light, physically') slightly explain the joke rather than letting the disagreement speak entirely for itself, which keeps nuance from reaching the 4–5 range. The colour-theory thread in the catalogue is already developed, so novelty is solid but not catalog-opening.",
+  "revision_suggestion": "Drop the explanatory second lines of the figcaptions and keep only the space name (srgb / srgb-linear / lab / oklab / hsl / hwb / lch / oklch / hsl longer hue / oklch longer hue) so the disagreement is purely visual and the literate viewer has to do the work of recognising the argument; this would push nuance toward a stronger double-coding and let the deadpan voice carry the explanation instead.",
+  "jury_model": "minimax/minimax-m3"
+}

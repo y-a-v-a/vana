@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Average of Two Colours</title>
+<style>
+  :root{
+    --a:#0000ff;            /* endpoint A */
+    --b:#ffff00;            /* endpoint B */
+    --ink:#111;
+    --paper:#f4f3ee;
+    --rule:#ddd9cd;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font:16px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:clamp(18px,4vw,56px);
+  }
+  header{max-width:62ch}
+  h1{
+    font-size:clamp(1.5rem,4.2vw,2.5rem);
+    font-weight:650;
+    letter-spacing:-.02em;
+    margin:0 0 .35em;
+  }
+  .lede{margin:0 0 .4em;color:#333}
+  .deadpan{margin:.2em 0 0;color:#555;font-style:italic}
+
+  /* endpoints */
+  .ends{
+    display:flex;flex-wrap:wrap;gap:22px;align-items:center;
+    margin:30px 0 8px;
+  }
+  .end{display:flex;align-items:center;gap:12px}
+  .chip{
+    width:48px;height:48px;border-radius:8px;border:1px solid rgba(0,0,0,.18);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);
+    padding:0;cursor:pointer;background:none;
+  }
+  .chip::-webkit-color-swatch-wrapper{padding:0}
+  .chip::-webkit-color-swatch{border:none;border-radius:7px}
+  .chip::-moz-color-swatch{border:none;border-radius:7px}
+  .end label{font-weight:600}
+  .end small{display:block;color:#666;font-weight:400}
+  .eqn{font-size:1.4rem;color:#999;padding:0 2px}
+
+  /* the disagreeing middles */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+    gap:14px;
+    margin:26px 0 8px;
+    border-top:1px solid var(--rule);
+    padding-top:26px;
+  }
+  figure{margin:0}
+  .swatch{
+    aspect-ratio:4/3;border-radius:9px;
+    border:1px solid rgba(0,0,0,.14);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
+  }
+  figcaption{margin-top:7px;font-size:.82rem}
+  figcaption b{font-weight:650;font-variant-numeric:tabular-nums}
+  figcaption span{display:block;color:#777;font-size:.74rem}
+
+  /* every middle is a genuine 50% color-mix of the SAME two ends,
+     differing only in the interpolation space named after `in`. */
+  .s1{background:color-mix(in srgb,        var(--a), var(--b))}
+  .s2{background:color-mix(in srgb-linear, var(--a), var(--b))}
+  .s3{background:color-mix(in lab,         var(--a), var(--b))}
+  .s4{background:color-mix(in oklab,       var(--a), var(--b))}
+  .s5{background:color-mix(in hsl,         var(--a), var(--b))}
+  .s6{background:color-mix(in hwb,         var(--a), var(--b))}
+  .s7{background:color-mix(in lch,         var(--a), var(--b))}
+  .s8{background:color-mix(in oklch,       var(--a), var(--b))}
+  .s9{background:color-mix(in hsl longer hue,   var(--a), var(--b))}
+  .s10{background:color-mix(in oklch longer hue, var(--a), var(--b))}
+
+  footer{
+    max-width:70ch;margin:34px 0 0;padding-top:16px;
+    border-top:1px solid var(--rule);
+    font-size:.82rem;color:#666;
+  }
+  footer a{color:inherit}
+  @media (prefers-reduced-motion:no-preference){
+    .swatch{transition:background .25s ease}
+  }
+</style>
+</head>
+<body>
+  <header>
+    <h1>The Average of Two Colours</h1>
+    <p class="lede">Two colours. One midpoint? Below are ten honest 50&thinsp;% mixes of the <em>same</em> two ends. They do not agree. The average of two colours is not a fact &mdash; it is a choice of where to stand.</p>
+    <p class="deadpan">Blue and yellow make green. Also grey. Also this.</p>
+  </header>
+
+  <section class="ends" aria-label="the two endpoint colours">
+    <div class="end">
+      <input id="a" class="chip" type="color" value="#0000ff" aria-label="first colour">
+      <label>A<small>drag to change</small></label>
+    </div>
+    <div class="eqn" aria-hidden="true">+</div>
+    <div class="end">
+      <input id="b" class="chip" type="color" value="#ffff00" aria-label="second colour">
+      <label>B<small>drag to change</small></label>
+    </div>
+    <div class="eqn" aria-hidden="true">=&nbsp;?</div>
+  </section>
+
+  <section class="grid" aria-label="ten computed midpoints">
+    <figure><div class="swatch s1"></div><figcaption><b>srgb</b><span>your screen's naïve average</span></figcaption></figure>
+    <figure><div class="swatch s2"></div><figcaption><b>srgb-linear</b><span>mixing light, physically</span></figcaption></figure>
+    <figure><div class="swatch s3"></div><figcaption><b>lab</b><span>perceptual, 1976</span></figcaption></figure>
+    <figure><div class="swatch s4"></div><figcaption><b>oklab</b><span>perceptual, 2020</span></figcaption></figure>
+    <figure><div class="swatch s5"></div><figcaption><b>hsl</b><span>around the wheel</span></figcaption></figure>
+    <figure><div class="swatch s6"></div><figcaption><b>hwb</b><span>around the wheel</span></figcaption></figure>
+    <figure><div class="swatch s7"></div><figcaption><b>lch</b><span>around the wheel</span></figcaption></figure>
+    <figure><div class="swatch s8"></div><figcaption><b>oklch</b><span>around the wheel</span></figcaption></figure>
+    <figure><div class="swatch s9"></div><figcaption><b>hsl</b><span>&hellip; the long way</span></figcaption></figure>
+    <figure><div class="swatch s10"></div><figcaption><b>oklch</b><span>&hellip; the long way</span></figcaption></figure>
+  </section>
+
+  <footer>
+    <p>Each swatch is a live <code>color-mix()</code>: identical inputs, identical 50&thinsp;%, interpolated in a different colour space named after <code>in</code>. Nothing here is painted by hand; the disagreement is the engine's, and it is the work.</p>
+    <p>&copy;&nbsp;2026 <strong>y-a-v-a</strong> (Vincent Bruijn). Licensed <strong>CC&nbsp;BY-SA&nbsp;4.0</strong>. After Josef&nbsp;Albers, <em>Interaction of Color</em> (1963); M.-E.&nbsp;Chevreul (1839); Goethe's <em>Farbenlehre</em> vs Newton's <em>Opticks</em>; CSS&nbsp;Color&nbsp;4 &amp; OKLab (Björn&nbsp;Ottosson, 2020); after Marcel&nbsp;Duchamp's <em>infrathin</em>. No cookies, no trackers, no network &mdash; everything is computed on your device.</p>
+  </footer>
+
+  <script>
+    // The only script: hand the two picker values to CSS as custom
+    // properties. Every "average" above is then the browser's, not ours.
+    const root = document.documentElement;
+    const a = document.getElementById('a');
+    const b = document.getElementById('b');
+    function sync(){
+      root.style.setProperty('--a', a.value);
+      root.style.setProperty('--b', b.value);
+    }
+    a.addEventListener('input', sync);
+    b.addEventListener('input', sync);
+    sync();
+  </script>
+</body>
+</html>
