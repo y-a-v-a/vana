@@ -319,7 +319,13 @@ async function eachInChrome(
     const exited = new Promise((r) => proc.once("exit", r));
     proc.kill();
     await exited;
-    rmSync(tmp, { recursive: true, force: true });
+    // Chrome's helpers can still be writing to the profile after the main
+    // process exits (ENOTEMPTY). Retry, and never let cleanup mask the result.
+    try {
+      rmSync(tmp, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+    } catch (err) {
+      console.warn(`could not remove ${tmp}: ${(err as Error).message}`);
+    }
   }
   return result;
 }
