@@ -14,6 +14,10 @@ export const WIDTH = 1280;
 export const HEIGHT = 800;
 export const CHROME_HEIGHT = 80;
 export const VIEWPORT_HEIGHT = HEIGHT - CHROME_HEIGHT;
+// Downscaled WebP derivatives of the PNG, for the public catalogue. The PNG
+// stays the archival capture; visitors only ever download these.
+export const THUMB_WIDTHS = [480, 960] as const;
+const THUMB_QUALITY = 80;
 // Let the work run (timers, animations, favicon painting) before capture.
 const SETTLE_MS = 3000;
 const LOAD_TIMEOUT_MS = 15_000;
@@ -31,6 +35,24 @@ export function worksNeedingScreenshot(publishedRoot: string, force = false): st
       (id) =>
         existsSync(join(publishedRoot, id, "index.html")) &&
         (force || !existsSync(join(publishedRoot, id, SCREENSHOT_FILE))),
+    )
+    .sort();
+}
+
+export function thumbFile(width: number): string {
+  return `screenshot-${width}.webp`;
+}
+
+/** Works with a screenshot; unless `force`, only those missing a thumbnail. */
+export function worksNeedingThumbnails(publishedRoot: string, force = false): string[] {
+  if (!existsSync(publishedRoot)) return [];
+  return readdirSync(publishedRoot, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+    .filter(
+      (id) =>
+        existsSync(join(publishedRoot, id, SCREENSHOT_FILE)) &&
+        (force || THUMB_WIDTHS.some((w) => !existsSync(join(publishedRoot, id, thumbFile(w))))),
     )
     .sort();
 }
@@ -92,6 +114,12 @@ body{width:${WIDTH}px;height:${HEIGHT}px;overflow:hidden;background:#fff;
 </div>
 <img class="shot" src="${p.shot}" alt="">
 </body></html>`;
+}
+
+/** A page showing the PNG at 1:1, so Chrome can re-encode it downscaled. */
+export function renderThumbSource(pngUrl: string): string {
+  return `<!doctype html><html><head><meta charset="utf-8"><style>*{margin:0}img{display:block}</style></head>
+<body><img src="${escapeHtml(pngUrl)}" width="${WIDTH}" height="${HEIGHT}" alt=""></body></html>`;
 }
 
 function urlHtml(url: string): string {
@@ -231,17 +259,36 @@ async function screenshotWork(cdp: Cdp, tmp: string, publishedRoot: string, id: 
   const f = await openPage(cdp, pathToFileURL(framePath).href, WIDTH, HEIGHT, 100);
   writeFileSync(join(workDir, SCREENSHOT_FILE), Buffer.from(await capture(cdp, f), "base64"));
   await closeSession(cdp, f);
+  await writeThumbnails(cdp, tmp, workDir);
 }
 
+/** Derive each THUMB_WIDTHS WebP from the work's PNG (Chrome does the scaling + encoding). */
+async function writeThumbnails(cdp: Cdp, tmp: string, workDir: string): Promise<void> {
+  const page = join(tmp, "thumb.html");
+  writeFileSync(page, renderThumbSource(pathToFileURL(join(workDir, SCREENSHOT_FILE)).href));
+  // The load event waits for the <img>, so no settle time is needed.
+  const s = await openPage(cdp, pathToFileURL(page).href, WIDTH, HEIGHT, 0);
+  for (const w of THUMB_WIDTHS) {
+    const { data } = await cdp.send(
+      "Page.captureScreenshot",
+      { format: "webp", quality: THUMB_QUALITY, clip: { x: 0, y: 0, width: WIDTH, height: HEIGHT, scale: w / WIDTH } },
+      s,
+    );
+    writeFileSync(join(workDir, thumbFile(w)), Buffer.from(data as string, "base64"));
+  }
+  await closeSession(cdp, s);
+}
+
+type Job = (cdp: Cdp, tmp: string, id: string) => Promise<void>;
+
 /**
- * Capture a framed screenshot for each of `ids` under `publishedRoot`, in one
- * headless Chrome. Per-work failures are collected, not thrown; a missing
- * Chrome or a failed launch throws.
+ * Run `job` for each of `ids` in one headless Chrome. Per-work failures are
+ * collected, not thrown; a missing Chrome or a failed launch throws.
  */
-export async function captureScreenshots(
-  publishedRoot: string,
+async function eachInChrome(
   ids: string[],
-  onDone: (id: string, err?: Error) => void = () => {},
+  job: Job,
+  onDone: (id: string, err?: Error) => void,
 ): Promise<{ ok: string[]; failed: string[] }> {
   const result = { ok: [] as string[], failed: [] as string[] };
   if (ids.length === 0) return result;
@@ -259,7 +306,7 @@ export async function captureScreenshots(
     });
     for (const id of ids) {
       try {
-        await screenshotWork(cdp, tmp, publishedRoot, id);
+        await job(cdp, tmp, id);
         result.ok.push(id);
         onDone(id);
       } catch (err) {
@@ -277,16 +324,43 @@ export async function captureScreenshots(
   return result;
 }
 
-// CLI: `npm run screenshots [-- --force]`
+/**
+ * Capture a framed screenshot (and its thumbnails) for each of `ids` under
+ * `publishedRoot`, in one headless Chrome.
+ */
+export function captureScreenshots(
+  publishedRoot: string,
+  ids: string[],
+  onDone: (id: string, err?: Error) => void = () => {},
+): Promise<{ ok: string[]; failed: string[] }> {
+  return eachInChrome(ids, (cdp, tmp, id) => screenshotWork(cdp, tmp, publishedRoot, id), onDone);
+}
+
+/** Re-derive the thumbnails of `ids` from their existing PNGs. */
+export function captureThumbnails(
+  publishedRoot: string,
+  ids: string[],
+  onDone: (id: string, err?: Error) => void = () => {},
+): Promise<{ ok: string[]; failed: string[] }> {
+  return eachInChrome(ids, (cdp, tmp, id) => writeThumbnails(cdp, tmp, join(publishedRoot, id)), onDone);
+}
+
+// CLI: `npm run screenshots [-- --force | --thumbs]`
+//   --force   recapture every screenshot (and its thumbnails)
+//   --thumbs  re-derive every thumbnail from the existing PNGs
 if (import.meta.url === `file://${process.argv[1]}`) {
   const root = loadConfig().abs.published;
-  const ids = worksNeedingScreenshot(root, process.argv.includes("--force"));
-  console.log(`${ids.length} work(s) need a screenshot.`);
+  const log = (id: string, err?: Error) =>
+    err ? console.error(`  ✗ ${id}: ${err.message}`) : console.log(`  ✓ ${id}`);
   try {
-    const { failed } = await captureScreenshots(root, ids, (id, err) =>
-      err ? console.error(`  ✗ ${id}: ${err.message}`) : console.log(`  ✓ ${id}`),
-    );
-    process.exit(failed.length ? 1 : 0);
+    const ids = worksNeedingScreenshot(root, process.argv.includes("--force"));
+    console.log(`${ids.length} work(s) need a screenshot.`);
+    const shots = await captureScreenshots(root, ids, log);
+    // Backfills works captured before thumbnails existed.
+    const thumbIds = worksNeedingThumbnails(root, process.argv.includes("--thumbs"));
+    console.log(`${thumbIds.length} work(s) need thumbnails.`);
+    const thumbs = await captureThumbnails(root, thumbIds, log);
+    process.exit(shots.failed.length + thumbs.failed.length ? 1 : 0);
   } catch (err) {
     console.error((err as Error).message);
     process.exit(1);
