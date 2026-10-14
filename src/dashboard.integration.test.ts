@@ -136,6 +136,16 @@ test("dashboard handler: routes, CSP, sandbox, traversal", async (t) => {
       assert.match(r.headers["Content-Security-Policy"] ?? "", /default-src 'none'/);
     });
 
+    await t.test("the work stays sandboxed when opened top-level (new tab), not just in the iframe", async () => {
+      const page = await request(cfg, `/candidate/${id}`);
+      assert.match(page.body, new RegExp(`href="/candidate/${id}/work" target="_blank" rel="noopener noreferrer"`));
+      const csp = (await request(cfg, `/candidate/${id}/work`)).headers["Content-Security-Policy"] ?? "";
+      // Same tokens as the iframe attribute; never allow-same-origin, or the
+      // work's scripts would share the gateway's origin and its approve form.
+      assert.match(csp, /(^|; )sandbox allow-scripts allow-downloads$/);
+      assert.doesNotMatch(csp, /allow-same-origin/);
+    });
+
     await t.test("traversal id → 404 (not a file read)", async () => {
       const r = await request(cfg, `/candidate/${encodeURIComponent("../../etc/passwd")}/work`);
       assert.equal(r.statusCode, 404);
@@ -228,6 +238,7 @@ test("dashboard handler: routes, CSP, sandbox, traversal", async (t) => {
       assert.equal(r.statusCode, 200);
       assert.match(r.body, /ORPHAN_WORK/);
       assert.match(r.headers["Content-Security-Policy"] ?? "", /connect-src 'none'/);
+      assert.match(r.headers["Content-Security-Policy"] ?? "", /sandbox allow-scripts allow-downloads/);
     });
 
     await t.test("orphan traversal id → 404 (not a file read)", async () => {

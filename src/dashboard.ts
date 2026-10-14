@@ -94,6 +94,7 @@ const STYLE = `
   /* The work is a separate document; keep its frame light and opaque so the
      gateway's dark theme never leaks into (or shows through) the artwork. */
   iframe{width:100%;height:60vh;border:1px solid var(--line);border-radius:.4rem;background:#fff;color-scheme:light}
+  .worklink{margin:.4rem 0 0;font-size:.875rem;text-align:right}
   pre{white-space:pre-wrap;font:.875rem/1.55 Georgia,serif;background:var(--well);padding:1rem;border-radius:.3rem}
   form{display:inline}
   button{font:600 .9375rem/1 Georgia,serif;padding:.6rem 1.4rem;border-radius:.3rem;border:1px solid var(--line);cursor:pointer;background:var(--btn-bg);color:var(--btn-ink)}
@@ -140,6 +141,15 @@ function shell(title: string, body: string): string {
 <meta name="color-scheme" content="light dark">
 <title>${escapeHtml(title)}</title><style>${STYLE}</style><script>${BUSY_SCRIPT}</script></head>
 <body><header><a href="/">vana</a> · approval gateway</header><main>${body}</main></body></html>`;
+}
+
+/**
+ * The work in a sandboxed frame, plus a link to open it in its own tab for a
+ * full-size look (still sandboxed there: WORK_CSP carries the same tokens).
+ */
+function workFrame(src: string): string {
+  return `<iframe src="${src}" title="work" sandbox="${WORK_SANDBOX}" referrerpolicy="no-referrer"></iframe>
+  <p class="worklink"><a href="${src}" target="_blank" rel="noopener noreferrer">Open the work in a new tab ↗</a></p>`;
 }
 
 /** The orphan section of the landing page — omitted entirely when there are none. */
@@ -197,7 +207,7 @@ export function renderOrphan(
         : ""
     }</p>
   </div>
-  <iframe src="/orphan/${enc}/work" title="work" sandbox="allow-scripts allow-downloads" referrerpolicy="no-referrer"></iframe>
+  ${workFrame(`/orphan/${enc}/work`)}
   <div class="card">
     <form method="POST" action="/orphan/${enc}/rejury">
       <label>Re-jury — grade it now and send it to pending for your decision</label>
@@ -223,7 +233,7 @@ function scoreNotes(verdict: JuryVerdict): string {
 function workAndJury(id: string, meta: GeneratedMeta, verdict: JuryVerdict): string {
   const s = verdict.scores;
   return `
-  <iframe src="/candidate/${encodeURIComponent(id)}/work" title="work" sandbox="allow-scripts allow-downloads" referrerpolicy="no-referrer"></iframe>
+  ${workFrame(`/candidate/${encodeURIComponent(id)}/work`)}
   <div class="card">
     <div class="scores">novelty ${s.novelty} · nuance ${s.nuance} · narrative ${s.narrative} · craft ${s.craft} · wit ${s.wit}</div>
     ${scoreNotes(verdict)}
@@ -337,10 +347,19 @@ export function candidateLocation(cfg: Config, id: string): { status: Lifecycle;
 // default-src 'none' blocks external loads; connect-src 'none' blocks
 // fetch/XHR/WebSocket/sendBeacon/EventSource; inline + data: + blob: are allowed
 // so legitimately self-contained works still render.
+//
+// The work is served from the gateway's own origin, so it is also sandboxed
+// (without allow-same-origin → an opaque origin): its scripts can never reach
+// the approve form. The same tokens go on the iframe attribute and into the CSP
+// `sandbox` directive, so the isolation holds when the work is opened top-level
+// in its own tab too.
+const WORK_SANDBOX = "allow-scripts allow-downloads";
+
 export const WORK_CSP =
   "default-src 'none'; img-src data: blob:; media-src data: blob:; " +
   "style-src 'unsafe-inline'; script-src 'unsafe-inline' 'unsafe-eval' blob:; " +
-  "font-src data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'";
+  "font-src data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'; " +
+  `sandbox ${WORK_SANDBOX}`;
 
 // ── Server ───────────────────────────────────────────────────────────────────
 function send(res: ServerResponse, status: number, type: string, body: string): void {

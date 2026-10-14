@@ -67,6 +67,14 @@ test("renderCandidate embeds work iframe, scores, rationale, and action forms", 
   assert.match(html, /motivation body/);
 });
 
+test("renderCandidate offers the work in a new tab, opened without an opener", () => {
+  const html = renderCandidate("2026-06-16-x", meta, verdict, "m");
+  assert.match(
+    html,
+    /<a href="\/candidate\/2026-06-16-x\/work" target="_blank" rel="noopener noreferrer">Open the work in a new tab/,
+  );
+});
+
 test("renderCandidate action buttons show busy feedback on submit", () => {
   const html = renderCandidate("2026-06-16-x", meta, verdict, "m");
   assert.match(html, /class="approve"[^>]*data-busy="Publishing…"/);
