@@ -83,7 +83,7 @@ To read a route's headers, use a GET (`curl -s -D - -o /dev/null <url>`):
 `curl -I` sends HEAD, which `handle()` doesn't route, so you'd see no CSP.
 
 Wakes run on a wall-clock schedule (`schedule` in `vana.config.json`, e.g.
-mon,thu,sat at 12:00), so a restart does **not** shift the next wake. Do check
+mon,thu at 12:00), so a restart does **not** shift the next wake. Do check
 `npm run status` first, though: restarting *during* a wake kills it mid-run.
 
 ## Step 6 — Deploy surface (only if you changed the public site)

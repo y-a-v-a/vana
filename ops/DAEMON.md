@@ -37,7 +37,7 @@ schedule; `VANA_WAKE_ON_START=1` makes the daemon wake the moment it boots.
 `vana.config.json` takes either form. A `schedule` block wins when present:
 
 ```json
-"schedule": { "days": ["mon", "thu", "sat"], "hour": 12, "minute": 0 }
+"schedule": { "days": ["mon", "thu"], "hour": 12, "minute": 0 }
 ```
 
 Days are `sun`…`sat`; the time is **local wall clock** (Europe/Amsterdam), so a
@@ -49,8 +49,8 @@ Either way a restart re-arms from now, so the daemon logs the next wake on
 startup — check it with `npm run daemon:logs`:
 
 ```
-[daemon] … up. wakes=mon,thu,sat at 12:00 …
-[daemon] … next wake at 2026-09-05T10:00:00.000Z (Sat Sep 05 2026 12:00:00 GMT+0200)
+[daemon] … up. wakes=mon,thu at 12:00 …
+[daemon] … next wake at 2026-09-03T10:00:00.000Z (Thu Sep 03 2026 12:00:00 GMT+0200)
 ```
 
 ## After a change
