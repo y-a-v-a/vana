@@ -84,7 +84,8 @@ wake:
 | `promote.ts` | `decide(id, approve|reject, {note})` — moves pending→published/rejected, updates the catalogue, commits + pushes. On reject-with-note, saves `rejection.md` and appends the note to `guidance.md`. **Approve is the only writer to `published/`.** |
 | `refine.ts` | `runRefine(id, feedback)` — the agent reworks a pending candidate **in place** from human feedback, re-juries it, logs the feedback (`refinements.md`), commits + pushes, emails. Stays in `pending/` for the gate; serialized with the wake via the lock; respects the $ fuse |
 | `lock.ts` | tiny in-process mutex (`withLock`) so a refine and a scheduled wake never run at once |
-| `site.ts` | `buildSite()` — assembles `dist-site/` for Vercel; copies per-work `index.html` + `motivation.md` + `meta.json`, **never `jury.json`**; writes the catalogue index |
+| `site.ts` | `buildSite()` — assembles `dist-site/` for Vercel; copies per-work `index.html` + `motivation.md` + `meta.json` + WebP thumbnails, **never `jury.json`** (nor the full-size PNG); writes the catalogue index with lazy-loaded, `srcset`-responsive, content-hash cache-busted thumbnails |
+| `screenshot.ts` | Headless Chrome over CDP: captures each published work into a drawn browser frame (`screenshot.png`, 1280×800, the archival master) and has Chrome downscale + encode `screenshot-{480,960}.webp` for the catalogue. Runs on approve (best-effort) and via `npm run screenshots` |
 | `daemon.ts` | The long-running process: serves the dashboard continuously **and** self-schedules wakes; launchd target |
 
 Pure logic (ids, self-containment, weighting/thresholds, JSON extraction, email
@@ -97,7 +98,8 @@ and SMTP message building, rendering, site assembly) is unit-tested with
 workspace/
   .work/<tmp>/      generator staging (unique mkdtemp; gitignored)
   pending/<id>/     awaiting human approval   { index.html, motivation.md, meta.json, jury.json }
-  published/<id>/   approved (served publicly){ index.html, motivation.md, meta.json, jury.json }
+  published/<id>/   approved (served publicly){ index.html, motivation.md, meta.json, jury.json,
+                                                screenshot.png, screenshot-480.webp, screenshot-960.webp }
   rejected/<id>/    archived, discarded       { index.html, motivation.md, meta.json, jury.json }
 catalogue.json      every work + status (historical | pending | published | rejected)
 .vana-state.json    daily $ spend for the fuse (gitignored)
@@ -178,7 +180,8 @@ Cost asymmetry: generation is ~99% of the spend (~$0.37–0.79/work), the jury i
 | `npm run daemon:start` / `:stop` / `:restart` | launchd lifecycle (restart after a code change) |
 | `npm run daemon:logs` | tail the live log |
 | `npm run build:site` | assemble `dist-site/` locally |
-| `npm run verify:deploy` | post-deploy smoke: curls the live site for catalogue 200, CSP, work + motivation, and `jury.json` 404 |
+| `npm run screenshots` | backfill missing screenshots + thumbnails (`-- --force` recaptures all; `-- --thumbs` re-derives all thumbnails from the PNGs) |
+| `npm run verify:deploy` | post-deploy smoke: curls the live site for catalogue 200, CSP (strict on works, `img-src 'self'` only on the catalogue), work + motivation, thumbnail caching, and `jury.json` 404 |
 
 See [`ops/DAEMON.md`](ops/DAEMON.md) and [`ops/DEPLOY.md`](ops/DEPLOY.md).
 

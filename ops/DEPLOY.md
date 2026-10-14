@@ -2,7 +2,9 @@
 
 The public site is **assembled, not raw**: `npm run build:site` reads
 `workspace/published/*` and writes `dist-site/` containing, per work,
-`index.html` + `motivation.md` + `meta.json` — and a catalogue `index.html`.
+`index.html` + `motivation.md` + `meta.json` + `screenshot-{480,960}.webp`
+thumbnails — and a catalogue `index.html`. The full-size `screenshot.png` stays
+in the repo as the archival capture; visitors only download the thumbnails.
 **`jury.json` is never copied** (the private jury verdict stays private). A
 regular visitor lands on each work's `index.html`; `motivation.md` is reachable
 at `/<id>/motivation.md`.
@@ -42,3 +44,13 @@ the new work. `dist-site` is the only thing served, so `jury.json` never ships.
 - Visit the `*.vercel.app` URL → catalogue index.
 - `/<id>/` → the work; `/<id>/motivation.md` → its motivation.
 - `/<id>/jury.json` → **404** (must not exist).
+
+## Headers (`vercel.json`)
+- Every work gets the strict CSP (`img-src data: blob:`, `connect-src 'none'`),
+  the self-containment backstop. Only the catalogue (`/` and `/index.html`) adds
+  `img-src 'self'`, so it can show the thumbnails. The `source` patterns are
+  mutually exclusive on purpose: Vercel doesn't document which rule wins when
+  two set the same header.
+- Thumbnails are served `Cache-Control: public, max-age=31536000, immutable`.
+  The catalogue links them with a `?v=<content hash>`, so a recapture gets a new
+  URL rather than a stale cache hit.
