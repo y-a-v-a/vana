@@ -272,6 +272,35 @@ test("dashboard handler: routes, CSP, sandbox, traversal", async (t) => {
   }
 });
 
+test("dashboard handler: the landing page paginates pending by ?page=", async (t) => {
+  const root = mkdtempSync(join(tmpdir(), "vana-dash-pages-"));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  for (let i = 1; i <= 12; i++) {
+    const id = `2026-06-${String(i).padStart(2, "0")}-paged`;
+    const dir = join(root, "pending", id);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, "meta.json"), JSON.stringify({ title: `Paged ${i}`, summary: "s", license: "CC BY-SA 4.0" }));
+    writeFileSync(join(dir, "jury.json"), JSON.stringify({ verdict: "strong", weighted_total: 40 }));
+  }
+  const cfg = fixtureConfig(root);
+
+  const first = await request(cfg, "/");
+  assert.match(first.body, /Pending \(12\)/);
+  assert.match(first.body, />Paged 10</);
+  assert.doesNotMatch(first.body, />Paged 11</);
+
+  const second = await request(cfg, "/?page=2");
+  assert.equal(second.statusCode, 200);
+  assert.match(second.body, />Paged 11</);
+  assert.match(second.body, />Paged 12</);
+  assert.doesNotMatch(second.body, />Paged 1</);
+  assert.match(second.body, /11–12 of 12/);
+
+  // Junk and stale page numbers still land on a real page rather than an empty list.
+  assert.match((await request(cfg, "/?page=abc")).body, />Paged 1</);
+  assert.match((await request(cfg, "/?page=9")).body, />Paged 12</);
+});
+
 test("dashboard handler: plain-HTTP hits on the tailnet name 301 to the HTTPS origin", async (t) => {
   const root = mkdtempSync(join(tmpdir(), "vana-redirect-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));

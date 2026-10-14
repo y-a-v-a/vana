@@ -113,6 +113,11 @@ const STYLE = `
   .rejurybtn{background:var(--neutral);color:var(--on-badge);border-color:var(--neutral)}
   .err{font:.8125rem/1.5 monospace;color:var(--bad);word-break:break-word}
   h2.section{margin-top:2.5rem;border-top:1px solid var(--line);padding-top:1.5rem}
+  .pager{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem .25rem;margin:1.5rem 0}
+  .pager a,.pager [aria-current]{padding:.25rem .55rem;border-radius:.3rem;text-decoration:none}
+  .pager a:hover{background:var(--well)}
+  .pager [aria-current]{background:var(--accent);color:var(--on-accent);font-weight:600}
+  .pager .range{margin-left:auto;font-size:.875rem}
 `;
 
 // Submit feedback: once a form submits (after native validation), lock every
@@ -170,8 +175,36 @@ function orphanSection(orphans: OrphanItem[]): string {
 ${rows}`;
 }
 
-export function renderIndex(items: PendingItem[], orphans: OrphanItem[] = []): string {
-  const rows = items
+/** Candidates per page on the landing page. */
+export const PAGE_SIZE = 10;
+
+/**
+ * One page of `items` (1-based). A malformed or out-of-range page clamps to the
+ * nearest real one, so a stale `?page=9` after a run of decisions still lands.
+ */
+export function paginate<T>(items: T[], page: number, size = PAGE_SIZE): { items: T[]; page: number; pages: number } {
+  const pages = Math.max(1, Math.ceil(items.length / size));
+  const p = Math.min(Math.max(1, Math.trunc(page) || 1), pages);
+  return { items: items.slice((p - 1) * size, p * size), page: p, pages };
+}
+
+/** Previous / numbered / next links between landing pages — omitted when one page holds everything. */
+function pager(page: number, pages: number, total: number): string {
+  if (pages <= 1) return "";
+  const href = (n: number) => (n === 1 ? "/" : `/?page=${n}`);
+  const numbers = Array.from({ length: pages }, (_, i) => i + 1)
+    .map((n) => (n === page ? `<span aria-current="page">${n}</span>` : `<a href="${href(n)}">${n}</a>`))
+    .join("");
+  const prev = page > 1 ? `<a href="${href(page - 1)}" rel="prev">← Previous</a>` : "";
+  const next = page < pages ? `<a href="${href(page + 1)}" rel="next">Next →</a>` : "";
+  const first = (page - 1) * PAGE_SIZE + 1;
+  const last = Math.min(page * PAGE_SIZE, total);
+  return `<nav class="pager" aria-label="Pending pages">${prev}${numbers}${next}<span class="muted range">${first}–${last} of ${total}</span></nav>`;
+}
+
+export function renderIndex(items: PendingItem[], orphans: OrphanItem[] = [], page = 1): string {
+  const shown = paginate(items, page);
+  const rows = shown.items
     .map(
       (it) => `<div class="card">
   <a href="/candidate/${encodeURIComponent(it.id)}"><strong>${escapeHtml(it.meta.title)}</strong></a>
@@ -183,8 +216,9 @@ export function renderIndex(items: PendingItem[], orphans: OrphanItem[] = []): s
   const pending =
     items.length === 0
       ? `<p class="muted">No candidates awaiting confirmation.</p>`
-      : `<h1>Pending (${items.length})</h1>${rows}`;
-  return shell("vana · pending", `${pending}${orphanSection(orphans)}`);
+      : `<h1>Pending (${items.length})</h1>${rows}${pager(shown.page, shown.pages, items.length)}`;
+  const title = shown.page > 1 ? `vana · pending · page ${shown.page}` : "vana · pending";
+  return shell(title, `${pending}${orphanSection(orphans)}`);
 }
 
 /** A stranded work: the work itself, why it never got a verdict, and a re-jury button. */
@@ -409,7 +443,8 @@ export async function handle(req: IncomingMessage, res: ServerResponse, cfg: Con
   const parts = url.pathname.split("/").filter(Boolean); // e.g. ["candidate","<id>","work"]
 
   if (req.method === "GET" && parts.length === 0) {
-    return send(res, 200, "text/html; charset=utf-8", renderIndex(listPending(cfg), listOrphans(cfg)));
+    const page = Number(url.searchParams.get("page") ?? 1);
+    return send(res, 200, "text/html; charset=utf-8", renderIndex(listPending(cfg), listOrphans(cfg), page));
   }
 
   if (parts[0] === "orphan" && parts[1]) {

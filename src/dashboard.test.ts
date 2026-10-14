@@ -4,6 +4,7 @@ import {
   escapeHtml,
   parseFormBody,
   renderIndex,
+  paginate,
   renderCandidate,
   renderResolved,
   renderNotFound,
@@ -46,6 +47,49 @@ test("escapeHtml neutralizes angle brackets, amp, quote", () => {
 
 test("renderIndex shows empty-state when nothing pending", () => {
   assert.match(renderIndex([]), /No candidates awaiting confirmation/);
+});
+
+test("paginate slices 1-based pages and clamps malformed or out-of-range pages", () => {
+  const xs = Array.from({ length: 25 }, (_, i) => i + 1);
+  assert.deepEqual(paginate(xs, 1), { items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], page: 1, pages: 3 });
+  assert.deepEqual(paginate(xs, 3), { items: [21, 22, 23, 24, 25], page: 3, pages: 3 });
+  assert.equal(paginate(xs, 99).page, 3); // stale link past the end → last page
+  for (const bad of [0, -2, NaN]) assert.equal(paginate(xs, bad).page, 1);
+  assert.equal(paginate(xs, 2.7).page, 2);
+  assert.deepEqual(paginate(xs.slice(0, 20), 2).items, xs.slice(10, 20)); // exact multiple: no empty page 3
+  assert.equal(paginate(xs.slice(0, 20), 3).page, 2);
+  assert.deepEqual(paginate([], 4), { items: [], page: 1, pages: 1 });
+});
+
+test("renderIndex shows 10 per page with a pager, keeping the full count in the heading", () => {
+  const items: PendingItem[] = Array.from({ length: 25 }, (_, i) => ({
+    id: `2026-06-${String(i + 1).padStart(2, "0")}-w`,
+    meta: { ...meta, title: `Work ${i + 1}` },
+    verdict,
+  }));
+  const html = renderIndex(items, [], 2);
+  assert.match(html, /Pending \(25\)/);
+  assert.equal(html.match(/<div class="card">/g)?.length, 10);
+  assert.match(html, />Work 11</);
+  assert.match(html, />Work 20</);
+  assert.doesNotMatch(html, />Work 10</);
+  assert.doesNotMatch(html, />Work 21</);
+  assert.match(html, /<a href="\/" rel="prev">/); // page 1 is the bare landing URL
+  assert.match(html, /<a href="\/\?page=3" rel="next">/);
+  assert.match(html, /<span aria-current="page">2<\/span>/);
+  assert.match(html, /11–20 of 25/);
+  assert.match(html, /<title>vana · pending · page 2<\/title>/);
+
+  const last = renderIndex(items, [], 3);
+  assert.match(last, /21–25 of 25/);
+  assert.doesNotMatch(last, /rel="next"/);
+  assert.doesNotMatch(renderIndex(items), /rel="prev"/);
+});
+
+test("renderIndex omits the pager when one page holds everything", () => {
+  const items: PendingItem[] = Array.from({ length: 10 }, (_, i) => ({ id: `2026-06-1${i}-w`, meta, verdict }));
+  assert.doesNotMatch(renderIndex(items), /class="pager"/);
+  assert.doesNotMatch(renderIndex([]), /class="pager"/);
 });
 
 test("renderIndex lists items with verdict badge and escapes titles", () => {
