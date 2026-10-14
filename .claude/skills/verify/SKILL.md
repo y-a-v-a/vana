@@ -113,6 +113,15 @@ art-approval decision, are the human's. Don't automate the gate; for visual
 changes, ask the user to glance at the rendered work (or use a browser/preview
 tool if one is available).
 
+For the **catalogue layout** (`site.ts`), don't trust Chrome's
+`--headless --screenshot --window-size=390,…`: new-headless clamps the window
+to ~500px wide (the page looks overflowing when it isn't) and that mode loads
+every `loading="lazy"` image. Instead, serve `dist-site` with the `vercel.json`
+headers applied and drive Chrome over CDP with
+`Emulation.setDeviceMetricsOverride {width:390, deviceScaleFactor:3, mobile:true}`.
+Then compare `scrollWidth` with `clientWidth`, read `img.currentSrc`, and count
+the `.webp` requests before and after scrolling.
+
 ---
 
 **If you run into a blocker, find a solution and then update this skill** so the
