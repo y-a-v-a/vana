@@ -79,8 +79,12 @@ Then exercise the actual surface you changed, e.g. for a dashboard route:
 id=$(ls -1 workspace/pending | grep -v gitkeep | head -1)
 curl -s -o /dev/null -w "%{http_code}\n" "http://localhost:4737/candidate/$id"
 ```
-Note: a restart **resets the 6h wake timer** (next autonomous wake is one
-interval out). That's expected; mention it to the user.
+To read a route's headers, use a GET (`curl -s -D - -o /dev/null <url>`):
+`curl -I` sends HEAD, which `handle()` doesn't route, so you'd see no CSP.
+
+Wakes run on a wall-clock schedule (`schedule` in `vana.config.json`, e.g.
+mon,thu,sat at 12:00), so a restart does **not** shift the next wake. Do check
+`npm run status` first, though: restarting *during* a wake kills it mid-run.
 
 ## Step 6 — Deploy surface (only if you changed the public site)
 
@@ -104,6 +108,10 @@ These are load-bearing — a change must not regress them:
 - **Self-contained:** works make zero external requests (regex first pass in
   `generator.ts` + CSP/sandbox at render). `jury.json` is **never** published.
 - **Untrusted ids validated:** HTTP ids pass `isValidId` before touching the FS.
+- **Works never share the gateway's origin:** the `/…/work` routes carry
+  `sandbox allow-scripts allow-downloads` in `WORK_CSP` (never
+  `allow-same-origin`), so a work opened top-level in its own tab still can't
+  script the approve form. The iframe attribute uses the same `WORK_SANDBOX`.
 - **Budget is a fuse:** time first, `$` as the backstop.
 
 ## What you cannot verify by command
