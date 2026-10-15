@@ -1438,5 +1438,13 @@
     "source": "Josef Albers, Interaction of Color (1963); Michel-Eugene Chevreul, De la loi du contraste simultane des couleurs (1839); Goethe, Zur Farbenlehre (1810) vs Newton, Opticks (1704); Bjorn Ottosson, OKLab (2020); CSS Color Module Level 4/5, color-mix() (W3C); Marcel Duchamp, infrathin",
     "mechanism": "CSS color-mix() interpolation across ten named colour spaces (srgb, srgb-linear, lab, oklab, hsl, hwb, lch, oklch, incl. longer-hue arcs), driven live by two <input type=color> through custom properties; client-side only, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-10-15-in-capitals-none-in-the-source",
+    "title": "In Capitals (None in the Source)",
+    "year": 2026,
+    "source": "Horace, Odes III.30 (exegi monumentum aere perennius), 23 BC; Trajan's Column / Roman monumental capitals (capitalis monumentalis); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); net.art source-vs-render tradition (y-a-v-a: Silencio, La Disparition)",
+    "mechanism": "CSS text-transform:uppercase renders monumental capitals absent from the DOM text and dropped by Selection/clipboard, a reversible one-line 'carving' verified live.",
+    "status": "pending"
   }
 ]

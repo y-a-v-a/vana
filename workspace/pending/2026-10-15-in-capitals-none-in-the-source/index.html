@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>In Capitals (None in the Source)</title>
+<style>
+  :root{
+    --stone:#1b1a17;
+    --plaque:#23221e;
+    --incised:#8c8678;
+    --incised-bright:#b9b2a1;
+    --rule:#3a382f;
+    --ink:#6f6a5e;
+    --warn:#b58a4a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--stone);color:var(--ink)}
+  body{
+    font-family:Georgia,"Times New Roman",Times,serif;
+    line-height:1.5;
+    -webkit-text-size-adjust:100%;
+    padding:clamp(18px,5vw,64px);
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+  }
+  main{width:min(760px,100%)}
+  .kicker{
+    font:11px/1.6 ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    letter-spacing:.28em;text-transform:uppercase;color:var(--ink);
+    text-align:center;margin:0 0 clamp(16px,4vw,34px);
+  }
+
+  /* The stele: a slab of dark stone with an incised inscription. */
+  .stele{
+    background:
+      radial-gradient(120% 140% at 30% 0%, #2a2924 0%, var(--plaque) 55%, #1d1c18 100%);
+    border:1px solid var(--rule);
+    border-radius:3px;
+    padding:clamp(26px,6vw,56px) clamp(20px,5vw,52px);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.04),
+      inset 0 0 0 1px rgba(0,0,0,.35),
+      0 24px 60px rgba(0,0,0,.45);
+  }
+  /* THE WHOLE TRICK: uppercase is a render pass. The DOM holds lowercase. */
+  .inscription{
+    text-transform:uppercase;
+    text-align:center;
+    color:var(--incised);
+    font-weight:400;
+    font-size:clamp(19px,4.6vw,34px);
+    letter-spacing:.14em;
+    line-height:1.8;
+    margin:0;
+    /* incised / carved look, pure CSS */
+    text-shadow:0 1px 0 rgba(255,255,255,.05), 0 -1px 1px rgba(0,0,0,.65);
+    user-select:text;
+  }
+  .inscription.raw{ text-transform:none; letter-spacing:.01em; color:var(--incised-bright); }
+  .inscription span{display:block}
+  .inscription .big{color:var(--incised-bright);font-size:1.12em}
+  .dot{color:var(--ink)}
+
+  .controls{
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+    margin:clamp(20px,4vw,30px) 0 8px;
+  }
+  button{
+    font:11px/1 ui-monospace,Menlo,Consolas,monospace;
+    letter-spacing:.14em;text-transform:uppercase;
+    color:var(--incised-bright);background:#201f1b;
+    border:1px solid var(--rule);border-radius:3px;
+    padding:11px 15px;cursor:pointer;
+  }
+  button:hover{border-color:#524e41;color:#d7cfbc}
+  button:focus-visible{outline:2px solid var(--warn);outline-offset:2px}
+
+  .caption{
+    max-width:60ch;margin:clamp(18px,4vw,26px) auto 0;
+    text-align:center;color:var(--ink);font-size:14px;font-style:italic;
+  }
+
+  .ledger{
+    margin:clamp(22px,5vw,34px) auto 0;
+    border:1px solid var(--rule);border-radius:3px;background:#1e1d19;
+    font:12px/1.65 ui-monospace,Menlo,Consolas,monospace;
+    color:#8a8577;
+  }
+  .ledger div{display:flex;gap:12px;padding:9px 14px;border-top:1px solid #2a2824}
+  .ledger div:first-child{border-top:0}
+  .ledger b{color:#6d685c;font-weight:400;flex:0 0 7.5em;text-transform:uppercase;letter-spacing:.08em}
+  .ledger samp{color:#c7bfad;word-break:break-word}
+  .ledger .ok{color:#7fa06a}
+
+  .cartel{
+    margin:clamp(30px,6vw,46px) auto 0;max-width:62ch;
+    border-top:1px solid var(--rule);padding-top:18px;
+    font-size:12.5px;color:var(--ink);
+  }
+  .cartel h2{font-size:13px;letter-spacing:.04em;color:#8a8577;margin:0 0 2px}
+  .cartel p{margin:.5em 0}
+  .cartel .meta{font:11px/1.7 ui-monospace,Menlo,Consolas,monospace;color:#6a655a}
+  a{color:#9c957f}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">a monument more lasting than a keystroke</p>
+
+  <!-- Everything inside .inscription is authored in lowercase.
+       The capitals you see are supplied by CSS at render time only. -->
+  <div class="stele">
+    <p class="inscription" id="inscription">
+      <span class="big">to the eternal collection</span>
+      <span>endowed in perpetuity</span>
+      <span>never to be sold <span class="dot">·</span> never to be lent</span>
+      <span>its value carved in stone</span>
+      <span>reader <span class="dot">—</span> you may take nothing from this room</span>
+    </p>
+  </div>
+
+  <div class="controls">
+    <button id="select">select the monument</button>
+    <button id="chisel" aria-pressed="true">un-chisel</button>
+  </div>
+
+  <p class="caption" id="caption">
+    You just read that in capitals. Not one of them is in the page.
+    Select it, press Ctrl/⌘-C, and you will carry off every word — in lowercase.
+    The permanence was a single line of CSS.
+  </p>
+
+  <div class="ledger" aria-live="polite">
+    <div><b>rendered</b><samp>as CAPITALS, by text-transform</samp></div>
+    <div><b>in the DOM</b><samp id="src">…</samp></div>
+    <div><b>capitals</b><samp id="caps">…</samp></div>
+    <div><b>you copied</b><samp id="clip">— (nothing selected yet)</samp></div>
+  </div>
+
+  <div class="cartel">
+    <h2>In Capitals (None in the Source)</h2>
+    <p class="meta">y-a-v-a · 2026 · pixels on screen · CSS <code>text-transform</code> + the clipboard</p>
+    <p>
+      Capital letters are the typography of permanence: the Roman inscription, the
+      lapidary frieze, the donor's name endowed <em>in perpetuity</em>, the all-caps
+      authority of the headline. Here that authority is a render pass. The browser
+      lifts lowercase source into monumental capitals; the clipboard and the DOM keep
+      only the whisper. Horace promised a monument more lasting than bronze. This one
+      is less lasting than <kbd>Ctrl-C</kbd>.
+    </p>
+    <p class="meta">
+      After: Horace, <em>Odes</em> III.30 (<em>aere perennius</em>, 23 BC);
+      Trajan's Column / Roman monumental capitals; Walter Benjamin,
+      <em>The Work of Art in the Age of Mechanical Reproduction</em> (1935);
+      net.art source-vs-render tradition (y-a-v-a: <em>Silencio</em>, <em>La Disparition</em>).
+    </p>
+    <p class="meta">
+      License: <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license noopener">CC BY-SA 4.0</a>
+      — y-a-v-a (yet another visual artist). Validated by Vincent Bruijn.
+      No cookies, no trackers, no network. The page asks for nothing and keeps nothing.
+    </p>
+  </div>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var insc = document.getElementById('inscription');
+  var src = document.getElementById('src');
+  var caps = document.getElementById('caps');
+  var clip = document.getElementById('clip');
+  var chisel = document.getElementById('chisel');
+  var selectBtn = document.getElementById('select');
+
+  // Attest the source: the DOM text, exactly as it will reach any copy.
+  var text = insc.textContent.replace(/\s+/g,' ').trim();
+  var capCount = (text.match(/[A-Z]/g) || []).length;
+  src.textContent = '"' + (text.length > 72 ? text.slice(0,72) + '…' : text) + '"';
+  caps.innerHTML = capCount === 0
+    ? '<span class="ok">0 capital letters in the source</span>'
+    : capCount + ' capital letter(s) in the source';
+
+  // What the clipboard would actually carry — always the lowercase original.
+  function showSelection(){
+    var s = (window.getSelection && window.getSelection().toString()) || '';
+    s = s.replace(/\s+/g,' ').trim();
+    if(!s){ clip.textContent = '— (nothing selected yet)'; return; }
+    var cc = (s.match(/[A-Z]/g) || []).length;
+    clip.innerHTML = '"' + (s.length > 60 ? s.slice(0,60) + '…' : s) + '" ' +
+      '<span class="ok">(' + cc + ' capitals carried)</span>';
+  }
+  document.addEventListener('selectionchange', showSelection);
+  document.addEventListener('copy', showSelection);
+
+  // Select the monument for the viewer (no clipboard API, no permissions).
+  selectBtn.addEventListener('click', function(){
+    var sel = window.getSelection();
+    var range = document.createRange();
+    range.selectNodeContents(insc);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    showSelection();
+  });
+
+  // The "carving" is reversible: toggle the single declaration, live.
+  chisel.addEventListener('click', function(){
+    var raw = insc.classList.toggle('raw');       // raw = text-transform:none
+    chisel.textContent = raw ? 're-chisel' : 'un-chisel';
+    chisel.setAttribute('aria-pressed', String(!raw));
+  });
+})();
+</script>
+</body>
+</html>

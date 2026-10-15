@@ -1,0 +1,46 @@
+{
+  "work_id": "2026-10-15-in-capitals-none-in-the-source",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 4,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "Letter case as source-vs-render target is genuinely new to the catalogue, but the one-line CSS + ledger + cartel pattern is now a familiar DNA subgenre alongside Silencio, La Disparition, Quotation, Incipit, Non-finito, Indivisible, Rubrica, and Schreibzeit — fresh target, seen pairing.",
+    "nuance": "Surface gag (a monument that brags it cannot be copied, copied in one keystroke) lands through the copy interaction alone; literate reading (Horace's boast vs Benjamin's aura) deepens it without needing the cartel; the \"un-chisel\" toggle makes the construction's reversibility the witty closer.",
+    "narrative": "Explicitly names and answers Silencio and La Disparition and the value/authenticity axis is staged through the endowment inscription, but the chance/order axis is absent and the broader source-vs-render extension is stated in the cartel rather than enacted through a structural surprise.",
+    "craft": "The build is tight — single CSS declaration, one toggle, one programmatic select, live ledger via selectionchange/copy; the stele styling and incised text-shadow serve the metaphor without bloat; nothing to remove, nothing obviously missing.",
+    "wit": "\"A monument more lasting than a keystroke\" and \"you may take nothing from this room\" (which you do, in lowercase) land the joke through mechanism; the ledger's \"0 capital letters in the source\" is the deflation that closes it; humor rides the CSS rather than sitting beside it."
+  },
+  "weighted_total": 35,
+  "verdict": "borderline",
+  "references_named": [
+    "Horace, Odes III.30 (exegi monumentum aere perennius), 23 BC",
+    "Trajan's Column / Roman monumental capitals (capitalis monumentalis)",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "y-a-v-a, Silencio (2026)",
+    "y-a-v-a, La Disparition (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P6",
+    "P7",
+    "P9"
+  ],
+  "rationale": "The mechanism (text-transform:uppercase with a live attestation that nothing uppercase lives in the DOM or the clipboard) cleanly enacts the conceptual point: monumentality and the aura of the carved capital are a single render pass, not substance. The Horace + Benjamin pairing is well-chosen and the un-chisel toggle is the witty minimal gesture the DNA rewards. The work is materially distinct from every catalogued item (no prior work uses letter case as the source-vs-render target) and the ethics, attribution and voice are clean.",
+  "reservations": "The one-line-CSS + live-ledger + cartel structure is now a recognizable y-a-v-a subgenre (Silencio, La Disparition, Quotation, Incipit, Non-finito, Indivisible, Rubrica, Schreibzeit, Rivers), so the work's novel contribution is the case target rather than the form. The chance/order axis is absent — the work lives entirely on the value/authenticity axis — which limits the narrative depth even though the lineage is correctly named.",
+  "revision_suggestion": "Consider folding the chance/order axis into the carving itself — for instance, letting a once-seeded RNG occasionally drop a capital that breaks the lowercase contract (so the monument's own 'authenticity' is visibly chance-driven), or having a per-visit 'weathering' of the inscription that thins letters on the order-axis side. That would extend the twenty-year argument with a move the source-vs-render family has not made and would move the work toward the 'strong' threshold.",
+  "jury_model": "minimax/minimax-m3"
+}
