@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0908">
+<title>Endless Column (It Arrives Nowhere)</title>
+<style>
+  :root{ --bronze:#c49a5c; --ink:#0a0908; --dim:#7d7466; }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    background:var(--ink);
+    color:#cdc6ba;
+    font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    display:flex; flex-direction:column; min-height:100%;
+    overflow:hidden;
+  }
+  header{ padding:18px 20px 6px; text-align:center; }
+  header h1{ font-size:17px; font-weight:600; letter-spacing:.02em; color:#e6ddcd; }
+  header p{ font-size:12.5px; color:var(--dim); margin-top:3px; }
+  main{ flex:1; position:relative; min-height:0; }
+  canvas{ display:block; width:100%; height:100%; }
+  .controls{ text-align:center; padding:8px 20px 4px; }
+  button{
+    font:inherit; font-size:14px; color:var(--ink); background:var(--bronze);
+    border:0; border-radius:2px; padding:9px 22px; cursor:pointer; letter-spacing:.03em;
+  }
+  button:hover{ background:#d9ad6b; }
+  .read{ font-size:12px; color:var(--dim); margin-top:8px; min-height:1em; letter-spacing:.04em; }
+  footer{ padding:10px 20px 16px; text-align:center; font-size:11px; color:#5e574c; line-height:1.6; }
+  footer a{ color:#6f6758; }
+  @media (prefers-reduced-motion: reduce){ .rm{ display:inline; } }
+  .rm{ display:none; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Endless Column</h1>
+    <p>a tone that rises forever and never gets higher</p>
+  </header>
+
+  <main><canvas id="c"></canvas></main>
+
+  <div class="controls">
+    <button id="toggle" aria-pressed="false">Raise the column</button>
+    <div class="read" id="read">Mind the volume. It only goes up.</div>
+  </div>
+
+  <footer>
+    After Constantin Br&#226;ncu&#537;i, <em>Coloana f&#259;r&#259; sf&#226;r&#537;it</em> (Endless Column), 1938 &middot;
+    sound is a Shepard&ndash;Risset glissando (Roger Shepard, 1964; Jean-Claude Risset), synthesised live in your browser.<br>
+    <strong>y-a-v-a</strong> &middot; <span class="rm">Motion paused for prefers-reduced-motion &mdash; the ascent is in the sound. &middot; </span>
+    CC BY-SA 4.0 &middot; no cookies, no tracking, nothing stored or sent.
+  </footer>
+
+<script>
+(() => {
+  "use strict";
+  const cv = document.getElementById('c');
+  const cx = cv.getContext('2d');
+  const btn = document.getElementById('toggle');
+  const read = document.getElementById('read');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // --- The whole work is one variable: `phase`, the position of the climb.
+  // It drives the ear (seven octave-spaced oscillators, wrapping) and the eye
+  // (a stack of identical modules, scrolling) in lockstep. Increasing it = rising.
+  const N = 7;            // octaves stacked
+  const FMIN = 27.5;      // Hz, the bottom of the stack (A0)
+  const PERIOD = 15;      // seconds to climb one octave
+  let phase = 0, running = false, last = 0, audio = null;
+
+  // Raised-cosine bell over the stack: silent/dark at top and bottom, full in the
+  // middle. A voice is born mute at the bottom, swells, and dies mute at the top,
+  // so there is no seam where it wraps — the finite stack reads as infinite.
+  const bell = x => 0.5 - 0.5 * Math.cos(2 * Math.PI * x);
+
+  function startAudio(){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return null;
+    const ac = new AC();
+    const master = ac.createGain();
+    master.gain.value = 0.0001;
+    master.connect(ac.destination);
+    const voices = [];
+    for(let i=0;i<N;i++){
+      const osc = ac.createOscillator(); osc.type = 'sine';
+      const g = ac.createGain(); g.gain.value = 0;
+      osc.connect(g); g.connect(master); osc.start();
+      voices.push({osc, g});
+    }
+    return {ac, master, voices};
+  }
+
+  function updateAudio(){
+    if(!audio) return;
+    const t = audio.ac.currentTime;
+    for(let i=0;i<N;i++){
+      const oct = (i + phase) % N;                 // 0..N, where it sits in the stack
+      audio.voices[i].osc.frequency.setTargetAtTime(FMIN * Math.pow(2, oct), t, 0.02);
+      audio.voices[i].g.gain.setTargetAtTime(bell(oct / N) * 0.16, t, 0.02);
+    }
+  }
+
+  // --- canvas ---
+  let W=0, H=0, DPR=1;
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const r = cv.getBoundingClientRect();
+    W = r.width; H = r.height;
+    cv.width = Math.max(1, W*DPR); cv.height = Math.max(1, H*DPR);
+    cx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  new ResizeObserver(resize).observe(cv.parentElement);
+  resize();
+
+  function diamond(xc, yc, hw, hh, a){
+    if(a <= 0.004) return;
+    const g = cx.createLinearGradient(xc-hw, yc, xc+hw, yc);
+    g.addColorStop(0,   'rgba(120,88,42,'  + a + ')');
+    g.addColorStop(0.5, 'rgba(228,186,118,'+ a + ')');
+    g.addColorStop(1,   'rgba(120,88,42,'  + a + ')');
+    cx.fillStyle = g;
+    cx.beginPath();
+    cx.moveTo(xc, yc-hh); cx.lineTo(xc+hw, yc); cx.lineTo(xc, yc+hh); cx.lineTo(xc-hw, yc);
+    cx.closePath(); cx.fill();
+  }
+
+  function draw(){
+    cx.clearRect(0,0,W,H);
+    const xc = W/2;
+    const mh = Math.max(44, Math.min(H*0.17, 118));   // module height
+    const hw = mh*0.42, hh = mh*0.5;
+    // scroll the stack upward with phase (frozen when reduced-motion)
+    const scroll = reduce ? 0 : (phase * mh) % mh;
+    for(let y = -mh; y < H + mh; y += mh){
+      const cy = y + scroll;
+      const a = bell(Math.min(Math.max(cy / H, 0), 1));  // fade into dark at both ends
+      diamond(xc, cy, hw, hh, a);
+    }
+  }
+
+  function frame(ts){
+    const dt = last ? Math.min((ts - last)/1000, 0.05) : 0;
+    last = ts;
+    if(running) phase = (phase + dt / PERIOD) % 1;   // climb; audio needs this even under reduced-motion
+    updateAudio();
+    draw();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  btn.addEventListener('click', async () => {
+    if(!running){
+      if(!audio) audio = startAudio();
+      if(audio){
+        if(audio.ac.state === 'suspended') await audio.ac.resume();
+        audio.master.gain.setTargetAtTime(0.5, audio.ac.currentTime, 0.4); // fade in, no click
+      }
+      running = true;
+      btn.textContent = 'Let it rest'; btn.setAttribute('aria-pressed','true');
+      read.textContent = 'Rising. Forever. Arriving nowhere.';
+    } else {
+      if(audio) audio.master.gain.setTargetAtTime(0.0001, audio.ac.currentTime, 0.3);
+      running = false;
+      btn.textContent = 'Raise the column'; btn.setAttribute('aria-pressed','false');
+      read.textContent = 'It stopped where it started. It always does.';
+    }
+  });
+})();
+</script>
+</body>
+</html>

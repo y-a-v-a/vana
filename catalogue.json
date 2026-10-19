@@ -1446,5 +1446,13 @@
     "source": "Horace, Odes III.30 (exegi monumentum aere perennius), 23 BC; Trajan's Column / Roman monumental capitals (capitalis monumentalis); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935); net.art source-vs-render tradition (y-a-v-a: Silencio, La Disparition)",
     "mechanism": "CSS text-transform:uppercase renders monumental capitals absent from the DOM text and dropped by Selection/clipboard, a reversible one-line 'carving' verified live.",
     "status": "pending"
+  },
+  {
+    "id": "2026-10-19-endless-column-it-arrives-nowhere",
+    "title": "Endless Column (It Arrives Nowhere)",
+    "year": 2026,
+    "source": "Constantin Brancusi, Coloana fara sfarsit (Endless Column), 1938; Roger Shepard, Shepard tone (1964); Jean-Claude Risset, Shepard-Risset glissando",
+    "mechanism": "Seven octave-spaced Web Audio oscillators wrapped under a raised-cosine envelope (a live Shepard-Risset glissando) driven by one phase variable that also scrolls a canvas module stack; no samples, no network.",
+    "status": "pending"
   }
 ]

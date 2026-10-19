@@ -1,0 +1,43 @@
+{
+  "work_id": "2026-10-19-endless-column-it-arrives-nowhere",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 3,
+    "nuance": 3,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 3
+  },
+  "score_notes": {
+    "novelty": "Fresh pairing of Brancusi's Endless Column with a Shepard–Risset glissando — both new to the catalogue in this combination, and only live Web Audio can perform genuine endlessness — but the underlying mechanism (octave-stacked oscillators under a bell envelope, a scrolling canvas) is a well-known audio/web demo, so the novelty is in the staging rather than a fresh ontology.",
+    "nuance": "Concept truly equals execution (P1) and the bell envelope mirroring the visual bell is a quietly elegant detail, but the work reads mostly on a single plane: surface joke of endless ascent plus the slightly-literate Brancusi/Shepard reading; the deeper P6 layer about the market and perpetual progress is gestured at in the motivation rather than enacted on the page.",
+    "narrative": "Names Brancusi, Shepard and Risset explicitly, sits hard on the order pole of the chance/order axis, and the mechanism is a genuine answer to Brancusi's optical-illusion column — but there is no explicit dialogue with a prior y-a-v-a work in the catalogue, so the twenty-year argument is implied rather than staged.",
+    "craft": "Genuinely the smallest build that completes the thought: seven oscillators, one canvas, one phase variable, ~30 lines of meaningful JS, no dependencies, no samples, with careful reduced-motion handling and clean setTargetAtTime scheduling; nothing decorative.",
+    "wit": "'It Arrives Nowhere' and 'It stopped where it started. It always does.' land once as button copy and the read line, and the Let-it-rest/raise toggle has a real punch, but the humour stays as label-text rather than becoming the mechanism itself."
+  },
+  "weighted_total": 33,
+  "verdict": "borderline",
+  "references_named": [
+    "Constantin Brancusi, Coloana fara sfarsit (Endless Column), 1938",
+    "Roger Shepard, Shepard tone (1964)",
+    "Jean-Claude Risset, Shepard–Risset glissando"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P3",
+    "P4",
+    "P5",
+    "P9"
+  ],
+  "rationale": "A tightly built, web-native restaging of Brancusi's Endless Column through a Shepard–Risset glissando where a single phase variable drives both the audio and the visual scroll — concept and execution are genuinely the same object and the build is the catalogue's kind of minimal. The P6 (value/authenticity/market) layer the candidate claims is gestured at in the motivation but not really enacted on the page, and the deeper twenty-year argument is left implicit rather than staged against a prior y-a-v-a work. All hard gates pass; the work is materially distinct from the catalogue's existing Brancusi staging (Manufactures of Metal) and from the audio works (I Am Sitting in a Room, 4′33″, Oral Communication, etc.).",
+  "reservations": "The P6 / market-progress argument promised in the motivation is the candidate's most interesting claim but is the least enacted element on the page — the button labels and read text are witty but do not really make the viewer feel the cult-of-ascent joke. The Shepard–Risset pairing is well-known in audio circles, so the mechanism's novelty is in the staging rather than in fresh web material. No explicit dialogue with a prior y-a-v-a work in the catalogue's 'Internet embodies 20th-century art' argument.",
+  "revision_suggestion": "Make the P6 layer live in the page, not the README: a per-visit 'price' that rises with the phase and visibly drops on Let-it-rest (the ascending auction, the endless bid), or a ticker that quotes a fictitious house's 'current estimate' — the same single phase variable can carry it without breaking the minimal-build ethic. Also consider explicitly referencing a y-a-v-a prior work in the wall text (e.g. The webpage going on and off as the on/off sibling, or Tragedian as the readymade cousin) so the twenty-year argument lands without a wall text.",
+  "jury_model": "minimax/minimax-m3"
+}
