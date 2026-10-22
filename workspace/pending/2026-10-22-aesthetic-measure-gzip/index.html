@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aesthetic Measure (gzip)</title>
+<style>
+  :root{
+    --ink:#111; --paper:#f4f2ec; --line:#111; --dim:#6b675d; --crown:#b8912a;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink)}
+  body{padding:clamp(16px,4vw,48px);line-height:1.5}
+  header{max-width:62ch}
+  h1{font-size:clamp(1.3rem,3.5vw,2rem);margin:0 0 .2em;letter-spacing:.01em}
+  .formula{font-size:1.1rem;margin:.1em 0 .6em}
+  .lede{color:var(--dim);max-width:62ch;margin:.2em 0 1.4em}
+  .grid{
+    display:grid;gap:14px;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    max-width:1100px;
+  }
+  .card{border:1px solid var(--line);padding:10px;background:#fff;position:relative}
+  .card canvas{width:100%;height:auto;display:block;image-rendering:pixelated;border:1px solid #ddd}
+  .name{font-weight:700;margin:.5em 0 .1em}
+  .after{color:var(--dim);font-size:.8rem;margin-bottom:.5em}
+  table{width:100%;border-collapse:collapse;font-size:.82rem}
+  td{padding:1px 0}
+  td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+  .crown{outline:3px solid var(--crown);outline-offset:-1px}
+  .crown::before{
+    content:"★ most beautiful";position:absolute;top:-1px;right:-1px;
+    background:var(--crown);color:#fff;font-size:.68rem;padding:2px 6px;letter-spacing:.03em;
+  }
+  .verdict{max-width:62ch;margin:1.6em 0 .4em;font-size:1.05rem}
+  .verdict b{background:var(--crown);color:#fff;padding:0 .35em}
+  button{
+    font:inherit;cursor:pointer;background:var(--ink);color:var(--paper);
+    border:1px solid var(--ink);padding:.5em 1em;margin-top:.4em
+  }
+  button:hover{background:#000}
+  footer{margin-top:2.4em;color:var(--dim);font-size:.78rem;max-width:62ch}
+  footer a{color:var(--dim)}
+  .warn{color:#a33;max-width:62ch}
+  code{background:#e9e6dd;padding:0 .3em}
+</style>
+</head>
+<body>
+<header>
+  <h1>Aesthetic Measure</h1>
+  <div class="formula">M = O / C</div>
+  <p class="lede">
+    A machine that computes beauty. It has read Birkhoff. It has not looked at the pictures.
+    Each specimen below is squeezed through your browser's own <code>deflate</code> encoder.
+    The bytes it cannot remove are its <i>complexity</i> (C); the bytes it removes are its
+    <i>order</i> (O). Beauty is their ratio. The compressor is the eye.
+  </p>
+</header>
+
+<div id="grid" class="grid" aria-live="polite"></div>
+<p id="verdict" class="verdict"></p>
+<button id="reroll" type="button">Re-measure (new chance)</button>
+<p id="warn" class="warn" hidden>
+  Your browser withholds <code>CompressionStream</code>, so beauty cannot be computed here.
+  It remains, as ever, unquantified.
+</p>
+
+<footer>
+  <p><b>Aesthetic Measure (gzip)</b> — y-a-v-a (yet another visual artist), 2026.
+  After George D. Birkhoff, <i>Aesthetic Measure</i> (1933); Max Bense, <i>Aesthetica</i> /
+  information aesthetics (1954–60); Abraham A. Moles, <i>Information Theory and Esthetic
+  Perception</i> (1958); Claude E. Shannon, <i>A Mathematical Theory of Communication</i> (1948).
+  Specimens nod to Malevich, Mondrian, and Kenneth Martin's chance/order.</p>
+  <p>Licensed <b>CC BY-SA 4.0</b>. No cookies, no trackers, no network, no data leaves this page.
+  The deflate encoder and the pixels are the whole of the work.</p>
+</footer>
+
+<script>
+"use strict";
+const SIZE = 128;               // specimens are SIZE×SIZE
+const RAW = SIZE * SIZE * 4;    // uncompressed RGBA bytes
+
+// --- specimens: each paints an SIZE×SIZE canvas -------------------------------
+function rand(){ return crypto.getRandomValues(new Uint32Array(1))[0] / 4294967296; }
+
+const SPECIMENS = [
+  { name:"The Void", after:"after Malevich / Klein — nothing to see",
+    paint(c){ c.fillStyle="#2b2b2b"; c.fillRect(0,0,SIZE,SIZE); } },
+
+  { name:"Suprematist", after:"after Malevich — one black square",
+    paint(c){ c.fillStyle="#fff"; c.fillRect(0,0,SIZE,SIZE);
+      c.save(); c.translate(SIZE/2,SIZE/2); c.rotate((rand()-.5)*0.5);
+      const s=SIZE*0.5; c.fillStyle="#111"; c.fillRect(-s/2,-s/2,s,s); c.restore(); } },
+
+  { name:"Composition", after:"after Mondrian — lines and three fields",
+    paint(c){ c.fillStyle="#fff"; c.fillRect(0,0,SIZE,SIZE);
+      const x=Math.floor(SIZE*(.35+rand()*.3)), y=Math.floor(SIZE*(.35+rand()*.3));
+      const cols=["#d12d26","#f2cf1b","#1f4fd1"];
+      c.fillStyle=cols[0]; c.fillRect(0,0,x,y);
+      c.fillStyle=cols[1]; c.fillRect(x,SIZE-(SIZE-y),SIZE-x,SIZE-y);
+      c.fillStyle="#111";
+      c.fillRect(x-3,0,6,SIZE); c.fillRect(0,y-3,SIZE,6);
+      c.fillRect(SIZE*.75-3,0,6,SIZE); } },
+
+  { name:"Gradient", after:"a smooth ramp — redundancy on the diagonal",
+    paint(c){ const g=c.createLinearGradient(0,0,SIZE,SIZE);
+      g.addColorStop(0,"#0b2a4a"); g.addColorStop(1,"#e8c06a");
+      c.fillStyle=g; c.fillRect(0,0,SIZE,SIZE); } },
+
+  { name:"Chance", after:"after Kenneth Martin — pure entropy",
+    paint(c){ const img=c.createImageData(SIZE,SIZE);
+      crypto.getRandomValues(img.data); // every byte random, alpha included
+      for(let i=3;i<img.data.length;i+=4) img.data[i]=255; // opaque
+      c.putImageData(img,0,0); } },
+];
+
+// --- the measuring instrument: the browser's deflate encoder ------------------
+async function complexity(bytes){
+  const cs = new CompressionStream("deflate");
+  const buf = await new Response(new Blob([bytes]).stream().pipeThrough(cs)).arrayBuffer();
+  return buf.byteLength;
+}
+
+const gridEl = document.getElementById("grid");
+const verdictEl = document.getElementById("verdict");
+
+async function measureAll(){
+  if (typeof CompressionStream === "undefined"){
+    document.getElementById("warn").hidden = false;
+    document.getElementById("reroll").disabled = true;
+    return;
+  }
+  gridEl.innerHTML = "";
+  const rows = [];
+  for (const spec of SPECIMENS){
+    const card = document.createElement("div");
+    card.className = "card";
+    const cv = document.createElement("canvas");
+    cv.width = cv.height = SIZE;
+    const ctx = cv.getContext("2d", { willReadFrequently:true });
+    spec.paint(ctx);
+    const data = ctx.getImageData(0,0,SIZE,SIZE).data;      // raw RGBA
+    const C = await complexity(data);                        // bytes deflate keeps
+    const O = RAW - C;                                       // bytes deflate removes
+    const M = O / C;                                         // Birkhoff's ratio
+    card.innerHTML =
+      '<canvas width="'+SIZE+'" height="'+SIZE+'"></canvas>'+
+      '<div class="name">'+spec.name+'</div>'+
+      '<div class="after">'+spec.after+'</div>'+
+      '<table>'+
+        '<tr><td>order O (bytes removed)</td><td>'+O.toLocaleString()+'</td></tr>'+
+        '<tr><td>complexity C (bytes kept)</td><td>'+C.toLocaleString()+'</td></tr>'+
+        '<tr><td><b>M = O / C</b></td><td><b>'+M.toFixed(2)+'</b></td></tr>'+
+      '</table>';
+    card.querySelector("canvas").getContext("2d").drawImage(cv,0,0);
+    gridEl.appendChild(card);
+    rows.push({ name:spec.name, M, card });
+  }
+  rows.sort((a,b)=>b.M-a.M);
+  rows.forEach(r=>r.card.classList.remove("crown"));
+  const best = rows[0], worst = rows[rows.length-1];
+  best.card.classList.add("crown");
+  verdictEl.innerHTML =
+    "By Birkhoff's measure, the most beautiful image on this page is <b>"+best.name+
+    "</b> (M&nbsp;=&nbsp;"+best.M.toFixed(2)+"), and the least is "+worst.name+
+    ". The emptier the canvas, the higher the beauty. The compressor has no further questions.";
+}
+
+document.getElementById("reroll").addEventListener("click", measureAll);
+measureAll();
+</script>
+</body>
+</html>

@@ -1454,5 +1454,13 @@
     "source": "Constantin Brancusi, Coloana fara sfarsit (Endless Column), 1938; Roger Shepard, Shepard tone (1964); Jean-Claude Risset, Shepard-Risset glissando",
     "mechanism": "Seven octave-spaced Web Audio oscillators wrapped under a raised-cosine envelope (a live Shepard-Risset glissando) driven by one phase variable that also scrolls a canvas module stack; no samples, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-10-22-aesthetic-measure-gzip",
+    "title": "Aesthetic Measure (gzip)",
+    "year": 2026,
+    "source": "George D. Birkhoff, Aesthetic Measure (1933); Max Bense, Aesthetica / information aesthetics (1954-60); Abraham A. Moles, Information Theory and Esthetic Perception (1958); Claude E. Shannon, A Mathematical Theory of Communication (1948); Kazimir Malevich / Suprematism; Piet Mondrian; Kenneth Martin, Chance and Order",
+    "mechanism": "CompressionStream('deflate') squeezes each canvas specimen's raw RGBA bytes; bytes removed are order O, bytes kept are complexity C, the ratio is the live aesthetic measure.",
+    "status": "pending"
   }
 ]

@@ -1,0 +1,50 @@
+{
+  "work_id": "2026-10-22-aesthetic-measure-gzip",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "The deflate codec is a genuinely new found-object in the catalogue (a browser API as critic) and the compression-ratio-as-aesthetic-verdict mechanism could only live on the web; this opens a location the prior twenty-year argument hadn't touched.",
+    "nuance": "Strongly double-coded — the surface gag ('which picture is the biggest file?') and the literate reading (Birkhoff/Bense/Moles refuted by their own formula) coexist without wall-text explanation, and the restraint is exemplary; falls just short of 5 because the Gradient specimen leans slightly decorative and a couple of the readymade specimens don't quite carry both readings as hard as the Void and Chance do.",
+    "narrative": "Names a precise four-name lineage (Birkhoff, Bense, Moles, Shannon) and sits the five specimens explicitly along the chance↔order axis the catalogue has been drawing since A Chance of Order and Maleglitch; the information-aesthetics angle is a genuine new thread in the twenty-year argument but the move (stage a historical theory through a web mechanism) follows an existing pattern rather than breaking new narrative ground.",
+    "craft": "Single HTML file, ~120 lines of JS, the compressor is the whole instrument and nothing else is bolted on; the table-of-measurements layout, the crown, and the graceful 'beauty cannot be computed here' fallback are all load-bearing and nothing obvious is left to remove.",
+    "wit": "The punchline lands twice — 'It has read Birkhoff. It has not looked at the pictures' on the surface, the void-as-most-beautiful on re-reading — and the fallback line ('It remains, as ever, unquantified') is the kind of dry, self-aware closure the cheerful-cynic voice wants."
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "George D. Birkhoff, Aesthetic Measure (1933)",
+    "Max Bense, Aesthetica / information aesthetics (1954–60)",
+    "Abraham A. Moles, Information Theory and Esthetic Perception (1958)",
+    "Claude E. Shannon, A Mathematical Theory of Communication (1948)",
+    "Kazimir Malevich / Suprematism",
+    "Piet Mondrian",
+    "Kenneth Martin, Chance and Order"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The work takes Birkhoff's 1933 formula M = O/C and literally enacts it through the browser's deflate encoder: bytes removed = order, bytes kept = complexity, and the ratio crowns the emptiest canvas. This is a textbook instance of P1 — the codec is not illustrating information aesthetics, it is performing the measurement. It opens genuinely new catalogue territory (the compression algorithm as a digital readymade, information aesthetics as a new lineage thread) while sitting legibly on the chance↔order axis the practice has been drawing for fifteen years. The punchline is dry, restrained, and lands without explanation; the void winning is both the surface joke and the literate refutation of the whole quantification project.",
+  "reservations": "The Gradient specimen is the weakest of the five — it carries the axis but not much double-coding, and reads slightly decorative next to the Void, Suprematist, Composition, and Chance. The 'Re-measure' button only genuinely re-rolls the Chance specimen (the others are deterministic per visit), so the live/regenerative promise is slightly asymmetric with what the button implies.",
+  "revision_suggestion": "Either swap the Gradient for a more pointed specimen that also double-codes at both depths (e.g. a Reinhardt near-black or a Perlin-noise field that scores between Gradient and Chance) or re-roll all five per click so the 're-measure' button lives up to the 'only change' manifesto.",
+  "jury_model": "minimax/minimax-m3"
+}
