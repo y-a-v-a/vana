@@ -1253,7 +1253,7 @@
     "year": 2026,
     "source": "Marcel Duchamp, infra-mince / infrathin (c. 1935); Mel Bochner, Measurement series (1968-69); 0.30000000000000004.com (Erik Wiffin); IEEE 754 double-precision floating point (1985)",
     "mechanism": "Live IEEE 754 double-precision arithmetic sums 1/N N times client-side; the rounding residue (sum minus 1) is the artwork, sub-pixel on the bar but exact in the ledger.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-08-30-incipit-does-not-copy",
