@@ -1333,7 +1333,7 @@
     "year": 2026,
     "source": "Hans Holbein the Younger, The Ambassadors (1533); Jean-Francois Niceron, La Perspective curieuse (1638); the vanitas / memento mori tradition; y-a-v-a, Costruzione Legittima (2026)",
     "mechanism": "CSS perspective + rotateX foreshortening compresses a vertically pre-stretched canvas skull into true proportion only at the grazing angle where the face-on figures collapse, making the two readings geometrically mutually exclusive.",
-    "status": "pending"
+    "status": "rejected"
   },
   {
     "id": "2026-09-14-manufactures-of-metal-present-to-customs",

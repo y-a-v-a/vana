@@ -44,6 +44,24 @@
 
   @keyframes turn { to { transform: rotate(3600deg); } }
 
+  /* The two fallback overlays. Their DEFAULT state is declared HERE,
+     before the conditional blocks below, so that the equal-specificity
+     overrides inside @supports / @media always win the cascade. Declaring
+     these after the conditions is what let BOTH overlays cover the disc on
+     browsers that actually have the motor (e.g. Chrome on macOS). */
+  .no-motor, .reduced {
+    position: fixed;
+    inset: 0;
+    place-items: center;
+    padding: 24px;
+    text-align: center;
+    background: #111;
+    z-index: 5;
+  }
+  .no-motor { display: grid; }  /* shown until the motor is detected */
+  .reduced  { display: none; }  /* shown only under reduced-motion */
+  .no-motor span, .reduced span { max-width: 34ch; color: #ddd; }
+
   /* This is the whole work. Support the spec, get the depth.
      Do not support it, get a print. */
   @supports (animation-timeline: scroll()) {
@@ -59,9 +77,8 @@
      a still Rotorelief is only a drawing, which is the point. */
   @media (prefers-reduced-motion: reduce) {
     .disc { animation: none !important; }
-    .reduced { display: block; }
+    .reduced { display: grid; }
   }
-  .reduced { display: none; }
 
   .hud {
     position: fixed;
@@ -94,18 +111,6 @@
   .label b { color: #cfcfcf; font-weight: 600; }
   .label .cartel { max-width: 40ch; }
   .label a { color: inherit; }
-
-  .no-motor, .reduced {
-    position: fixed;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    padding: 24px;
-    text-align: center;
-    background: #111;
-    z-index: 5;
-  }
-  .no-motor span, .reduced span { max-width: 34ch; color: #ddd; }
 </style>
 </head>
 <body>
