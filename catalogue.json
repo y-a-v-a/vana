@@ -1293,7 +1293,7 @@
     "year": 2026,
     "source": "pentimento (art-historical term); Lillian Hellman, Pentimento (1973); Robert Rauschenberg, Erased de Kooning Drawing (1953); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "HTML <del>/<ins> semantic edit elements rendered by the user-agent stylesheet: the deleted words stay in the DOM (display:none toggles the 'finished' reading) and ride along in textContent, so every clipboard copy carries the correction.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-09-04-in-situ-8-7-cm",
