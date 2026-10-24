@@ -1365,7 +1365,7 @@
     "year": 2026,
     "source": "Marcel Duchamp, Rotoreliefs (Optical Discs), 1935; Marcel Duchamp, Anemic Cinema, 1926",
     "mechanism": "Pure-CSS scroll-driven animation (animation-timeline: scroll(root)) binds the disc's rotation to scroll position with no timer or JS motion; @supports and prefers-reduced-motion downgrade it to a still print.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-09-24-copy-link-to-highlight",
