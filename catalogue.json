@@ -1462,5 +1462,13 @@
     "source": "George D. Birkhoff, Aesthetic Measure (1933); Max Bense, Aesthetica / information aesthetics (1954-60); Abraham A. Moles, Information Theory and Esthetic Perception (1958); Claude E. Shannon, A Mathematical Theory of Communication (1948); Kazimir Malevich / Suprematism; Piet Mondrian; Kenneth Martin, Chance and Order",
     "mechanism": "CompressionStream('deflate') squeezes each canvas specimen's raw RGBA bytes; bytes removed are order O, bytes kept are complexity C, the ratio is the live aesthetic measure.",
     "status": "pending"
+  },
+  {
+    "id": "2026-10-26-pierced-form-carve-to-open",
+    "title": "Pierced Form (Carve to Open)",
+    "year": 2026,
+    "source": "Barbara Hepworth, Pierced Form (1931); Henry Moore (the hole as positive form); CSS Shapes / shape-outside specification",
+    "mechanism": "CSS Shapes (shape-outside) carves transparent, pixel-less circular exclusions that the running prose wraps around; a range input enlarges the aperture and reflows the text live.",
+    "status": "pending"
   }
 ]

@@ -1,0 +1,46 @@
+{
+  "work_id": "2026-10-26-pierced-form-carve-to-open",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 3,
+    "narrative": 3,
+    "craft": 4,
+    "wit": 3
+  },
+  "score_notes": {
+    "novelty": "The uncatalogued pairing of Hepworth’s pierced form with CSS shape-outside text exclusion creates a genuinely web-only negative-space sculpture, though it does not open an entirely new artistic ontology.",
+    "nuance": "The exclusion mechanism and sculpture argument are one object, but the long prose explicitly explains the invisible-hole gag and therefore spends the restrained second reading it otherwise earns.",
+    "narrative": "It materially restages Hepworth’s named 1931 sculpture, but the claimed chance side is only deterministic device-dependent reflow rather than a legible chance mechanism.",
+    "craft": "The dependency-free shape-outside implementation, single control, and absence of fallbacks or unused machinery make this close to the smallest build that completes the thought.",
+    "wit": "The retreating prose and ‘carve’ control land as a clean conceptual gag once, while the earnest explanation largely prevents a dry second laugh."
+  },
+  "weighted_total": 34,
+  "verdict": "borderline",
+  "references_named": [
+    "Barbara Hepworth, Pierced Form (1931)",
+    "Henry Moore, the hole as positive form",
+    "CSS Shapes / shape-outside specification"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "All hard gates pass: the work is web-native, makes a clear argument about sculptural absence, and enacts that argument through live CSS text exclusion rather than merely illustrating it. It is materially distinct from the catalogue’s clip-path, visibility, and source-versus-render works, while its compact no-network implementation satisfies the open-license and attribution requirements. Its main weakness is that the lengthy explanatory prose names the art-historical answer and browser trick explicitly, while the claimed chance axis is overstated.",
+  "reservations": "The didactic paragraph both supplies the art-historical reading and explains the browser trick, weakening P7; P5 is also overstated because resize-dependent wrapping is contingency rather than genuine chance.",
+  "revision_suggestion": "Shorten and de-explain the running prose while retaining enough text to reveal the bend, then either introduce a real per-visit chance variable or remove the chance claim; keep the implementation otherwise.",
+  "jury_model": "minimax/minimax-m3"
+}

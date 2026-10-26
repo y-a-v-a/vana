@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Pierced Form</title>
+<style>
+  :root{
+    --paper:#f4f1ea;
+    --ink:#1a1714;
+    --r:42%;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink)}
+  body{
+    font:400 clamp(16px,1.15rem,22px)/1.65 Georgia,"Times New Roman",serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  main{max-width:42em;margin:0 auto;padding:10vh 6vw 4rem}
+  h1{
+    font-weight:400;font-size:1.1rem;letter-spacing:.32em;
+    text-transform:uppercase;margin:0 0 2.2rem;opacity:.6;
+  }
+
+  /* The sculpture. It is never painted — it is only declared:
+     two regions the layout engine is forbidden to fill. */
+  .hole{
+    display:block;height:20em;width:46%;
+    background:transparent;border:0;margin:0;
+    pointer-events:none;
+  }
+  .hole-l{float:left; shape-outside:circle(var(--r) at 72% 50%);}
+  .hole-r{float:right;shape-outside:circle(var(--r) at 28% 50%);}
+
+  article{text-align:justify;hyphens:auto}
+  article p{margin:0}
+
+  .tool{
+    clear:both;margin:3rem 0 0;padding-top:1.4rem;
+    border-top:1px solid rgba(26,23,20,.18);
+    font:400 .82rem/1.5 ui-monospace,Menlo,Consolas,monospace;
+    letter-spacing:.02em;opacity:.85;
+  }
+  .tool label{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+  .tool input[type=range]{flex:1 1 12rem;min-width:10rem;accent-color:var(--ink)}
+  .read{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  footer{
+    clear:both;margin-top:2.6rem;
+    font:400 .72rem/1.6 ui-monospace,Menlo,Consolas,monospace;
+    opacity:.55;
+  }
+  footer a{color:inherit}
+</style>
+</head>
+<body>
+<main>
+  <h1>Pierced Form</h1>
+
+  <article>
+    <!-- The two curves of an opening. Transparent, borderless, pixel-less:
+         present to the layout engine only as places the words may not go. -->
+    <b class="hole hole-l" aria-hidden="true"></b>
+    <b class="hole hole-r" aria-hidden="true"></b>
+    <p>In 1931 Barbara Hepworth bored a hole clean through a block of alabaster
+    and decided the hole was the sculpture. Everything solid around it had
+    become mere support — stone kept on only to give the opening an edge. What
+    you are meant to look at is the part that was taken away. Here there is no
+    stone to take away. The opening below is not drawn; it is only declared, a
+    region the layout engine has been told the words may not occupy. The
+    sentences arrive, meet the boundary of a shape that has no colour, no
+    border, no pixels of its own, and turn aside. The void you see is made
+    entirely of their refusal to enter it. Carve with the control: widen the
+    aperture and the text retreats further, a revelation performed by
+    subtraction. Close it to nothing and the block heals into uncarved prose,
+    the sculpture un-made. The opening keeps no record of itself and reflows
+    with every window; where each word happens to break around the curve is
+    left to chance and to your device. The stone is not shown because, on the
+    web, there was never any stone — only the hole, and the paragraph bending
+    around the place where it is not.</p>
+  </article>
+
+  <div class="tool">
+    <label>
+      carve
+      <input id="r" type="range" min="0" max="50" value="42" step="1"
+             aria-label="aperture radius, percent">
+      <span class="read" id="out">aperture 42%</span>
+    </label>
+  </div>
+
+  <footer>
+    <strong>Pierced Form (Carve to Open)</strong> — y-a-v-a, 2026.<br>
+    After Barbara Hepworth, <em>Pierced Form</em> (1931); and Henry Moore, the
+    hole as positive form. Mechanism: CSS Shapes (<code>shape-outside</code>).<br>
+    Medium: pixels not placed. No cookies, no trackers, no network, no storage.<br>
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+    View source — the sculpture is the one thing not in it.
+  </footer>
+</main>
+
+<script>
+  // The whole program: hand the chisel to the viewer.
+  // Changing the radius changes nothing that is drawn — only where
+  // drawing is forbidden. Carving is subtraction, performed live.
+  (function () {
+    var root = document.documentElement;
+    var r = document.getElementById('r');
+    var out = document.getElementById('out');
+    function carve() {
+      root.style.setProperty('--r', r.value + '%');
+      out.textContent = 'aperture ' + r.value + '%';
+    }
+    r.addEventListener('input', carve);
+    carve();
+  })();
+</script>
+</body>
+</html>
