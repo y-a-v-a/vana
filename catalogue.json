@@ -1470,5 +1470,13 @@
     "source": "Barbara Hepworth, Pierced Form (1931); Henry Moore (the hole as positive form); CSS Shapes / shape-outside specification",
     "mechanism": "CSS Shapes (shape-outside) carves transparent, pixel-less circular exclusions that the running prose wraps around; a range input enlarges the aperture and reflows the text live.",
     "status": "pending"
+  },
+  {
+    "id": "2026-10-29-parergon-the-frame-is-not-drawn-by-you",
+    "title": "Parergon (The Frame Is Not Drawn by You)",
+    "year": 2026,
+    "source": "Jacques Derrida, The Truth in Painting / Le parergon (1978); Immanuel Kant, Critique of the Power of Judgment (1790); Marcel Duchamp / the readymade",
+    "mechanism": "CSS :focus-visible plus the unstyled user-agent focus outline: the frame appears for keyboard arrivals and is withheld from pointer clicks, a verdict the page reads via matches(':focus-visible') but cannot forge.",
+    "status": "pending"
   }
 ]

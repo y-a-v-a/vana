@@ -1,0 +1,48 @@
+{
+  "work_id": "2026-10-29-parergon-the-frame-is-not-drawn-by-you",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 3,
+    "narrative": 3,
+    "craft": 3,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "The native :focus-visible outline is a fresh readymade and a browser-only adjudicating mechanism absent from the catalogue, although it extends the already explored ontology of browser chrome rather than opening a wholly new location.",
+    "nuance": "The unchanged canvas becoming framed according to input modality supplies both a casual access gag and a parergon argument, but the verdict text and conceptual footer explicitly explain both readings instead of letting the native mechanism carry the double code.",
+    "narrative": "The work clearly answers the gallery-threshold lineage of Duchamp, Brian O’Doherty, and Piero Manzoni by relocating institutional judgment into a browser accessibility heuristic, but its per-visit random geometric canvas only gestures toward the chance/order axis.",
+    "craft": "The dependency-free single page is clean and workable, but the empty focus rule, verbose explanatory apparatus, and dispensable random composition leave it slightly larger and more redundant than the smallest completed thought.",
+    "wit": "The browser’s keyboard-versus-pointer rule produces the dry mouse-users-get-no-art gag and, on rereading, a sharper joke about modality acting as an invisible gatekeeper."
+  },
+  "weighted_total": 34,
+  "verdict": "borderline",
+  "references_named": [
+    "Jacques Derrida, The Truth in Painting / Le parergon (1978)",
+    "Immanuel Kant, Critique of the Power of Judgment (1790)",
+    "Marcel Duchamp / the readymade",
+    "Brian O’Doherty, Inside the White Cube",
+    "Piero Manzoni / pedestal as readymade"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "All six hard gates pass: the browser-dependent focus heuristic carries a clear argument about the moment a picture becomes a work, while the page states CC BY 4.0, names its sources and y-a-v-a, collects no data, and remains materially distinct from the catalogue. Its strongest feature is the precise conversion of Derrida’s parergon into an engine-owned judgment that visibly grants or withholds the frame. The main weakness is that the work explains its wit and inserts a largely ornamental chance operation where the conceptual tension should be.",
+  "reservations": "The verdict and footer reduce the double coding by spelling out the central gag and parergon reading, while the crypto-random geometric canvas is largely decorative and does not genuinely stage the chance/order tension claimed by P5.",
+  "revision_suggestion": "Retain the native outline and only a terse state attestation, compress the conceptual footer to the required attribution and licence, and either make the random variation consequential to the framing verdict or use a fixed ergon and drop the P5 claim.",
+  "jury_model": "minimax/minimax-m3"
+}

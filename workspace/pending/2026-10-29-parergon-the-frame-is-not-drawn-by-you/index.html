@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parergon (The Frame Is Not Drawn by You)</title>
+<meta name="referrer" content="no-referrer">
+<style>
+  :root{
+    --ink:#1a1714; --ground:#e9e4da; --faint:#8a8276; --line:#cfc8ba;
+  }
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--ground); color:var(--ink);
+    font:16px/1.5 Georgia,"Times New Roman",serif;
+    display:flex; flex-direction:column; align-items:center;
+    padding:5vh 1rem 2rem; box-sizing:border-box; min-height:100%;
+  }
+  header{max-width:40rem; text-align:center}
+  h1{font-size:1.25rem; font-weight:400; letter-spacing:.02em; margin:0 0 .3rem}
+  .sub{color:var(--faint); font-size:.82rem; font-style:italic; margin:0 0 2.2rem}
+
+  /* The picture. Its ONLY frame is the native focus outline the
+     browser draws — and only when the browser's :focus-visible
+     heuristic decides the visitor deserves it. We do not style the
+     outline: each OS supplies its own frame. */
+  #work{
+    display:block; width:min(62vw,320px); height:min(62vw,320px);
+    background:#fff; cursor:pointer;
+    /* no border, no box-shadow, no CSS frame of our own */
+  }
+  #work:focus{ /* focused but unworthy: the ring is withheld here */ }
+
+  figure{margin:0; display:flex; flex-direction:column; align-items:center}
+  figcaption{
+    margin-top:1.4rem; min-height:2.6em; max-width:30rem; text-align:center;
+    font-size:1.02rem;
+  }
+  .verdict{font-weight:400}
+  .verdict.on{color:var(--ink)}
+  .verdict.off{color:var(--faint)}
+  .attest{
+    margin-top:.8rem; font:12px/1.5 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    color:var(--faint); letter-spacing:.01em;
+  }
+  .hint{margin-top:.2rem; font-size:.78rem; color:var(--faint); font-style:italic}
+
+  footer{
+    margin-top:auto; padding-top:2.5rem; max-width:38rem; text-align:center;
+    font-size:.72rem; line-height:1.6; color:var(--faint);
+  }
+  footer a{color:var(--faint)}
+  footer .t{border-top:1px solid var(--line); padding-top:1rem; display:block}
+</style>
+</head>
+<body>
+  <header>
+    <h1>Parergon</h1>
+    <p class="sub">The frame is not drawn by you.</p>
+  </header>
+
+  <figure>
+    <!-- tabindex makes it reachable; the frame it may receive is the
+         user-agent focus outline, rendered by the OS, never in the DOM. -->
+    <canvas id="work" width="640" height="640" tabindex="0"
+            aria-label="A small abstract painting"></canvas>
+    <figcaption>
+      <div class="verdict off" id="verdict" aria-live="polite">Unframed.</div>
+      <div class="attest" id="attest">:focus = false · :focus-visible = false</div>
+      <div class="hint">Click the picture with a pointer. Then reach it with the Tab key. The pixels will not change.</div>
+    </figcaption>
+  </figure>
+
+  <footer>
+    <span class="t">
+      <strong>Parergon (The Frame Is Not Drawn by You)</strong>, 2026. Pixels on screen.<br>
+      After Jacques Derrida, <em>The Truth in Painting</em> (<em>Le parergon</em>, 1978);
+      Immanuel Kant, <em>Critique of the Power of Judgment</em> (1790); Marcel Duchamp / the readymade.<br>
+      The painting is the <em>ergon</em>; the frame is the <em>parergon</em>. The CSS
+      <code>:focus-visible</code> heuristic — inside the browser, not reachable by this page —
+      decides whether the frame appears. We neither draw it nor override it.<br>
+      A work by <strong>y-a-v-a</strong> (Vincent Bruijn). AI-generated, DNA-validated.
+      Licensed <strong>CC BY 4.0</strong>. No cookies, no trackers, no data leaves your device.
+    </span>
+  </footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // --- the ergon: a per-visit painting, held only in RAM ---------------
+  var cv = document.getElementById('work');
+  var ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+  function rnd(){ // crypto chance, no seed, no storage
+    var a = new Uint32Array(1);
+    (self.crypto||self.msCrypto).getRandomValues(a);
+    return a[0] / 4294967296;
+  }
+  function paint(){
+    var pal = ['#b23a2e','#2f4b6e','#d9b23a','#2a2622','#e9e4da','#6a7f52'];
+    ctx.fillStyle = '#f3efe7'; ctx.fillRect(0,0,W,H);
+    // a quiet modernist composition of a few flat planes
+    var n = 3 + Math.floor(rnd()*3);
+    for(var i=0;i<n;i++){
+      var x = rnd()*W*0.7, y = rnd()*H*0.7;
+      var w = (0.2+rnd()*0.55)*W, h = (0.2+rnd()*0.55)*H;
+      ctx.fillStyle = pal[Math.floor(rnd()*pal.length)];
+      ctx.globalAlpha = 0.85;
+      ctx.fillRect(x,y,w,h);
+    }
+    ctx.globalAlpha = 1;
+    // one decisive line
+    ctx.strokeStyle = '#1a1714'; ctx.lineWidth = Math.max(2, W*0.012);
+    ctx.beginPath();
+    ctx.moveTo(rnd()*W, 0); ctx.lineTo(rnd()*W, H); ctx.stroke();
+  }
+  paint();
+
+  // --- the parergon: read the browser's verdict, do not forge it --------
+  var verdict = document.getElementById('verdict');
+  var attest  = document.getElementById('attest');
+
+  function supportsFV(){
+    try { cv.matches(':focus-visible'); return true; } catch(e){ return false; }
+  }
+  var FV = supportsFV();
+
+  function read(){
+    var focused = cv.matches(':focus');
+    var framed  = FV ? cv.matches(':focus-visible') : focused;
+
+    attest.textContent =
+      ':focus = ' + focused + ' · :focus-visible = ' + (FV ? framed : '(unsupported)');
+
+    if(!focused){
+      verdict.textContent = 'Unframed. A picture waiting to be approached.';
+      verdict.className = 'verdict off';
+    } else if(framed){
+      verdict.textContent = 'The frame is granted. Now it is a work.';
+      verdict.className = 'verdict on';
+    } else {
+      verdict.textContent = 'Focused — but the browser withholds the frame. Still just a picture.';
+      verdict.className = 'verdict off';
+    }
+  }
+
+  cv.addEventListener('focus', read);
+  cv.addEventListener('blur',  read);
+  // the modality that decides :focus-visible is set by the last input event;
+  // re-reading after key/pointer keeps the attestation honest.
+  cv.addEventListener('keydown', function(){ requestAnimationFrame(read); });
+  cv.addEventListener('pointerdown', function(){ requestAnimationFrame(read); });
+
+  read();
+})();
+</script>
+</body>
+</html>
