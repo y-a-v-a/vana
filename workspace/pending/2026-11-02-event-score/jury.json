@@ -1,0 +1,47 @@
+{
+  "work_id": "2026-11-02-event-score",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 3,
+    "narrative": 4,
+    "craft": 3,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "The browser’s sync–microtask–timer scheduler as the performer is a new found object and mechanism absent from the catalogue, and its collision with Brecht’s event scores could not be staged as a print.",
+    "nuance": "The scheduler literally creates the gap between score and performance, but the deck names the precedence and authorship joke, so the double coding is explained rather than left to surface and literate viewers.",
+    "narrative": "It answers A Chance of Order by moving the order from the artist’s rule to browser-enforced queue precedence, so a named prior work and the chance/order axis are structurally joined rather than merely name-dropped.",
+    "craft": "The two-column JavaScript build is clean and compact, but the decorative per-visit hue, explanatory copy, and settle animation leave it slightly more furnished than the thought strictly needs.",
+    "wit": "The event/event-loop collision lands first as a machine-reorders-your-list gag and then as the verdict’s dry joke that faithful authorship was only accidental."
+  },
+  "weighted_total": 36,
+  "verdict": "borderline",
+  "references_named": [
+    "George Brecht, event scores / Fluxus (1959– )",
+    "John Cage",
+    "the JavaScript event loop (microtask/macrotask precedence)",
+    "y-a-v-a, A Chance of Order (2021)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "All hard gates pass: the JavaScript event loop is a genuinely web-native performer, the score-versus-performance distinction is produced rather than illustrated, and the ethics and attribution are explicit. Its strongest feature is the fresh collision between Brecht’s event scores and browser queue precedence, with chance casting placed against runtime-enforced order. The main weakness is that the explanatory deck and queue labels resolve the double reading too explicitly, while the random accent contributes little beyond decoration.",
+  "reservations": "The page explains its event/event-loop pun and authorship argument rather than leaving the literate reading to emerge; the hue is conceptually decorative, and the phrase ‘You wrote the order’ conflicts with the artist’s authorship premise.",
+  "revision_suggestion": "Trim the deck to the title and queue labels, remove the per-visit hue, correct ‘You wrote the order’ to ‘The artist wrote the order,’ and add the A Chance of Order lineage to the page footer.",
+  "jury_model": "minimax/minimax-m3"
+}
