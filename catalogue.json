@@ -1494,5 +1494,13 @@
     "source": "On Kawara, Today series (1966-2013); On Kawara, I Am Still Alive (1970- ); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "document.lastModified (host/filesystem Last-Modified for this very file) + Intl.RelativeTimeFormat recomputed every second; the age, stamp and hue are all minted from the birth instant, which reproduction resets to now.",
     "status": "pending"
+  },
+  {
+    "id": "2026-11-05-pop-up-art-blocked",
+    "title": "Pop-up Art (Blocked)",
+    "year": 2026,
+    "source": "Richard Hamilton, letter to Alison and Peter Smithson (16 January 1957), the definition of Pop Art; Richard Hamilton, Just what is it that makes today's homes so different, so appealing? (1956); Roy Lichtenstein, Ben-Day dots; The pop-up ad and default browser pop-up blockers (Opera, Mozilla, Internet Explorer XP SP2, 2000-2004); y-a-v-a, Pop Whaam! (2020); y-a-v-a, The Agreeing Internet (2009)",
+    "mechanism": "An unsolicited window.open() on load whose null return (the browser's default pop-up blocker) is reported as the verdict; a consent click opens a locally written about:blank pop-up that window.close()s itself after 11 seconds; no network, no storage.",
+    "status": "pending"
   }
 ]

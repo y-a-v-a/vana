@@ -1,0 +1,49 @@
+{
+  "work_id": "2026-11-05-pop-up-art-blocked",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "The pop-up blocker as jury is a fresh found-object and a fresh mechanism the catalogue lacks; only the browser could do this and it stages a real policy verdict rather than a visual gag — earns the extra point above the median.",
+    "nuance": "Concept and execution collapse cleanly: the null return IS the verdict, the self-closing window IS 'transient/expendable', and the Hamilton list strikes through one word per second; double-coded without wall text, restraint intact.",
+    "narrative": "Names and answers Pop Whaam! (2020) explicitly, sits beside The Agreeing Internet (2009) as a portrait of web manners, and extends the twenty-year argument by moving Pop from image to browser policy — a move the catalogue did not have.",
+    "craft": "Single page, one window.open, one self-closing about:blank, no network or storage; the smallest build that completes the thought, with a live ledger that is genuinely useful rather than decorative.",
+    "wit": "The pun lands on the surface (pop-up / Pop Art) and again on re-reading (consent undoes popularity, the browser is the gallery committee); the Hamilton list ticking down is the joke and the mechanism in one."
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Richard Hamilton, letter to Alison and Peter Smithson (16 January 1957) — definition of Pop Art",
+    "Richard Hamilton, Just what is it that makes today's homes so different, so appealing? (1956)",
+    "Roy Lichtenstein — Ben-Day dots",
+    "Pop-up ad and default browser pop-up blockers (Opera, Mozilla, Internet Explorer XP SP2, 2000–2004)",
+    "y-a-v-a, Pop Whaam! (2020)",
+    "y-a-v-a, The Agreeing Internet (2009)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "Pop-up Art (Blocked) lets the browser's built-in pop-up blocker deliver the verdict on Pop Art, then stages Hamilton's 1957 definition as a self-closing about:blank window that ticks through its eleven adjectives before window.close()ing itself. The mechanism is the argument: null is the jury's ruling, the self-destruct enacts 'transient' and 'expendable', and consent undoes 'popular'. It answers Pop Whaam! by relocating Pop from image to browser policy, sits cleanly beside The Agreeing Internet, and is delivered with the catalogue's usual restraint — no network, no storage, CC BY-SA, attribution in place.",
+  "reservations": "The Ben-Day-dot radial-gradient is a small piece of decoration that does not strictly carry the argument; the catalogue's strongest works tend to be even leaner. The 'Allow Pop-up Art' button is a touch literal as a UI affordance, though it doubles as the consent gag.",
+  "revision_suggestion": "Consider letting the Hamilton list drive the only visual change in the pop-up (no flashing POP! headline) so the strike-through is the entire surface; the parent page could also drop the button and rely on the unsolicited attempt alone, trusting the null verdict to carry the work.",
+  "jury_model": "minimax/minimax-m3"
+}
