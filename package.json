@@ -31,7 +31,7 @@
     "jury:sample": "tsx src/jury-sample.ts"
   },
   "dependencies": {
-    "@anthropic-ai/claude-agent-sdk": "^0.3.178",
+    "@anthropic-ai/claude-agent-sdk": "^0.3.318",
     "dotenv": "^16.4.5",
     "zod": "^4.0.0"
   },
