@@ -4,7 +4,7 @@
   "workBudget": { "minutes": 20 },
   "costFuse": { "perWakeUsd": 5, "perDayUsd": 20 },
   "models": {
-    "generator": "claude-opus-4-8",
+    "generator": "claude-opus-5-5",
     "jury": "minimax/minimax-m3"
   },
   "thresholds": { "strong": 38, "borderline": 30 },
