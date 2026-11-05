@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { homedir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { config as loadDotenv } from "dotenv";
@@ -9,6 +10,13 @@ import { DAY_NAMES } from "./schedule.ts";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 loadDotenv({ path: resolve(ROOT, ".env") });
+
+// Vana's own secrets live outside the repo and outside the shell profile, so the
+// agent can use keys dedicated to it. Loaded with `override` so they win over
+// anything `.zshenv` exported. Missing file = no-op (CI, tests).
+export const SECRETS_FILE =
+  process.env.VANA_SECRETS_FILE?.trim() || resolve(homedir(), ".config/vana/secrets.env");
+loadDotenv({ path: SECRETS_FILE, override: true });
 
 const ConfigSchema = z.object({
   interval: z.object({ hours: z.number().positive() }),
@@ -110,15 +118,15 @@ export function loadConfig(): Config {
  * if either key is missing — the harness is useless without both.
  */
 export function loadSecrets(): Secrets {
-  const anthropicApiKey = process.env.ANTHROPIC_API_KEY?.trim();
+  const anthropicApiKey = process.env.VANA_ANTHROPIC_API_KEY?.trim();
   const openRouterApiKey = process.env.OPENROUTER_API_KEY?.trim();
   const missing: string[] = [];
-  if (!anthropicApiKey) missing.push("ANTHROPIC_API_KEY (generator)");
+  if (!anthropicApiKey) missing.push("VANA_ANTHROPIC_API_KEY (generator)");
   if (!openRouterApiKey) missing.push("OPENROUTER_API_KEY (jury)");
   if (missing.length > 0) {
     throw new Error(
       `Missing required secret(s): ${missing.join(", ")}. ` +
-        `Set them in .env (see .env.example).`,
+        `Set them in ${SECRETS_FILE} (see .env.example).`,
     );
   }
   return { anthropicApiKey: anthropicApiKey!, openRouterApiKey: openRouterApiKey! };

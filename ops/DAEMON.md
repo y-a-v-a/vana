@@ -65,8 +65,9 @@ npm run daemon:stop
 ```
 
 ## Notes
-- Secrets come from `.zshenv` via `zsh -lc` in the plist — no secrets are stored
-  in the plist or the repo.
+- Secrets come from `~/.config/vana/secrets.env` (chmod 600; see `.env.example`),
+  which overrides `.zshenv` (still sourced via `zsh -lc` in the plist). No secrets
+  are stored in the plist or the repo. Restart the daemon after changing it.
 - Each wake auto-commits and pushes every candidate (pending *and* rejected) to
   GitHub; approvals (dashboard) push `workspace/published/` which triggers deploy.
 - Logs: `logs/daemon.out.log` / `logs/daemon.err.log` (gitignored).

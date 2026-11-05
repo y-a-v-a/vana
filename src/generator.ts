@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { query, type Options, type SDKResultMessage } from "@anthropic-ai/claude-agent-sdk";
 import { z } from "zod";
-import { loadConfig } from "./config.ts";
+import { loadConfig, SECRETS_FILE } from "./config.ts";
 import { loadDna } from "./dna.ts";
 import { catalogueDigest } from "./catalogue.ts";
 import { loadGuidance, recentGuidance } from "./guidance.ts";
@@ -144,19 +144,56 @@ export function readGeneratedFiles(dir: string): GeneratedFiles {
 
 // ── The agentic step (integration; exercised by `npm run once` / refine) ──────
 
+// Variables that would re-route the Claude Code subprocess away from the
+// first-party Anthropic API (OpenRouter via base URL + bearer token, or a cloud
+// provider), plus secrets the agent has no business seeing.
+const STRIPPED_ENV = [
+  "ANTHROPIC_BASE_URL",
+  "ANTHROPIC_AUTH_TOKEN",
+  "ANTHROPIC_API_KEY",
+  "ANTHROPIC_CUSTOM_HEADERS",
+  "CLAUDE_CODE_USE_BEDROCK",
+  "CLAUDE_CODE_USE_VERTEX",
+  "CLAUDE_CODE_USE_FOUNDRY",
+  "VANA_ANTHROPIC_API_KEY",
+  "OPENROUTER_API_KEY",
+  "ONI_MAIL_PASSWORD",
+];
+
+/**
+ * Environment for the generator's Claude Code subprocess: the inherited env
+ * minus anything that could redirect it, with Vana's dedicated key as
+ * ANTHROPIC_API_KEY. Pure, so the routing guarantee is unit-testable.
+ */
+export function generatorEnv(base: NodeJS.ProcessEnv = process.env): Record<string, string | undefined> {
+  const key = base.VANA_ANTHROPIC_API_KEY?.trim();
+  if (!key) {
+    throw new Error(
+      `VANA_ANTHROPIC_API_KEY is required for the generator. Put it in ${SECRETS_FILE} (see .env.example).`,
+    );
+  }
+  const env: Record<string, string | undefined> = { ...base };
+  for (const name of STRIPPED_ENV) delete env[name];
+  env.ANTHROPIC_API_KEY = key;
+  env.CLAUDE_AGENT_SDK_CLIENT_APP = "vana";
+  return env;
+}
+
 /** Run the Opus agent in `workDir` with the given task + tools; return the result. */
 async function runAgent(
   workDir: string,
   task: string,
   allowedTools: string[],
 ): Promise<SDKResultMessage> {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is required for the generator (see .env.example).");
-  }
   const cfg = loadConfig();
   const options: Options = {
     model: cfg.models.generator,
     cwd: workDir,
+    env: generatorEnv(),
+    // Isolation: don't load ~/.claude or project settings — their `env`,
+    // `apiKeyHelper` or CLAUDE.md could override the key/endpoint or leak
+    // coding preferences into the artist's context.
+    settingSources: [],
     systemPrompt: {
       type: "preset",
       preset: "claude_code",

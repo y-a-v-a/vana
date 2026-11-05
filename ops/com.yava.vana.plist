@@ -5,8 +5,9 @@
   <key>Label</key>
   <string>com.yava.vana</string>
 
-  <!-- Run via `zsh -lc` so .zshenv is sourced (ANTHROPIC_API_KEY,
-       OPENROUTER_API_KEY, ONI_MAIL_*). Absolute node path avoids PATH issues. -->
+  <!-- Secrets come from ~/.config/vana/secrets.env (VANA_ANTHROPIC_API_KEY, …),
+       loaded by src/config.ts. Run via `zsh -lc` so .zshenv still supplies
+       anything not in that file. Absolute node path avoids PATH issues. -->
   <key>ProgramArguments</key>
   <array>
     <string>/bin/zsh</string>

@@ -16,7 +16,7 @@ The harness encodes **no taste of its own** — it *applies* `identity/DNA.md`.
                                     │
                                     ▼
         GENERATOR — Claude Opus (Agent SDK)         writes a self-contained candidate:
-        ANTHROPIC_API_KEY                            index.html + motivation.md + meta.json
+        VANA_ANTHROPIC_API_KEY (first-party API)     index.html + motivation.md + meta.json
                                     │
                                     ▼
         JURY — OpenRouter (minimax/minimax-m3)       applies DNA §8 → gates + 0–5 scores
@@ -148,14 +148,18 @@ Cost asymmetry: generation is ~99% of the spend (~$0.37–0.79/work), the jury i
   for the generator, OpenRouter pricing × usage for the jury). A trip stops the wake.
 - **Schedule:** every 6h, via the daemon's own timer.
 - **Resilience:** launchd `RunAtLoad` + `KeepAlive` restart the daemon on crash
-  and on reboot. Secrets reach it because the plist runs `zsh -lc`, which sources
-  `.zshenv`.
+  and on reboot. Secrets reach it from `~/.config/vana/secrets.env`; the plist
+  also runs `zsh -lc`, so `.zshenv` is sourced for anything not in that file.
 
 ## Configuration & secrets
 
 - `vana.config.json` — interval, work budget, `$` fuse, model ids, lifecycle
   paths, `thresholds`, dashboard port + tailnet host, email recipient, git remote/branch.
-- Secrets from the environment (`.zshenv`): `ANTHROPIC_API_KEY` (generator),
+- Secrets from `~/.config/vana/secrets.env` (chmod 600, loaded with override so it
+  beats `.zshenv`; path overridable via `VANA_SECRETS_FILE`) or the environment:
+  `VANA_ANTHROPIC_API_KEY` (generator — a Vana-only key, passed to the Agent SDK
+  subprocess as `ANTHROPIC_API_KEY` with `ANTHROPIC_BASE_URL`/`ANTHROPIC_AUTH_TOKEN`
+  stripped and `settingSources: []`, so it always hits the first-party API),
   `OPENROUTER_API_KEY` (jury), and `ONI_MAIL_SERVER` / `ONI_MAIL_ADDRESS` /
   `ONI_MAIL_PASSWORD` (SMTP, port 465). No secrets in the repo or the plist.
 

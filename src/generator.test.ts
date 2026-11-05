@@ -5,6 +5,7 @@ import {
   buildRefineTask,
   validateSelfContained,
   parseMeta,
+  generatorEnv,
 } from "./generator.ts";
 
 test("task prompt embeds catalogue digest and the three filenames", () => {
@@ -103,4 +104,33 @@ test("buildGeneratorTask folds in accumulated guidance when present", () => {
 
 test("buildGeneratorTask omits the guidance section when there is none", () => {
   assert.doesNotMatch(buildGeneratorTask("- Catalogued Work", ""), /accumulated guidance/i);
+});
+
+test("generatorEnv pins the subprocess to first-party Anthropic with Vana's key", () => {
+  const env = generatorEnv({
+    PATH: "/usr/bin",
+    VANA_ANTHROPIC_API_KEY: " sk-ant-vana ",
+    ANTHROPIC_API_KEY: "sk-ant-global",
+    ANTHROPIC_BASE_URL: "https://openrouter.ai/api",
+    ANTHROPIC_AUTH_TOKEN: "sk-or-xyz",
+    CLAUDE_CODE_USE_BEDROCK: "1",
+    OPENROUTER_API_KEY: "sk-or-jury",
+    ONI_MAIL_PASSWORD: "secret",
+  });
+  assert.equal(env.ANTHROPIC_API_KEY, "sk-ant-vana");
+  assert.equal(env.PATH, "/usr/bin");
+  for (const k of [
+    "ANTHROPIC_BASE_URL",
+    "ANTHROPIC_AUTH_TOKEN",
+    "CLAUDE_CODE_USE_BEDROCK",
+    "VANA_ANTHROPIC_API_KEY",
+    "OPENROUTER_API_KEY",
+    "ONI_MAIL_PASSWORD",
+  ]) {
+    assert.equal(k in env, false, `${k} should be stripped`);
+  }
+});
+
+test("generatorEnv refuses to fall back to a global ANTHROPIC_API_KEY", () => {
+  assert.throws(() => generatorEnv({ ANTHROPIC_API_KEY: "sk-ant-global" }), /VANA_ANTHROPIC_API_KEY/);
 });
