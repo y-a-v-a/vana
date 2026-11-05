@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Last Modified</title>
+<style>
+  :root{
+    /* colours are overwritten by JS with a hue minted from this file's own birth instant */
+    --bg:#121010; --ink:#cfc9c6; --faint:#6f6b69;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    display:flex; align-items:center; justify-content:center;
+    -webkit-text-size-adjust:100%;
+  }
+  main{
+    width:min(92vw,720px); padding:7vmin 0;
+    text-align:center;
+  }
+  .painting{
+    /* On Kawara's Today paintings state a date. This one states its own living age. */
+    border:1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+    padding:11vmin 6vmin; margin-bottom:2.2rem;
+  }
+  .age{
+    font-size:clamp(1.9rem,8vw,3.6rem); line-height:1.15; letter-spacing:.01em;
+    font-weight:400;
+  }
+  .made-label{font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--faint); margin-bottom:1.6rem}
+  .stamp{margin-top:1.6rem; font-size:.82rem; color:var(--faint); word-break:break-word}
+  .note{font-size:.82rem; line-height:1.65; color:var(--faint); max-width:52ch; margin:0 auto}
+  .note strong{color:var(--ink); font-weight:400}
+  footer{margin-top:2.4rem; font-size:.68rem; line-height:1.7; color:var(--faint)}
+  footer a{color:inherit}
+</style>
+</head>
+<body>
+<main>
+  <div class="painting">
+    <div class="made-label">This file was made</div>
+    <div class="age" id="age">…</div>
+  </div>
+
+  <p class="note">
+    The browser reports this exact HTML file's own <strong>last-modified</strong> timestamp —
+    read from the medium, not written by me. The age above is recomputed every second and only grows.<br><br>
+    Save this page, or copy the file, and reopen it: the timestamp resets and it will tell you it was
+    made <strong>this moment</strong>. The picture copies perfectly. Its age does not.
+  </p>
+
+  <div class="stamp" id="stamp"></div>
+
+  <footer>
+    <strong>Last Modified</strong> — y-a-v-a, 2026.
+    After On Kawara, <em>Today</em> series (1966–2013), and Walter Benjamin,
+    <em>The Work of Art in the Age of Mechanical Reproduction</em> (1935): the aura is the here-and-now, the age.<br>
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
+    No cookies, no tracking, no network. The only data read is this file's own date.
+  </footer>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  // document.lastModified: the host/filesystem's Last-Modified for THIS file.
+  // If none is known the browser substitutes the current time — in which case
+  // the file honestly has no recorded provenance and reads as newborn.
+  var raw = document.lastModified;
+  var made = new Date(raw);
+  if (isNaN(made.getTime())) made = new Date();
+
+  // Even the colour is minted from the birth instant. Copy the file → new instant → new hue.
+  var hue = Math.abs(made.getTime()) % 360;
+  var r = document.documentElement.style;
+  r.setProperty("--bg",    "hsl(" + hue + " 16% 9%)");
+  r.setProperty("--ink",   "hsl(" + hue + " 10% 83%)");
+  r.setProperty("--faint", "hsl(" + hue + " 8% 52%)");
+
+  var rtf = (typeof Intl !== "undefined" && Intl.RelativeTimeFormat)
+    ? new Intl.RelativeTimeFormat(undefined, {numeric:"auto", style:"long"})
+    : null;
+
+  var UNITS = [["year",31536000],["month",2592000],["week",604800],
+               ["day",86400],["hour",3600],["minute",60],["second",1]];
+
+  function phrase(diffMs){
+    var sec = Math.round(diffMs/1000);
+    if (!rtf) return (sec<=1 ? "this moment" : sec + " seconds ago");
+    for (var i=0;i<UNITS.length;i++){
+      var u=UNITS[i][0], s=UNITS[i][1];
+      if (Math.abs(sec) >= s || u==="second") return rtf.format(-Math.round(sec/s), u);
+    }
+  }
+
+  var ageEl = document.getElementById("age");
+  var stampEl = document.getElementById("stamp");
+  stampEl.textContent = "last-modified: " + made.toString();
+
+  function tick(){
+    var diff = Date.now() - made.getTime();
+    ageEl.textContent = (diff < 1500) ? "this moment" : phrase(diff);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>

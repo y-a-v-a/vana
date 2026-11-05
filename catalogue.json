@@ -1486,5 +1486,13 @@
     "source": "George Brecht, event scores / Fluxus (1959– ); John Cage; the JavaScript event loop (microtask/macrotask precedence); y-a-v-a, A Chance of Order (2021)",
     "mechanism": "crypto.getRandomValues casts each instruction into a sync/microtask/macrotask queue per visit; the event loop's precedence law (sync, then microtasks, then timers) realises them in an order the artist never authored.",
     "status": "pending"
+  },
+  {
+    "id": "2026-11-05-last-modified",
+    "title": "Last Modified",
+    "year": 2026,
+    "source": "On Kawara, Today series (1966-2013); On Kawara, I Am Still Alive (1970- ); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
+    "mechanism": "document.lastModified (host/filesystem Last-Modified for this very file) + Intl.RelativeTimeFormat recomputed every second; the age, stamp and hue are all minted from the birth instant, which reproduction resets to now.",
+    "status": "pending"
   }
 ]

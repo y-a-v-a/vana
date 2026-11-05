@@ -1,0 +1,45 @@
+{
+  "work_id": "2026-11-05-last-modified",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 3,
+    "narrative": 4,
+    "craft": 3,
+    "wit": 3
+  },
+  "score_notes": {
+    "novelty": "The new found object is document.lastModified itself: the host or filesystem timestamp becomes copy-fragile provenance and also mints the hue, a web-native pairing absent from the catalogue.",
+    "nuance": "The live age, hue, and copy-reset behavior collapse the Benjaminian idea into the mechanism, but the explanatory note states the conclusion and leaves only one dominant reading.",
+    "narrative": "By replacing the catalogue’s Today date with the exact file’s mutable age and making reproduction enact Benjamin’s aura problem, it answers a named prior work through deterministic timestamp order opposed to contingent acts of visiting and copying.",
+    "craft": "The single-page implementation is clean and economical, but the explanatory paragraphs and secondary stamp make it slightly more elaborate than the minimum gesture.",
+    "wit": "The dry reversal that the picture copies perfectly while its age does not lands cleanly, but the page explains its own punchline rather than allowing a concealed second joke."
+  },
+  "weighted_total": 35,
+  "verdict": "borderline",
+  "references_named": [
+    "On Kawara, Today series (1966-2013)",
+    "On Kawara, I Am Still Alive (1970- )",
+    "Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8"
+  ],
+  "rationale": "All six gates pass: the piece depends on browser and filesystem metadata, makes a clear Benjaminian argument, enacts that argument through the timestamp and copying, supplies an open license and attribution, and remains materially distinct from Today by replacing calendar time with mutable file age. Its strongest feature is the tight coupling of age and hue to one supposedly file-specific instant. The main weakness is that it treats the host or filesystem’s timestamp behavior as more deterministic and more biographical than web platforms actually guarantee.",
+  "reservations": "The copy-reset claim is not guaranteed across every host, browser, metadata-preserving copy, or deployment pipeline; last-modified records an event, not authorship or a reliable birth time. The extended explanatory note also reduces the work’s double-coding.",
+  "revision_suggestion": "Replace the categorical copy claim with a tested in-page Blob-copy comparison, label the value as last modification rather than authorship or birth, and cut the explanation to one line.",
+  "jury_model": "minimax/minimax-m3"
+}
