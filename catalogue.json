@@ -1502,5 +1502,13 @@
     "source": "Richard Hamilton, letter to Alison and Peter Smithson (16 January 1957), the definition of Pop Art; Richard Hamilton, Just what is it that makes today's homes so different, so appealing? (1956); Roy Lichtenstein, Ben-Day dots; The pop-up ad and default browser pop-up blockers (Opera, Mozilla, Internet Explorer XP SP2, 2000-2004); y-a-v-a, Pop Whaam! (2020); y-a-v-a, The Agreeing Internet (2009)",
     "mechanism": "An unsolicited window.open() on load whose null return (the browser's default pop-up blocker) is reported as the verdict; a consent click opens a locally written about:blank pop-up that window.close()s itself after 11 seconds; no network, no storage.",
     "status": "pending"
+  },
+  {
+    "id": "2026-11-09-as-slow-as-possible-8-64e15-ms",
+    "title": "As Slow As Possible (±8.64e15 ms)",
+    "year": 2026,
+    "source": "John Cage, ORGAN²/ASLSP (As SLow aS Possible), 1987; John-Cage-Orgel-Kunst-Projekt, St. Burchardi, Halberstadt (2001–2640); ECMAScript specification, Time Values and Time Range (±8.64e15 ms); y-a-v-a, The webpage going on and off (2023)",
+    "mechanism": "Date.now() placed within the ECMAScript time value range (±8.64e15 ms) selects one of 131,072 hash-determined chords, voiced on demand with Web Audio; the system clock is the only conductor, and new Date(8.64e15+1) computed live is the finale.",
+    "status": "pending"
   }
 ]

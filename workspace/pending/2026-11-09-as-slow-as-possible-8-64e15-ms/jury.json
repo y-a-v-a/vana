@@ -1,0 +1,49 @@
+{
+  "work_id": "2026-11-09-as-slow-as-possible-8-64e15-ms",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 3,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "The ECMAScript representable-time range is a fresh found object, and converting its ±8.64e15 ms span into a live hash-scored Cage performance supplies a catalogue-absent mechanism that depends on the web’s time model.",
+    "nuance": "The clock-derived chord carries the ‘everyone arrived late’ surface gag and the critique of institutional duration together, while the tiny Halberstadt tick supplies the literate scale without a wall-text argument.",
+    "narrative": "It explicitly answers y-a-v-a’s The webpage going on and off by replacing an endless render with ECMAScript’s terminal date, while the fixed hash makes the chance/order axis literal.",
+    "craft": "The single-file implementation is clean and self-contained, but the Invalid Date finale is printed at load rather than staged at the boundary and the explanatory readouts add avoidable bulk.",
+    "wit": "‘You arrived in the middle. Everyone does.’ lands as dry surface wit, and the browser’s Invalid Date turns the duration premise into a second technical punchline."
+  },
+  "weighted_total": 39,
+  "verdict": "strong",
+  "references_named": [
+    "John Cage, ORGAN²/ASLSP (As SLow aS Possible), 1987",
+    "John-Cage-Orgel-Kunst-Projekt, St. Burchardi, Halberstadt (2001–2640)",
+    "ECMAScript specification, Time Values and Time Range (±8.64e15 ms)",
+    "y-a-v-a, The webpage going on and off (2023)",
+    "Web Audio API"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "All six hard gates pass: the work depends on ECMAScript time and Web Audio, makes a clear argument about duration and institutional scale, enacts that argument through its clock-driven score, states an open license and attribution, sustains the dry critical voice, and is materially distinct from the catalogue’s other duration works. Its strongest feature is the conversion of JavaScript’s finite representable time into Cage’s instruction, with hash-fixed chords cleanly staging chance inside order. The unsynchronized system clock and precomputed rather than enacted endpoint keep the execution from being exceptional.",
+  "reservations": "The same-chord claim assumes independently configured visitor clocks agree, while the Invalid Date appears from the outset rather than becoming a performed terminal event.",
+  "revision_suggestion": "Make clock disagreement part of the visible argument or qualify the unison claim, and stage a distinct terminal state when MAX is crossed while retaining the Invalid Date as its error.",
+  "jury_model": "minimax/minimax-m3"
+}

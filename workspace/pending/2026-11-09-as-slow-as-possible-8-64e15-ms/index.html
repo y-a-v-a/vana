@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>As Slow As Possible (±8.64e15 ms) — y-a-v-a</title>
+<style>
+  :root { color-scheme: light; }
+  html, body { margin: 0; background: #f4f1ea; color: #1a1a1a; }
+  body { font: 15px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace; min-height: 100vh; display: flex; flex-direction: column; }
+  main { flex: 1; padding: 6vh 6vw 2vh; max-width: 1100px; width: 100%; box-sizing: border-box; margin: 0 auto; }
+  h1 { font: 600 clamp(20px, 3vw, 30px)/1.2 Georgia, "Times New Roman", serif; margin: 0 0 .2em; }
+  .sub { color: #666; margin: 0 0 6vh; }
+  .pct { font-size: clamp(22px, 5.2vw, 56px); letter-spacing: -.02em; margin: 0; font-variant-numeric: tabular-nums; }
+  .pct small { font-size: .4em; color: #888; letter-spacing: 0; }
+  .bar { position: relative; height: 2px; background: #1a1a1a; margin: 5vh 0 1em; }
+  .bar .head { position: absolute; top: -14px; width: 1px; height: 30px; background: #c0392b; }
+  .bar .cage { position: absolute; top: -6px; height: 14px; background: #1a1a1a; min-width: 1px; }
+  .ends { display: flex; justify-content: space-between; gap: 1em; font-size: 12px; color: #555; flex-wrap: wrap; }
+  .ends span:last-child { text-align: right; }
+  .note { font-size: 12px; color: #777; margin: .3em 0 0; }
+  dl { display: grid; grid-template-columns: max-content 1fr; gap: .35em 1.5em; margin: 6vh 0 3vh; }
+  dt { color: #777; }
+  dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .chord { font-size: 1.25em; }
+  button { font: inherit; background: none; border: 1px solid #1a1a1a; padding: .5em 1.1em; cursor: pointer; color: inherit; }
+  button[aria-pressed="true"] { background: #1a1a1a; color: #f4f1ea; }
+  .fine { margin-top: 5vh; }
+  .fine b { color: #c0392b; font-weight: 600; }
+  footer { font-size: 11.5px; color: #666; padding: 2vh 6vw 4vh; max-width: 1100px; width: 100%; box-sizing: border-box; margin: 0 auto; border-top: 1px solid #d8d3c7; }
+  footer p { margin: .3em 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>As Slow As Possible (±8.64e15 ms)</h1>
+  <p class="sub">A performance lasting exactly as long as JavaScript allows time to exist. Already in progress. Please enter quietly.</p>
+
+  <p class="pct" id="pct" aria-live="off">—</p>
+  <p class="note">of the piece has been performed. You arrived in the middle. Everyone does.</p>
+
+  <div class="bar" id="bar" aria-hidden="true">
+    <div class="cage" id="cage" title="Halberstadt, 2001–2640: Cage's 639 years"></div>
+    <div class="head" id="head"></div>
+  </div>
+  <div class="ends">
+    <span>first note<br><span id="t0"></span></span>
+    <span>the black tick near the red line: Halberstadt, 2001–2640</span>
+    <span>last note<br><span id="t1"></span></span>
+  </div>
+
+  <dl>
+    <dt>now sounding</dt><dd class="chord" id="now">—</dd>
+    <dt>held since</dt><dd id="since">—</dd>
+    <dt>next change</dt><dd id="next">—</dd>
+    <dt>then</dt><dd id="then">—</dd>
+    <dt>remaining</dt><dd id="left">—</dd>
+  </dl>
+
+  <button id="listen" aria-pressed="false">join the audience</button>
+
+  <p class="fine">Fine: <code>new Date(8.64e15 + 1)</code> &rarr; <b id="fine"></b></p>
+</main>
+<footer>
+  <p><b>As Slow As Possible (±8.64e15 ms)</b>, y-a-v-a, 2026. After John Cage, <i>ORGAN²/ASLSP</i> (1987) and its Halberstadt performance (St. Burchardi, 2001–2640).</p>
+  <p>Medium: the ECMAScript time value range (±100,000,000 days from 1970), your system clock, Web Audio. Score: 131,072 chords, one every ~4.18 years, cast by a fixed pseudo-random hash so every browser on Earth plays the same chord at the same time without a server. The conductor is your clock; set it forward and you will hear the future.</p>
+  <p>No cookies, no tracking, no storage, no network. Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>. AI-generated candidate, in the y-a-v-a DNA.</p>
+</footer>
+<script>
+(() => {
+  'use strict';
+  const MIN = -8.64e15, MAX = 8.64e15, SPAN = MAX - MIN;  // the whole of JS time
+  const SEGS = 131072, SEG = SPAN / SEGS;                  // ~4.18 years per chord
+  const YEAR = 31556952000;
+  const NAMES = ['C','C♯','D','E♭','E','F','F♯','G','A♭','A','B♭','B'];
+  const $ = id => document.getElementById(id);
+
+  // The score: a fixed hash per segment. Chance, frozen into order.
+  function hash(n) {
+    let t = (n * 0x9E3779B1 + 0x1987) >>> 0;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0);
+  }
+  function chord(i) {
+    let h = hash(i), notes = new Set();
+    const count = 1 + (h % 4);
+    for (let k = 0; k < count; k++) { h = hash(h + k + 1); notes.add(36 + (h % 49)); }
+    return [...notes].sort((a, b) => a - b);
+  }
+  const name = m => NAMES[m % 12] + (Math.floor(m / 12) - 1);
+  const show = c => c.map(name).join('  ');
+  const iso = ms => new Date(ms).toISOString().replace('T', ' ').replace(/\.\d+Z$/, ' UTC');
+  const seg = now => Math.min(SEGS - 1, Math.floor((now - MIN) / SEG));
+
+  $('t0').textContent = iso(MIN);
+  $('t1').textContent = iso(MAX);
+  $('fine').textContent = String(new Date(MAX + 1));
+  const c0 = Date.UTC(2001, 8, 5), c1 = Date.UTC(2640, 8, 5);
+  $('cage').style.left = ((c0 - MIN) / SPAN * 100) + '%';
+  $('cage').style.width = ((c1 - c0) / SPAN * 100) + '%';
+
+  let lastSeg = -1;
+  function tick() {
+    const now = Date.now();
+    const f = (now - MIN) / SPAN;
+    $('pct').innerHTML = (f * 100).toFixed(12) + '<small> %</small>';
+    $('head').style.left = (f * 100) + '%';
+    const i = seg(now);
+    if (i !== lastSeg) {
+      lastSeg = i;
+      $('now').textContent = show(chord(i));
+      $('since').textContent = iso(MIN + i * SEG);
+      $('next').textContent = i + 1 < SEGS ? iso(MIN + (i + 1) * SEG) : 'there is no next';
+      $('then').textContent = i + 1 < SEGS ? show(chord(i + 1)) : 'Invalid Date';
+      if (ctx) voice(chord(i));
+    }
+    $('left').textContent = ((MAX - now) / YEAR).toLocaleString('en', { maximumFractionDigits: 9, minimumFractionDigits: 9 }) + ' years';
+    requestAnimationFrame(tick);
+  }
+
+  // The organ: only built when you ask for it.
+  let ctx = null, bus = null, pipes = [];
+  function voice(c) {
+    const t = ctx.currentTime;
+    pipes.forEach(p => { p.g.gain.setTargetAtTime(0, t, 1.5); p.o.stop(t + 8); });
+    const wave = ctx.createPeriodicWave(new Float32Array([0,0,0,0,0,0]), new Float32Array([0,1,.5,.25,.12,.06]));
+    pipes = c.map(m => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.setPeriodicWave(wave);
+      o.frequency.value = 440 * Math.pow(2, (m - 69) / 12);
+      g.gain.value = 0; g.gain.setTargetAtTime(0.12 / c.length, t, 2.5);
+      o.connect(g).connect(bus); o.start(t);
+      return { o, g };
+    });
+  }
+  $('listen').addEventListener('click', e => {
+    const b = e.currentTarget;
+    if (!ctx) {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      bus = ctx.createGain(); bus.gain.value = 0.8; bus.connect(ctx.destination);
+      voice(chord(lastSeg));
+      b.setAttribute('aria-pressed', 'true'); b.textContent = 'leave (the piece continues without you)';
+    } else {
+      ctx.close(); ctx = null; pipes = [];
+      b.setAttribute('aria-pressed', 'false'); b.textContent = 'join the audience';
+    }
+  });
+
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
