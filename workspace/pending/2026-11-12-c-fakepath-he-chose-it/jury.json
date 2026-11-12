@@ -1,0 +1,50 @@
+{
+  "work_id": "2026-11-12-c-fakepath-he-chose-it",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 3,
+    "narrative": 3,
+    "craft": 3,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "The file picker as curator and the spec-mandated fake path as counterfeit provenance form a new found-object and mechanism pairing that depends on web privacy plumbing.",
+    "nuance": "The metadata-only nomination and fake path unify concept and execution, but the displayed quotation and explanatory footer decode both levels instead of leaving the literate reading productively implicit.",
+    "narrative": "It explicitly answers Fountain (As Manufactured), Cartel, and Provenance by moving the readymade choice to the visitor, but the tension between arbitrary selection and fixed specification does not become a fully legible chance/order axis.",
+    "craft": "The native control and metadata handler form a clean implementation, though the long quotation, explanatory prose, and counters make the build slightly larger than the central enactment requires.",
+    "wit": "The counterfeit provenance lands dryly on first selection and again as a Duchampian joke when the filename, fake path, and institutional label are read together."
+  },
+  "weighted_total": 34,
+  "verdict": "borderline",
+  "references_named": [
+    "Marcel Duchamp, Fountain (1917)",
+    "The Blind Man, no. 2, ‘The Richard Mutt Case’ (May 1917)",
+    "Marcel Duchamp / the readymade",
+    "HTML Standard, file-input value fake-path rule (WHATWG)",
+    "y-a-v-a, Fountain (As Manufactured) (2026)",
+    "y-a-v-a, Cartel (2026)",
+    "y-a-v-a, Provenance (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "All hard gates pass: the native file picker, metadata-only handling, and spec-fixed fake path produce a genuinely web-native act of nomination with a clear argument about readymades, authenticity, and privacy. The pairing is fresh and strong, but the work explains its layered readings so fully that the fake path loses some ambiguity and surprise. The implementation is clean and ethical, although its explanatory apparatus is somewhat more substantial than the central mechanism.",
+  "reservations": "The explicit Duchamp quotation and explanatory footer reduce the subtlety, while the visitor-choice versus spec-order tension remains underdeveloped. The ‘bytes sent: 0’ ledger should also say ‘file bytes sent: 0’, because delivering the page itself may involve network bytes.",
+  "revision_suggestion": "Keep the compact metadata cartel and fake-path reveal, but reduce the explanatory prose to a minimal colophon and let the interaction carry the deeper reading; make arbitrary selection versus deterministic fakepath more visibly structural and relabel the counters as file bytes read and sent.",
+  "jury_model": "minimax/minimax-m3"
+}

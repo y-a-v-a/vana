@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>C:\fakepath\ (He Chose It)</title>
+<style>
+  :root{color-scheme:light}
+  html,body{margin:0;background:#f4f2ee;color:#1a1a1a;font:16px/1.45 Georgia,"Times New Roman",serif}
+  main{max-width:34rem;margin:0 auto;padding:12vh 1.5rem 4rem}
+  h1{font-weight:normal;font-size:1.05rem;letter-spacing:.02em;margin:0 0 2.5rem}
+  .plinth{border:1px solid #1a1a1a;background:#fff;padding:2.2rem 1.5rem;text-align:center}
+  .plinth p{margin:0 0 1.2rem;font-style:italic}
+  input[type=file]{font:inherit;max-width:100%}
+  .cartel{margin:3rem 0 0 auto;width:min(19rem,100%);font:13px/1.5 "Helvetica Neue",Arial,sans-serif;background:#fff;padding:1rem 1.1rem;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+  .cartel[hidden]{display:none}
+  .cartel b{display:block;font-size:15px;word-break:break-all}
+  .cartel i{font-style:italic}
+  .cartel dl{margin:.6rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.1rem .7rem}
+  .cartel dt{color:#777}
+  .cartel dd{margin:0;word-break:break-all}
+  .cartel .path{font-family:Menlo,Consolas,monospace;font-size:12px}
+  blockquote{margin:3.5rem 0 0;font-size:.95rem;color:#444}
+  footer{margin-top:3rem;font:12px/1.5 "Helvetica Neue",Arial,sans-serif;color:#666}
+</style>
+</head>
+<body>
+<main>
+  <h1>C:\fakepath\ <span style="color:#777">(He Chose It)</span></h1>
+
+  <div class="plinth">
+    <p>Choose an ordinary article of life.</p>
+    <input type="file" id="pick" aria-label="Choose a file to nominate as art">
+  </div>
+
+  <div class="cartel" id="cartel" hidden aria-live="polite">
+    <b id="t"></b>
+    <dl>
+      <dt>Artist</dt><dd>you (by choice)</dd>
+      <dt>Date</dt><dd id="d"></dd>
+      <dt>Medium</dt><dd id="m"></dd>
+      <dt>Dimensions</dt><dd id="s"></dd>
+      <dt>Provenance</dt><dd class="path" id="p"></dd>
+      <dt>Bytes looked at</dt><dd>0</dd>
+      <dt>Bytes sent</dt><dd>0</dd>
+    </dl>
+  </div>
+
+  <blockquote>
+    “Whether Mr Mutt with his own hands made the fountain or not has no importance.
+    He CHOSE it. He took an ordinary article of life, placed it so that its useful
+    significance disappeared under the new title and point of view.”
+    <br>— <i>The Blind Man</i>, no. 2, New York, May 1917
+  </blockquote>
+
+  <footer>
+    The file is never opened. The browser hands this page a name, a size, a date and a
+    type, and withholds where the thing came from, replacing its location with the
+    spec-mandated <span class="path">C:\fakepath\</span>, on every operating system.
+    Nothing is read, stored or uploaded; reload and the nomination lapses.<br><br>
+    y-a-v-a, <i>C:\fakepath\ (He Chose It)</i>, 2026. After Marcel Duchamp,
+    <i>Fountain</i> (1917) and the readymade; with the HTML Standard’s file-input
+    “fakepath” rule. Licensed
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>.
+    No cookies, no tracking.
+  </footer>
+</main>
+<script>
+(function(){
+  var pick=document.getElementById('pick'), c=document.getElementById('cartel');
+  function $(id){return document.getElementById(id)}
+  pick.addEventListener('change',function(){
+    var f=pick.files&&pick.files[0];
+    if(!f){c.hidden=true;return}
+    // Metadata only. No FileReader, no arrayBuffer(), no text(), no network.
+    var name=f.name, dot=name.lastIndexOf('.');
+    $('t').textContent=dot>0?name.slice(0,dot):name;
+    $('d').textContent=f.lastModified?new Date(f.lastModified).getFullYear():'undated';
+    $('m').textContent=f.type||'unknown (found object)';
+    $('s').textContent=new Intl.NumberFormat().format(f.size)+' bytes';
+    $('p').textContent=pick.value; // "C:\fakepath\" + name, by specification
+    c.hidden=false;
+  });
+})();
+</script>
+</body>
+</html>

@@ -1510,5 +1510,13 @@
     "source": "John Cage, ORGAN²/ASLSP (As SLow aS Possible), 1987; John-Cage-Orgel-Kunst-Projekt, St. Burchardi, Halberstadt (2001–2640); ECMAScript specification, Time Values and Time Range (±8.64e15 ms); y-a-v-a, The webpage going on and off (2023)",
     "mechanism": "Date.now() placed within the ECMAScript time value range (±8.64e15 ms) selects one of 131,072 hash-determined chords, voiced on demand with Web Audio; the system clock is the only conductor, and new Date(8.64e15+1) computed live is the finale.",
     "status": "pending"
+  },
+  {
+    "id": "2026-11-12-c-fakepath-he-chose-it",
+    "title": "C:\\fakepath\\ (He Chose It)",
+    "year": 2026,
+    "source": "Marcel Duchamp, Fountain (1917); The Blind Man, no. 2, 'The Richard Mutt Case' (May 1917); Marcel Duchamp / the readymade; HTML Standard, file input value 'C:\\fakepath\\' rule (WHATWG); y-a-v-a, Cartel (2026); y-a-v-a, Provenance (2026)",
+    "mechanism": "Native <input type=file> change event reading only File.name/size/type/lastModified (no FileReader, no network) plus input.value, which the HTML Standard forces to report 'C:\\fakepath\\' + filename on every OS.",
+    "status": "pending"
   }
 ]
