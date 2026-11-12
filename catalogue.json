@@ -413,7 +413,7 @@
     "year": 2026,
     "source": "Gerhard Richter, 1024 Colours (1974); Gerhard Richter, 256 Colours / 4096 Colours; Marcel Duchamp / the readymade; CSS Color Module Level 4 named colours (W3C)",
     "mechanism": "The CSS Color Module Level 4 named-colour list is rendered swatch by swatch with backgroundColor and read back via getComputedStyle, chance-shuffled per visit; the engine supplies every pixel, nothing is stored, no network.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-06-22-an-artist-who-cannot-speak-english-is-no-artist",
