@@ -829,7 +829,7 @@
     "year": 2026,
     "source": "Elaine Sturtevant, Warhol Flowers (1964-65); Andy Warhol, Flowers (1964); Walter Benjamin, The Work of Art in the Age of Mechanical Reproduction (1935)",
     "mechanism": "Canvas globalCompositeOperation='difference' subtracts a draggable copy from its identical original, with a live getImageData pixel count reporting fidelity vs. visible art.",
-    "status": "pending"
+    "status": "published"
   },
   {
     "id": "2026-07-06-touch-piece-do-not-look",
