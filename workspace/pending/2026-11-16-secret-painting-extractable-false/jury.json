@@ -1,0 +1,48 @@
+{
+  "work_id": "2026-11-16-secret-painting-extractable-false",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "The non-extractable CryptoKey as the literal artist is a fresh found-object the catalogue lacks; only the browser's Web Crypto API can do this, and it answers Maleglitch by inverting it (image→data→black).",
+    "nuance": "Concept and execution collapse cleanly: the ciphertext IS the black square, the exportKey refusal IS the artist's silence, the plaintext zero-fill IS the lost secret; double-coded (Ramsden's bluff + Malevich) with restraint and no wall text needed.",
+    "narrative": "Names two prior works it answers (Maleglitch 2010, Zone de Sensibilité 2026) and sits legibly on the chance/order axis (crypto-random under fixed 28×28 rule); extends the twenty-year argument by handing authorship to a security primitive.",
+    "craft": "Smallest build that completes the thought: one canvas, one dl, one button, ~30 lines of script; nothing decorative, no fallback apologising, the code itself is the argument.",
+    "wit": "The 'Ask the artist' button that the browser refuses is the joke, and it lands twice — once on click, once on re-reading as a real point about open media and unrecoverable secrets."
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Art & Language (Mel Ramsden), Secret Painting (1967-68)",
+    "Kazimir Malevich, Black Square (1915)",
+    "W3C Web Crypto API (SubtleCrypto, extractable:false)",
+    "y-a-v-a, Maleglitch (2010)",
+    "y-a-v-a, Zone de Sensibilité Picturale Immaterielle (2026)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "A clean, restrained digital readymade that cashes Ramsden's 1967 bluff by making the browser itself the artist who knows and will not tell. The mechanism (non-extractable AES-GCM key, plaintext zeroed, ciphertext rendered as a 28×28 black square) enacts the concept rather than illustrating it, and the exportKey refusal is the joke and the argument at once. It answers Maleglitch by reversing it (image becomes data becomes black) and Zone de Sensibilité by keeping rather than burning the secret, extending the catalogue's chance/order and value/authenticity threads with a genuinely new found-object.",
+  "reservations": "The 'plaintext held' readout reports non-zero bytes after plain.fill(0) because plain[0] is set to side before the fill — a small inconsistency between the page's claim ('0 bytes') and the live attestation; also the 28×28 / 784-byte fixed ciphertext size is a mild tell that the 'dimension' secret is partly theatrical.",
+  "revision_suggestion": "Either zero plain[0] before the fill (and store the side elsewhere, e.g. inside the ciphertext) or update the readout copy so the attested byte count matches the page's own claim; consider varying the ciphertext canvas size per visit to deepen the 'dimension is secret' conceit.",
+  "jury_model": "minimax/minimax-m3"
+}

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Secret Painting (extractable: false) — y-a-v-a</title>
+<style>
+  html,body{margin:0;background:#000;color:#8a8a8a;font:14px/1.5 ui-monospace,Menlo,Consolas,monospace}
+  main{min-height:100vh;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:48px;padding:48px 24px;box-sizing:border-box}
+  canvas{width:min(70vw,70vh,560px);height:min(70vw,70vh,560px);image-rendering:pixelated;background:#000;outline:1px solid #111}
+  aside{max-width:340px}
+  h1{font-size:15px;font-weight:normal;color:#ccc;margin:0 0 4px}
+  .q{color:#bbb;margin:16px 0}
+  dl{margin:16px 0;display:grid;grid-template-columns:auto 1fr;gap:2px 12px}
+  dt{color:#555}dd{margin:0;color:#aaa;word-break:break-word}
+  button{font:inherit;background:#000;color:#ccc;border:1px solid #333;padding:6px 10px;cursor:pointer}
+  button:hover{border-color:#777}
+  #answer{min-height:3em;color:#c44;margin-top:10px}
+  small{display:block;color:#444;margin-top:24px}
+  a{color:#666}
+</style>
+</head>
+<body>
+<main>
+  <canvas id="c" width="28" height="28" aria-label="A black square. Its pixels are the ciphertext of a painting nobody has seen."></canvas>
+  <aside>
+    <h1>Secret Painting (extractable: false)</h1>
+    <div>y-a-v-a, 2026 — after Art &amp; Language (Mel Ramsden), <i>Secret Painting</i>, 1967–68</div>
+    <p class="q">“The content of this painting is invisible; the character and dimension of the content are to be kept permanently secret, known only to the artist.”</p>
+    <dl>
+      <dt>medium</dt><dd>AES-GCM-256 ciphertext on pixels, 784 bytes</dd>
+      <dt>content</dt><dd>a painting, minted this visit, never drawn</dd>
+      <dt>dimension</dt><dd>padded; secret</dd>
+      <dt>key.type</dt><dd id="kt">…</dd>
+      <dt>key.extractable</dt><dd id="kx">…</dd>
+      <dt>plaintext held</dt><dd id="ph">…</dd>
+      <dt>known only to</dt><dd>the artist (this tab)</dd>
+      <dt>price</dt><dd>undisclosed</dd>
+    </dl>
+    <button id="ask">Ask the artist</button>
+    <div id="answer"></div>
+    <small>Nothing is stored, sent or tracked. Reload and this secret is lost to everyone, including its keeper; a new one takes its place.<br><br>
+    Licensed <a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> — y-a-v-a (yet another visual artist). The quotation belongs to Art &amp; Language. The source is open. The painting is not.</small>
+  </aside>
+</main>
+<script>
+(async () => {
+  const $ = id => document.getElementById(id);
+  const c = $('c'), g = c.getContext('2d');
+  if (!(window.crypto && crypto.subtle)) {
+    $('kt').textContent = $('kx').textContent = 'no Web Crypto here';
+    $('ph').textContent = '0 bytes (no painting was made)';
+    return;
+  }
+  // 1. Mint the painting: a random-sized grid of random colours, 3 bytes per cell.
+  const r = n => crypto.getRandomValues(new Uint8Array(n));
+  const side = 4 + (r(1)[0] % 13);                 // 4..16 — the dimension
+  const plain = r(768);                            // 16*16*3; cells beyond side*side*3 are padding,
+  // so the ciphertext is the same size whatever the painting's dimension.
+  plain[0] = side;                                 // the header knows how big it is; you won't.
+
+  // 2. A key the page itself cannot read back.
+  const key = await crypto.subtle.generateKey({name:'AES-GCM', length:256}, false, ['encrypt']);
+  const iv = r(12);
+  const ct = new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, plain));
+
+  // 3. Forget the painting.
+  plain.fill(0);
+
+  // 4. Hang the ciphertext. 784 bytes = 28 x 28. Each byte is shown at 0..7 of 255: black.
+  const img = g.createImageData(28, 28);
+  for (let i = 0; i < ct.length; i++) {
+    const v = ct[i] >> 5;
+    img.data.set([v, v, v, 255], i * 4);
+  }
+  g.putImageData(img, 0, 0);
+
+  $('kt').textContent = key.type;
+  $('kx').textContent = String(key.extractable);
+  $('ph').textContent = plain.reduce((a, b) => a + (b !== 0), 0) + ' bytes';
+
+  // 5. The interview.
+  let asked = 0;
+  $('ask').onclick = async () => {
+    asked++;
+    try {
+      await crypto.subtle.exportKey('raw', key);
+      $('answer').textContent = 'The artist talked. This should not happen.';
+    } catch (e) {
+      $('answer').textContent = (e.name || 'Error') + ': ' + (e.message || 'key is not extractable') +
+        (asked > 1 ? '  (asked ' + asked + '×; the artist is consistent)' : '');
+    }
+  };
+})();
+</script>
+</body>
+</html>
