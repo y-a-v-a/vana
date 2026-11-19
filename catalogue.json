@@ -1526,5 +1526,13 @@
     "source": "Art & Language (Mel Ramsden), Secret Painting (1967-68); Kazimir Malevich, Black Square (1915); W3C Web Crypto API (SubtleCrypto, extractable:false); y-a-v-a, Maleglitch (2010); y-a-v-a, Zone de Sensibilite Picturale Immaterielle (2026)",
     "mechanism": "Web Crypto AES-GCM with a non-extractable CryptoKey (exportKey refused live), fixed-length padding to hide the dimension, ciphertext bytes rendered at 0-7/255 on a 28x28 canvas; nothing stored or sent.",
     "status": "pending"
+  },
+  {
+    "id": "2026-11-19-untitled-ok",
+    "title": "Untitled (OK)",
+    "year": 2026,
+    "source": "Barbara Kruger, Untitled (Your gaze hits the side of my face) (1981); Barbara Kruger, Untitled (I shop therefore I am) (1987); JODI (Joan Heemskerk & Dirk Paesmans), alert-box net.art; y-a-v-a, The Agreeing Internet (2009)",
+    "mechanism": "Synchronous window.alert() halts the JS thread and render loop; performance.now() and a requestAnimationFrame counter measure the halt (frames painted: 0) and detect vendor suppression (~0 ms return); RAM only, no storage, no network.",
+    "status": "pending"
   }
 ]

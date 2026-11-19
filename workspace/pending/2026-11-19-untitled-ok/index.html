@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Untitled (OK) — y-a-v-a</title>
+<style>
+  html,body{margin:0;background:#fff;color:#000;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+  main{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6vh 5vw;box-sizing:border-box;gap:4vh}
+  #clock{font:700 clamp(2.4rem,9vw,7rem)/1 "Helvetica Neue",Helvetica,Arial,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  #clock small{display:block;font-size:.8rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase;margin-top:.6em;color:#555}
+  button{all:unset;cursor:pointer;background:#e1261c;color:#fff;font:italic 800 clamp(1.1rem,3.4vw,2.2rem)/1 "Helvetica Neue",Helvetica,Arial,sans-serif;text-transform:uppercase;padding:.35em .6em;letter-spacing:-.01em}
+  button:focus-visible{outline:3px solid #000;outline-offset:4px}
+  #ledger{font:13px/1.6 ui-monospace,Menlo,Consolas,monospace;width:min(42rem,100%);margin:0;padding:0;list-style:none}
+  #ledger li{border-top:1px solid #000;padding:.3em 0}
+  #verdict{font-weight:700;max-width:42rem;text-align:center;min-height:1.6em}
+  footer{font-size:12px;line-height:1.5;color:#444;max-width:42rem;text-align:center;padding:0 5vw 4vh;margin:0 auto}
+  footer a{color:inherit}
+</style>
+</head>
+<body>
+<main>
+  <div id="clock" aria-live="off">0.000<small>seconds this page has been running</small></div>
+  <button id="go" type="button">Press to be addressed</button>
+  <p id="verdict" role="status"></p>
+  <ol id="ledger"></ol>
+</main>
+<footer>
+  <strong>Untitled (OK)</strong>, y-a-v-a, 2026. Medium: <code>window.alert()</code>, the operating system's typeface, one button.
+  After Barbara Kruger's imperative second-person works (<em>Untitled (Your gaze hits the side of my face)</em>, 1981; <em>Untitled (I shop therefore I am)</em>, 1987) and the JODI alert-box tradition; answers y-a-v-a, <em>The Agreeing Internet</em> (2009).
+  <br>Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>. No cookies, no storage, no network, no tracking. Your replies are counted in RAM and forgotten on reload.
+  <br>AI-generated candidate in the y-a-v-a DNA.
+</footer>
+<script>
+(() => {
+  'use strict';
+  const MESSAGES = [
+    'YOUR ATTENTION HAS BEEN SCHEDULED.',
+    'NOTHING ON THIS PAGE MOVES UNTIL YOU AGREE.',
+    'YOU MAY ANSWER IN ANY WAY YOU LIKE, PROVIDED IT IS OK.',
+    'WE CANNOT CHOOSE OUR TYPEFACE. NEITHER CAN YOU CHOOSE YOUR REPLY.',
+    'YOUR SILENCE IS AVAILABLE FROM THE BROWSER, NOT FROM THE ARTIST.'
+  ];
+  const t0 = performance.now();
+  let frames = 0, n = 0, oks = 0, silenced = 0;
+  const clock = document.getElementById('clock').firstChild;
+  const ledger = document.getElementById('ledger');
+  const verdict = document.getElementById('verdict');
+
+  (function tick() {
+    frames++;
+    clock.nodeValue = ((performance.now() - t0) / 1000).toFixed(3);
+    requestAnimationFrame(tick);
+  })();
+
+  document.getElementById('go').addEventListener('click', () => {
+    const msg = MESSAGES[n % MESSAGES.length];
+    n++;
+    const f0 = frames, a = performance.now();
+    window.alert(msg);                       // the whole page halts here
+    const ms = performance.now() - a, df = frames - f0;
+    const li = document.createElement('li');
+    if (ms < 25) {
+      silenced++;
+      li.textContent = `#${n}  "${msg}"  — not shown (${ms.toFixed(1)} ms). Suppressed by the browser.`;
+      verdict.textContent = 'The dialog did not appear. Your browser has silenced the work — the only "no" on offer, and it was granted by the vendor, not by the artist.';
+    } else {
+      oks++;
+      li.textContent = `#${n}  "${msg}"  — page halted ${(ms / 1000).toFixed(2)} s · frames painted meanwhile: ${df} · reply: OK`;
+      verdict.textContent = `You said OK ${oks} time${oks === 1 ? '' : 's'}. You said anything else 0 times.`;
+    }
+    ledger.prepend(li);
+  });
+})();
+</script>
+</body>
+</html>
