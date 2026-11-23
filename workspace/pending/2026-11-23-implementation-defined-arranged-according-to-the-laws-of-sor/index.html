@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Implementation-Defined — y-a-v-a</title>
+<style>
+  :root { --paper:#f2eee4; --ink:#141414; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; background:var(--paper); color:var(--ink);
+    font:14px/1.45 ui-monospace, Menlo, Consolas, monospace; }
+  main { max-width:960px; margin:0 auto; padding:4vh 4vw 6vh; }
+  .pair { display:grid; grid-template-columns:1fr 1fr; gap:4vw; }
+  @media (max-width:620px){ .pair { grid-template-columns:1fr; } }
+  figure { margin:0; }
+  canvas { width:100%; aspect-ratio:1; display:block; image-rendering:pixelated;
+    outline:1px solid var(--ink); }
+  figcaption { margin-top:.7em; }
+  figcaption b { font-weight:600; }
+  .n { font-variant-numeric:tabular-nums; }
+  .label { margin-top:5vh; max-width:34em; border-top:1px solid var(--ink); padding-top:1em; }
+  .label h1 { font-size:1em; margin:0 0 .4em; font-style:italic; font-weight:600; }
+  .label p { margin:.3em 0; }
+  code { background:none; }
+  small { opacity:.75; }
+  a { color:inherit; }
+</style>
+</head>
+<body>
+<main>
+  <div class="pair">
+    <figure>
+      <canvas id="fy" width="12" height="12"></canvas>
+      <figcaption>
+        <b>Chance</b> — Fisher–Yates shuffle<br>
+        throws: <span class="n" id="fyN">0</span><br>
+        largest deviation: <span class="n" id="fyD">—</span>
+      </figcaption>
+    </figure>
+    <figure>
+      <canvas id="so" width="12" height="12"></canvas>
+      <figcaption>
+        <b>Order</b> — <code>.sort(() =&gt; Math.random() - 0.5)</code><br>
+        throws: <span class="n" id="soN">0</span><br>
+        largest deviation: <span class="n" id="soD">—</span>
+      </figcaption>
+    </figure>
+  </div>
+
+  <section class="label">
+    <h1>Implementation-Defined (Arranged According to the Laws of Sort)</h1>
+    <p>y-a-v-a, 2026</p>
+    <p>Twelve squares thrown into twelve places, again and again, by your browser. Each cell: how often square&nbsp;<i>row</i> landed in place&nbsp;<i>column</i>. Grey is fair. Black is too often. Paper is too seldom.</p>
+    <p>Left, honest chance: the more it throws, the less there is to see. Right, the shortcut everyone copies: a sorting algorithm fed a coin. The specification calls the result “implementation-defined”. Your engine defines it here. True chance paints nothing; the bug paints a portrait of the sorter.</p>
+    <p>Medium: <code>Array.prototype.sort</code>, <code>Math.random</code>, your JavaScript engine, ongoing. Edition: one per engine.</p>
+    <p><small>After Hans (Jean) Arp, <i>Untitled (Collage with Squares Arranged According to the Laws of Chance)</i>, 1916–17; and the 2010 EU Browser Choice ballot, whose “random” order was shuffled the same way.<br>
+    <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a> — y-a-v-a (Vincent Bruijn). No cookies, no trackers, no network; nothing leaves this page.</small></p>
+  </section>
+</main>
+<script>
+(() => {
+  const K = 12, EXP = 1 / K;
+  const make = (id) => ({
+    ctx: document.getElementById(id).getContext('2d'),
+    img: null, counts: new Float64Array(K * K), n: 0,
+    nEl: document.getElementById(id + 'N'), dEl: document.getElementById(id + 'D')
+  });
+  const A = make('fy'), B = make('so');
+  A.img = A.ctx.createImageData(K, K); B.img = B.ctx.createImageData(K, K);
+  const base = Array.from({ length: K }, (_, i) => i);
+
+  const fisherYates = () => {
+    const a = base.slice();
+    for (let i = K - 1; i > 0; i--) {
+      const j = (Math.random() * (i + 1)) | 0;
+      const t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  };
+  const sortShuffle = () => base.slice().sort(() => Math.random() - 0.5);
+
+  const tally = (S, a) => { for (let p = 0; p < K; p++) S.counts[a[p] * K + p]++; S.n++; };
+
+  const P = [242, 238, 228], I = [20, 20, 20], G = [131, 129, 124];
+  const paint = (S) => {
+    const d = S.img.data; let max = 0;
+    for (let c = 0; c < K * K; c++) {
+      const r = (S.counts[c] / S.n) / EXP - 1;           // relative deviation
+      if (Math.abs(r) > Math.abs(max)) max = r;
+      const t = Math.max(-1, Math.min(1, r * 2.5));     // ±40% saturates
+      const to = t > 0 ? I : P, k = Math.abs(t);
+      for (let ch = 0; ch < 3; ch++) d[c * 4 + ch] = G[ch] + (to[ch] - G[ch]) * k;
+      d[c * 4 + 3] = 255;
+    }
+    S.ctx.putImageData(S.img, 0, 0);
+    S.nEl.textContent = S.n.toLocaleString('en');
+    S.dEl.textContent = (max >= 0 ? '+' : '−') + Math.abs(max * 100).toFixed(2) + '%';
+  };
+
+  const frame = () => {
+    const end = performance.now() + 10;
+    while (performance.now() < end) {
+      for (let i = 0; i < 200; i++) { tally(A, fisherYates()); tally(B, sortShuffle()); }
+    }
+    paint(A); paint(B);
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

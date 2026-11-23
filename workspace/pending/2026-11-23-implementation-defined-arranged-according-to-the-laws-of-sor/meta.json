@@ -1,0 +1,15 @@
+{
+  "title": "Implementation-Defined (Arranged According to the Laws of Sort)",
+  "summary": "Two live shuffles of twelve squares are tallied side by side: honest chance fades to grey, while the web's favourite sort-shuffle develops a portrait of your JavaScript engine.",
+  "mechanism": "Array.prototype.sort with an inconsistent Math.random comparator (sort order 'implementation-defined' per ECMA-262), run against Fisher–Yates thousands of times per frame and tallied into live 12×12 deviation canvases; no storage, no network.",
+  "principles": ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9"],
+  "references": [
+    "Hans (Jean) Arp, Untitled (Collage with Squares Arranged According to the Laws of Chance), 1916-17",
+    "Kenneth Martin, Chance and Order",
+    "y-a-v-a, A Chance of Order (2021)",
+    "y-a-v-a, Arranged According to the Laws of Chance (2026)",
+    "Microsoft EU Browser Choice ballot screen (2010) and Rob Weir's analysis of its biased shuffle",
+    "ECMA-262, Array.prototype.sort: implementation-defined order for inconsistent comparators"
+  ],
+  "license": "CC BY-SA 4.0"
+}

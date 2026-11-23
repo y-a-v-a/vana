@@ -1,0 +1,50 @@
+{
+  "work_id": "2026-11-23-implementation-defined-arranged-according-to-the-laws-of-sor",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "The 'sort-shuffle is biased' observation is well-known in JS circles (Rob Weir 2010, countless Stack Overflow answers), but the live side-by-side tally that turns the bias into a per-engine portrait is a fresh mechanism the catalogue lacks — only the browser can do it, and the engine-as-author twist is genuinely new.",
+    "nuance": "Concept and execution collapse cleanly: the spec's 'implementation-defined' wording is literally enacted by the canvas, and the surface gag (two squares, one grey, one patterned) carries the literate reading (the engine is the artist) without wall text — restraint is exemplary, nothing on the page explains the joke.",
+    "narrative": "Names Arp, Kenneth Martin, y-a-v-a's own A Chance of Order and Arranged According to the Laws of Chance, and the EU ballot; sits legibly on the chance↔order axis and answers the prior works by staging the bug as the new readymade — a real move in the twenty-year argument, not just a name-drop.",
+    "craft": "Two 12×12 canvases, a counter, a label — the smallest build that completes the thought; the code is clean, no decoration, no fallback, no apology, and the implementation-defined mechanism is the idea rather than scaffolding around it.",
+    "wit": "The dry joke lands twice: honest chance fades to grey (chance paints nothing), the bug paints a portrait of the sorter (the engine is the artist) — humour IS the mechanism, and the 'Edition: one per engine' line is a perfect deadpan closer."
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Hans (Jean) Arp, Untitled (Collage with Squares Arranged According to the Laws of Chance), 1916-17",
+    "Kenneth Martin, Chance and Order",
+    "y-a-v-a, A Chance of Order (2021)",
+    "y-a-v-a, Arranged According to the Laws of Chance (2026)",
+    "Microsoft EU Browser Choice ballot screen (2010) and Rob Weir's analysis",
+    "ECMA-262, Array.prototype.sort"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "A strong candidate that earns its place in the catalogue. The mechanism — tallying Fisher–Yates against the canonical sort-shuffle into live deviation canvases — is genuinely web-native and only the browser can do it, and the 'implementation-defined' framing turns a well-known JS gotcha into a precise art-historical argument about authorship, chance, and the engine as artist. Concept and execution are the same object (P1), the chance↔order axis is staged directly (P5), the build is minimal (P3), and the dry wit carries the idea without explanation (P9). It answers prior works (Arp, Kenneth Martin, y-a-v-a's own chance pieces) rather than repeating them.",
+  "reservations": "The sort-shuffle bias is a familiar trope in JS pedagogy, so the novelty credit is modest rather than maximal; a casual viewer who doesn't know the ECMA-262 wording may need a beat to grasp why the right square is the point. None of these are gate failures.",
+  "revision_suggestion": "Optional: a one-line engine readout (V8/SpiderMonkey/JavaScriptCore) under the right canvas would make the 'edition: one per engine' claim self-attesting and tighten the surface gag for viewers who don't know the spec.",
+  "jury_model": "minimax/minimax-m3"
+}
