@@ -1,0 +1,51 @@
+{
+  "work_id": "2026-11-26-off-the-main-thread-spot-painting",
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true
+  },
+  "scores": {
+    "novelty": 4,
+    "nuance": 4,
+    "narrative": 4,
+    "craft": 4,
+    "wit": 4
+  },
+  "score_notes": {
+    "novelty": "Web Workers + transferControlToOffscreen as the literal studio-assistant division of labour is a fresh found-object the catalogue lacks; only the browser's threading model makes the no-repeat rule structurally unenforceable.",
+    "nuance": "Concept and execution collapse cleanly: the InvalidStateError thrown on the 'Let the artist paint one' button is the platform enforcing the readymade, not a label explaining it; the surface spot painting and the studio-system critique are the same object.",
+    "narrative": "Sits legibly on the chance/order axis (rule set by main thread, race order by workers) and explicitly answers For the Love of Fame (2009) and Three Ball Total Equilibrium Slot Machine (2020); extends the value/authenticity arc with a new move (the signature is forbidden from holding the brush).",
+    "craft": "Clean, single-file build with no unused code; the Blob worker, hardwareConcurrency sizing, and shuffle are the smallest build that completes the thought; the wall label and ledger are restrained.",
+    "wit": "The 'Let the artist paint one' button that prints the real InvalidStateError is the joke and the mechanism in one move; the 'Spots by the artist: 0' line lands on the surface and again on re-reading."
+  },
+  "weighted_total": 40,
+  "verdict": "strong",
+  "references_named": [
+    "Damien Hirst, Spot Paintings (1986– )",
+    "Rachel Howard (Hirst studio assistant)",
+    "Peter Paul Rubens / the studio workshop tradition",
+    "Jeff Koons, fabricated works",
+    "Marcel Duchamp / the readymade",
+    "y-a-v-a, For the Love of Fame (2009)",
+    "y-a-v-a, Three Ball Total Equilibrium Slot Machine (2020)"
+  ],
+  "principles_invoked": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7",
+    "P8",
+    "P9"
+  ],
+  "rationale": "The work earns its place by making the browser's threading model the studio system: transferControlToOffscreen is the literal handover, and the InvalidStateError thrown when the main thread tries to paint is the platform enforcing the readymade rather than the page telling a joke. It sits squarely on the chance/order axis (rule by the main thread, race order by isolated workers) and extends the catalogue's value/authenticity arc by answering For the Love of Fame and Three Ball Total Equilibrium Slot Machine with a new move: the signature is structurally forbidden from holding the brush. Craft is restrained and the wall label is dry; the surface spot painting and the studio critique are the same object.",
+  "reservations": "The 'no colour repeats' rule is broken by structure rather than by the workers' agency, which slightly softens the readymade's bite (the assistants are not choosing to defy the rule, they cannot see it); the Hirst quote on the label is a touch explanatory where the mechanism already lands the joke.",
+  "revision_suggestion": "Consider letting the workers each carry their own private palette (so the rule-failure is a per-assistant choice, not a structural inevitability) and drop the Hirst epigraph so the InvalidStateError and the 'Spots by the artist: 0' line carry the literate reading unaided.",
+  "jury_model": "minimax/minimax-m3"
+}

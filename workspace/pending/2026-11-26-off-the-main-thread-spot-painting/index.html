@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Off the Main Thread (Spot Painting) — y-a-v-a</title>
+<style>
+  :root { --ink:#1a1a1a; --mute:#777; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:#ecebe7; color:var(--ink);
+         font:14px/1.45 ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  main { max-width:980px; margin:0 auto; padding:5vh 4vw 8vh; display:grid;
+         grid-template-columns:minmax(0,1fr) 260px; gap:4vw; align-items:start; }
+  @media (max-width:760px){ main { grid-template-columns:1fr; } }
+  .work { background:#fff; padding:5%; box-shadow:0 1px 2px rgba(0,0,0,.08), 0 18px 40px rgba(0,0,0,.10); }
+  .grid { display:grid; grid-template-columns:repeat(7,1fr); gap:0; }
+  .grid canvas { width:100%; aspect-ratio:1; display:block; }
+  .label { font-size:12.5px; }
+  .label h1 { font-size:15px; margin:0 0 .2em; font-weight:600; }
+  .label p { margin:0 0 .9em; }
+  .label .m { color:var(--mute); }
+  dl { margin:0 0 1em; display:grid; grid-template-columns:1fr auto; gap:.25em .8em; font-variant-numeric:tabular-nums; }
+  dt { color:var(--mute); } dd { margin:0; text-align:right; }
+  button { font:inherit; font-size:12px; background:none; border:1px solid var(--ink); padding:.35em .7em; cursor:pointer; }
+  button:hover { background:var(--ink); color:#fff; }
+  #err { font-family:ui-monospace, Menlo, Consolas, monospace; font-size:11px; color:#a11; min-height:1.4em; margin:.6em 0 1em; word-break:break-word; }
+  .dot { display:inline-block; width:.7em; height:.7em; border-radius:50%; background:#d0021b; vertical-align:-.05em; margin-right:.3em; }
+  footer { grid-column:1/-1; font-size:11px; color:var(--mute); border-top:1px solid #ccc; padding-top:1em; }
+  footer a { color:inherit; }
+</style>
+</head>
+<body>
+<main>
+  <div class="work"><div class="grid" id="grid" aria-label="Spot painting, 35 spots, each painted by a Web Worker"></div></div>
+
+  <aside class="label">
+    <h1>Off the Main Thread (Spot Painting)</h1>
+    <p class="m">y-a-v-a, 2026<br>Studio assistants on pixels on screen<br>7 × 5 spots</p>
+
+    <dl>
+      <dt>Assistants employed</dt><dd id="n">–</dd>
+      <dt>Spots by assistants</dt><dd id="k">0 / 35</dd>
+      <dt>Spots by the artist</dt><dd>0</dd>
+      <dt>Colour repeats*</dt><dd id="rep">0</dd>
+    </dl>
+
+    <button id="try" type="button">Let the artist paint one</button>
+    <div id="err" aria-live="polite"></div>
+
+    <p>The idea, the grid and the signature are the artist's. Every spot is painted in a Web Worker: a separate thread, hired per CPU core, handed the canvas via <code>transferControlToOffscreen()</code>. After the handover the main thread is legally unable to touch it.</p>
+    <p class="m">* Rule: no colour may repeat. The assistants share no memory and cannot see each other's spots.</p>
+    <p class="m">“The best spot painting you can have by me is one painted by Rachel.” — Damien Hirst</p>
+    <p><span class="dot"></span>Sold. Signed by the main thread.</p>
+  </aside>
+
+  <footer>
+    <b>Off the Main Thread (Spot Painting)</b> by y-a-v-a, after Damien Hirst, Spot Paintings (1986– ), and the studio-assistant tradition (Rubens to Koons).
+    Licensed <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a>.
+    No cookies, no trackers, no storage, no network. Every visit hires a new studio; reload dismisses it.
+    AI-generated, DNA-validated.
+  </footer>
+</main>
+
+<script>
+(() => {
+  const COLS = 7, ROWS = 5, TOTAL = COLS * ROWS;
+  const grid = document.getElementById('grid');
+  const $ = id => document.getElementById(id);
+  const canvases = [];
+  for (let i = 0; i < TOTAL; i++) {
+    const c = document.createElement('canvas');
+    c.width = c.height = 120;
+    grid.appendChild(c);
+    canvases.push(c);
+  }
+
+  const supported = typeof Worker === 'function' && 'transferControlToOffscreen' in HTMLCanvasElement.prototype;
+  if (!supported) {
+    $('n').textContent = '0';
+    $('err').textContent = 'This browser hires no assistants (no OffscreenCanvas). The artist does not paint. The canvas stays white.';
+    $('try').disabled = true;
+    return;
+  }
+
+  // The assistant's job description. It knows the palette and the brush; it does not know its colleagues.
+  const job = `
+    const P = [];
+    for (let i = 0; i < 48; i++) {
+      const h = (i * 137.508) % 360, s = 45 + (i * 29) % 50, l = 38 + (i * 17) % 40;
+      P.push('hsl(' + h.toFixed(1) + ' ' + s + '% ' + l + '%)');
+    }
+    const r = n => { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; };
+    onmessage = e => {
+      const { me, jobs } = e.data;
+      let t = 0;
+      for (const { id, canvas } of jobs) {
+        t += 250 + r(1400);
+        setTimeout(() => {
+          const ctx = canvas.getContext('2d');
+          const w = canvas.width, k = r(P.length);
+          ctx.fillStyle = P[k];
+          ctx.beginPath();
+          ctx.arc(w/2, w/2, w*0.36, 0, Math.PI*2);
+          ctx.fill();
+          postMessage({ id, me, k });
+        }, t);
+      }
+    };`;
+  const url = URL.createObjectURL(new Blob([job], { type: 'text/javascript' }));
+
+  const n = Math.max(1, Math.min(16, navigator.hardwareConcurrency || 1));
+  $('n').textContent = n + ' (one per core)';
+
+  const order = canvases.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+
+  const used = new Map();
+  let done = 0, repeats = 0;
+  const workers = [];
+  for (let a = 0; a < n; a++) {
+    const w = new Worker(url);
+    workers.push(w);
+    const mine = order.filter((_, i) => i % n === a);
+    const jobs = mine.map(id => ({ id, canvas: canvases[id].transferControlToOffscreen() }));
+    w.onmessage = e => {
+      const { id, me, k } = e.data;
+      done++;
+      if (used.has(k)) repeats++; else used.set(k, me);
+      canvases[id].title = 'Spot ' + (id + 1) + ' — painted by assistant #' + (me + 1);
+      $('k').textContent = done + ' / ' + TOTAL;
+      $('rep').textContent = repeats;
+      if (done === TOTAL) { workers.forEach(x => x.terminate()); URL.revokeObjectURL(url); }
+    };
+    w.postMessage({ me: a, jobs }, jobs.map(j => j.canvas));
+  }
+
+  let attempts = 0;
+  $('try').addEventListener('click', () => {
+    const c = canvases[Math.floor(Math.random() * TOTAL)];
+    attempts++;
+    try {
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#000'; ctx.fillRect(0, 0, 10, 10);
+      $('err').textContent = 'Attempt ' + attempts + ': the artist painted. This should not have happened.';
+    } catch (e) {
+      $('err').textContent = 'Attempt ' + attempts + ': ' + e.name + ' — ' + e.message;
+    }
+  });
+})();
+</script>
+</body>
+</html>

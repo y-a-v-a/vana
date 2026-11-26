@@ -1542,5 +1542,13 @@
     "source": "Hans (Jean) Arp, Untitled (Collage with Squares Arranged According to the Laws of Chance), 1916-17; Kenneth Martin, Chance and Order; y-a-v-a, A Chance of Order (2021); y-a-v-a, Arranged According to the Laws of Chance (2026); Microsoft EU Browser Choice ballot screen (2010) and Rob Weir's analysis of its biased shuffle; ECMA-262, Array.prototype.sort: implementation-defined order for inconsistent comparators",
     "mechanism": "Array.prototype.sort with an inconsistent Math.random comparator (sort order 'implementation-defined' per ECMA-262), run against Fisher–Yates thousands of times per frame and tallied into live 12×12 deviation canvases; no storage, no network.",
     "status": "pending"
+  },
+  {
+    "id": "2026-11-26-off-the-main-thread-spot-painting",
+    "title": "Off the Main Thread (Spot Painting)",
+    "year": 2026,
+    "source": "Damien Hirst, Spot Paintings (1986- ); Rachel Howard (Hirst studio assistant); Peter Paul Rubens / the studio workshop tradition; Jeff Koons, fabricated works; Marcel Duchamp / the readymade; y-a-v-a, For the Love of Fame (2009); y-a-v-a, Three Ball Total Equilibrium Slot Machine (2020)",
+    "mechanism": "Per-spot canvas.transferControlToOffscreen() handed to inline Blob Web Workers (one per navigator.hardwareConcurrency core); main-thread getContext() then throws InvalidStateError live; isolated worker memory makes the no-repeat colour rule unenforceable, tallied in RAM only, no network or storage.",
+    "status": "pending"
   }
 ]
